@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 15
-  productGUID: 0c403cf02365ac0429e32363906d379d
+  productGUID: 268cd5fb39de64c4294b05deff126b52
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -648,8 +648,8 @@ PlayerSettings:
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: 0fc51871-2382-49a3-bf03-8900dc9b339a
-  projectName: FoodFight
+  cloudProjectId: c0afd44f-f594-42fa-af8e-ce2363d71895
+  projectName: FoodFight (1)
   organizationId: sibela46
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
