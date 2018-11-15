@@ -16,7 +16,9 @@ public class Server : MonoBehaviour {
     private bool isStarted = false;
 
     private byte error;
-    public Transform brick;
+
+    public Transform player;
+
     private void Start () {
         NetworkTransport.Init();
         ConnectionConfig connectConfig = new ConnectionConfig();
@@ -28,7 +30,6 @@ public class Server : MonoBehaviour {
 
         isStarted = true;
 
-        Instantiate(brick, new Vector3(1, 2, 1), Quaternion.identity);
     }
 	
 	private void Update () {
@@ -72,9 +73,6 @@ public class Server : MonoBehaviour {
 
     private void createPlayerPrefab(int connectiondId)
     {
-        //        GameObject prefab = (GameObject)Resources.Load("/Assets/Prefabs/Player.prefab");
-        //        GameObject player = Instantiate(prefab);
-        
-
+        Instantiate(player, new Vector3(1, 2, 1), Quaternion.identity);
     }
 }
