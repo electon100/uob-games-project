@@ -4,6 +4,8 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEditor;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class Server : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
@@ -11,8 +13,10 @@ public class Server : MonoBehaviour {
     private int port = 8080;
 
     private int hostId;
-    private int channelID;
     private int webHostId;
+
+    private int reliableChannel;
+    private int unreliableChannel;
 
     private bool isStarted = false;
 
@@ -23,7 +27,8 @@ public class Server : MonoBehaviour {
     private void Start () {
         NetworkTransport.Init();
         ConnectionConfig connectConfig = new ConnectionConfig();
-        
+
+        reliableChannel = connectConfig.AddChannel(QosType.ReliableSequenced);
         HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
 
         hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
@@ -52,11 +57,12 @@ public class Server : MonoBehaviour {
                 break;
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Player " + connectionId + " has connected");
-                Debug.Log("Channel " + channelID);
                 createPlayerPrefab(connectionId);
+                //reliableChannel = connectConfig.AddChannel(QosType.Reliable);
                 break;
             case NetworkEventType.DataEvent:
-                string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
+                //string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
+                string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
                 Debug.Log("Player " + connectionId + " has sent: " + message);
                 break;
             case NetworkEventType.DisconnectEvent:
@@ -69,6 +75,22 @@ public class Server : MonoBehaviour {
 
         return;
 	}
+
+    //This function is called when data is sent
+    private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error)
+    {
+        //Here the message being received is deserialized and output to the console
+        Stream serializedMessage = new MemoryStream(data);
+        BinaryFormatter formatter = new BinaryFormatter();
+        string message = formatter.Deserialize(serializedMessage).ToString();
+
+        //Output the deserialized message as well as the connection information to the console
+        Debug.Log("OnData(hostId = " + hostId + ", connectionId = "
+            + connectionId + ", channelId = " + channelId + ", data = "
+            + message + ", size = " + size + ", error = " + error.ToString() + ")");
+
+        return message;
+    }
 
     private void createPlayerPrefab(int connectiondId)
     {

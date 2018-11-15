@@ -8,41 +8,28 @@ using System.IO;
 
 public class Client : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.100";
+    private const string serverIP = "localhost";
 
     private int port = 8080;
 
     private int hostId;
+
+    private int reliableChannel;
+    private int unreliableChannel;
+
+    ConnectionConfig connectConfig;
+
     private int connectionId;
-    
+
     private bool isConnected = false;
 
     private byte error;
 
-    private void SendMyMessage(string textInput, int hostId, int connectionId, int channelID)
+    public void Connect ()
     {
-        byte error;
-        byte[] buffer = new byte[1024];
-        int bufferSize = 1024;
-        Stream message = new MemoryStream(buffer);
-        BinaryFormatter formatter = new BinaryFormatter();
-        //Serialize the message
-        formatter.Serialize(message, textInput);
-
-        //Send the message from the "client" with the serialized message and the connection information
-        NetworkTransport.Send(hostId, connectionId, channelID, buffer, bufferSize, out error);
-
-        //If there is an error, output message error to the console
-        if ((NetworkError)error != NetworkError.Ok)
-        {
-            Debug.Log("Message send error: " + (NetworkError)error);
-        }
-    }
-
-    public void Connect () {
 
         NetworkTransport.Init();
-        ConnectionConfig connectConfig = new ConnectionConfig();
+        connectConfig = new ConnectionConfig();
 
         HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
 
@@ -52,12 +39,13 @@ public class Client : MonoBehaviour {
         isConnected = true;
     }
 	
-	private void Update () {
+	private void Update ()
+    {
         if (!isConnected) return;
 
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
-        int channelID; // ID of channel connected to recHostId;
+        int channelID; // ID of channel connected to recHostId.
         byte[] recBuffer = new byte[1024];
         int bufferSize = 1024;
         int dataSize;
@@ -68,11 +56,10 @@ public class Client : MonoBehaviour {
         
         switch (recData)
         {
-            case NetworkEventType.Nothing:
-                Debug.Log("A nothing Network Event.");
-                break;
+            case NetworkEventType.Nothing: break;
             case NetworkEventType.ConnectEvent:
-                SendMyMessage("hello", hostId, connectionId, channelID);
+                //SendMyMessage("hello");
+                reliableChannel = connectConfig.AddChannel(QosType.Reliable);
                 Debug.Log("Player " + connectionId + " has been connected to server.");
                 break;
             case NetworkEventType.DataEvent:
@@ -85,6 +72,26 @@ public class Client : MonoBehaviour {
             case NetworkEventType.BroadcastEvent:
                 Debug.Log("Broadcast event.");
                 break;
+        }
+    }
+
+    private void SendMyMessage(string textInput)
+    {
+        byte error;
+        byte[] buffer = new byte[1024];
+        int bufferSize = 1024;
+        Stream message = new MemoryStream(buffer);
+        BinaryFormatter formatter = new BinaryFormatter();
+        //Serialize the message
+        formatter.Serialize(message, textInput);
+
+        //Send the message from the "client" with the serialized message and the connection information
+        NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
+
+        //If there is an error, output message error to the console
+        if ((NetworkError)error != NetworkError.Ok)
+        {
+            Debug.Log("Message send error: " + (NetworkError)error);
         }
     }
 }
