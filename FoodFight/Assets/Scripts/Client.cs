@@ -31,6 +31,7 @@ public class Client : MonoBehaviour {
         NetworkTransport.Init();
         connectConfig = new ConnectionConfig();
 
+        reliableChannel = connectConfig.AddChannel(QosType.ReliableSequenced);
         HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
 
         hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
@@ -39,40 +40,9 @@ public class Client : MonoBehaviour {
         isConnected = true;
     }
 	
-	private void Update ()
+    public void Send ()
     {
-        if (!isConnected) return;
-
-        int recHostId; // Player ID
-        int connectionId; // ID of connection to recHostId.
-        int channelID; // ID of channel connected to recHostId.
-        byte[] recBuffer = new byte[1024];
-        int bufferSize = 1024;
-        int dataSize;
-        byte error;
-
-        NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
-                                                            recBuffer, bufferSize, out dataSize, out error);
-        
-        switch (recData)
-        {
-            case NetworkEventType.Nothing: break;
-            case NetworkEventType.ConnectEvent:
-                //SendMyMessage("hello");
-                reliableChannel = connectConfig.AddChannel(QosType.Reliable);
-                Debug.Log("Player " + connectionId + " has been connected to server.");
-                break;
-            case NetworkEventType.DataEvent:
-                string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
-                Debug.Log("Server has sent: " + message);
-                break;
-            case NetworkEventType.DisconnectEvent:
-                Debug.Log("Player " + connectionId + " has been disconnected to server");
-                break;
-            case NetworkEventType.BroadcastEvent:
-                Debug.Log("Broadcast event.");
-                break;
-        }
+        SendMyMessage("hello");
     }
 
     private void SendMyMessage(string textInput)
@@ -92,6 +62,40 @@ public class Client : MonoBehaviour {
         if ((NetworkError)error != NetworkError.Ok)
         {
             Debug.Log("Message send error: " + (NetworkError)error);
+        }
+    }
+
+    private void Update ()
+    {
+        if (!isConnected) return;
+
+        int recHostId; // Player ID
+        int connectionId; // ID of connection to recHostId.
+        int channelID; // ID of channel connected to recHostId.
+        byte[] recBuffer = new byte[1024];
+        int bufferSize = 1024;
+        int dataSize;
+        byte error;
+
+        NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
+                                                            recBuffer, bufferSize, out dataSize, out error);
+        
+        switch (recData)
+        {
+            case NetworkEventType.Nothing: break;
+            case NetworkEventType.ConnectEvent:
+                Debug.Log("Player " + connectionId + " has been connected to server.");
+                break;
+            case NetworkEventType.DataEvent:
+                string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
+                Debug.Log("Server has sent: " + message);
+                break;
+            case NetworkEventType.DisconnectEvent:
+                Debug.Log("Player " + connectionId + " has been disconnected to server");
+                break;
+            case NetworkEventType.BroadcastEvent:
+                Debug.Log("Broadcast event.");
+                break;
         }
     }
 }
