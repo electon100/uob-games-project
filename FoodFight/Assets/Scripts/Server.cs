@@ -11,6 +11,7 @@ public class Server : MonoBehaviour {
     private int port = 8080;
 
     private int hostId;
+    private int channelID;
     private int webHostId;
 
     private bool isStarted = false;
@@ -22,14 +23,13 @@ public class Server : MonoBehaviour {
     private void Start () {
         NetworkTransport.Init();
         ConnectionConfig connectConfig = new ConnectionConfig();
-
+        
         HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
 
         hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
         webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
 
         isStarted = true;
-
     }
 	
 	private void Update () {
@@ -49,11 +49,10 @@ public class Server : MonoBehaviour {
         switch (recData)
         {
             case NetworkEventType.Nothing:
-                createPlayerPrefab(0);
-                Debug.Log("A nothing Network Event.");
                 break;
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Player " + connectionId + " has connected");
+                Debug.Log("Channel " + channelID);
                 createPlayerPrefab(connectionId);
                 break;
             case NetworkEventType.DataEvent:

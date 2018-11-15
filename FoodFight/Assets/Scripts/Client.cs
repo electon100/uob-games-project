@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class Client : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
@@ -12,13 +14,33 @@ public class Client : MonoBehaviour {
 
     private int hostId;
     private int connectionId;
-
+    
     private bool isConnected = false;
 
     private byte error;
-    
+
+    private void SendMyMessage(string textInput, int hostId, int connectionId, int channelID)
+    {
+        byte error;
+        byte[] buffer = new byte[1024];
+        int bufferSize = 1024;
+        Stream message = new MemoryStream(buffer);
+        BinaryFormatter formatter = new BinaryFormatter();
+        //Serialize the message
+        formatter.Serialize(message, textInput);
+
+        //Send the message from the "client" with the serialized message and the connection information
+        NetworkTransport.Send(hostId, connectionId, channelID, buffer, bufferSize, out error);
+
+        //If there is an error, output message error to the console
+        if ((NetworkError)error != NetworkError.Ok)
+        {
+            Debug.Log("Message send error: " + (NetworkError)error);
+        }
+    }
+
     public void Connect () {
-        Debug.Log("Button pressed");
+
         NetworkTransport.Init();
         ConnectionConfig connectConfig = new ConnectionConfig();
 
@@ -43,13 +65,14 @@ public class Client : MonoBehaviour {
 
         NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
                                                             recBuffer, bufferSize, out dataSize, out error);
-
+        
         switch (recData)
         {
             case NetworkEventType.Nothing:
                 Debug.Log("A nothing Network Event.");
                 break;
             case NetworkEventType.ConnectEvent:
+                SendMyMessage("hello", hostId, connectionId, channelID);
                 Debug.Log("Player " + connectionId + " has been connected to server.");
                 break;
             case NetworkEventType.DataEvent:
