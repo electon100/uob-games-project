@@ -22,8 +22,8 @@ public class Server : MonoBehaviour {
 
     private byte error;
 
-    public Transform redPlayer;
-    public Transform bluePlayer;
+    public GameObject redPlayer;
+    public GameObject bluePlayer;
 
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
@@ -79,8 +79,8 @@ public class Server : MonoBehaviour {
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has disconnected");
-                IDictionary teamToDestroyFrom = getTeam(connectionId);
-                if (teamToDestroyFrom)
+                IDictionary<int, GameObject> teamToDestroyFrom = getTeam(connectionId);
+                if (teamToDestroyFrom != null)
                 {
                     destroyPlayer(teamToDestroyFrom, connectionId);
                 } 
@@ -111,23 +111,23 @@ public class Server : MonoBehaviour {
 
     private void createRedPlayer(int connectiondId)
     {
-        GameObject newRedPlayer = Instantiate(redPlayer, new Vector3(-5, 2, 1), Quaternion.identity);
+        GameObject newRedPlayer = (GameObject) Instantiate(redPlayer, new Vector3(-5, 2, 1), Quaternion.identity);
         redTeam.Add(connectiondId, newRedPlayer);
     }
 
     private void createBluePlayer(int connectiondId)
     {
-        GameObject newBluePlayer = Instantiate(bluePlayer, new Vector3(5, 2, 1), Quaternion.identity);
+        GameObject newBluePlayer = (GameObject) Instantiate(bluePlayer, new Vector3(5, 2, 1), Quaternion.identity);
         blueTeam.Add(connectiondId, newBluePlayer);
     }
 
-    private void destroyPlayer(IDictionary team, int connectionID)
+    private void destroyPlayer(IDictionary<int, GameObject> team, int connectionID)
     {
-        team.Remove(connectionID);
         Destroy(team[connectionID]);
+        team.Remove(connectionID);
     }
 
-    private IDictionary getTeam(int connectionID)
+    private IDictionary<int, GameObject> getTeam(int connectionID)
     {
         if (redTeam.ContainsKey(connectionID))
         {
