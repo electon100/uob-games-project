@@ -22,7 +22,8 @@ public class Server : MonoBehaviour {
 
     private byte error;
 
-    public Transform player;
+    public Transform redPlayer;
+    public Transform bluePlayer;
 
     private void Start () {
         NetworkTransport.Init();
@@ -35,6 +36,9 @@ public class Server : MonoBehaviour {
         webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
 
         isStarted = true;
+
+        createBluePlayerPrefab(1);
+        createRedPlayerPrefab(1);
     }
 	
 	private void Update () {
@@ -57,13 +61,20 @@ public class Server : MonoBehaviour {
                 break;
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Player " + connectionId + " has connected");
-                createPlayerPrefab(connectionId);
                 //reliableChannel = connectConfig.AddChannel(QosType.Reliable);
                 break;
             case NetworkEventType.DataEvent:
                 //string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
                 string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
                 Debug.Log("Player " + connectionId + " has sent: " + message);
+                if (message == "red")
+                {
+                    createRedPlayerPrefab(connectionId);
+                }
+                else
+                {
+                    createBluePlayerPrefab(connectionId);
+                }
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has disconnected");
@@ -92,8 +103,13 @@ public class Server : MonoBehaviour {
         return message;
     }
 
-    private void createPlayerPrefab(int connectiondId)
+    private void createRedPlayerPrefab(int connectiondId)
     {
-        Instantiate(player, new Vector3(1, 2, 1), Quaternion.identity);
+        Instantiate(redPlayer, new Vector3(-5, 2, 1), Quaternion.identity);
+    }
+
+    private void createBluePlayerPrefab(int connectiondId)
+    {
+        Instantiate(bluePlayer, new Vector3(5, 2, 1), Quaternion.identity);
     }
 }

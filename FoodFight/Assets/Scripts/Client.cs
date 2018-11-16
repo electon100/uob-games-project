@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
 public class Client : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "localhost";
+    private const string serverIP = "192.168.0.62";
 
     private int port = 8080;
 
@@ -25,6 +26,9 @@ public class Client : MonoBehaviour {
 
     private byte error;
 
+    public GameObject buttonPrefab;
+    public GameObject startPanel;
+
     public void Connect ()
     {
 
@@ -39,10 +43,29 @@ public class Client : MonoBehaviour {
 
         isConnected = true;
     }
-	
-    public void Send ()
+
+    public void onClickRed()
     {
-        SendMyMessage("hello");
+        Debug.Log("red");
+        SendMyMessage("red");
+    }
+
+    public void onClickBlue()
+    {
+        Debug.Log("blue");
+        SendMyMessage("blue");
+    }
+    private void initialiseStartButtons ()
+    {
+        GameObject redButton = (GameObject) Instantiate(buttonPrefab, new Vector3(-100, -17, 0), Quaternion.identity);
+        redButton.transform.SetParent(startPanel.transform);//Setting button parent
+        redButton.GetComponent<Button>().onClick.AddListener(onClickRed);//Setting what button does when clicked
+        redButton.transform.GetChild(0).GetComponent<Text>().text = "Red Team";//Changing text
+
+        GameObject blueButton = (GameObject)Instantiate(buttonPrefab, new Vector3(100, -17, 0), Quaternion.identity);
+        blueButton.transform.SetParent(startPanel.transform);//Setting button parent
+        blueButton.GetComponent<Button>().onClick.AddListener(onClickBlue);//Setting what button does when clicked
+        blueButton.transform.GetChild(0).GetComponent<Text>().text = "Blue Team";//Changing text
     }
 
     private void SendMyMessage(string textInput)
@@ -76,15 +99,16 @@ public class Client : MonoBehaviour {
         int bufferSize = 1024;
         int dataSize;
         byte error;
-
+        
         NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
                                                             recBuffer, bufferSize, out dataSize, out error);
-        
+
         switch (recData)
         {
             case NetworkEventType.Nothing: break;
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Player " + connectionId + " has been connected to server.");
+                initialiseStartButtons();
                 break;
             case NetworkEventType.DataEvent:
                 string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
