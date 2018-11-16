@@ -25,6 +25,9 @@ public class Server : MonoBehaviour {
     public Transform redPlayer;
     public Transform bluePlayer;
 
+    IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
+    IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
+
     private void Start () {
         NetworkTransport.Init();
         ConnectionConfig connectConfig = new ConnectionConfig();
@@ -36,9 +39,7 @@ public class Server : MonoBehaviour {
         webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
 
         isStarted = true;
-
-        createBluePlayerPrefab(1);
-        createRedPlayerPrefab(1);
+        
     }
 	
 	private void Update () {
@@ -69,15 +70,20 @@ public class Server : MonoBehaviour {
                 Debug.Log("Player " + connectionId + " has sent: " + message);
                 if (message == "red")
                 {
-                    createRedPlayerPrefab(connectionId);
+                    createRedPlayer(connectionId);
                 }
                 else
                 {
-                    createBluePlayerPrefab(connectionId);
+                    createBluePlayer(connectionId);
                 }
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has disconnected");
+                IDictionary teamToDestroyFrom = getTeam(connectionId);
+                if (teamToDestroyFrom)
+                {
+                    destroyPlayer(teamToDestroyFrom, connectionId);
+                } 
                 break;
             case NetworkEventType.BroadcastEvent:
                 Debug.Log("Broadcast event.");
@@ -103,13 +109,37 @@ public class Server : MonoBehaviour {
         return message;
     }
 
-    private void createRedPlayerPrefab(int connectiondId)
+    private void createRedPlayer(int connectiondId)
     {
-        Instantiate(redPlayer, new Vector3(-5, 2, 1), Quaternion.identity);
+        GameObject newRedPlayer = Instantiate(redPlayer, new Vector3(-5, 2, 1), Quaternion.identity);
+        redTeam.Add(connectiondId, newRedPlayer);
     }
 
-    private void createBluePlayerPrefab(int connectiondId)
+    private void createBluePlayer(int connectiondId)
     {
-        Instantiate(bluePlayer, new Vector3(5, 2, 1), Quaternion.identity);
+        GameObject newBluePlayer = Instantiate(bluePlayer, new Vector3(5, 2, 1), Quaternion.identity);
+        blueTeam.Add(connectiondId, newBluePlayer);
+    }
+
+    private void destroyPlayer(IDictionary team, int connectionID)
+    {
+        team.Remove(connectionID);
+        Destroy(team[connectionID]);
+    }
+
+    private IDictionary getTeam(int connectionID)
+    {
+        if (redTeam.ContainsKey(connectionID))
+        {
+            return redTeam;
+        }
+        else if (blueTeam.ContainsKey(connectionID))
+        {
+            return blueTeam;
+        }
+        else
+        {
+            return null;
+        }
     }
 }
