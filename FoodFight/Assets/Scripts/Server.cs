@@ -39,7 +39,6 @@ public class Server : MonoBehaviour {
         webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
 
         isStarted = true;
-        
     }
 	
 	private void Update () {
@@ -62,10 +61,8 @@ public class Server : MonoBehaviour {
                 break;
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Player " + connectionId + " has connected");
-                //reliableChannel = connectConfig.AddChannel(QosType.Reliable);
                 break;
             case NetworkEventType.DataEvent:
-                //string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
                 string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
                 Debug.Log("Player " + connectionId + " has sent: " + message);
                 if (message == "red")

@@ -31,7 +31,6 @@ public class Client : MonoBehaviour {
 
     public void Connect ()
     {
-
         NetworkTransport.Init();
         connectConfig = new ConnectionConfig();
 
@@ -42,6 +41,8 @@ public class Client : MonoBehaviour {
         connectionId = NetworkTransport.Connect(hostId, serverIP, port, 0, out error);
 
         isConnected = true;
+
+        initialiseStartButtons();
     }
 
     public void onClickRed()
@@ -55,6 +56,7 @@ public class Client : MonoBehaviour {
         Debug.Log("blue");
         SendMyMessage("blue");
     }
+
     private void initialiseStartButtons ()
     {
         GameObject redButton = (GameObject) Instantiate(buttonPrefab, new Vector3(-100, -17, 0), Quaternion.identity);
@@ -108,7 +110,6 @@ public class Client : MonoBehaviour {
             case NetworkEventType.Nothing: break;
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Player " + connectionId + " has been connected to server.");
-                initialiseStartButtons();
                 break;
             case NetworkEventType.DataEvent:
                 string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
