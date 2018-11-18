@@ -80,10 +80,10 @@ public class Server : MonoBehaviour {
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has disconnected");
                 IDictionary<int, GameObject> teamToDestroyFrom = getTeam(connectionId);
-                if (teamToDestroyFrom != null)
+                /*if (teamToDestroyFrom != null)
                 {
                     destroyPlayer(teamToDestroyFrom, connectionId);
-                } 
+                }*/
                 break;
             case NetworkEventType.BroadcastEvent:
                 Debug.Log("Broadcast event.");
@@ -109,15 +109,15 @@ public class Server : MonoBehaviour {
         return message;
     }
 
-    private void createRedPlayer(int connectiondId)
+    private void createRedPlayer(int connectionId)
     {
-        GameObject newRedPlayer = (GameObject) Instantiate(redPlayer, new Vector3(-5, 2, 1), Quaternion.identity);
-        redTeam.Add(connectiondId, newRedPlayer);
+        GameObject newRedPlayer = (GameObject) Instantiate(redPlayer, new Vector3(-5*(redTeam.Count + 1), 2, 1 * (redTeam.Count + 1)), Quaternion.identity);
+        redTeam.Add(connectionId, newRedPlayer);
     }
 
     private void createBluePlayer(int connectiondId)
     {
-        GameObject newBluePlayer = (GameObject) Instantiate(bluePlayer, new Vector3(5, 2, 1), Quaternion.identity);
+        GameObject newBluePlayer = (GameObject) Instantiate(bluePlayer, new Vector3(5 * (redTeam.Count + 1), 2, 1 * (redTeam.Count + 1)), Quaternion.identity);
         blueTeam.Add(connectiondId, newBluePlayer);
     }
 

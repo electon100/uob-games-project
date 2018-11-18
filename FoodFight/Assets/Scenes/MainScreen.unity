@@ -283,8 +283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07a339f45a8a4dc4f96720b7782aa6d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redPlayer: {fileID: 4993853102391538, guid: bdd3911e8b1f5024f813df22783a91ba, type: 2}
-  bluePlayer: {fileID: 4707724717741130, guid: ee6afe0cb40bfb642a361e77f679699b, type: 2}
+  redPlayer: {fileID: 1982460696520624, guid: bdd3911e8b1f5024f813df22783a91ba, type: 2}
+  bluePlayer: {fileID: 1163954923977550, guid: ee6afe0cb40bfb642a361e77f679699b, type: 2}
 --- !u!4 &1588600714
 Transform:
   m_ObjectHideFlags: 0
