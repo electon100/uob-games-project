@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System;
+using System.Reflection;
 
 public class Client : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
@@ -29,6 +31,14 @@ public class Client : MonoBehaviour {
 
     public GameObject buttonPrefab;
     public GameObject startPanel;
+
+    //NFC Stuff:
+    public Text tag_output_text;
+
+	private AndroidJavaObject mActivity;
+	private AndroidJavaObject mIntent;
+	private string sAction;
+	private int lastTag = -1;
 
     public void Connect ()
     {
@@ -105,7 +115,7 @@ public class Client : MonoBehaviour {
         int bufferSize = 1024;
         int dataSize;
         byte error;
-        
+
         NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
                                                             recBuffer, bufferSize, out dataSize, out error);
 
@@ -125,6 +135,52 @@ public class Client : MonoBehaviour {
             case NetworkEventType.BroadcastEvent:
                 Debug.Log("Broadcast event.");
                 break;
+        }
+
+        checkNFC();
+    }
+
+    private void checkNFC() {
+        if (Application.platform == RuntimePlatform.Android) {
+            try {
+                mActivity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
+                mIntent = mActivity.Call<AndroidJavaObject>("getIntent");
+                sAction = mIntent.Call<String>("getAction");
+                if (sAction == "android.nfc.action.NDEF_DISCOVERED") {
+                    tag_output_text.text = "NDEF tag";
+                } else if (sAction == "android.nfc.action.TECH_DISCOVERED") {
+                    AndroidJavaObject[] mNdefMessage = mIntent.Call<AndroidJavaObject[]>("getParcelableArrayExtra", "android.nfc.extra.NDEF_MESSAGES");
+                    AndroidJavaObject[] mNdefRecord = mNdefMessage[0].Call<AndroidJavaObject[]>("getRecords");
+                    byte[] payLoad = mNdefRecord[0].Call<byte[]>("getPayload");
+
+                    if (mNdefMessage != null) {
+                        string text = System.Text.Encoding.UTF8.GetString(payLoad).Substring(3);
+                        int j = -1;
+                        Int32.TryParse(text, out j);
+                        // if (Int32.TryParse(text, out j)) tag_output_text.text = "Tag value: " + j;
+                        // else tag_output_text.text = "Could not parse tag for text: " + text;
+
+                        if (j != lastTag) {
+
+                            SendMyMessage("Tag " + text + " scanned.");
+
+                            lastTag = j;
+                        }
+                    } else {
+                        tag_output_text.text = "No ID found !";
+                    }
+                    mIntent.Call("removeExtra", "android.nfc.extra.TAG");
+                    return;
+                } else if (sAction == "android.nfc.action.TAG_DISCOVERED") {
+                    tag_output_text.text = "Tag not supported";
+                } else {
+                    tag_output_text.text = "Scan a NFC tag...";
+                    return;
+                }
+            } catch (Exception ex) {
+                string text = ex.Message;
+                tag_output_text.text = text;
+            }
         }
     }
 }
