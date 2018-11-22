@@ -43,7 +43,7 @@ public class Client : MonoBehaviour {
 
         isConnected = true;
 
-        if (! areButtonsHere)
+        if (!areButtonsHere)
         {
             initialiseStartButtons();
             areButtonsHere = true;
@@ -52,14 +52,12 @@ public class Client : MonoBehaviour {
 
     public void onClickRed()
     {
-        Debug.Log("red");
-        SendMyMessage("red");
+        SendMyMessage("connect", "red");
     }
 
     public void onClickBlue()
     {
-        Debug.Log("blue");
-        SendMyMessage("blue");
+        SendMyMessage("connect", "blue");
     }
 
     private void initialiseStartButtons ()
@@ -75,7 +73,7 @@ public class Client : MonoBehaviour {
         blueButton.transform.GetChild(0).GetComponent<Text>().text = "Blue Team";//Changing text
     }
 
-    private void SendMyMessage(string textInput)
+    private void SendMyMessage(string messageType, string textInput)
     {
         byte error;
         byte[] buffer = new byte[1024];
@@ -83,7 +81,8 @@ public class Client : MonoBehaviour {
         Stream message = new MemoryStream(buffer);
         BinaryFormatter formatter = new BinaryFormatter();
         //Serialize the message
-        formatter.Serialize(message, textInput);
+        string messageToSend = messageType + "&" + textInput;
+        formatter.Serialize(message, messageToSend);
 
         //Send the message from the "client" with the serialized message and the connection information
         NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEditor;
@@ -65,17 +66,22 @@ public class Server : MonoBehaviour {
             case NetworkEventType.DataEvent:
                 string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
                 Debug.Log("Player " + connectionId + " has sent: " + message);
-                if (redTeam.ContainsKey(connectionId) || blueTeam.ContainsKey(connectionId))
+                string messageType = decodeMessage(message)[0];
+                if (messageType == "connect")
                 {
-                    break;
+                    if (redTeam.ContainsKey(connectionId) || blueTeam.ContainsKey(connectionId))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        string messageContent = decodeMessage(message)[1];
+                        allocateToTeam(connectionId, messageContent);
+                    }
                 }
-                else if (message == "red")
+                else
                 {
-                    createRedPlayer(connectionId);
-                }
-                else if (message == "blue")
-                {
-                    createBluePlayer(connectionId);
+                    //add all other functionality here
                 }
                 break;
             case NetworkEventType.DisconnectEvent:
@@ -110,6 +116,25 @@ public class Server : MonoBehaviour {
         return message;
     }
 
+    
+    private void allocateToTeam(int connectionId, string message)
+    {
+        if (message == "red")
+        {
+            createRedPlayer(connectionId);
+        }
+        else if (message == "blue")
+        {
+            createBluePlayer(connectionId);
+        }
+    }
+
+    private string[] decodeMessage(string message)
+    {
+        string[] splitted = Regex.Split(message, "&");
+
+        return splitted;
+    }
     private void createRedPlayer(int connectionId)
     {
         GameObject newRedPlayer = (GameObject) Instantiate(redPlayer, new Vector3(-5*(redTeam.Count + 1), 2, 1 * (redTeam.Count + 1)), Quaternion.identity);
