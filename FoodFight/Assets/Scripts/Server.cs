@@ -65,11 +65,15 @@ public class Server : MonoBehaviour {
             case NetworkEventType.DataEvent:
                 string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
                 Debug.Log("Player " + connectionId + " has sent: " + message);
-                if (message == "red")
+                if (redTeam.ContainsKey(connectionId) || blueTeam.ContainsKey(connectionId))
+                {
+                    break;
+                }
+                else if (message == "red")
                 {
                     createRedPlayer(connectionId);
                 }
-                else
+                else if (message == "blue")
                 {
                     createBluePlayer(connectionId);
                 }
@@ -77,10 +81,10 @@ public class Server : MonoBehaviour {
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has disconnected");
                 IDictionary<int, GameObject> teamToDestroyFrom = getTeam(connectionId);
-                /*if (teamToDestroyFrom != null)
+                if (teamToDestroyFrom != null)
                 {
                     destroyPlayer(teamToDestroyFrom, connectionId);
-                }*/
+                }
                 break;
             case NetworkEventType.BroadcastEvent:
                 Debug.Log("Broadcast event.");

@@ -9,7 +9,7 @@ using System.IO;
 
 public class Client : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.62";
+    private const string serverIP = "192.168.0.100";
 
     private int port = 8080;
 
@@ -23,6 +23,7 @@ public class Client : MonoBehaviour {
     private int connectionId;
 
     private bool isConnected = false;
+    private bool areButtonsHere = false;
 
     private byte error;
 
@@ -42,7 +43,11 @@ public class Client : MonoBehaviour {
 
         isConnected = true;
 
-        initialiseStartButtons();
+        if (! areButtonsHere)
+        {
+            initialiseStartButtons();
+            areButtonsHere = true;
+        }
     }
 
     public void onClickRed()
