@@ -162,7 +162,7 @@ public class Client : MonoBehaviour {
 
                         if (j != lastTag) {
 
-                            SendMyMessage("Tag " + text + " scanned.");
+                            SendMyMessage("NFC", "Tag " + text + " scanned.");
 
                             lastTag = j;
                         }
