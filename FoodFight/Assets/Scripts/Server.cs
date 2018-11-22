@@ -65,7 +65,7 @@ public class Server : MonoBehaviour {
                 break;
             case NetworkEventType.DataEvent:
                 string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
-                manageMessageEvents(message);
+                manageMessageEvents(message, connectionId);
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has disconnected");
@@ -83,7 +83,7 @@ public class Server : MonoBehaviour {
         return;
 	}
 
-    private void manageMessageEvents(string message)
+    private void manageMessageEvents(string message, int connectionId)
     {
         string messageType = decodeMessage(message)[0];
         string messageContent = decodeMessage(message)[1];
@@ -94,8 +94,8 @@ public class Server : MonoBehaviour {
                 if (redTeam.ContainsKey(connectionId) || blueTeam.ContainsKey(connectionId)){
                     break;
                 }
-                else{
-                    string messageContent = decodeMessage(message)[1];
+                else {
+                    messageContent = decodeMessage(message)[1];
                     allocateToTeam(connectionId, messageContent);
                 }
                 break;
