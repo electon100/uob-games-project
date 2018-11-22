@@ -65,24 +65,7 @@ public class Server : MonoBehaviour {
                 break;
             case NetworkEventType.DataEvent:
                 string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
-                Debug.Log("Player " + connectionId + " has sent: " + message);
-                string messageType = decodeMessage(message)[0];
-                if (messageType == "connect")
-                {
-                    if (redTeam.ContainsKey(connectionId) || blueTeam.ContainsKey(connectionId))
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        string messageContent = decodeMessage(message)[1];
-                        allocateToTeam(connectionId, messageContent);
-                    }
-                }
-                else
-                {
-                    //add all other functionality here
-                }
+                manageMessageEvents(message);
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has disconnected");
@@ -100,6 +83,29 @@ public class Server : MonoBehaviour {
         return;
 	}
 
+    private void manageMessageEvents(string message)
+    {
+        string messageType = decodeMessage(message)[0];
+        string messageContent = decodeMessage(message)[1];
+
+        switch(messageType)
+        {
+            case "connect":
+                if (redTeam.ContainsKey(connectionId) || blueTeam.ContainsKey(connectionId)){
+                    break;
+                }
+                else{
+                    string messageContent = decodeMessage(message)[1];
+                    allocateToTeam(connectionId, messageContent);
+                }
+                break;
+            case "NFC":
+                //Do NFC stuff
+                Debug.Log("Player " + connectionId + " has sent: " + messageContent);
+                break;
+
+        }
+    }
     //This function is called when data is sent
     private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error)
     {
