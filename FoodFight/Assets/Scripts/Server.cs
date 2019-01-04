@@ -11,7 +11,7 @@ using System.IO;
 public class Server : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
 
-    private int port = 8080;
+    private int port = 8000;
 
     private int hostId;
     private int webHostId;
@@ -141,6 +141,7 @@ public class Server : MonoBehaviour {
 
         return splitted;
     }
+
     private void createRedPlayer(int connectionId)
     {
         GameObject newRedPlayer = (GameObject) Instantiate(redPlayer, new Vector3(-5*(redTeam.Count + 1), 2, 1 * (redTeam.Count + 1)), Quaternion.identity);
