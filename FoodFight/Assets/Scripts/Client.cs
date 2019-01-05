@@ -4,6 +4,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System;
@@ -11,9 +12,9 @@ using System.Reflection;
 
 public class Client : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.100";
+    private const string serverIP = "192.168.2.47";
 
-    private int port = 8080;
+    private int port = 8000;
 
     private int hostId;
 
@@ -40,6 +41,10 @@ public class Client : MonoBehaviour {
 	private string sAction;
 	private int lastTag = -1;
 
+    public void Start()
+    {
+        DontDestroyOnLoad(GameObject.Find("Player"));
+    }
     public void Connect ()
     {
         NetworkTransport.Init();
@@ -52,22 +57,18 @@ public class Client : MonoBehaviour {
         connectionId = NetworkTransport.Connect(hostId, serverIP, port, 0, out error);
 
         isConnected = true;
-
-        if (!areButtonsHere)
-        {
-            initialiseStartButtons();
-            areButtonsHere = true;
-        }
     }
 
     public void onClickRed()
     {
         SendMyMessage("connect", "red");
+        SceneManager.LoadScene("PlayerMainScreen");
     }
 
     public void onClickBlue()
     {
         SendMyMessage("connect", "blue");
+        SceneManager.LoadScene("PlayerMainScreen");
     }
 
     private void initialiseStartButtons ()
@@ -81,6 +82,8 @@ public class Client : MonoBehaviour {
         blueButton.transform.SetParent(startPanel.transform);//Setting button parent
         blueButton.GetComponent<Button>().onClick.AddListener(onClickBlue);//Setting what button does when clicked
         blueButton.transform.GetChild(0).GetComponent<Text>().text = "Blue Team";//Changing text
+
+        Destroy(GameObject.Find("ConnectButton"));
     }
 
     private void SendMyMessage(string messageType, string textInput)
@@ -118,7 +121,11 @@ public class Client : MonoBehaviour {
 
         NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
                                                             recBuffer, bufferSize, out dataSize, out error);
-
+        if (!areButtonsHere)
+        {
+            initialiseStartButtons();
+            areButtonsHere = true;
+        }
         switch (recData)
         {
             case NetworkEventType.Nothing: break;
