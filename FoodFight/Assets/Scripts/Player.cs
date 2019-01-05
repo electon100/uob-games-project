@@ -33,11 +33,16 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        checkStation("0");
+        checkStation("1");
         if (Input.GetKeyDown(KeyCode.T))
         {
             Debug.Log(currentIngredient);
         }
+    }
+
+    public void goToFrying()
+    {
+        SceneManager.LoadScene("PanStation");
     }
 
     public void goToCupboard()
@@ -88,6 +93,10 @@ public class Player : MonoBehaviour {
         currentIngredient = new KeyValuePair<string, string>(ingredientPicked, "uncooked");
     }
 
+    private void fryStation() {
+
+    }
+
     private void checkStation(string text)
     {
         if (text != currentStation)
@@ -98,8 +107,12 @@ public class Player : MonoBehaviour {
                     pickUpStation();
                     currentStation = "0";
                     break;
+                case "1":
+                    fryStation();
+                    currentStation = "1";
+                    break;
                 default:
-                    break;  
+                    break;
             }
         }
     }
