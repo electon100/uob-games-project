@@ -12,11 +12,15 @@ using System.IO;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
-    
+
     private GameObject currentItem;
 
     KeyValuePair<string, string> currentIngredient = new KeyValuePair<string, string>("", "");
     string currentStation = "-1";
+
+    /* Experimental Ingredient class */
+    public static Ingredient currentIngred;
+    /* Experimental Ingredient class end */
 
     //NFC Stuff:
     public Text tag_output_text;
@@ -26,14 +30,13 @@ public class Player : MonoBehaviour {
     private string sAction;
     private int lastTag = -1;
 
-    // Use this for initialization
     void Start () {
-
+        /* Initialise current ingredient. This value will eventually come from the ARCupboard */
+        currentIngred = new Ingredient("Eggs", (GameObject)Resources.Load("EggsPrefab", typeof(GameObject)));
     }
-	
-	// Update is called once per frame
+
 	void Update () {
-        checkStation("1");
+        checkStation("0");
         if (Input.GetKeyDown(KeyCode.T))
         {
             Debug.Log(currentIngredient);
@@ -93,10 +96,6 @@ public class Player : MonoBehaviour {
         currentIngredient = new KeyValuePair<string, string>(ingredientPicked, "uncooked");
     }
 
-    private void fryStation() {
-
-    }
-
     private void checkStation(string text)
     {
         if (text != currentStation)
@@ -106,10 +105,6 @@ public class Player : MonoBehaviour {
                 case "0":
                     pickUpStation();
                     currentStation = "0";
-                    break;
-                case "1":
-                    fryStation();
-                    currentStation = "1";
                     break;
                 default:
                     break;
