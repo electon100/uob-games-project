@@ -12,32 +12,37 @@ using System.IO;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
-    
+
     private GameObject currentItem;
 
-    KeyValuePair<string, string> currentIngredient = new KeyValuePair<string, string>("", "");
-    string currentStation = "-1";
+    private string currentStation = "-1";
+
+    /* Current ingredient that the player is holding
+       -> Can be used externally */
+    public static Ingredient currentIngred;
 
     //NFC Stuff:
     public Text tag_output_text;
-
     private AndroidJavaObject mActivity;
     private AndroidJavaObject mIntent;
     private string sAction;
     private int lastTag = -1;
 
-    // Use this for initialization
     void Start () {
 
     }
-	
-	// Update is called once per frame
+
 	void Update () {
         checkStation("0");
         if (Input.GetKeyDown(KeyCode.T))
         {
-            Debug.Log(currentIngredient);
+            Debug.Log(currentIngred);
         }
+    }
+
+    public void goToFrying()
+    {
+        SceneManager.LoadScene("PanStation");
     }
 
     public void goToCupboard()
@@ -49,32 +54,7 @@ public class Player : MonoBehaviour {
     {
         if (currentItem == null)
         {
-            GameObject itemPrefab;
-            switch (currentIngredient.Key)
-            {
-                case "Potato":
-                    itemPrefab = (GameObject) Resources.Load("PotatoesPrefab", typeof(GameObject));
-                    currentItem = (GameObject)Instantiate(itemPrefab, new Vector3(0, 0, 90), Quaternion.identity);
-                    break;
-                case "Vegetables":
-                    itemPrefab = (GameObject) Resources.Load("VegetablesPrefab", typeof(GameObject));
-                    currentItem = (GameObject)Instantiate(itemPrefab, new Vector3(0, 0, 85), Quaternion.identity);
-                    break;
-                case "Milk":
-                    itemPrefab = (GameObject) Resources.Load("MilkPrefab", typeof(GameObject));
-                    currentItem = (GameObject)Instantiate(itemPrefab, new Vector3(0, 0, 90), Quaternion.identity);
-                    break;
-                case "Eggs":
-                    itemPrefab = (GameObject)Resources.Load("EggsPrefab", typeof(GameObject));
-                    currentItem = (GameObject)Instantiate(itemPrefab, new Vector3(0, 0, 90), Quaternion.identity);
-                    break;
-                case "Noodles":
-                    itemPrefab = (GameObject)Resources.Load("NoodlesPrefab", typeof(GameObject));
-                    currentItem = (GameObject)Instantiate(itemPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-                    break;
-                default:
-                    break;
-            }
+            currentItem = (GameObject) Instantiate(currentIngred.Model, new Vector3(0, 0, 90), Quaternion.identity);
         }
         else
         {
@@ -82,10 +62,8 @@ public class Player : MonoBehaviour {
         }
     }
 
-    private void pickUpStation()
-    {
-        string ingredientPicked = ARCupboard.ingredient;
-        currentIngredient = new KeyValuePair<string, string>(ingredientPicked, "uncooked");
+    private void pickUpStation() {
+        currentIngred = ARCupboard.ingredient;
     }
 
     private void checkStation(string text)
@@ -99,7 +77,7 @@ public class Player : MonoBehaviour {
                     currentStation = "0";
                     break;
                 default:
-                    break;  
+                    break;
             }
         }
     }

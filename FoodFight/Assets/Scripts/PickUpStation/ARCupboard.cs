@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class ARCupboard : MonoBehaviour
 {
 
-    public static string ingredient;
+    public static Ingredient ingredient;
     public Text foodName;
 
     // Use this for initialization
@@ -25,31 +25,31 @@ public class ARCupboard : MonoBehaviour
 
     public void onPotato()
     {
-        ingredient = "Potato";
+        ingredient = new Ingredient("Potato", (GameObject) Resources.Load("PotatoesPrefab", typeof(GameObject)));
         foodName.text = "You picked a potato!";
     }
 
     public void onVegetables()
     {
-        ingredient = "Vegetables";
+        ingredient = new Ingredient("Vegetables", (GameObject) Resources.Load("VegetablesPrefab", typeof(GameObject)));
         foodName.text = "You picked some vegetables!";
     }
 
     public void onMilk()
     {
-        ingredient = "Milk";
+        ingredient = new Ingredient("Milk", (GameObject) Resources.Load("MilkPrefab", typeof(GameObject)));
         foodName.text = "You picked a bottle of milk!";
     }
 
     public void onEggs()
     {
-        ingredient = "Eggs";
+        ingredient = new Ingredient("Eggs", (GameObject) Resources.Load("EggsPrefab", typeof(GameObject)));
         foodName.text = "You picked some eggs!";
     }
 
     public void onNoodles()
     {
-        ingredient = "Noodles";
+        ingredient = new Ingredient("Noodles", (GameObject) Resources.Load("NoodlesPrefab", typeof(GameObject)));
         foodName.text = "You picked a bowl of noodles!";
     }
 
