@@ -5,7 +5,19 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+  - enabled: 0
+    path: Assets/Scenes/MainScreen.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/PlayerStartScreen.unity
+    guid: 2aa005ddfd8f41f4b97850d35337c3a1
+  - enabled: 1
+    path: Assets/Scenes/PlayerMainScreen.unity
+    guid: 590ba94743ea40a4eb962efa18f1e048
+  - enabled: 1
+    path: Assets/Scenes/CupboardStation/PickUpStation.unity
+    guid: e0c0d187c66b6814aada1700e1ed8526
+  - enabled: 1
+    path: Assets/Scenes/FryingStation/PanStation.unity
+    guid: dc1781f5155a84b4c97991fcbb946400
   m_configObjects: {}
