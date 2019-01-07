@@ -26,7 +26,10 @@ public class Frying : MonoBehaviour {
 	private int minimumShakeInterval = 1; // (seconds)
 
 	/* Ingredient stuff */
-	private static List<Ingredient> panContents = new List<Ingredient>();
+
+	/* List of ingredients in the pan, with current shake count applied.
+		  -> Can be used externally to retrieve ingredients from pan */
+	public static List<Ingredient> panContents = new List<Ingredient>();
 
 	/* Other */
 	int panShakes = 0;
@@ -50,12 +53,12 @@ public class Frying : MonoBehaviour {
 
 		/* Draw ingredient models in pan */
 		foreach (Ingredient ingredient in panContents) {
-			Instantiate(ingredient.Model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 90), Quaternion.identity);
+			Instantiate(ingredient.Model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(-90, 0, 0));
 		}
 	}
 
 	void Update () {
-		if (Player.currentIngred != null) {
+		if (panContents.Count > 0) {
 
 			/* Read accelerometer data */
 			Vector3 acceleration = Input.acceleration;
@@ -90,6 +93,7 @@ public class Frying : MonoBehaviour {
 		}
 	}
 
+	/* Manages the sinusoidal movement of the pan */
 	private void shakeIfNeeded() {
 		if (shouldShake) {
 			float xTransform = -1 * Mathf.Sin((Time.time - lastShake) * shakeSpeed) * shakeAmount;
