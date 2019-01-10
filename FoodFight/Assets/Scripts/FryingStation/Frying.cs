@@ -40,8 +40,8 @@ public class Frying : MonoBehaviour {
 
 		test_text.text = "Pan shakes: 0";
 		lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
-    shakeDetectionThreshold *= shakeDetectionThreshold;
-    lowPassValue = Input.acceleration;
+        shakeDetectionThreshold *= shakeDetectionThreshold;
+        lowPassValue = Input.acceleration;
 		originalPos = gameObject.transform.position;
 		lastShake = Time.time;
 
