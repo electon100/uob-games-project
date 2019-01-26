@@ -211,11 +211,11 @@ public class Server : MonoBehaviour {
     {
         if (kitchen == "red")
         {
-            Debug.Log(redKitchen.TryGetValue(station));
+            Debug.Log(redKitchen[station]);
         }
         else if (kitchen == "blue")
         {
-            Debug.Log(blueKitchen.TryGetValue(station));
+            Debug.Log(blueKitchen[station]);
         }
     }
 }
