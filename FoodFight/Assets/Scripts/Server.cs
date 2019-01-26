@@ -94,7 +94,6 @@ public class Server : MonoBehaviour {
     {
         string messageType = decodeMessage(message)[0];
         string messageContent = decodeMessage(message)[1];
-        Debug.Log(message);
         switch(messageType)
         {
             case "connect":
@@ -112,7 +111,7 @@ public class Server : MonoBehaviour {
                 {
                     checkCurrentIngredient("red", messageContent);
                 }
-                else if (redKitchen.ContainsKey(messageContent))
+                else if (blueKitchen.ContainsKey(messageContent))
                 {
                     checkCurrentIngredient("blue", messageContent);
                 }

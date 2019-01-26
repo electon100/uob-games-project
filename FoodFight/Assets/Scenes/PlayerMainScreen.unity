@@ -357,7 +357,7 @@ GameObject:
   - component: {fileID: 784768832}
   - component: {fileID: 784768831}
   m_Layer: 5
-  m_Name: Text
+  m_Name: MainText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -602,6 +602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2ffe48b4e37b9642a41cd892cd96752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainText: {fileID: 784768831}
   tag_output_text: {fileID: 0}
 --- !u!4 &1039418509
 Transform:
@@ -842,7 +843,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1039418508}
         m_MethodName: goToFrying
         m_Mode: 1
         m_Arguments:
@@ -1088,7 +1089,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1039418508}
         m_MethodName: goToCupboard
         m_Mode: 1
         m_Arguments:
