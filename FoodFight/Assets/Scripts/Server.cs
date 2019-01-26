@@ -94,7 +94,6 @@ public class Server : MonoBehaviour {
     {
         string messageType = decodeMessage(message)[0];
         string messageContent = decodeMessage(message)[1];
-        Debug.Log(message);
         switch(messageType)
         {
             case "connect":
@@ -108,24 +107,34 @@ public class Server : MonoBehaviour {
                 break;
             case "station":
                 //If this station already exists, check what's in it and send it back to player.
-                if (redKitchen.ContainsKey(messageContent))
+                Debug.Log(messageContent);
+                string[] words = messageContent.Split('$');
+                /*foreach (string element in words)
                 {
-                    checkCurrentIngredient("red", messageContent);
+                    Debug.Log(element);
+                }*/
+                string stationId = words[0];
+                Debug.Log("Word 0: " + stationId);
+                string ingredient = words[1];
+                Debug.Log("Word 1: " + ingredient);
+                if (redKitchen.ContainsKey(stationId))
+                {
+                    checkCurrentIngredient("red", stationId);
                 }
-                else if (redKitchen.ContainsKey(messageContent))
+                else if (blueKitchen.ContainsKey(stationId))
                 {
-                    checkCurrentIngredient("blue", messageContent);
+                    checkCurrentIngredient("blue", stationId);
                 }
                 //If this is the first time a player has logged into that station, initialise it.
                 else 
                 {
                     if (redTeam.ContainsKey(connectionId))
                     {
-                        redKitchen.Add(messageContent, "pancake");
+                        redKitchen.Add(stationId, ingredient);
                     }
                     else
                     {
-                        blueKitchen.Add(messageContent, "potato");
+                        blueKitchen.Add(stationId, ingredient);
                     }
                 }
                 break;
