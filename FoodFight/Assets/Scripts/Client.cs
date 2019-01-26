@@ -42,9 +42,70 @@ public class Client : MonoBehaviour {
 	private string sAction;
 	private int lastTag = -1;
 
+    private GameObject currentItem;
+
+    private string currentStation = "-1";
+
+    /* Current ingredient that the player is holding
+       -> Can be used externally */
+    public static Ingredient currentIngred;
+
     public void Start()
     {
-        DontDestroyOnLoad(GameObject.Find("Player"));
+
+    }
+
+    public void Awake()
+    {
+        DontDestroyOnLoad(GameObject.Find("Client"));
+    }
+
+    public Client()
+    {
+
+    }
+
+    private void Update()
+    {
+        if (!isConnected) return;
+
+        int recHostId; // Player ID
+        int connectionId; // ID of connection to recHostId.
+        int channelID; // ID of channel connected to recHostId.
+        byte[] recBuffer = new byte[1024];
+        int bufferSize = 1024;
+        int dataSize;
+        byte error;
+
+        NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
+                                                            recBuffer, bufferSize, out dataSize, out error);
+
+        if (!areButtonsHere)
+        {
+            initialiseStartButtons();
+            areButtonsHere = true;
+        }
+
+        switch (recData)
+        {
+            case NetworkEventType.Nothing:
+                break;
+            case NetworkEventType.ConnectEvent:
+                Debug.Log("Player " + connectionId + " has been connected to server.");
+                break;
+            case NetworkEventType.DataEvent:
+                string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
+                Debug.Log("Server has sent: " + message);
+                break;
+            case NetworkEventType.DisconnectEvent:
+                Debug.Log("Player " + connectionId + " has been disconnected to server");
+                break;
+            case NetworkEventType.BroadcastEvent:
+                Debug.Log("Broadcast event.");
+                break;
+        }
+
+        checkNFC();
     }
 
     public void Connect ()
@@ -59,18 +120,6 @@ public class Client : MonoBehaviour {
         connectionId = NetworkTransport.Connect(hostId, serverIP, port, 0, out error);
 
         isConnected = true;
-    }
-
-    public void onClickRed()
-    {
-        SendMyMessage("connect", "red");
-        SceneManager.LoadScene("PlayerMainScreen");
-    }
-
-    public void onClickBlue()
-    {
-        SendMyMessage("connect", "blue");
-        SceneManager.LoadScene("PlayerMainScreen");
     }
 
     private void initialiseStartButtons ()
@@ -99,6 +148,7 @@ public class Client : MonoBehaviour {
         string messageToSend = messageType + "&" + textInput;
         formatter.Serialize(message, messageToSend);
 
+        Debug.Log(reliableChannel);
         //Send the message from the "client" with the serialized message and the connection information
         NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
 
@@ -107,47 +157,6 @@ public class Client : MonoBehaviour {
         {
             Debug.Log("Message send error: " + (NetworkError)error);
         }
-    }
-
-    private void Update ()
-    {
-        if (!isConnected) return;
-
-        int recHostId; // Player ID
-        int connectionId; // ID of connection to recHostId.
-        int channelID; // ID of channel connected to recHostId.
-        byte[] recBuffer = new byte[1024];
-        int bufferSize = 1024;
-        int dataSize;
-        byte error;
-
-        NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
-                                                            recBuffer, bufferSize, out dataSize, out error);
-
-        switch (recData)
-        {
-            case NetworkEventType.Nothing: break;
-            case NetworkEventType.ConnectEvent:
-                Debug.Log("Player " + connectionId + " has been connected to server.");
-                if (!areButtonsHere)
-                {
-                    initialiseStartButtons();
-                    areButtonsHere = true;
-                }
-                break;
-            case NetworkEventType.DataEvent:
-                string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
-                Debug.Log("Server has sent: " + message);
-                break;
-            case NetworkEventType.DisconnectEvent:
-                Debug.Log("Player " + connectionId + " has been disconnected to server");
-                break;
-            case NetworkEventType.BroadcastEvent:
-                Debug.Log("Broadcast event.");
-                break;
-        }
-
-        checkNFC();
     }
 
     private void checkNFC() {
@@ -193,4 +202,17 @@ public class Client : MonoBehaviour {
             }
         }
     }
+
+    public void onClickRed()
+    {
+        SendMyMessage("connect", "red");
+        SceneManager.LoadScene("PlayerMainScreen");
+    }
+
+    public void onClickBlue()
+    {
+        SendMyMessage("connect", "blue");
+        SceneManager.LoadScene("PlayerMainScreen");
+    }
+
 }
