@@ -53,6 +53,12 @@ public class ARCupboard : MonoBehaviour
         foodName.text = "You picked a bowl of noodles!";
     }
 
+    public void onFlour()
+    {
+        ingredient = new Ingredient("Flour", (GameObject)Resources.Load("FlourPrefab", typeof(GameObject)));
+        foodName.text = "You picked a bag of flour!";
+    }
+
     public void goBack()
     {
         SceneManager.LoadScene("PlayerMainScreen");

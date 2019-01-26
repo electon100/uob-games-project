@@ -38,6 +38,10 @@ public class Player : MonoBehaviour {
         {
             Debug.Log(currentIngred);
         }
+        if (currentItem != null)
+        {
+            currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
+        }
     }
 
     public void goToFrying()
@@ -54,7 +58,7 @@ public class Player : MonoBehaviour {
     {
         if (currentItem == null)
         {
-            currentItem = (GameObject) Instantiate(currentIngred.Model, new Vector3(0, 0, 90), Quaternion.identity);
+            currentItem = (GameObject)Instantiate(currentIngred.Model, new Vector3(0, 0, 80), Quaternion.identity);
         }
         else
         {
