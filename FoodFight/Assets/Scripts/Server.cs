@@ -110,7 +110,7 @@ public class Server : MonoBehaviour {
                 //If this station already exists, check what's in it and send it back to player.
                 if (redKitchen.ContainsKey(messageContent) || blueKitchen.ContainsKey(messageContent))
                 {
-                    checkCurrentIngredient(messageContent);
+                    //checkCurrentIngredient(messageContent);
                 }
                 //If this is the first time a player has logged into that station, initialise it.
                 else 
