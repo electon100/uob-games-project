@@ -21,6 +21,8 @@ public class Player : MonoBehaviour {
        -> Can be used externally */
     public static Ingredient currentIngred;
 
+    public static Client networkClient;
+
     //NFC Stuff:
     public Text tag_output_text;
     private AndroidJavaObject mActivity;
@@ -38,6 +40,10 @@ public class Player : MonoBehaviour {
         {
             Debug.Log(currentIngred);
         }
+        if (currentItem != null)
+        {
+            currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
+        }
     }
 
     public void goToFrying()
@@ -54,7 +60,7 @@ public class Player : MonoBehaviour {
     {
         if (currentItem == null)
         {
-            currentItem = (GameObject) Instantiate(currentIngred.Model, new Vector3(0, 0, 90), Quaternion.identity);
+            currentItem = (GameObject)Instantiate(currentIngred.Model, new Vector3(0, 0, 80), Quaternion.identity);
         }
         else
         {
@@ -70,6 +76,7 @@ public class Player : MonoBehaviour {
     {
         if (text != currentStation)
         {
+            networkClient.SendMyMessage("station", text);
             switch(text)
             {
                 case "0":
@@ -112,7 +119,7 @@ public class Player : MonoBehaviour {
                         if (j != lastTag)
                         {
 
-                            checkStation("0");
+                            checkStation(text);
 
                             lastTag = j;
                         }

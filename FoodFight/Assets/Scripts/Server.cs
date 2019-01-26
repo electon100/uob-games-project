@@ -29,6 +29,10 @@ public class Server : MonoBehaviour {
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
 
+    // dictionary <station, status>
+    IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
+    IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
+
     private void Start () {
         NetworkTransport.Init();
         ConnectionConfig connectConfig = new ConnectionConfig();
@@ -56,6 +60,7 @@ public class Server : MonoBehaviour {
         NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
                                                             recBuffer, bufferSize, out dataSize, out error);
 
+        //Networking events
         switch (recData)
         {
             case NetworkEventType.Nothing:
@@ -70,6 +75,7 @@ public class Server : MonoBehaviour {
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has disconnected");
                 IDictionary<int, GameObject> teamToDestroyFrom = getTeam(connectionId);
+                // Player with id connectionId has left the game, so destroy its object instance.
                 if (teamToDestroyFrom != null)
                 {
                     destroyPlayer(teamToDestroyFrom, connectionId);
@@ -83,11 +89,12 @@ public class Server : MonoBehaviour {
         return;
 	}
 
+    // This is where all the work happens.
     private void manageMessageEvents(string message, int connectionId)
     {
         string messageType = decodeMessage(message)[0];
         string messageContent = decodeMessage(message)[1];
-
+        Debug.Log(message);
         switch(messageType)
         {
             case "connect":
@@ -99,6 +106,25 @@ public class Server : MonoBehaviour {
                     allocateToTeam(connectionId, messageContent);
                 }
                 break;
+            case "station":
+                //If this station already exists, check what's in it and send it back to player.
+                if (redKitchen.ContainsKey(messageContent) || blueKitchen.ContainsKey(messageContent))
+                {
+                    checkCurrentIngredient(messageContent);
+                }
+                //If this is the first time a player has logged into that station, initialise it.
+                else 
+                {
+                    if (redTeam.ContainsKey(connectionId))
+                    {
+                        redKitchen.Add(messageContent, null);
+                    }
+                    else
+                    {
+                        blueKitchen.Add(messageContent, null);
+                    }
+                }
+                break;
             case "NFC":
                 //Do NFC stuff
                 Debug.Log("Player " + connectionId + " has sent: " + messageContent);
@@ -106,6 +132,7 @@ public class Server : MonoBehaviour {
 
         }
     }
+
     //This function is called when data is sent
     private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error)
     {
@@ -122,7 +149,7 @@ public class Server : MonoBehaviour {
         return message;
     }
 
-    
+    //Allocates a player to a team based on their choice.
     private void allocateToTeam(int connectionId, string message)
     {
         if (message == "red")
