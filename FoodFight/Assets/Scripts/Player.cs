@@ -21,6 +21,8 @@ public class Player : MonoBehaviour {
        -> Can be used externally */
     public static Ingredient currentIngred;
 
+    public static Client networkClient;
+
     //NFC Stuff:
     public Text tag_output_text;
     private AndroidJavaObject mActivity;
@@ -74,6 +76,7 @@ public class Player : MonoBehaviour {
     {
         if (text != currentStation)
         {
+            networkClient.SendMyMessage("station", text);
             switch(text)
             {
                 case "0":
@@ -116,7 +119,7 @@ public class Player : MonoBehaviour {
                         if (j != lastTag)
                         {
 
-                            checkStation("0");
+                            checkStation(text);
 
                             lastTag = j;
                         }

@@ -11,6 +11,7 @@ using System;
 using System.Reflection;
 
 public class Client : MonoBehaviour {
+
     private const int MAX_CONNECTION = 10;
     private const string serverIP = "192.168.2.47";
 
@@ -45,6 +46,7 @@ public class Client : MonoBehaviour {
     {
         DontDestroyOnLoad(GameObject.Find("Player"));
     }
+
     public void Connect ()
     {
         NetworkTransport.Init();
@@ -86,7 +88,7 @@ public class Client : MonoBehaviour {
         Destroy(GameObject.Find("ConnectButton"));
     }
 
-    private void SendMyMessage(string messageType, string textInput)
+    public void SendMyMessage(string messageType, string textInput)
     {
         byte error;
         byte[] buffer = new byte[1024];
@@ -121,16 +123,17 @@ public class Client : MonoBehaviour {
 
         NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
                                                             recBuffer, bufferSize, out dataSize, out error);
-        if (!areButtonsHere)
-        {
-            initialiseStartButtons();
-            areButtonsHere = true;
-        }
+
         switch (recData)
         {
             case NetworkEventType.Nothing: break;
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Player " + connectionId + " has been connected to server.");
+                if (!areButtonsHere)
+                {
+                    initialiseStartButtons();
+                    areButtonsHere = true;
+                }
                 break;
             case NetworkEventType.DataEvent:
                 string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
