@@ -30,8 +30,8 @@ public class Server : MonoBehaviour {
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
 
     // dictionary <station, status>
-    IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
-    IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
+    IDictionary<string, string> redKitchen = new Dictionary<string, string>();
+    IDictionary<string, string> blueKitchen = new Dictionary<string, string>();
 
     private void Start () {
         NetworkTransport.Init();
@@ -108,20 +108,24 @@ public class Server : MonoBehaviour {
                 break;
             case "station":
                 //If this station already exists, check what's in it and send it back to player.
-                if (redKitchen.ContainsKey(messageContent) || blueKitchen.ContainsKey(messageContent))
+                if (redKitchen.ContainsKey(messageContent))
                 {
-                    checkCurrentIngredient(messageContent);
+                    checkCurrentIngredient("red", messageContent);
+                }
+                else if (redKitchen.ContainsKey(messageContent))
+                {
+                    checkCurrentIngredient("blue", messageContent);
                 }
                 //If this is the first time a player has logged into that station, initialise it.
                 else 
                 {
                     if (redTeam.ContainsKey(connectionId))
                     {
-                        redKitchen.Add(messageContent, null);
+                        redKitchen.Add(messageContent, "pancake");
                     }
                     else
                     {
-                        blueKitchen.Add(messageContent, null);
+                        blueKitchen.Add(messageContent, "potato");
                     }
                 }
                 break;
@@ -200,6 +204,18 @@ public class Server : MonoBehaviour {
         else
         {
             return null;
+        }
+    }
+
+    private void checkCurrentIngredient(string kitchen, string station)
+    {
+        if (kitchen == "red")
+        {
+            Debug.Log(redKitchen.TryGetValue(station));
+        }
+        else if (kitchen == "blue")
+        {
+            Debug.Log(blueKitchen.TryGetValue(station));
         }
     }
 }

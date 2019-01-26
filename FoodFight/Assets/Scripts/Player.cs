@@ -14,14 +14,14 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour {
 
     private GameObject currentItem;
+    private GameObject networkClient;
+    private Client network;
 
     private string currentStation = "-1";
 
     /* Current ingredient that the player is holding
        -> Can be used externally */
     public static Ingredient currentIngred;
-
-    public static Client networkClient;
 
     //NFC Stuff:
     public Text tag_output_text;
@@ -31,11 +31,12 @@ public class Player : MonoBehaviour {
     private int lastTag = -1;
 
     void Start () {
-
+        networkClient = GameObject.Find("Client");
+        network = networkClient.GetComponent<Client>();
     }
 
 	void Update () {
-        checkStation("0");
+        checkNFC();
         if (Input.GetKeyDown(KeyCode.T))
         {
             Debug.Log(currentIngred);
@@ -76,8 +77,8 @@ public class Player : MonoBehaviour {
     {
         if (text != currentStation)
         {
-            networkClient.SendMyMessage("station", text);
-            switch(text)
+            network.SendMyMessage("station", text);
+            switch (text)
             {
                 case "0":
                     pickUpStation();
