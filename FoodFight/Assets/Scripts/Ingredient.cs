@@ -21,8 +21,6 @@ public class Ingredient {
 		isChopped = false;
 		isCookable = true;
 		isChoppable = true;
-        isCooked = false;
-        isChopped = false;
 	}
 
 }
