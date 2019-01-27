@@ -28,6 +28,7 @@ public class Player : MonoBehaviour {
     /* Current ingredient that the player is holding
        -> Can be used externally */
     public static Ingredient currentIngred;
+    public static string ingredientsFromStation;
     public Text mainText;
 
     //NFC Stuff:
@@ -77,6 +78,7 @@ public class Player : MonoBehaviour {
     private void fryingStation()
     {
         SceneManager.LoadScene("FryingStation");
+        ingredientsFromStation = network.getIngredientsFromStation("1");
     }
 
     private void choppingStation()

@@ -44,6 +44,9 @@ public class Client : MonoBehaviour {
 
     private GameObject currentItem;
 
+    // dictionary <station, ingredients>
+    IDictionary<string, string> myKitchen = new Dictionary<string, string>();
+
     private string currentStation = "-1";
 
     /* Current ingredient that the player is holding
@@ -95,7 +98,7 @@ public class Client : MonoBehaviour {
                 break;
             case NetworkEventType.DataEvent:
                 string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
-                Debug.Log("Server has sent: " + message);
+                manageReceiveFromServer(message);
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has been disconnected to server");
@@ -214,4 +217,33 @@ public class Client : MonoBehaviour {
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
+    // Splits up a string based on a given character
+    private string[] decodeMessage(string message, char character)
+    {
+        string[] splitted = message.Split(character);
+        return splitted;
+    }
+
+    public void manageReceiveFromServer(string message)
+    {
+        string messageType = decodeMessage(message, '&')[0];
+        string messageContent = decodeMessage(message, '&')[1];
+
+        switch (messageType)
+        {
+            case "station":
+                string[] data = decodeMessage(messageContent, '$');
+                string stationId = data[0];
+                string ingredients = data[1];
+                myKitchen.Add(stationId, ingredients);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public string getIngredientsFromStation(string stationID)
+    {
+        return myKitchen[stationID];
+    }
 }
