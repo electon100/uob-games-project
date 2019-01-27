@@ -30,7 +30,7 @@ public class Server : MonoBehaviour {
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
 
     // dictionary <station, status>
-    IDictionary<string, string> redKitchen = new Dictionary<string, string>();
+    IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
     IDictionary<string, string> blueKitchen = new Dictionary<string, string>();
 
     private void Start () {
@@ -168,13 +168,13 @@ public class Server : MonoBehaviour {
             {
                 if (redKitchen.ContainsKey(stationId))
                 {
-                    redKitchen[stationId] += "$";
-                    redKitchen[stationId] += ingredient;
+                   // redKitchen[stationId] += "$";
+                   // redKitchen[stationId] += ingredient;
                     Debug.Log("Added " + ingredient + " to red kitchen station. Now " + redKitchen[stationId]);
                 }
                 else
                 {
-                    redKitchen.Add(stationId, ingredient);
+                    //redKitchen.Add(stationId, ingredient);
                     Debug.Log("Created new red station with ingredient list: " + redKitchen[stationId]);
                 }
 
@@ -184,8 +184,8 @@ public class Server : MonoBehaviour {
             {
                 if (blueKitchen.ContainsKey(stationId))
                 {
-                    blueKitchen[stationId] += "$";
-                    blueKitchen[stationId] += ingredient;
+                    //blueKitchen[stationId] += "$";
+                    //blueKitchen[stationId] += ingredient;
                     Debug.Log("Added " + ingredient + " to blue kitchen station. Now " + blueKitchen[stationId]);
                 }
                 else
