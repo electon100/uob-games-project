@@ -140,8 +140,12 @@ public class Server : MonoBehaviour {
                         {
                             redKitchen[stationId] += "$";
                             redKitchen[stationId] += ingredient;
+                            Debug.Log("Added " + ingredient + " to red kitchen station. Now " + redKitchen[stationId]);
                         }
-                        else redKitchen.Add(stationId, ingredient);
+                        else {
+                            redKitchen.Add(stationId, ingredient);
+                            Debug.Log("Created new red station with ingredient list: " + redKitchen[stationId]);
+                        }
 
                         checkCurrentIngredient("red", stationId, connectionId);
                     }
@@ -151,8 +155,14 @@ public class Server : MonoBehaviour {
                         {
                             blueKitchen[stationId] += "$";
                             blueKitchen[stationId] += ingredient;
+                            Debug.Log("Added " + ingredient + " to blue kitchen station. Now " + blueKitchen[stationId]);
                         }
-                        else blueKitchen.Add(stationId, ingredient);
+                        else
+                        {
+                            blueKitchen.Add(stationId, ingredient);
+                            Debug.Log("Created new blue station with ingredient list: " + blueKitchen[stationId]);
+                        }
+
                         checkCurrentIngredient("blue", stationId, connectionId);
                     }
                 }
@@ -188,14 +198,12 @@ public class Server : MonoBehaviour {
     {
         byte error;
         byte[] buffer = new byte[1024];
-        int bufferSize = 1024;
         Stream message = new MemoryStream(buffer);
         BinaryFormatter formatter = new BinaryFormatter();
         //Serialize the message
         string messageToSend = messageType + "&" + textInput;
         formatter.Serialize(message, messageToSend);
 
-        Debug.Log(reliableChannel);
         //Send the message from the "client" with the serialized message and the connection information
         NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
 
@@ -265,10 +273,12 @@ public class Server : MonoBehaviour {
         if (kitchen == "red")
         {
             SendMyMessage("", redKitchen[station], hostId);
+            Debug.Log("Sent red kitchen list to player: " + redKitchen[station]);
         }
         else if (kitchen == "blue")
         {
             SendMyMessage("", blueKitchen[station], hostId);
+            Debug.Log("Sent blue kitchen list to player: " + blueKitchen[station]);
         }
     }
 }
