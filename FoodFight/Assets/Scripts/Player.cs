@@ -14,12 +14,16 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour {
 
     private GameObject currentItem;
+    private GameObject networkClient;
+    private Client network;
 
     private string currentStation = "-1";
 
     /* Current ingredient that the player is holding
        -> Can be used externally */
     public static Ingredient currentIngred;
+    public Text mainText;
+    private int numberOfScans = 0;
 
     //NFC Stuff:
     public Text tag_output_text;
@@ -29,11 +33,12 @@ public class Player : MonoBehaviour {
     private int lastTag = -1;
 
     void Start () {
-
+        networkClient = GameObject.Find("Client");
+        network = networkClient.GetComponent<Client>();
     }
 
 	void Update () {
-        checkStation("0");
+
         if (Input.GetKeyDown(KeyCode.T))
         {
             Debug.Log(currentIngred);
@@ -42,6 +47,8 @@ public class Player : MonoBehaviour {
         {
             currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
         }
+
+        checkNFC();
     }
 
     public void goToFrying()
@@ -72,13 +79,25 @@ public class Player : MonoBehaviour {
 
     private void checkStation(string text)
     {
+
+        //network.SendMyMessage("station", text);
         if (text != currentStation)
         {
-            switch(text)
+            switch (text)
             {
                 case "0":
                     pickUpStation();
                     currentStation = "0";
+                    text += "$" + currentIngred.Name;
+                    Debug.Log(text);
+                    network.SendMyMessage("station", text);
+                    break;
+                case "1":
+                    pickUpStation();
+                    currentStation = "1";
+                    text += "$" + currentIngred.Name;
+                    Debug.Log(text);
+                    network.SendMyMessage("station", text);
                     break;
                 default:
                     break;
@@ -115,9 +134,7 @@ public class Player : MonoBehaviour {
 
                         if (j != lastTag)
                         {
-
-                            checkStation("0");
-
+                            checkStation(text);
                             lastTag = j;
                         }
                     }

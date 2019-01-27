@@ -52,9 +52,9 @@
                   android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen">
         </activity>
         <!--
-            To support devices using the TI S3D library for stereo mode we must 
+            To support devices using the TI S3D library for stereo mode we must
             add the following library.
-            Devices that require this are: ODG X6 
+            Devices that require this are: ODG X6
         -->
         <uses-library android:name="com.ti.s3d" android:required="false" />
         <!--
