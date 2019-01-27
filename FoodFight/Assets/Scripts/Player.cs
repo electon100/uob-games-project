@@ -23,7 +23,7 @@ public class Player : MonoBehaviour {
     1  - Frying
     2  - Chopping
     3  - Plating*/
-    public string currentStation = "-1";
+    public static string currentStation = "-1";
 
     /* Current ingredient that the player is holding
        -> Can be used externally */
@@ -54,7 +54,7 @@ public class Player : MonoBehaviour {
             currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
         }
 
-        //checkNFC();
+        checkNFC();
     }
 
     public void viewItems()
@@ -106,42 +106,43 @@ public class Player : MonoBehaviour {
 
     private void checkStation(string text)
     {
-        //network.SendMyMessage("station", text);
-        mainText.text = "Text" + text + " Current" + currentStation;
         
-        switch (text)
+        if (currentStation != text)
         {
-            case "0":
-                currentStation = text;
-                //Tell server you've logged into the station, holding that food item
-                text += sendCurrentIngredient();
-                network.SendMyMessage("station", text);
-                cupboardStation();
-                break;
-            case "1":
-                currentStation = text;
-                //Tell server you've logged into the station, holding that food item
-                text += sendCurrentIngredient();
-                network.SendMyMessage("station", text);
-                fryingStation();
-                break;
-            case "2":
-                currentStation = text;
-                //Tell server you've logged into the station, holding that food item
-                text += sendCurrentIngredient();
-                network.SendMyMessage("station", text);
-                choppingStation();
-                break;
-            case "3":
-                currentStation = text;
-                //Tell server you've logged into the station, holding that food item
-                text += sendCurrentIngredient();
-                network.SendMyMessage("station", text);
-                platingStation();
-                break;
-            default:
-                currentStation = "-1";
-                break;
+            switch (text)
+            {
+                case "0":
+                    currentStation = text;
+                    //Tell server you've logged into the station, holding that food item
+                    text += sendCurrentIngredient();
+                    network.SendMyMessage("station", text);
+                    cupboardStation();
+                    break;
+                case "1":
+                    currentStation = text;
+                    //Tell server you've logged into the station, holding that food item
+                    text += sendCurrentIngredient();
+                    network.SendMyMessage("station", text);
+                    fryingStation();
+                    break;
+                case "2":
+                    currentStation = text;
+                    //Tell server you've logged into the station, holding that food item
+                    text += sendCurrentIngredient();
+                    network.SendMyMessage("station", text);
+                    choppingStation();
+                    break;
+                case "3":
+                    currentStation = text;
+                    //Tell server you've logged into the station, holding that food item
+                    text += sendCurrentIngredient();
+                    network.SendMyMessage("station", text);
+                    platingStation();
+                    break;
+                default:
+                    currentStation = "-1";
+                    break;
+            }
         }
     }
 
