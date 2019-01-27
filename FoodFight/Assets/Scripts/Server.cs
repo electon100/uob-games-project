@@ -63,15 +63,19 @@ public class Server : MonoBehaviour {
         //Networking events
         switch (recData)
         {
+            // Do nothing if nothing was sent to server
             case NetworkEventType.Nothing:
                 break;
+            // Have a phone connect to the server
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Player " + connectionId + " has connected");
                 break;
+            // Have the phone send data to the server
             case NetworkEventType.DataEvent:
                 string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
                 manageMessageEvents(message, connectionId);
                 break;
+            // Remove the player from the game
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has disconnected");
                 IDictionary<int, GameObject> teamToDestroyFrom = getTeam(connectionId);
@@ -92,52 +96,58 @@ public class Server : MonoBehaviour {
     // This is where all the work happens.
     private void manageMessageEvents(string message, int connectionId)
     {
-        string messageType = decodeMessage(message)[0];
-        string messageContent = decodeMessage(message)[1];
+        string messageType = decodeMessage(message, '$')[0];
+        string messageContent = decodeMessage(message, '$')[1];
         switch(messageType)
         {
+            // Player chooses team to play on
             case "connect":
-                if (redTeam.ContainsKey(connectionId) || blueTeam.ContainsKey(connectionId)){
-                    break;
-                }
-                else {
-                    messageContent = decodeMessage(message)[1];
+                // Allocate the player to the team if they are not already on a team
+                if (!redTeam.ContainsKey(connectionId) && !blueTeam.ContainsKey(connectionId)) { 
                     allocateToTeam(connectionId, messageContent);
                 }
                 break;
+
+            // Player connects to a work station
             case "station":
                 //If this station already exists, check what's in it and send it back to player.
-                Debug.Log(messageContent);
-                string[] words = messageContent.Split('$');
-                /*foreach (string element in words)
-                {
-                    Debug.Log(element);
-                }*/
+                string[] words = decodeMessage(messageContent, '$');
                 string stationId = words[0];
-                Debug.Log("Word 0: " + stationId);
+                
                 string ingredient = words[1];
+                Debug.Log("Word 0: " + stationId);
                 Debug.Log("Word 1: " + ingredient);
-                if (redKitchen.ContainsKey(stationId))
+
+                // Case where we want to send back ingredient stored at the station to player
+                if (ingredient.Equals(""))
                 {
-                    checkCurrentIngredient("red", stationId);
+                    if (redKitchen.ContainsKey(stationId))
+                    {
+                        checkCurrentIngredient("red", stationId);
+                    }
+                    else if (blueKitchen.ContainsKey(stationId))
+                    {
+                        checkCurrentIngredient("blue", stationId);
+                    }
                 }
-                else if (blueKitchen.ContainsKey(stationId))
-                {
-                    checkCurrentIngredient("blue", stationId);
-                }
-                //If this is the first time a player has logged into that station, initialise it.
+                
+                //If the player wants to add an ingredient, add it
                 else 
                 {
                     if (redTeam.ContainsKey(connectionId))
                     {
                         redKitchen.Add(stationId, ingredient);
+                        checkCurrentIngredient("red", stationId);
                     }
                     else
                     {
                         blueKitchen.Add(stationId, ingredient);
+                        checkCurrentIngredient("blue", stationId);
                     }
                 }
                 break;
+
+            // Player sends NFC data
             case "NFC":
                 //Do NFC stuff
                 Debug.Log("Player " + connectionId + " has sent: " + messageContent);
@@ -175,10 +185,10 @@ public class Server : MonoBehaviour {
         }
     }
 
-    private string[] decodeMessage(string message)
+    // Splits up a string based on a given character
+    private string[] decodeMessage(string message, char character)
     {
-        string[] splitted = Regex.Split(message, "&");
-
+        string[] splitted = message.Split(character);
         return splitted;
     }
 
