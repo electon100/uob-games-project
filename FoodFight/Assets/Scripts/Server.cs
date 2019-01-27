@@ -96,8 +96,8 @@ public class Server : MonoBehaviour {
     // This is where all the work happens.
     private void manageMessageEvents(string message, int connectionId)
     {
-        string messageType = decodeMessage(message, '$')[0];
-        string messageContent = decodeMessage(message, '$')[1];
+        string messageType = decodeMessage(message, '&')[0];
+        string messageContent = decodeMessage(message, '&')[1];
         switch(messageType)
         {
             // Player chooses team to play on

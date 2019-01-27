@@ -17,13 +17,18 @@ public class Player : MonoBehaviour {
     private GameObject networkClient;
     private Client network;
 
-    private string currentStation = "-1";
+    /*Current station:
+    -1 - Main Screen
+    0  - Cupboard
+    1  - Frying
+    2  - Chopping
+    3  - Plating*/
+    public string currentStation = "-1";
 
     /* Current ingredient that the player is holding
        -> Can be used externally */
     public static Ingredient currentIngred;
     public Text mainText;
-    private int numberOfScans = 0;
 
     //NFC Stuff:
     public Text tag_output_text;
@@ -35,6 +40,7 @@ public class Player : MonoBehaviour {
     void Start () {
         networkClient = GameObject.Find("Client");
         network = networkClient.GetComponent<Client>();
+        DontDestroyOnLoad(GameObject.Find("Player"));
     }
 
 	void Update () {
@@ -48,17 +54,7 @@ public class Player : MonoBehaviour {
             currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
         }
 
-        checkNFC();
-    }
-
-    public void goToFrying()
-    {
-        SceneManager.LoadScene("PanStation");
-    }
-
-    public void goToCupboard()
-    {
-        SceneManager.LoadScene("PickUpStation");
+        //checkNFC();
     }
 
     public void viewItems()
@@ -73,35 +69,79 @@ public class Player : MonoBehaviour {
         }
     }
 
-    private void pickUpStation() {
+    private void cupboardStation() {
         currentIngred = ARCupboard.ingredient;
+        SceneManager.LoadScene("CupboardStation");
+    }
+
+    private void fryingStation()
+    {
+        SceneManager.LoadScene("FryingStation");
+    }
+
+    private void choppingStation()
+    {
+        SceneManager.LoadScene("ChoppingStation");
+    }
+
+    private void platingStation()
+    {
+        SceneManager.LoadScene("PlatingStation");
+    }
+
+    private string sendCurrentIngredient()
+    {
+        string message;
+        if (currentIngred != null)
+        {
+            message = "$" + currentIngred.Name;
+        }
+        else
+        {
+            message = "$";
+        }
+
+        return message;
     }
 
     private void checkStation(string text)
     {
-
         //network.SendMyMessage("station", text);
-        if (text != currentStation)
+        mainText.text = "Text" + text + " Current" + currentStation;
+        
+        switch (text)
         {
-            switch (text)
-            {
-                case "0":
-                    pickUpStation();
-                    currentStation = "0";
-                    text += "$" + currentIngred.Name;
-                    Debug.Log(text);
-                    network.SendMyMessage("station", text);
-                    break;
-                case "1":
-                    pickUpStation();
-                    currentStation = "1";
-                    text += "$" + currentIngred.Name;
-                    Debug.Log(text);
-                    network.SendMyMessage("station", text);
-                    break;
-                default:
-                    break;
-            }
+            case "0":
+                currentStation = text;
+                //Tell server you've logged into the station, holding that food item
+                text += sendCurrentIngredient();
+                network.SendMyMessage("station", text);
+                cupboardStation();
+                break;
+            case "1":
+                currentStation = text;
+                //Tell server you've logged into the station, holding that food item
+                text += sendCurrentIngredient();
+                network.SendMyMessage("station", text);
+                fryingStation();
+                break;
+            case "2":
+                currentStation = text;
+                //Tell server you've logged into the station, holding that food item
+                text += sendCurrentIngredient();
+                network.SendMyMessage("station", text);
+                choppingStation();
+                break;
+            case "3":
+                currentStation = text;
+                //Tell server you've logged into the station, holding that food item
+                text += sendCurrentIngredient();
+                network.SendMyMessage("station", text);
+                platingStation();
+                break;
+            default:
+                currentStation = "-1";
+                break;
         }
     }
 

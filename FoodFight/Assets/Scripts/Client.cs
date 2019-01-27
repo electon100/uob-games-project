@@ -13,7 +13,7 @@ using System.Reflection;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.100";
+    private const string serverIP = "192.168.0.62";
 
     private int port = 8000;
 
@@ -104,8 +104,7 @@ public class Client : MonoBehaviour {
                 Debug.Log("Broadcast event.");
                 break;
         }
-
-        checkNFC();
+        
     }
 
     public void Connect ()
