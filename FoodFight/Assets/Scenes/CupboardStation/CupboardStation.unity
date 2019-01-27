@@ -1733,6 +1733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a661992e548a5f4faf9ab8cd2841df7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  control: {fileID: 0}
 --- !u!65 &1413251962
 BoxCollider:
   m_ObjectHideFlags: 0

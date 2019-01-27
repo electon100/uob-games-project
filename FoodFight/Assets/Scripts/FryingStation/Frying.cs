@@ -120,6 +120,7 @@ public class Frying : MonoBehaviour {
     }
 
 	public void goBack() {
-		SceneManager.LoadScene("PlayerMainScreen");
+        Player.currentStation = "1";
+        SceneManager.LoadScene("PlayerMainScreen");
 	}
 }

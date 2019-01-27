@@ -17,7 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CupboardStation/CupboardStation.unity
     guid: e0c0d187c66b6814aada1700e1ed8526
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/FryingStation/FryingStation.unity
     guid: dc1781f5155a84b4c97991fcbb946400
   - enabled: 0
