@@ -123,11 +123,11 @@ public class Server : MonoBehaviour {
                 {
                     if (redKitchen.ContainsKey(stationId))
                     {
-                        checkCurrentIngredient("red", stationId, connectionId);
+                        checkCurrentIngredient("station", "red", stationId, connectionId);
                     }
                     else if (blueKitchen.ContainsKey(stationId))
                     {
-                        checkCurrentIngredient("blue", stationId, connectionId);
+                        checkCurrentIngredient("station", "blue", stationId, connectionId);
                     }
                 }
                 
@@ -147,7 +147,7 @@ public class Server : MonoBehaviour {
                             Debug.Log("Created new red station with ingredient list: " + redKitchen[stationId]);
                         }
 
-                        checkCurrentIngredient("red", stationId, connectionId);
+                        checkCurrentIngredient("station", "red", stationId, connectionId);
                     }
                     else
                     {
@@ -163,7 +163,7 @@ public class Server : MonoBehaviour {
                             Debug.Log("Created new blue station with ingredient list: " + blueKitchen[stationId]);
                         }
 
-                        checkCurrentIngredient("blue", stationId, connectionId);
+                        checkCurrentIngredient("station", "blue", stationId, connectionId);
                     }
                 }
                 break;
@@ -268,16 +268,16 @@ public class Server : MonoBehaviour {
         }
     }
 
-    private void checkCurrentIngredient(string kitchen, string station, int hostId)
+    private void checkCurrentIngredient(string messageType, string kitchen, string station, int hostId)
     {
         if (kitchen == "red")
         {
-            SendMyMessage("", redKitchen[station], hostId);
+            SendMyMessage(messageType, redKitchen[station], hostId);
             Debug.Log("Sent red kitchen list to player: " + redKitchen[station]);
         }
         else if (kitchen == "blue")
         {
-            SendMyMessage("", blueKitchen[station], hostId);
+            SendMyMessage(messageType, blueKitchen[station], hostId);
             Debug.Log("Sent blue kitchen list to player: " + blueKitchen[station]);
         }
     }
