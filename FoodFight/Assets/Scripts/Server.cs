@@ -110,62 +110,7 @@ public class Server : MonoBehaviour {
 
             // Player connects to a work station
             case "station":
-                //If this station already exists, check what's in it and send it back to player.
-                string[] words = decodeMessage(messageContent, '$');
-                string stationId = words[0];
-                
-                string ingredient = words[1];
-                Debug.Log("Word 0: " + stationId);
-                Debug.Log("Word 1: " + ingredient);
-
-                // Case where we want to send back ingredient stored at the station to player
-                if (ingredient.Equals(""))
-                {
-                    if (redKitchen.ContainsKey(stationId))
-                    {
-                        checkCurrentIngredient("station", "red", stationId, connectionId);
-                    }
-                    else if (blueKitchen.ContainsKey(stationId))
-                    {
-                        checkCurrentIngredient("station", "blue", stationId, connectionId);
-                    }
-                }
-                
-                //If the player wants to add an ingredient, add it
-                else 
-                {
-                    if (redTeam.ContainsKey(connectionId))
-                    {
-                        if (redKitchen.ContainsKey(stationId))
-                        {
-                            redKitchen[stationId] += "$";
-                            redKitchen[stationId] += ingredient;
-                            Debug.Log("Added " + ingredient + " to red kitchen station. Now " + redKitchen[stationId]);
-                        }
-                        else {
-                            redKitchen.Add(stationId, ingredient);
-                            Debug.Log("Created new red station with ingredient list: " + redKitchen[stationId]);
-                        }
-
-                        checkCurrentIngredient("station", "red", stationId, connectionId);
-                    }
-                    else
-                    {
-                        if (blueKitchen.ContainsKey(stationId))
-                        {
-                            blueKitchen[stationId] += "$";
-                            blueKitchen[stationId] += ingredient;
-                            Debug.Log("Added " + ingredient + " to blue kitchen station. Now " + blueKitchen[stationId]);
-                        }
-                        else
-                        {
-                            blueKitchen.Add(stationId, ingredient);
-                            Debug.Log("Created new blue station with ingredient list: " + blueKitchen[stationId]);
-                        }
-
-                        checkCurrentIngredient("station", "blue", stationId, connectionId);
-                    }
-                }
+                OnStation(messageContent, connectionId);
                 break;
 
             // Player sends NFC data
@@ -191,6 +136,67 @@ public class Server : MonoBehaviour {
             + message + ", size = " + size + ", error = " + error.ToString() + ")");
 
         return message;
+    }
+
+    private void OnStation(string messageContent, int connectionId)
+    {
+        //If this station already exists, check what's in it and send it back to player.
+        string[] words = decodeMessage(messageContent, '$');
+        string stationId = words[0];
+
+        string ingredient = words[1];
+        Debug.Log("Word 0: " + stationId);
+        Debug.Log("Word 1: " + ingredient);
+
+        // Case where we want to send back ingredient stored at the station to player
+        if (ingredient.Equals(""))
+        {
+            if (redKitchen.ContainsKey(stationId))
+            {
+                checkCurrentIngredient("station", "red", stationId, connectionId);
+            }
+            else if (blueKitchen.ContainsKey(stationId))
+            {
+                checkCurrentIngredient("station", "blue", stationId, connectionId);
+            }
+        }
+
+        //If the player wants to add an ingredient, add it
+        else
+        {
+            if (redTeam.ContainsKey(connectionId))
+            {
+                if (redKitchen.ContainsKey(stationId))
+                {
+                    redKitchen[stationId] += "$";
+                    redKitchen[stationId] += ingredient;
+                    Debug.Log("Added " + ingredient + " to red kitchen station. Now " + redKitchen[stationId]);
+                }
+                else
+                {
+                    redKitchen.Add(stationId, ingredient);
+                    Debug.Log("Created new red station with ingredient list: " + redKitchen[stationId]);
+                }
+
+                checkCurrentIngredient("station", "red", stationId, connectionId);
+            }
+            else
+            {
+                if (blueKitchen.ContainsKey(stationId))
+                {
+                    blueKitchen[stationId] += "$";
+                    blueKitchen[stationId] += ingredient;
+                    Debug.Log("Added " + ingredient + " to blue kitchen station. Now " + blueKitchen[stationId]);
+                }
+                else
+                {
+                    blueKitchen.Add(stationId, ingredient);
+                    Debug.Log("Created new blue station with ingredient list: " + blueKitchen[stationId]);
+                }
+
+                checkCurrentIngredient("station", "blue", stationId, connectionId);
+            }
+        }
     }
 
     // Used for sending data to the players
@@ -272,12 +278,14 @@ public class Server : MonoBehaviour {
     {
         if (kitchen == "red")
         {
-            SendMyMessage(messageType, redKitchen[station], hostId);
+            string messageContent = station + "$" + redKitchen[station];
+            SendMyMessage(messageType, messageContent, hostId);
             Debug.Log("Sent red kitchen list to player: " + redKitchen[station]);
         }
         else if (kitchen == "blue")
         {
-            SendMyMessage(messageType, blueKitchen[station], hostId);
+            string messageContent = station + "$" + blueKitchen[station];
+            SendMyMessage(messageType, messageContent, hostId);
             Debug.Log("Sent blue kitchen list to player: " + blueKitchen[station]);
         }
     }
