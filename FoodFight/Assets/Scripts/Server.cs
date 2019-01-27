@@ -274,7 +274,7 @@ public class Server : MonoBehaviour {
         }
     }
 
-    private void checkCurrentIngredient(string kitchen, string station, int hostId)
+    private void checkCurrentIngredient(string messageType, string kitchen, string station, int hostId)
     {
         if (kitchen == "red")
         {

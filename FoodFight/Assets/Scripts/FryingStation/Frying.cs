@@ -45,11 +45,8 @@ public class Frying : MonoBehaviour {
 		originalPos = gameObject.transform.position;
 		lastShake = Time.time;
 
-		/* If available, add the held ingredient to the pan */
-		if (Player.currentIngred != null) {
-			panContents.Add(Player.currentIngred);
-			Debug.Log("Ingredient added to pan: " + Player.currentIngred.Name);
-		}
+        /* If available, add the held ingredient to the pan */
+        panContents = Player.ingredientsFromStation;
 
 		/* Draw ingredient models in pan */
 		foreach (Ingredient ingredient in panContents) {
@@ -111,6 +108,16 @@ public class Frying : MonoBehaviour {
 			}
 		}
 	}
+
+    private void putIngredientInPan()
+    {
+        if (Player.currentIngred != null)
+        {
+            panContents.Add(Player.currentIngred);
+            Instantiate(Player.currentIngred.Model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(-90, 0, 0));
+            Debug.Log("Ingredient added to pan: " + Player.currentIngred.Name);
+        }
+    }
 
 	public void goBack() {
 		SceneManager.LoadScene("PlayerMainScreen");

@@ -45,7 +45,8 @@ public class Client : MonoBehaviour {
     private GameObject currentItem;
 
     // dictionary <station, ingredients>
-    IDictionary<string, string> myKitchen = new Dictionary<string, string>();
+    List<Ingredient> ingredientsInStation;
+    IDictionary<string, List<Ingredient>> myKitchen = new Dictionary<string, List<Ingredient>>();
 
     private string currentStation = "-1";
 
@@ -234,15 +235,19 @@ public class Client : MonoBehaviour {
             case "station":
                 string[] data = decodeMessage(messageContent, '$');
                 string stationId = data[0];
-                string ingredients = data[1];
-                myKitchen.Add(stationId, ingredients);
+                ingredientsInStation = new List<Ingredient>();
+                for (int i = 1; i < data.Length; i++)
+                {
+                    //ingredientsInStation.Add(data[i]);
+                }
+                myKitchen.Add(stationId, ingredientsInStation);
                 break;
             default:
                 break;
         }
     }
 
-    public string getIngredientsFromStation(string stationID)
+    public List<Ingredient> getIngredientsFromStation(string stationID)
     {
         return myKitchen[stationID];
     }
