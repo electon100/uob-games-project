@@ -123,11 +123,11 @@ public class Server : MonoBehaviour {
                 {
                     if (redKitchen.ContainsKey(stationId))
                     {
-                        checkCurrentIngredient("red", stationId);
+                        checkCurrentIngredient("red", stationId, connectionId);
                     }
                     else if (blueKitchen.ContainsKey(stationId))
                     {
-                        checkCurrentIngredient("blue", stationId);
+                        checkCurrentIngredient("blue", stationId, connectionId);
                     }
                 }
                 
@@ -136,13 +136,24 @@ public class Server : MonoBehaviour {
                 {
                     if (redTeam.ContainsKey(connectionId))
                     {
-                        redKitchen.Add(stationId, ingredient);
-                        checkCurrentIngredient("red", stationId);
+                        if (redKitchen.ContainsKey(stationId))
+                        {
+                            redKitchen[stationId] += "$";
+                            redKitchen[stationId] += ingredient;
+                        }
+                        else redKitchen.Add(stationId, ingredient);
+
+                        checkCurrentIngredient("red", stationId, connectionId);
                     }
                     else
                     {
-                        blueKitchen.Add(stationId, ingredient);
-                        checkCurrentIngredient("blue", stationId);
+                        if (blueKitchen.ContainsKey(stationId))
+                        {
+                            blueKitchen[stationId] += "$";
+                            blueKitchen[stationId] += ingredient;
+                        }
+                        else blueKitchen.Add(stationId, ingredient);
+                        checkCurrentIngredient("blue", stationId, connectionId);
                     }
                 }
                 break;
@@ -170,6 +181,29 @@ public class Server : MonoBehaviour {
             + message + ", size = " + size + ", error = " + error.ToString() + ")");
 
         return message;
+    }
+
+    // Used for sending data to the players
+    public void SendMyMessage(string messageType, string textInput, int connectionId)
+    {
+        byte error;
+        byte[] buffer = new byte[1024];
+        int bufferSize = 1024;
+        Stream message = new MemoryStream(buffer);
+        BinaryFormatter formatter = new BinaryFormatter();
+        //Serialize the message
+        string messageToSend = messageType + "&" + textInput;
+        formatter.Serialize(message, messageToSend);
+
+        Debug.Log(reliableChannel);
+        //Send the message from the "client" with the serialized message and the connection information
+        NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
+
+        //If there is an error, output message error to the console
+        if ((NetworkError)error != NetworkError.Ok)
+        {
+            Debug.Log("Message send error: " + (NetworkError)error);
+        }
     }
 
     //Allocates a player to a team based on their choice.
@@ -226,15 +260,15 @@ public class Server : MonoBehaviour {
         }
     }
 
-    private void checkCurrentIngredient(string kitchen, string station)
+    private void checkCurrentIngredient(string kitchen, string station, int hostId)
     {
         if (kitchen == "red")
         {
-            Debug.Log(redKitchen[station]);
+            SendMyMessage("", redKitchen[station], hostId);
         }
         else if (kitchen == "blue")
         {
-            Debug.Log(blueKitchen[station]);
+            SendMyMessage("", blueKitchen[station], hostId);
         }
     }
 }
