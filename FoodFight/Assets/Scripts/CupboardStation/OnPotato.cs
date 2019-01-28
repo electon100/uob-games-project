@@ -10,7 +10,6 @@ public class OnPotato : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        control = GameObject.Find("ARCupboard").GetComponent<ARCupboard>();
     }
 
     // Update is called once per frame
@@ -20,6 +19,7 @@ public class OnPotato : MonoBehaviour {
 
     void OnMouseDown()
     {
+        control = GameObject.Find("ImageTarget").GetComponent<ARCupboard>();
         control.onPotato();
     }
 }

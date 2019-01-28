@@ -7,14 +7,13 @@ using UnityEngine.SceneManagement;
 
 public class ARCupboard : MonoBehaviour
 {
-
     public static Ingredient ingredient;
     public Text foodName;
 
     // Use this for initialization
     void Start()
     {
-
+        DontDestroyOnLoad(GameObject.Find("Player"));
     }
 
     // Update is called once per frame
@@ -61,6 +60,7 @@ public class ARCupboard : MonoBehaviour
 
     public void goBack()
     {
+        Player.currentStation = "0";
         SceneManager.LoadScene("PlayerMainScreen");
     }
 

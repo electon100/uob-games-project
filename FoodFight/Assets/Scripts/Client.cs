@@ -13,7 +13,7 @@ using System.Reflection;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.100";
+    private const string serverIP = "192.168.0.101";
 
     private int port = 8000;
 
@@ -44,6 +44,11 @@ public class Client : MonoBehaviour {
 
     private GameObject currentItem;
 
+    // List of ingredient for each station.
+    public List<Ingredient> ingredientsInStation;
+    // A kitchen is a dictionary of different stations and their associated ingredients.
+    public IDictionary<string, List<Ingredient>> myKitchen = new Dictionary<string, List<Ingredient>>();
+
     private string currentStation = "-1";
 
     /* Current ingredient that the player is holding
@@ -52,17 +57,18 @@ public class Client : MonoBehaviour {
 
     public void Start()
     {
+        ingredientsInStation = new List<Ingredient>();
 
+        for (int i = 0; i < 4; i++)
+        {
+            string stationId = i.ToString();
+            myKitchen.Add(stationId, ingredientsInStation);
+        }
     }
 
     public void Awake()
     {
         DontDestroyOnLoad(GameObject.Find("Client"));
-    }
-
-    public Client()
-    {
-
     }
 
     private void Update()
@@ -94,8 +100,8 @@ public class Client : MonoBehaviour {
                 Debug.Log("Player " + connectionId + " has been connected to server.");
                 break;
             case NetworkEventType.DataEvent:
-                string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
-                Debug.Log("Server has sent: " + message);
+                string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
+                manageReceiveFromServer(message);
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has been disconnected to server");
@@ -104,8 +110,7 @@ public class Client : MonoBehaviour {
                 Debug.Log("Broadcast event.");
                 break;
         }
-
-        checkNFC();
+        
     }
 
     public void Connect ()
@@ -147,8 +152,7 @@ public class Client : MonoBehaviour {
         //Serialize the message
         string messageToSend = messageType + "&" + textInput;
         formatter.Serialize(message, messageToSend);
-
-        Debug.Log(reliableChannel);
+        
         //Send the message from the "client" with the serialized message and the connection information
         NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
 
@@ -159,48 +163,66 @@ public class Client : MonoBehaviour {
         }
     }
 
-    private void checkNFC() {
-        if (Application.platform == RuntimePlatform.Android) {
-            try {
-                mActivity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
-                mIntent = mActivity.Call<AndroidJavaObject>("getIntent");
-                sAction = mIntent.Call<String>("getAction");
-                if (sAction == "android.nfc.action.NDEF_DISCOVERED") {
-                    AndroidJavaObject[] mNdefMessage = mIntent.Call<AndroidJavaObject[]>("getParcelableArrayExtra", "android.nfc.extra.NDEF_MESSAGES");
-                    AndroidJavaObject[] mNdefRecord = mNdefMessage[0].Call<AndroidJavaObject[]>("getRecords");
-                    byte[] payLoad = mNdefRecord[0].Call<byte[]>("getPayload");
+    // Splits up a string based on a given character
+    private string[] decodeMessage(string message, char character)
+    {
+        string[] splitted = message.Split(character);
+        return splitted;
+    }
 
-                    if (mNdefMessage != null) {
-                        string text = System.Text.Encoding.UTF8.GetString(payLoad);
-                        int j = -1;
-                        Int32.TryParse(text, out j);
-                        // if (Int32.TryParse(text, out j)) tag_output_text.text = "Tag value: " + j;
-                        // else tag_output_text.text = "Could not parse tag for text: " + text;
 
-                        if (j != lastTag) {
+    //This function is called when data is sent
+    private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error)
+    {
+        //Here the message being received is deserialized and output to the console
+        Stream serializedMessage = new MemoryStream(data);
+        BinaryFormatter formatter = new BinaryFormatter();
+        string message = formatter.Deserialize(serializedMessage).ToString();
 
-                            SendMyMessage("NFC", "Tag " + text + " scanned.");
+        //Output the deserialized message as well as the connection information to the console
+        Debug.Log("OnData(hostId = " + hostId + ", connectionId = "
+            + connectionId + ", channelId = " + channelId + ", data = "
+            + message + ", size = " + size + ", error = " + error.ToString() + ")");
 
-                            lastTag = j;
-                        }
-                    } else {
-                        tag_output_text.text = "No ID found !";
+        return message;
+    }
+
+    public void manageReceiveFromServer(string message)
+    {
+        string messageType = decodeMessage(message, '&')[0];
+        string messageContent = decodeMessage(message, '&')[1];
+
+        switch (messageType)
+        {
+            case "station":
+                string[] data = decodeMessage(messageContent, '$');
+                string stationId = data[0];
+                for (int i = 1; i < data.Length; i++)
+                {
+                    //receives whole string with flags, e.g. Eggs^0^2
+                    if (data[i] != "")
+                    {
+                        string ingredientString = FirstLetterToUpper(data[i]);
+                        string[] ingredientStringList = decodeMessage(ingredientString, '^');
+                        string ingredientName = ingredientStringList[0];
+                        string prefab = ingredientName + "Prefab";
+                        Ingredient ingredientToAdd = new Ingredient(ingredientName, (GameObject)Resources.Load(prefab, typeof(GameObject)));
+                        ingredientToAdd.translateToIngredient(ingredientString);
+                        ingredientsInStation.Add(ingredientToAdd);
                     }
-                    mIntent.Call("removeExtra", "android.nfc.extra.TAG");
-                    return;
-                } else if (sAction == "android.nfc.action.TECH_DISCOVERED") {
-                    tag_output_text.text = "NDEF tag";
-                } else if (sAction == "android.nfc.action.TAG_DISCOVERED") {
-                    tag_output_text.text = "Tag not supported";
-                } else {
-                    tag_output_text.text = "Scan a NFC tag...";
-                    return;
                 }
-            } catch (Exception ex) {
-                string text = ex.Message;
-                tag_output_text.text = text;
-            }
+
+                myKitchen[stationId] = ingredientsInStation;
+                ingredientsInStation = new List<Ingredient>();
+                break;
+            default:
+                break;
         }
+    }
+
+    public List<Ingredient> getIngredientsFromStation(string stationID)
+    {        
+        return myKitchen[stationID];
     }
 
     public void onClickRed()
@@ -213,6 +235,17 @@ public class Client : MonoBehaviour {
     {
         SendMyMessage("connect", "blue");
         SceneManager.LoadScene("PlayerMainScreen");
+    }
+
+    private string FirstLetterToUpper(string str)
+    {
+        if (str == null)
+            return null;
+
+        if (str.Length > 1)
+            return char.ToUpper(str[0]) + str.Substring(1);
+
+        return str.ToUpper();
     }
 
 }

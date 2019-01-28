@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OnEggs : MonoBehaviour {
+public class OnVegetables : MonoBehaviour {
     public ARCupboard control;
 
     // Use this for initialization
     void Start()
     {
-        control = GameObject.Find("ARCupboard").GetComponent<ARCupboard>();
     }
 
     // Update is called once per frame
@@ -19,6 +18,7 @@ public class OnEggs : MonoBehaviour {
 
     void OnMouseDown()
     {
-        control.onEggs();
+        control = GameObject.Find("ImageTarget").GetComponent<ARCupboard>();
+        control.onVegetables();
     }
 }
