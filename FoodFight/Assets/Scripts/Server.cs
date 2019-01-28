@@ -151,6 +151,22 @@ public class Server : MonoBehaviour {
         string[] ingredientAndFlags = decodeMessage(ingredientWithFlags, '^');
         string ingredient = ingredientAndFlags[0];
 
+        // Add station to correct kitchen if it does not exist
+        if (redTeam.ContainsKey(connectionId))
+        {
+            if (!redKitchen.ContainsKey(stationId))
+            {
+                redKitchen.Add(stationId, new List<Ingredient>());
+            }
+        }
+        else if (blueTeam.ContainsKey(connectionId))
+        {
+            if (!blueKitchen.ContainsKey(stationId))
+            {
+                blueKitchen.Add(stationId, new List<Ingredient>());
+            }
+        }
+
         // Case where we want to send back ingredient stored at the station to player
         if (ingredient.Equals(""))
         {
@@ -167,40 +183,20 @@ public class Server : MonoBehaviour {
         //If the player wants to add an ingredient, add it
         else
         {
-            if (redTeam.ContainsKey(connectionId))
+            // Add to a station if it exists
+            if (redKitchen.ContainsKey(stationId))
             {
-                // Add to a station if it exists
-                if (redKitchen.ContainsKey(stationId))
-                {
-                    AddIngredientToList(stationId, ingredientWithFlags, ingredient, "red");
-                    Debug.Log("Added " + ingredient + " to red kitchen station. Now " + redKitchen[stationId]);
-                }
-                // Create a new station with the ingredient if it doesn't exist
-                else
-                {
-                    redKitchen.Add(stationId, new List<Ingredient>());
-                    AddIngredientToList(stationId, ingredientWithFlags,ingredient, "red");
-                    Debug.Log("Created new red station with ingredient list: " + redKitchen[stationId]);
-                }
-
+                AddIngredientToList(stationId, ingredientWithFlags, ingredient, "red");
+                Debug.Log("Added " + ingredient + " to red kitchen station.");
                 checkCurrentIngredient("station", "red", stationId, connectionId);
             }
-            else if (blueTeam.ContainsKey(connectionId))
-            {
-                if (blueKitchen.ContainsKey(stationId))
-                {
-                    AddIngredientToList(stationId, ingredientWithFlags, ingredient, "blue");
-                    Debug.Log("Added " + ingredient + " to blue kitchen station. Now " + blueKitchen[stationId]);
-                }
-                else
-                {
-                    blueKitchen.Add(stationId, new List<Ingredient>());
-                    AddIngredientToList(stationId, ingredientWithFlags, ingredient, "blue");
-                    Debug.Log("Created new blue station with ingredient list: " + blueKitchen[stationId]);
-                }
 
+            else if (blueKitchen.ContainsKey(stationId))
+            {
+                AddIngredientToList(stationId, ingredientWithFlags, ingredient, "blue");
+                Debug.Log("Added " + ingredient + " to blue kitchen station.");
                 checkCurrentIngredient("station", "blue", stationId, connectionId);
-            }
+            }   
         }
     }
 
@@ -286,22 +282,24 @@ public class Server : MonoBehaviour {
             string messageContent = station + "$";
             foreach (Ingredient ingredient in redKitchen[station])
             {
-                messageContent += ingredient.ToString();
+                messageContent += ingredient.translateToString();
+                messageContent += "$";
             }
 
             SendMyMessage(messageType, messageContent, hostId);
-            Debug.Log("Sent red kitchen list to player: " + redKitchen[station]);
+            Debug.Log("Sent red kitchen list to player: " + messageContent);
         }
         else if (kitchen == "blue")
         {
             string messageContent = station + "$";
             foreach (Ingredient ingredient in blueKitchen[station])
             {
-                messageContent += ingredient.ToString();
+                messageContent += ingredient.translateToString();
+                messageContent += "$";
             }
 
             SendMyMessage(messageType, messageContent, hostId);
-            Debug.Log("Sent blue kitchen list to player: " + blueKitchen[station]);
+            Debug.Log("Sent blue kitchen list to player: " + messageContent);
         }
     }
 
