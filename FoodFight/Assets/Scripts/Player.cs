@@ -180,21 +180,15 @@ public class Player : MonoBehaviour {
                 sAction = mIntent.Call<String>("getAction");
                 if (sAction == "android.nfc.action.NDEF_DISCOVERED")
                 {
-                    tag_output_text.text = "NDEF tag";
-                }
-                else if (sAction == "android.nfc.action.TECH_DISCOVERED")
-                {
-                    AndroidJavaObject[] mNdefMessage = mIntent.Call<AndroidJavaObject[]>("getParcelableArrayExtra", "android.nfc.extra.NDEF_MESSAGES");
+                     AndroidJavaObject[] mNdefMessage = mIntent.Call<AndroidJavaObject[]>("getParcelableArrayExtra", "android.nfc.extra.NDEF_MESSAGES");
                     AndroidJavaObject[] mNdefRecord = mNdefMessage[0].Call<AndroidJavaObject[]>("getRecords");
                     byte[] payLoad = mNdefRecord[0].Call<byte[]>("getPayload");
 
                     if (mNdefMessage != null)
                     {
-                        string text = System.Text.Encoding.UTF8.GetString(payLoad).Substring(3);
+                        string text = System.Text.Encoding.UTF8.GetString(payLoad);
                         int j = -1;
                         Int32.TryParse(text, out j);
-                        // if (Int32.TryParse(text, out j)) tag_output_text.text = "Tag value: " + j;
-                        // else tag_output_text.text = "Could not parse tag for text: " + text;
 
                         if (j != lastTag)
                         {
@@ -208,6 +202,10 @@ public class Player : MonoBehaviour {
                     }
                     mIntent.Call("removeExtra", "android.nfc.extra.TAG");
                     return;
+                }
+                else if (sAction == "android.nfc.action.TECH_DISCOVERED")
+                {
+                   tag_output_text.text = "Tech discovered tag";
                 }
                 else if (sAction == "android.nfc.action.TAG_DISCOVERED")
                 {
