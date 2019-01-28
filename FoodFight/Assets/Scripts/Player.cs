@@ -42,6 +42,7 @@ public class Player : MonoBehaviour {
         networkClient = GameObject.Find("Client");
         network = networkClient.GetComponent<Client>();
         DontDestroyOnLoad(GameObject.Find("Player"));
+        ingredientsFromStation = new List<Ingredient>();
     }
 
 	void Update () {
@@ -49,12 +50,21 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.T))
         {
             checkStation("1");
-            Debug.Log(currentIngred);
+            Debug.Log("I am holding " + currentIngred);
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
             checkStation("0");
-            Debug.Log(currentIngred);
+            Debug.Log("I am holding " + currentIngred);
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ingredientsFromStation = network.getIngredientsFromStation("0");
+            foreach (Ingredient ingredient in ingredientsFromStation)
+            {
+                Debug.Log(ingredient.Name);
+            }
+
         }
         if (currentItem != null)
         {
@@ -62,7 +72,7 @@ public class Player : MonoBehaviour {
         }
 
         currentIngred = ARCupboard.ingredient;
-        ingredientsFromStation = network.getIngredientsFromStation("1");
+
         checkNFC();
     }
 
@@ -83,26 +93,19 @@ public class Player : MonoBehaviour {
     private void cupboardStation()
     {
         SceneManager.LoadScene("CupboardStation");
-        foreach (Ingredient ingredient in ingredientsFromStation)
-        {
-            Debug.Log(ingredient.Name);
-        }
     }
 
     private void fryingStation()
     {
         if (currentIngred == null)
         {
-            mainText.text = "You are not holding any ingredient";
+            mainText.text = "You are not holding any ingredient.";
         }
         else
         {
             ingredientsFromStation.Add(currentIngred);
-            foreach (Ingredient ingredient in ingredientsFromStation)
-            {
-                Debug.Log(ingredient.Name);
-            }
         }
+
         SceneManager.LoadScene("FryingStation");
     }
 
@@ -116,12 +119,12 @@ public class Player : MonoBehaviour {
         SceneManager.LoadScene("PlatingStation");
     }
 
-    private string sendCurrentIngredient()
+    private string sendCurrentIngredient(Ingredient addedIngredient)
     {
         string message;
-        if (currentIngred != null)
+        if (addedIngredient != null)
         {
-            message = "$" + currentIngred.translateToString();
+            message = "$" + addedIngredient.translateToString();
         }
         else
         {
@@ -129,6 +132,12 @@ public class Player : MonoBehaviour {
         }
 
         return message;
+    }
+
+    public static void notifyServerAboutIngredientPlaced()
+    {
+        text += sendCurrentIngredient(currentIngred);
+        network.SendMyMessage("station", text);
     }
 
     private void checkStation(string text)
@@ -141,28 +150,28 @@ public class Player : MonoBehaviour {
                 case "0":
                     currentStation = text;
                     //Tell server you've logged into the station, holding that food item
-                    text += sendCurrentIngredient();
+                    text += sendCurrentIngredient(null);
                     network.SendMyMessage("station", text);
                     cupboardStation();
                     break;
                 case "1":
                     currentStation = text;
                     //Tell server you've logged into the station, holding that food item
-                    text += sendCurrentIngredient();
+                    text += sendCurrentIngredient(null);
                     network.SendMyMessage("station", text);
                     fryingStation();
                     break;
                 case "2":
                     currentStation = text;
                     //Tell server you've logged into the station, holding that food item
-                    text += sendCurrentIngredient();
+                    text += sendCurrentIngredient(null);
                     network.SendMyMessage("station", text);
                     choppingStation();
                     break;
                 case "3":
                     currentStation = text;
                     //Tell server you've logged into the station, holding that food item
-                    text += sendCurrentIngredient();
+                    text += sendCurrentIngredient(null);
                     network.SendMyMessage("station", text);
                     platingStation();
                     break;

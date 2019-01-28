@@ -13,7 +13,7 @@ using System.Reflection;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.62";
+    private const string serverIP = "192.168.0.101";
 
     private int port = 8000;
 
@@ -44,8 +44,9 @@ public class Client : MonoBehaviour {
 
     private GameObject currentItem;
 
-    // dictionary <station, ingredients>
+    // List of ingredient for each station.
     List<Ingredient> ingredientsInStation;
+    // A kitchen is a dictionary of different stations and their associated ingredients.
     IDictionary<string, List<Ingredient>> myKitchen = new Dictionary<string, List<Ingredient>>();
 
     private string currentStation = "-1";
@@ -62,11 +63,6 @@ public class Client : MonoBehaviour {
     public void Awake()
     {
         DontDestroyOnLoad(GameObject.Find("Client"));
-    }
-
-    public Client()
-    {
-
     }
 
     private void Update()
@@ -98,7 +94,7 @@ public class Client : MonoBehaviour {
                 Debug.Log("Player " + connectionId + " has been connected to server.");
                 break;
             case NetworkEventType.DataEvent:
-                string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
+                string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
                 manageReceiveFromServer(message);
                 break;
             case NetworkEventType.DisconnectEvent:
@@ -150,8 +146,7 @@ public class Client : MonoBehaviour {
         //Serialize the message
         string messageToSend = messageType + "&" + textInput;
         formatter.Serialize(message, messageToSend);
-
-        Debug.Log(reliableChannel);
+        
         //Send the message from the "client" with the serialized message and the connection information
         NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
 
@@ -162,67 +157,28 @@ public class Client : MonoBehaviour {
         }
     }
 
-    private void checkNFC() {
-        if (Application.platform == RuntimePlatform.Android) {
-            try {
-                mActivity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
-                mIntent = mActivity.Call<AndroidJavaObject>("getIntent");
-                sAction = mIntent.Call<String>("getAction");
-                if (sAction == "android.nfc.action.NDEF_DISCOVERED") {
-                    tag_output_text.text = "NDEF tag";
-                } else if (sAction == "android.nfc.action.TECH_DISCOVERED") {
-                    AndroidJavaObject[] mNdefMessage = mIntent.Call<AndroidJavaObject[]>("getParcelableArrayExtra", "android.nfc.extra.NDEF_MESSAGES");
-                    AndroidJavaObject[] mNdefRecord = mNdefMessage[0].Call<AndroidJavaObject[]>("getRecords");
-                    byte[] payLoad = mNdefRecord[0].Call<byte[]>("getPayload");
-
-                    if (mNdefMessage != null) {
-                        string text = System.Text.Encoding.UTF8.GetString(payLoad).Substring(3);
-                        int j = -1;
-                        Int32.TryParse(text, out j);
-                        // if (Int32.TryParse(text, out j)) tag_output_text.text = "Tag value: " + j;
-                        // else tag_output_text.text = "Could not parse tag for text: " + text;
-
-                        if (j != lastTag) {
-
-                            SendMyMessage("NFC", "Tag " + text + " scanned.");
-
-                            lastTag = j;
-                        }
-                    } else {
-                        tag_output_text.text = "No ID found !";
-                    }
-                    mIntent.Call("removeExtra", "android.nfc.extra.TAG");
-                    return;
-                } else if (sAction == "android.nfc.action.TAG_DISCOVERED") {
-                    tag_output_text.text = "Tag not supported";
-                } else {
-                    tag_output_text.text = "Scan a NFC tag...";
-                    return;
-                }
-            } catch (Exception ex) {
-                string text = ex.Message;
-                tag_output_text.text = text;
-            }
-        }
-    }
-
-    public void onClickRed()
-    {
-        SendMyMessage("connect", "red");
-        SceneManager.LoadScene("PlayerMainScreen");
-    }
-
-    public void onClickBlue()
-    {
-        SendMyMessage("connect", "blue");
-        SceneManager.LoadScene("PlayerMainScreen");
-    }
-
     // Splits up a string based on a given character
     private string[] decodeMessage(string message, char character)
     {
         string[] splitted = message.Split(character);
         return splitted;
+    }
+
+
+    //This function is called when data is sent
+    private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error)
+    {
+        //Here the message being received is deserialized and output to the console
+        Stream serializedMessage = new MemoryStream(data);
+        BinaryFormatter formatter = new BinaryFormatter();
+        string message = formatter.Deserialize(serializedMessage).ToString();
+
+        //Output the deserialized message as well as the connection information to the console
+        Debug.Log("OnData(hostId = " + hostId + ", connectionId = "
+            + connectionId + ", channelId = " + channelId + ", data = "
+            + message + ", size = " + size + ", error = " + error.ToString() + ")");
+
+        return message;
     }
 
     public void manageReceiveFromServer(string message)
@@ -243,7 +199,7 @@ public class Client : MonoBehaviour {
                     ingredientsInStation.Add(ingredientToAdd);
                     Debug.Log("Received" + data[i]);
                 }
-                myKitchen.Add(stationId, ingredientsInStation);
+                myKitchen[stationId] = ingredientsInStation;
                 break;
             default:
                 break;
@@ -254,4 +210,17 @@ public class Client : MonoBehaviour {
     {
         return myKitchen[stationID];
     }
+
+    public void onClickRed()
+    {
+        SendMyMessage("connect", "red");
+        SceneManager.LoadScene("PlayerMainScreen");
+    }
+
+    public void onClickBlue()
+    {
+        SendMyMessage("connect", "blue");
+        SceneManager.LoadScene("PlayerMainScreen");
+    }
+
 }

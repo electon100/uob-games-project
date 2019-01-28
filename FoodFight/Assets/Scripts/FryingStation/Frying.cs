@@ -109,14 +109,17 @@ public class Frying : MonoBehaviour {
 		}
 	}
 
-    private void putIngredientInPan()
+    public void putIngredientInPan()
     {
+        // Instantiates the ingredient and adds it to the pan contents list.
         if (Player.currentIngred != null)
         {
             panContents.Add(Player.currentIngred);
             Instantiate(Player.currentIngred.Model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(-90, 0, 0));
             Debug.Log("Ingredient added to pan: " + Player.currentIngred.Name);
         }
+        // Tells the server that this ingredient is put in the pan
+        Player.notifyServerAboutIngredientPlaced();
     }
 
 	public void goBack() {
