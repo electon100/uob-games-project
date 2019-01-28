@@ -238,8 +238,9 @@ public class Client : MonoBehaviour {
                 ingredientsInStation = new List<Ingredient>();
                 for (int i = 1; i < data.Length; i++)
                 {
-                    Ingredient ingredientToAdd = newIngredient(data[1], null);
-                    ingredientsInStation.Add(ingredientToAdd.translateToIngredient(data[i]));
+                    Ingredient ingredientToAdd = new Ingredient(data[1], null);
+                    ingredientToAdd.translateToIngredient(data[i]);
+                    ingredientsInStation.Add(ingredientToAdd);
                     Debug.Log("Received" + data[i]);
                 }
                 myKitchen.Add(stationId, ingredientsInStation);
