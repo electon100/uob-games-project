@@ -31,7 +31,7 @@ public class Server : MonoBehaviour {
 
     // dictionary <station, status>
     IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
-    IDictionary<string, string> blueKitchen = new Dictionary<string, string>();
+    IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
 
     private void Start () {
         NetworkTransport.Init();
@@ -144,9 +144,12 @@ public class Server : MonoBehaviour {
         string[] words = decodeMessage(messageContent, '$');
         string stationId = words[0];
 
-        string ingredient = words[1];
+        string ingredientWithFlags = words[1];
         Debug.Log("Word 0: " + stationId);
-        Debug.Log("Word 1: " + ingredient);
+        Debug.Log("Word 1: " + ingredientWithFlags);
+
+        string[] ingredientAndFlags = decodeMessage(ingredientWithFlags, '^');
+        string ingredient = ingredientAndFlags[0];
 
         // Case where we want to send back ingredient stored at the station to player
         if (ingredient.Equals(""))
@@ -166,31 +169,33 @@ public class Server : MonoBehaviour {
         {
             if (redTeam.ContainsKey(connectionId))
             {
+                // Add to a station if it exists
                 if (redKitchen.ContainsKey(stationId))
                 {
-                   // redKitchen[stationId] += "$";
-                   // redKitchen[stationId] += ingredient;
+                    AddIngredientToList(stationId, ingredientWithFlags, ingredient, "red");
                     Debug.Log("Added " + ingredient + " to red kitchen station. Now " + redKitchen[stationId]);
                 }
+                // Create a new station with the ingredient if it doesn't exist
                 else
                 {
-                    //redKitchen.Add(stationId, ingredient);
+                    redKitchen.Add(stationId, new List<Ingredient>());
+                    AddIngredientToList(stationId, ingredientWithFlags,ingredient, "red");
                     Debug.Log("Created new red station with ingredient list: " + redKitchen[stationId]);
                 }
 
                 checkCurrentIngredient("station", "red", stationId, connectionId);
             }
-            else
+            else if (blueTeam.ContainsKey(connectionId))
             {
                 if (blueKitchen.ContainsKey(stationId))
                 {
-                    //blueKitchen[stationId] += "$";
-                    //blueKitchen[stationId] += ingredient;
+                    AddIngredientToList(stationId, ingredientWithFlags, ingredient, "blue");
                     Debug.Log("Added " + ingredient + " to blue kitchen station. Now " + blueKitchen[stationId]);
                 }
                 else
                 {
-                    blueKitchen.Add(stationId, ingredient);
+                    blueKitchen.Add(stationId, new List<Ingredient>());
+                    AddIngredientToList(stationId, ingredientWithFlags, ingredient, "blue");
                     Debug.Log("Created new blue station with ingredient list: " + blueKitchen[stationId]);
                 }
 
@@ -278,15 +283,59 @@ public class Server : MonoBehaviour {
     {
         if (kitchen == "red")
         {
-            string messageContent = station + "$" + redKitchen[station];
+            string messageContent = station + "$";
+            foreach (Ingredient ingredient in redKitchen[station])
+            {
+                messageContent += ingredient.ToString();
+            }
+
             SendMyMessage(messageType, messageContent, hostId);
             Debug.Log("Sent red kitchen list to player: " + redKitchen[station]);
         }
         else if (kitchen == "blue")
         {
-            string messageContent = station + "$" + blueKitchen[station];
+            string messageContent = station + "$";
+            foreach (Ingredient ingredient in blueKitchen[station])
+            {
+                messageContent += ingredient.ToString();
+            }
+
             SendMyMessage(messageType, messageContent, hostId);
             Debug.Log("Sent blue kitchen list to player: " + blueKitchen[station]);
         }
+    }
+
+    private string FirstLetterToUpper(string str)
+    {
+        if (str == null)
+            return null;
+
+        if (str.Length > 1)
+            return char.ToUpper(str[0]) + str.Substring(1);
+
+        return str.ToUpper();
+    }
+
+    private void AddIngredientToList(string stationId, string ingredientWithFlags, string ingredient, string kitchen)
+    {
+        if (kitchen == "red")
+        {
+            Ingredient newIngredient = IngredientToAdd(ingredient, ingredientWithFlags);
+            redKitchen[stationId].Add(newIngredient);
+        }
+        else if (kitchen == "blue")
+        {
+            Ingredient newIngredient = IngredientToAdd(ingredient, ingredientWithFlags);
+            blueKitchen[stationId].Add(newIngredient);
+        }
+    }
+
+    private Ingredient IngredientToAdd(string ingredient, string ingredientWithFlags)
+    {
+        string addIngredient = FirstLetterToUpper(ingredient);
+        string prefab = addIngredient + "Prefab";
+        Ingredient ingredientToAdd = new Ingredient(addIngredient, (GameObject)Resources.Load(prefab, typeof(GameObject)));
+        ingredientToAdd.translateToIngredient(ingredientWithFlags);
+        return ingredientToAdd;
     }
 }
