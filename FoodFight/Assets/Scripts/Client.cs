@@ -240,6 +240,7 @@ public class Client : MonoBehaviour {
                 {
                     Ingredient ingredientToAdd = newIngredient(data[1], null);
                     ingredientsInStation.Add(ingredientToAdd.translateToIngredient(data[i]));
+                    Debug.Log("Received" + data[i]);
                 }
                 myKitchen.Add(stationId, ingredientsInStation);
                 break;

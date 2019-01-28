@@ -40,7 +40,7 @@ public class Player : MonoBehaviour {
 
     void Start () {
         networkClient = GameObject.Find("Client");
-        //network = networkClient.GetComponent<Client>();
+        network = networkClient.GetComponent<Client>();
         DontDestroyOnLoad(GameObject.Find("Player"));
     }
 
@@ -62,6 +62,7 @@ public class Player : MonoBehaviour {
         }
 
         currentIngred = ARCupboard.ingredient;
+        ingredientsFromStation = network.getIngredientsFromStation("1");
         checkNFC();
     }
 
@@ -82,12 +83,14 @@ public class Player : MonoBehaviour {
     private void cupboardStation()
     {
         SceneManager.LoadScene("CupboardStation");
+        foreach (Ingredient ingredient in ingredientsFromStation)
+        {
+            Debug.Log(ingredient.Name);
+        }
     }
 
     private void fryingStation()
     {
-        //ingredientsFromStation = network.getIngredientsFromStation("1");
-        ingredientsFromStation = new List<Ingredient>();
         if (currentIngred == null)
         {
             mainText.text = "You are not holding any ingredient";
@@ -139,14 +142,14 @@ public class Player : MonoBehaviour {
                     currentStation = text;
                     //Tell server you've logged into the station, holding that food item
                     text += sendCurrentIngredient();
-                    //network.SendMyMessage("station", text);
+                    network.SendMyMessage("station", text);
                     cupboardStation();
                     break;
                 case "1":
                     currentStation = text;
                     //Tell server you've logged into the station, holding that food item
                     text += sendCurrentIngredient();
-                    //network.SendMyMessage("station", text);
+                    network.SendMyMessage("station", text);
                     fryingStation();
                     break;
                 case "2":
