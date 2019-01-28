@@ -45,9 +45,9 @@ public class Client : MonoBehaviour {
     private GameObject currentItem;
 
     // List of ingredient for each station.
-    List<Ingredient> ingredientsInStation;
+    public List<Ingredient> ingredientsInStation;
     // A kitchen is a dictionary of different stations and their associated ingredients.
-    IDictionary<string, List<Ingredient>> myKitchen = new Dictionary<string, List<Ingredient>>();
+    public IDictionary<string, List<Ingredient>> myKitchen = new Dictionary<string, List<Ingredient>>();
 
     private string currentStation = "-1";
 
@@ -57,7 +57,13 @@ public class Client : MonoBehaviour {
 
     public void Start()
     {
+        ingredientsInStation = new List<Ingredient>();
 
+        for (int i = 0; i < 4; i++)
+        {
+            string stationId = i.ToString();
+            myKitchen.Add(stationId, ingredientsInStation);
+        }
     }
 
     public void Awake()
@@ -191,15 +197,23 @@ public class Client : MonoBehaviour {
             case "station":
                 string[] data = decodeMessage(messageContent, '$');
                 string stationId = data[0];
-                ingredientsInStation = new List<Ingredient>();
                 for (int i = 1; i < data.Length; i++)
                 {
-                    Ingredient ingredientToAdd = new Ingredient(data[1], null);
-                    ingredientToAdd.translateToIngredient(data[i]);
-                    ingredientsInStation.Add(ingredientToAdd);
-                    Debug.Log("Received" + data[i]);
+                    //receives whole string with flags, e.g. Eggs^0^2
+                    if (data[i] != "")
+                    {
+                        string ingredientString = FirstLetterToUpper(data[i]);
+                        string[] ingredientStringList = decodeMessage(ingredientString, '^');
+                        string ingredientName = ingredientStringList[0];
+                        string prefab = ingredientName + "Prefab";
+                        Ingredient ingredientToAdd = new Ingredient(ingredientName, (GameObject)Resources.Load(prefab, typeof(GameObject)));
+                        ingredientToAdd.translateToIngredient(ingredientString);
+                        ingredientsInStation.Add(ingredientToAdd);
+                    }
                 }
+
                 myKitchen[stationId] = ingredientsInStation;
+                ingredientsInStation = new List<Ingredient>();
                 break;
             default:
                 break;
@@ -207,7 +221,7 @@ public class Client : MonoBehaviour {
     }
 
     public List<Ingredient> getIngredientsFromStation(string stationID)
-    {
+    {        
         return myKitchen[stationID];
     }
 
@@ -221,6 +235,17 @@ public class Client : MonoBehaviour {
     {
         SendMyMessage("connect", "blue");
         SceneManager.LoadScene("PlayerMainScreen");
+    }
+
+    private string FirstLetterToUpper(string str)
+    {
+        if (str == null)
+            return null;
+
+        if (str.Length > 1)
+            return char.ToUpper(str[0]) + str.Substring(1);
+
+        return str.ToUpper();
     }
 
 }

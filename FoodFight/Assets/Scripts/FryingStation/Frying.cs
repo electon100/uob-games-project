@@ -8,9 +8,10 @@ using System.Text;
 public class Frying : MonoBehaviour {
 
 	public Text test_text;
+    public Player player;
 
-	/* Phone motion stuff */
-	private float accelerometerUpdateInterval = 1.0f / 60.0f;
+    /* Phone motion stuff */
+    private float accelerometerUpdateInterval = 1.0f / 60.0f;
 	private float lowPassKernelWidthInSeconds = 1.0f;
 	private float shakeDetectionThreshold = 2.0f;
 	private float lowPassFilterFactor;
@@ -29,10 +30,11 @@ public class Frying : MonoBehaviour {
 
 	/* List of ingredients in the pan, with current shake count applied.
 		  -> Can be used externally to retrieve ingredients from pan */
-	public static List<Ingredient> panContents = new List<Ingredient>();
+    public List<Ingredient> panContents = new List<Ingredient>();
+	public List<Ingredient> newPanContents = new List<Ingredient>();
 
-	/* Other */
-	int panShakes = 0;
+    /* Other */
+    int panShakes = 0;
 
 	void Start () {
 
@@ -45,17 +47,32 @@ public class Frying : MonoBehaviour {
 		originalPos = gameObject.transform.position;
 		lastShake = Time.time;
 
-        /* If available, add the held ingredient to the pan */
-        panContents = Player.ingredientsFromStation;
-
-		/* Draw ingredient models in pan */
-		foreach (Ingredient ingredient in panContents) {
-			Instantiate(ingredient.Model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(-90, 0, 0));
-		}
-	}
+        panContents = new List<Ingredient>();
+    }
 
 	void Update () {
-		if (panContents.Count > 0) {
+        /* If available, add the held ingredient to the pan */
+        newPanContents = Player.ingredientsFromStation;
+
+        foreach (Ingredient ingredient in newPanContents)
+        {
+            Debug.Log(ingredient.Name);
+        }
+            /* Draw ingredient models in pan */
+        foreach (Ingredient ingredient in newPanContents)
+        {
+            if (panContents.IndexOf(ingredient) < 0)
+            {
+                Debug.Log(ingredient.Name);
+                if (ingredient.Model != null)
+                {
+                    Instantiate(ingredient.Model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(-90, 0, 0));
+                }
+                panContents.Add(ingredient);
+            }
+        }
+        
+        if (panContents.Count > 0) {
 
 			/* Read accelerometer data */
 			Vector3 acceleration = Input.acceleration;
@@ -119,7 +136,8 @@ public class Frying : MonoBehaviour {
             Debug.Log("Ingredient added to pan: " + Player.currentIngred.Name);
         }
         // Tells the server that this ingredient is put in the pan
-        Player.notifyServerAboutIngredientPlaced();
+        player = GameObject.Find("Player").GetComponent<Player>();
+        player.notifyServerAboutIngredientPlaced();
     }
 
 	public void goBack() {

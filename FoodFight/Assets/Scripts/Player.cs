@@ -42,7 +42,6 @@ public class Player : MonoBehaviour {
         networkClient = GameObject.Find("Client");
         network = networkClient.GetComponent<Client>();
         DontDestroyOnLoad(GameObject.Find("Player"));
-        ingredientsFromStation = new List<Ingredient>();
     }
 
 	void Update () {
@@ -50,21 +49,17 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.T))
         {
             checkStation("1");
-            Debug.Log("I am holding " + currentIngred);
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
             checkStation("0");
-            Debug.Log("I am holding " + currentIngred);
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            ingredientsFromStation = network.getIngredientsFromStation("0");
             foreach (Ingredient ingredient in ingredientsFromStation)
             {
                 Debug.Log(ingredient.Name);
             }
-
         }
         if (currentItem != null)
         {
@@ -78,8 +73,6 @@ public class Player : MonoBehaviour {
 
     public void viewItems()
     {
-        Debug.Log(ARCupboard.ingredient.Name);
-        Debug.Log(currentIngred.Name);
         if (currentItem == null)
         {
             currentItem = (GameObject)Instantiate(currentIngred.Model, new Vector3(0, 0, 80), Quaternion.identity);
@@ -92,20 +85,13 @@ public class Player : MonoBehaviour {
 
     private void cupboardStation()
     {
+        ingredientsFromStation = network.getIngredientsFromStation("0");
         SceneManager.LoadScene("CupboardStation");
     }
 
     private void fryingStation()
     {
-        if (currentIngred == null)
-        {
-            mainText.text = "You are not holding any ingredient.";
-        }
-        else
-        {
-            ingredientsFromStation.Add(currentIngred);
-        }
-
+        ingredientsFromStation = network.getIngredientsFromStation("1");
         SceneManager.LoadScene("FryingStation");
     }
 
@@ -134,10 +120,11 @@ public class Player : MonoBehaviour {
         return message;
     }
 
-    public static void notifyServerAboutIngredientPlaced()
+    public void notifyServerAboutIngredientPlaced()
     {
-        text += sendCurrentIngredient(currentIngred);
-        network.SendMyMessage("station", text);
+        string message;
+        message = currentStation + sendCurrentIngredient(currentIngred);
+        network.SendMyMessage("station", message);
     }
 
     private void checkStation(string text)
