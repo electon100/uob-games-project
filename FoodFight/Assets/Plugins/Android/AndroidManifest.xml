@@ -37,10 +37,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
+                <!-- NFC Stuff -->
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-                <action android:name="android.nfc.action.TECH_DISCOVERED" />
-                <action android:name="android.nfc.action.TAG_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/com.sourtoe.foodfight"/>
             </intent-filter>
             <meta-data android:name="android.nfc.action.TECH_DISCOVERED" android:resource="@xml/nfc_tech_filter" android:value="true" />
             <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
