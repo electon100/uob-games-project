@@ -133,11 +133,21 @@ public class Client : MonoBehaviour {
         redButton.transform.SetParent(startPanel.transform);//Setting button parent
         redButton.GetComponent<Button>().onClick.AddListener(onClickRed);//Setting what button does when clicked
         redButton.transform.GetChild(0).GetComponent<Text>().text = "Red Team";//Changing text
+        Color redCol;
+        if (ColorUtility.TryParseHtmlString("#FF7000", out redCol))
+        {
+            redButton.GetComponent<Image>().color = redCol;//Changing colour
+        }
 
         GameObject blueButton = (GameObject)Instantiate(buttonPrefab, new Vector3(100, -17, 0), Quaternion.identity);
         blueButton.transform.SetParent(startPanel.transform);//Setting button parent
         blueButton.GetComponent<Button>().onClick.AddListener(onClickBlue);//Setting what button does when clicked
         blueButton.transform.GetChild(0).GetComponent<Text>().text = "Blue Team";//Changing text
+        Color blueCol;
+        if (ColorUtility.TryParseHtmlString("#00ACFF", out blueCol))
+        {
+            blueButton.GetComponent<Image>().color = blueCol;//Changing colour
+        }
 
         Destroy(GameObject.Find("ConnectButton"));
     }
