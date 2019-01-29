@@ -315,17 +315,6 @@ public class Server : MonoBehaviour {
         }
     }
 
-    private string FirstLetterToUpper(string str)
-    {
-        if (str == null)
-            return null;
-
-        if (str.Length > 1)
-            return char.ToUpper(str[0]) + str.Substring(1);
-
-        return str.ToUpper();
-    }
-
     private void AddIngredientToList(string stationId, Ingredient newIngredient, string kitchen)
     {
         if (kitchen == "red")
