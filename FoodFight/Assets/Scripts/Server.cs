@@ -210,14 +210,12 @@ public class Server : MonoBehaviour {
         if (redKitchen.ContainsKey(stationId))
         {
             AddIngredientToList(stationId, ingredientToAdd, "red");
-            Debug.Log("Added " + ingredientToAdd.Name + " to red kitchen station.");
             checkCurrentIngredient("station", "red", stationId, connectionId);
         }
 
         else if (blueKitchen.ContainsKey(stationId))
         {
             AddIngredientToList(stationId, ingredientToAdd, "blue");
-            Debug.Log("Added " + ingredientToAdd.Name + " to blue kitchen station.");
             checkCurrentIngredient("station", "blue", stationId, connectionId);
         }
     }
@@ -231,6 +229,7 @@ public class Server : MonoBehaviour {
         BinaryFormatter formatter = new BinaryFormatter();
         //Serialize the message
         string messageToSend = messageType + "&" + textInput;
+        Debug.Log("Sent: " + messageToSend);
         formatter.Serialize(message, messageToSend);
 
         //Send the message from the "client" with the serialized message and the connection information
@@ -299,7 +298,6 @@ public class Server : MonoBehaviour {
             }
 
             SendMyMessage(messageType, messageContent, hostId);
-            Debug.Log("Sent red kitchen list to player: " + messageContent);
         }
         else if (kitchen == "blue")
         {
@@ -311,7 +309,6 @@ public class Server : MonoBehaviour {
             }
 
             SendMyMessage(messageType, messageContent, hostId);
-            Debug.Log("Sent blue kitchen list to player: " + messageContent);
         }
     }
 
