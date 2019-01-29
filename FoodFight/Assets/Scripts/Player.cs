@@ -46,6 +46,7 @@ public class Player : MonoBehaviour {
 
 	void Update () {
 
+        //Testing on computer/////////////////
         if (Input.GetKeyDown(KeyCode.T))
         {
             checkStation("1");
@@ -61,6 +62,8 @@ public class Player : MonoBehaviour {
                 Debug.Log(ingredient.Name);
             }
         }
+        /////////////////////////////////////
+        
         if (currentItem != null)
         {
             currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
