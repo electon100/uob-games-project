@@ -98,6 +98,7 @@ public class Server : MonoBehaviour {
     {
         string messageType = decodeMessage(message, '&')[0];
         string messageContent = decodeMessage(message, '&')[1];
+
         switch(messageType)
         {
             // Player chooses team to play on
@@ -145,6 +146,7 @@ public class Server : MonoBehaviour {
         string stationId = words[0];
 
         string ingredientWithFlags = words[1];
+        Ingredient ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientWithFlags.GetType());
         Debug.Log("Word 0: " + stationId);
         Debug.Log("Word 1: " + ingredientWithFlags);
 
@@ -164,7 +166,7 @@ public class Server : MonoBehaviour {
 
             //If the player wants to add an ingredient, add it
             else
-                addIngredientToStation(stationId, ingredientWithFlags, ingredient, connectionId);
+                addIngredientToStation(stationId, ingredientToAdd, connectionId);
         }
     }
 
@@ -203,19 +205,19 @@ public class Server : MonoBehaviour {
     }
 
     // Add to a station if it exists
-    private void addIngredientToStation(string stationId, string ingredientWithFlags, string ingredient, int connectionId)
+    private void addIngredientToStation(string stationId, Ingredient ingredientToAdd, int connectionId)
     { 
         if (redKitchen.ContainsKey(stationId))
         {
-            AddIngredientToList(stationId, ingredientWithFlags, ingredient, "red");
-            Debug.Log("Added " + ingredient + " to red kitchen station.");
+            AddIngredientToList(stationId, ingredientToAdd, "red");
+            Debug.Log("Added " + ingredientToAdd.Name + " to red kitchen station.");
             checkCurrentIngredient("station", "red", stationId, connectionId);
         }
 
         else if (blueKitchen.ContainsKey(stationId))
         {
-            AddIngredientToList(stationId, ingredientWithFlags, ingredient, "blue");
-            Debug.Log("Added " + ingredient + " to blue kitchen station.");
+            AddIngredientToList(stationId, ingredientToAdd, "blue");
+            Debug.Log("Added " + ingredientToAdd.Name + " to blue kitchen station.");
             checkCurrentIngredient("station", "blue", stationId, connectionId);
         }
     }
@@ -292,7 +294,7 @@ public class Server : MonoBehaviour {
             string messageContent = station + "$";
             foreach (Ingredient ingredient in redKitchen[station])
             {
-                messageContent += ingredient.translateToString();
+                messageContent += Ingredient.SerializeObject(ingredient);
                 messageContent += "$";
             }
 
@@ -304,7 +306,7 @@ public class Server : MonoBehaviour {
             string messageContent = station + "$";
             foreach (Ingredient ingredient in blueKitchen[station])
             {
-                messageContent += ingredient.translateToString();
+                messageContent += Ingredient.SerializeObject(ingredient);
                 messageContent += "$";
             }
 
@@ -324,26 +326,12 @@ public class Server : MonoBehaviour {
         return str.ToUpper();
     }
 
-    private void AddIngredientToList(string stationId, string ingredientWithFlags, string ingredient, string kitchen)
+    private void AddIngredientToList(string stationId, Ingredient newIngredient, string kitchen)
     {
         if (kitchen == "red")
-        {
-            Ingredient newIngredient = IngredientToAdd(ingredient, ingredientWithFlags);
             redKitchen[stationId].Add(newIngredient);
-        }
+   
         else if (kitchen == "blue")
-        {
-            Ingredient newIngredient = IngredientToAdd(ingredient, ingredientWithFlags);
             blueKitchen[stationId].Add(newIngredient);
-        }
-    }
-
-    private Ingredient IngredientToAdd(string ingredient, string ingredientWithFlags)
-    {
-        string addIngredient = FirstLetterToUpper(ingredient);
-        string prefab = addIngredient + "Prefab";
-        Ingredient ingredientToAdd = new Ingredient(addIngredient, (GameObject)Resources.Load(prefab, typeof(GameObject)));
-        ingredientToAdd.translateToIngredient(ingredientWithFlags);
-        return ingredientToAdd;
     }
 }

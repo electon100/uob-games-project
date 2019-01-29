@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.IO;
+using System.Xml.Serialization;
+using UnityEngine;
 
 public class Ingredient {
 
@@ -77,5 +80,29 @@ public class Ingredient {
             }
         }
        
+    }
+
+    public static string SerializeObject<Ingredient>(Ingredient toSerialize)
+    {
+        XmlSerializer xmlSerializer = new XmlSerializer(toSerialize.GetType());
+
+        using (StringWriter textWriter = new StringWriter())
+        {
+            xmlSerializer.Serialize(textWriter, toSerialize);
+            return textWriter.ToString();
+        }
+    }
+
+    public static Ingredient XmlDeserializeFromString<Ingredient>(string objectData, Type type)
+    {
+        var serializer = new XmlSerializer(type);
+        Ingredient result;
+
+        using (TextReader reader = new StringReader(objectData))
+        {
+            result = (Ingredient) serializer.Deserialize(reader);
+        }
+
+        return result;
     }
 }
