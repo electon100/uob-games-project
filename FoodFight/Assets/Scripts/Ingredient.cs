@@ -10,11 +10,19 @@ public class Ingredient {
 
 	public bool isChopped { get; set; }
 
+    public bool isCooked { get; set; }
+
 	public bool isCookable { get; set; }
 
 	public bool isChoppable { get; set; }
 
-	public Ingredient(string name, GameObject model) {
+    /*
+     * 0 - uncooked
+     * 1 - cooked
+     * 2 - unchopped
+     * 3 - chopped
+    */
+    public Ingredient(string name, GameObject model) {
 		Name = name;
 		Model = model;
 		panTosses = 0;
@@ -23,4 +31,51 @@ public class Ingredient {
 		isChoppable = true;
 	}
 
+    public string translateToString ()
+    {
+        string ingredient = this.Name + "^";
+        if (!isCooked)
+        {
+            ingredient += "0^";
+        }
+        if (isCooked)
+        {
+            ingredient += "1^";
+        }
+        if (!isChopped)
+        {
+            ingredient += "2^";
+        }
+        if (isChopped)
+        {
+            ingredient += "3^";
+        }
+
+        return ingredient;
+    }
+
+    public void translateToIngredient(string ingredientAsString)
+    {
+        string[] ingredientValues = ingredientAsString.Split('^');
+        this.Name = ingredientValues[0];
+        for (int i = 1; i < ingredientValues.Length; i++)
+        {
+            switch (ingredientValues[i])
+            {
+                case "0":
+                    this.isCooked = false;
+                    break;
+                case "1":
+                    this.isCooked = true;
+                    break;
+                case "2":
+                    this.isChopped = false;
+                    break;
+                case "3":
+                    this.isChopped = true;
+                    break;
+            }
+        }
+       
+    }
 }

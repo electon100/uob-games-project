@@ -29,6 +29,10 @@ public class Server : MonoBehaviour {
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
 
+    // dictionary <station, status>
+    IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
+    IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
+
     private void Start () {
         NetworkTransport.Init();
         ConnectionConfig connectConfig = new ConnectionConfig();
@@ -56,20 +60,26 @@ public class Server : MonoBehaviour {
         NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
                                                             recBuffer, bufferSize, out dataSize, out error);
 
+        //Networking events
         switch (recData)
         {
+            // Do nothing if nothing was sent to server
             case NetworkEventType.Nothing:
                 break;
+            // Have a phone connect to the server
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Player " + connectionId + " has connected");
                 break;
+            // Have the phone send data to the server
             case NetworkEventType.DataEvent:
                 string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
                 manageMessageEvents(message, connectionId);
                 break;
+            // Remove the player from the game
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has disconnected");
                 IDictionary<int, GameObject> teamToDestroyFrom = getTeam(connectionId);
+                // Player with id connectionId has left the game, so destroy its object instance.
                 if (teamToDestroyFrom != null)
                 {
                     destroyPlayer(teamToDestroyFrom, connectionId);
@@ -83,22 +93,27 @@ public class Server : MonoBehaviour {
         return;
 	}
 
+    // This is where all the work happens.
     private void manageMessageEvents(string message, int connectionId)
     {
-        string messageType = decodeMessage(message)[0];
-        string messageContent = decodeMessage(message)[1];
-
+        string messageType = decodeMessage(message, '&')[0];
+        string messageContent = decodeMessage(message, '&')[1];
         switch(messageType)
         {
+            // Player chooses team to play on
             case "connect":
-                if (redTeam.ContainsKey(connectionId) || blueTeam.ContainsKey(connectionId)){
-                    break;
-                }
-                else {
-                    messageContent = decodeMessage(message)[1];
+                // Allocate the player to the team if they are not already on a team
+                if (!redTeam.ContainsKey(connectionId) && !blueTeam.ContainsKey(connectionId)) { 
                     allocateToTeam(connectionId, messageContent);
                 }
                 break;
+
+            // Player connects to a work station
+            case "station":
+                OnStation(messageContent, connectionId);
+                break;
+
+            // Player sends NFC data
             case "NFC":
                 //Do NFC stuff
                 Debug.Log("Player " + connectionId + " has sent: " + messageContent);
@@ -106,6 +121,7 @@ public class Server : MonoBehaviour {
 
         }
     }
+
     //This function is called when data is sent
     private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error)
     {
@@ -122,23 +138,121 @@ public class Server : MonoBehaviour {
         return message;
     }
 
-    
-    private void allocateToTeam(int connectionId, string message)
+    private void OnStation(string messageContent, int connectionId)
     {
-        if (message == "red")
+        //If this station already exists, check what's in it and send it back to player.
+        string[] words = decodeMessage(messageContent, '$');
+        string stationId = words[0];
+
+        string ingredientWithFlags = words[1];
+        Debug.Log("Word 0: " + stationId);
+        Debug.Log("Word 1: " + ingredientWithFlags);
+
+        string[] ingredientAndFlags = decodeMessage(ingredientWithFlags, '^');
+        string ingredient = ingredientAndFlags[0];
+
+        // Case where we add a station to a kitchen if it has not been seen before
+        addStationToKitchen(stationId, connectionId);
+
+        bool playerOnValidStation = isPlayerOnValidStation(connectionId, stationId);
+
+        if (playerOnValidStation)
         {
-            createRedPlayer(connectionId);
-        }
-        else if (message == "blue")
-        {
-            createBluePlayer(connectionId);
+            // Case where we want to send back ingredients stored at the station to player
+            if (ingredient.Equals(""))
+                sendIngredientsToPlayer(ingredient, stationId, connectionId);
+
+            //If the player wants to add an ingredient, add it
+            else
+                addIngredientToStation(stationId, ingredientWithFlags, ingredient, connectionId);
         }
     }
 
-    private string[] decodeMessage(string message)
+    private bool isPlayerOnValidStation(int connectionId, string stationId)
     {
-        string[] splitted = Regex.Split(message, "&");
+        if (redTeam.ContainsKey(connectionId) && redKitchen.ContainsKey(stationId))
+            return true;
+        else if (blueTeam.ContainsKey(connectionId) && blueKitchen.ContainsKey(stationId))
+            return true;
+        else
+            return false;
+    }
 
+    // Add station to correct kitchen if it does not exist
+    private void addStationToKitchen(string stationId, int connectionId)
+    {
+        if (redTeam.ContainsKey(connectionId))
+        {
+            if (!redKitchen.ContainsKey(stationId) && !blueKitchen.ContainsKey(stationId))
+                redKitchen.Add(stationId, new List<Ingredient>());
+        }
+        else if (blueTeam.ContainsKey(connectionId))
+        {
+            if (!blueKitchen.ContainsKey(stationId) && !redKitchen.ContainsKey(stationId))
+                blueKitchen.Add(stationId, new List<Ingredient>());
+        }
+    }
+
+    private void sendIngredientsToPlayer(string ingredient, string stationId, int connectionId)
+    {
+        if (redKitchen.ContainsKey(stationId))
+            checkCurrentIngredient("station", "red", stationId, connectionId);
+
+        else if (blueKitchen.ContainsKey(stationId))
+            checkCurrentIngredient("station", "blue", stationId, connectionId);
+    }
+
+    // Add to a station if it exists
+    private void addIngredientToStation(string stationId, string ingredientWithFlags, string ingredient, int connectionId)
+    { 
+        if (redKitchen.ContainsKey(stationId))
+        {
+            AddIngredientToList(stationId, ingredientWithFlags, ingredient, "red");
+            Debug.Log("Added " + ingredient + " to red kitchen station.");
+            checkCurrentIngredient("station", "red", stationId, connectionId);
+        }
+
+        else if (blueKitchen.ContainsKey(stationId))
+        {
+            AddIngredientToList(stationId, ingredientWithFlags, ingredient, "blue");
+            Debug.Log("Added " + ingredient + " to blue kitchen station.");
+            checkCurrentIngredient("station", "blue", stationId, connectionId);
+        }
+    }
+
+    // Used for sending data to the players
+    public void SendMyMessage(string messageType, string textInput, int connectionId)
+    {
+        byte error;
+        byte[] buffer = new byte[1024];
+        Stream message = new MemoryStream(buffer);
+        BinaryFormatter formatter = new BinaryFormatter();
+        //Serialize the message
+        string messageToSend = messageType + "&" + textInput;
+        formatter.Serialize(message, messageToSend);
+
+        //Send the message from the "client" with the serialized message and the connection information
+        NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
+
+        //If there is an error, output message error to the console
+        if ((NetworkError)error != NetworkError.Ok)
+            Debug.Log("Message send error: " + (NetworkError)error);
+    }
+
+    //Allocates a player to a team based on their choice.
+    private void allocateToTeam(int connectionId, string message)
+    {
+        if (message == "red")
+            createRedPlayer(connectionId);
+
+        else if (message == "blue")
+            createBluePlayer(connectionId);
+    }
+
+    // Splits up a string based on a given character
+    private string[] decodeMessage(string message, char character)
+    {
+        string[] splitted = message.Split(character);
         return splitted;
     }
 
@@ -163,16 +277,73 @@ public class Server : MonoBehaviour {
     private IDictionary<int, GameObject> getTeam(int connectionID)
     {
         if (redTeam.ContainsKey(connectionID))
-        {
             return redTeam;
-        }
+
         else if (blueTeam.ContainsKey(connectionID))
-        {
             return blueTeam;
-        }
-        else
+
+        return null;
+    }
+
+    private void checkCurrentIngredient(string messageType, string kitchen, string station, int hostId)
+    {
+        if (kitchen == "red")
         {
-            return null;
+            string messageContent = station + "$";
+            foreach (Ingredient ingredient in redKitchen[station])
+            {
+                messageContent += ingredient.translateToString();
+                messageContent += "$";
+            }
+
+            SendMyMessage(messageType, messageContent, hostId);
+            Debug.Log("Sent red kitchen list to player: " + messageContent);
         }
+        else if (kitchen == "blue")
+        {
+            string messageContent = station + "$";
+            foreach (Ingredient ingredient in blueKitchen[station])
+            {
+                messageContent += ingredient.translateToString();
+                messageContent += "$";
+            }
+
+            SendMyMessage(messageType, messageContent, hostId);
+            Debug.Log("Sent blue kitchen list to player: " + messageContent);
+        }
+    }
+
+    private string FirstLetterToUpper(string str)
+    {
+        if (str == null)
+            return null;
+
+        if (str.Length > 1)
+            return char.ToUpper(str[0]) + str.Substring(1);
+
+        return str.ToUpper();
+    }
+
+    private void AddIngredientToList(string stationId, string ingredientWithFlags, string ingredient, string kitchen)
+    {
+        if (kitchen == "red")
+        {
+            Ingredient newIngredient = IngredientToAdd(ingredient, ingredientWithFlags);
+            redKitchen[stationId].Add(newIngredient);
+        }
+        else if (kitchen == "blue")
+        {
+            Ingredient newIngredient = IngredientToAdd(ingredient, ingredientWithFlags);
+            blueKitchen[stationId].Add(newIngredient);
+        }
+    }
+
+    private Ingredient IngredientToAdd(string ingredient, string ingredientWithFlags)
+    {
+        string addIngredient = FirstLetterToUpper(ingredient);
+        string prefab = addIngredient + "Prefab";
+        Ingredient ingredientToAdd = new Ingredient(addIngredient, (GameObject)Resources.Load(prefab, typeof(GameObject)));
+        ingredientToAdd.translateToIngredient(ingredientWithFlags);
+        return ingredientToAdd;
     }
 }

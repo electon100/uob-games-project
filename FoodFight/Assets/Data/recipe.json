@@ -1,0 +1,34 @@
+{
+  "recipes": [
+    {
+      "name": "chips",
+      "ingredients": [
+        {
+          "name": "potato",
+          "cooked": true,
+          "chopped": true
+        }
+      ]
+    },
+    {
+      "name": "stirfry",
+      "ingredients": [
+        {
+          "name": "noodles",
+          "cooked": true,
+          "chopped": false
+        },
+        {
+          "name": "vegetables",
+          "cooked": true,
+          "chopped": true
+        },
+        {
+          "name": "chicken",
+          "cooked": true,
+          "chopped": true
+        }
+      ]
+    }
+  ]
+}
