@@ -151,52 +151,57 @@ public class Server : MonoBehaviour {
         string[] ingredientAndFlags = decodeMessage(ingredientWithFlags, '^');
         string ingredient = ingredientAndFlags[0];
 
-        // Add station to correct kitchen if it does not exist
+        // Case where we add a station to a kitchen if it has not been seen before
+        addStationToKitchen(stationId, connectionId);
+
+        // Case where we want to send back ingredients stored at the station to player
+        if (ingredient.Equals(""))
+            sendIngredientsToPlayer(ingredient, stationId, connectionId);
+
+        //If the player wants to add an ingredient, add it
+        else
+            addIngredientToStation(stationId, ingredientWithFlags, ingredient, connectionId);
+    }
+
+    // Add station to correct kitchen if it does not exist
+    private void addStationToKitchen(string stationId, int connectionId)
+    {
         if (redTeam.ContainsKey(connectionId))
         {
             if (!redKitchen.ContainsKey(stationId))
-            {
                 redKitchen.Add(stationId, new List<Ingredient>());
-            }
         }
         else if (blueTeam.ContainsKey(connectionId))
         {
             if (!blueKitchen.ContainsKey(stationId))
-            {
                 blueKitchen.Add(stationId, new List<Ingredient>());
-            }
+        }
+    }
+
+    private void sendIngredientsToPlayer(string ingredient, string stationId, int connectionId)
+    {
+        if (redKitchen.ContainsKey(stationId))
+            checkCurrentIngredient("station", "red", stationId, connectionId);
+
+        else if (blueKitchen.ContainsKey(stationId))
+            checkCurrentIngredient("station", "blue", stationId, connectionId);
+    }
+
+    // Add to a station if it exists
+    private void addIngredientToStation(string stationId, string ingredientWithFlags, string ingredient, int connectionId)
+    { 
+        if (redKitchen.ContainsKey(stationId))
+        {
+            AddIngredientToList(stationId, ingredientWithFlags, ingredient, "red");
+            Debug.Log("Added " + ingredient + " to red kitchen station.");
+            checkCurrentIngredient("station", "red", stationId, connectionId);
         }
 
-        // Case where we want to send back ingredient stored at the station to player
-        if (ingredient.Equals(""))
+        else if (blueKitchen.ContainsKey(stationId))
         {
-            if (redKitchen.ContainsKey(stationId))
-            {
-                checkCurrentIngredient("station", "red", stationId, connectionId);
-            }
-            else if (blueKitchen.ContainsKey(stationId))
-            {
-                checkCurrentIngredient("station", "blue", stationId, connectionId);
-            }
-        }
-
-        //If the player wants to add an ingredient, add it
-        else
-        {
-            // Add to a station if it exists
-            if (redKitchen.ContainsKey(stationId))
-            {
-                AddIngredientToList(stationId, ingredientWithFlags, ingredient, "red");
-                Debug.Log("Added " + ingredient + " to red kitchen station.");
-                checkCurrentIngredient("station", "red", stationId, connectionId);
-            }
-
-            else if (blueKitchen.ContainsKey(stationId))
-            {
-                AddIngredientToList(stationId, ingredientWithFlags, ingredient, "blue");
-                Debug.Log("Added " + ingredient + " to blue kitchen station.");
-                checkCurrentIngredient("station", "blue", stationId, connectionId);
-            }   
+            AddIngredientToList(stationId, ingredientWithFlags, ingredient, "blue");
+            Debug.Log("Added " + ingredient + " to blue kitchen station.");
+            checkCurrentIngredient("station", "blue", stationId, connectionId);
         }
     }
 
@@ -216,22 +221,17 @@ public class Server : MonoBehaviour {
 
         //If there is an error, output message error to the console
         if ((NetworkError)error != NetworkError.Ok)
-        {
             Debug.Log("Message send error: " + (NetworkError)error);
-        }
     }
 
     //Allocates a player to a team based on their choice.
     private void allocateToTeam(int connectionId, string message)
     {
         if (message == "red")
-        {
             createRedPlayer(connectionId);
-        }
+
         else if (message == "blue")
-        {
             createBluePlayer(connectionId);
-        }
     }
 
     // Splits up a string based on a given character
@@ -262,17 +262,12 @@ public class Server : MonoBehaviour {
     private IDictionary<int, GameObject> getTeam(int connectionID)
     {
         if (redTeam.ContainsKey(connectionID))
-        {
             return redTeam;
-        }
+
         else if (blueTeam.ContainsKey(connectionID))
-        {
             return blueTeam;
-        }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
     private void checkCurrentIngredient(string messageType, string kitchen, string station, int hostId)
