@@ -154,13 +154,28 @@ public class Server : MonoBehaviour {
         // Case where we add a station to a kitchen if it has not been seen before
         addStationToKitchen(stationId, connectionId);
 
-        // Case where we want to send back ingredients stored at the station to player
-        if (ingredient.Equals(""))
-            sendIngredientsToPlayer(ingredient, stationId, connectionId);
+        bool playerOnValidStation = isPlayerOnValidStation(connectionId, stationId);
 
-        //If the player wants to add an ingredient, add it
+        if (playerOnValidStation)
+        {
+            // Case where we want to send back ingredients stored at the station to player
+            if (ingredient.Equals(""))
+                sendIngredientsToPlayer(ingredient, stationId, connectionId);
+
+            //If the player wants to add an ingredient, add it
+            else
+                addIngredientToStation(stationId, ingredientWithFlags, ingredient, connectionId);
+        }
+    }
+
+    private bool isPlayerOnValidStation(int connectionId, string stationId)
+    {
+        if (redTeam.ContainsKey(connectionId) && redKitchen.ContainsKey(stationId))
+            return true;
+        else if (blueTeam.ContainsKey(connectionId) && blueKitchen.ContainsKey(stationId))
+            return true;
         else
-            addIngredientToStation(stationId, ingredientWithFlags, ingredient, connectionId);
+            return false;
     }
 
     // Add station to correct kitchen if it does not exist
@@ -168,12 +183,12 @@ public class Server : MonoBehaviour {
     {
         if (redTeam.ContainsKey(connectionId))
         {
-            if (!redKitchen.ContainsKey(stationId))
+            if (!redKitchen.ContainsKey(stationId) && !blueKitchen.ContainsKey(stationId))
                 redKitchen.Add(stationId, new List<Ingredient>());
         }
         else if (blueTeam.ContainsKey(connectionId))
         {
-            if (!blueKitchen.ContainsKey(stationId))
+            if (!blueKitchen.ContainsKey(stationId) && !redKitchen.ContainsKey(stationId))
                 blueKitchen.Add(stationId, new List<Ingredient>());
         }
     }
