@@ -57,10 +57,7 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            foreach (Ingredient ingredient in ingredientsFromStation)
-            {
-                Debug.Log(ingredient.Name);
-            }
+            Debug.Log(network.serialiseIngredient(currentIngred));
         }
         /////////////////////////////////////
         
@@ -78,7 +75,8 @@ public class Player : MonoBehaviour {
     {
         if (currentItem == null)
         {
-            currentItem = (GameObject)Instantiate(currentIngred.Model, new Vector3(0, 0, 80), Quaternion.identity);
+            GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
+            currentItem = (GameObject)Instantiate(model, new Vector3(0, 0, 80), Quaternion.identity);
         }
         else
         {
@@ -113,7 +111,7 @@ public class Player : MonoBehaviour {
         string message;
         if (addedIngredient != null)
         {
-            message = "$" + addedIngredient.translateToString();
+            message = "$" + Ingredient.SerializeObject(addedIngredient);
         }
         else
         {
