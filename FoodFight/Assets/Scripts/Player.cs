@@ -55,9 +55,13 @@ public class Player : MonoBehaviour {
         {
             checkStation("0");
         }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            checkStation("2");
+        }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log(network.serialiseIngredient(currentIngred));
+            Debug.Log(currentIngred.isChopped);
         }
         /////////////////////////////////////
         
@@ -71,6 +75,10 @@ public class Player : MonoBehaviour {
 
     public void viewItems()
     {
+        if (currentIngred.isChopped)
+        {
+            mainText.text = "Your ingredient has been chopped";
+        }
         if (currentItem == null)
         {
             GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
@@ -96,6 +104,7 @@ public class Player : MonoBehaviour {
 
     private void choppingStation()
     {
+        ingredientsFromStation = network.getIngredientsFromStation("2");
         SceneManager.LoadScene("ChoppingStation");
     }
 
@@ -132,6 +141,7 @@ public class Player : MonoBehaviour {
         
         if (currentStation != text)
         {
+            mainText.text = text;
             switch (text)
             {
                 case "0":
@@ -150,9 +160,12 @@ public class Player : MonoBehaviour {
                     break;
                 case "2":
                     currentStation = text;
+                    mainText.text = "Enters1";
                     //Tell server you've logged into the station, holding that food item
                     text += sendCurrentIngredient(null);
+                    mainText.text = "Enters2";
                     network.SendMyMessage("station", text);
+                    mainText.text = "Trying to log in to chopping";
                     choppingStation();
                     break;
                 case "3":
@@ -193,6 +206,7 @@ public class Player : MonoBehaviour {
                         if (j != lastTag)
                         {
                             checkStation(text);
+                            mainText.text = text;
                             lastTag = j;
                         }
                     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class AccelerometerTest : MonoBehaviour {
 
@@ -67,7 +68,15 @@ public class AccelerometerTest : MonoBehaviour {
 
         // Check if ingredient has been chopped a certain number of times
         // and pass it to Player.
+        if (chopCount > 10)
+        {
+            Player.currentIngred.isChopped = true;
+        }
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SceneManager.LoadScene("PlayerMainScreen");
+        }
     }
 
     public void StartGame()
