@@ -24,31 +24,31 @@ public class ARCupboard : MonoBehaviour
 
     public void onPotato()
     {
-        ingredient = new Ingredient("Potato", "PotatoesPrefab");
+        ingredient = new Ingredient("potato", "potatoPrefab");
         foodName.text = "You picked a potato!";
     }
 
     public void onVegetables()
     {
-        ingredient = new Ingredient("Vegetables", "VegetablesPrefab");
+        ingredient = new Ingredient("mixed_vegetables", "vegetablesPrefab");
         foodName.text = "You picked some vegetables!";
     }
 
     public void onMilk()
     {
-        ingredient = new Ingredient("Milk", "MilkPrefab");
+        ingredient = new Ingredient("milk", "milkPrefab");
         foodName.text = "You picked a bottle of milk!";
     }
 
     public void onEggs()
     {
-        ingredient = new Ingredient("Eggs", "EggsPrefab");
+        ingredient = new Ingredient("eggs", "eggsPrefab");
         foodName.text = "You picked some eggs!";
     }
 
     public void onNoodles()
     {
-        ingredient = new Ingredient("Noodles", "NoodlesPrefab");
+        ingredient = new Ingredient("noodles", "noodlesPrefab");
         foodName.text = "You picked a bowl of noodles!";
     }
 

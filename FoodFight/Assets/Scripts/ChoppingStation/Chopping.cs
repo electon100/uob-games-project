@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class AccelerometerTest : MonoBehaviour {
+public class Chopping : MonoBehaviour {
 
     // Initialise different screens
     public Transform defaultCanvas;
@@ -113,11 +113,8 @@ public class AccelerometerTest : MonoBehaviour {
         {
             source.PlayOneShot(downSound);
             //display number of chops completed
-            chopCount++;
-
             Player.currentIngred.numberOfChops++;
-            //currentIngredient.noOfChops--;
-            chops.text = chopCount.ToString();
+            chops.text = Player.currentIngred.numberOfChops.ToString();
         }
     }
 
@@ -143,17 +140,17 @@ public class AccelerometerTest : MonoBehaviour {
 
     void ChoppingStatus()
     {
-        if (chopCount > 20)
+        /* Checks whether the ingredient has been chopped the appropriate number of times, based on the json */
+        if (FoodData.Instance.isChopped(Player.currentIngred))
         {
-            status.text =  "Ingredient chopped";
+            status.text = "Ingredient chopped";
             defaultCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(true);
             Time.timeScale = 0;
-            // Changes the ingredient to chopped
         }
+        /* If not, keep chopping */
         else
         {
-            //status.text =  "keep chopping";
             status.text = "";
         }
     }
@@ -162,16 +159,6 @@ public class AccelerometerTest : MonoBehaviour {
     {
         if (currentIngred != null)
         {
-            //check if currentIngredient is valid
-            if (FoodData.Instance.GetIngredientDescription(currentIngred).choppable)
-            {
-                outCome.text = "";
-            }
-            else
-            {
-                outCome.text = "ingredient cannot be chopped";
-                Time.timeScale = 0;     //stops the minigame if ingredient cannot be chopped
-            }
         }
     }
 

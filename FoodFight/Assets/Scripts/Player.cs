@@ -61,10 +61,7 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            foreach (Ingredient ingredient in ingredientsFromStation)
-            {
-                Debug.Log(ingredient.Name);
-            }
+            Debug.Log(currentIngred);
         }
         /////////////////////////////////////
         

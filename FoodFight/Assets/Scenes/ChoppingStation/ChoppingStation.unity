@@ -1740,7 +1740,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1964602098}
+      - m_Target: {fileID: 0}
         m_MethodName: goBack
         m_Mode: 1
         m_Arguments:
@@ -2241,7 +2241,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1964602098}
+      - m_Target: {fileID: 0}
         m_MethodName: goBack
         m_Mode: 1
         m_Arguments:
@@ -2364,7 +2364,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1964602098}
+      - m_Target: {fileID: 0}
         m_MethodName: goBack
         m_Mode: 1
         m_Arguments:
@@ -2604,6 +2604,7 @@ MonoBehaviour:
   startCanvas: {fileID: 1087308460}
   warningCanvas: {fileID: 828424451}
   endCanvas: {fileID: 749753385}
+  player: {fileID: 0}
   yAcc: {fileID: 1313205826}
   chops: {fileID: 1375737370}
   outCome: {fileID: 773190231}
