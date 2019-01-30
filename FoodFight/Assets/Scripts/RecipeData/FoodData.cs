@@ -115,5 +115,4 @@ public sealed class FoodData {
 			}
 		}
 	}
-
 }
