@@ -33,6 +33,9 @@ public class Server : MonoBehaviour {
     IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
     IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
 
+    // Timer variable
+    float timer = 300.0f;
+
     private void Start () {
         NetworkTransport.Init();
         ConnectionConfig connectConfig = new ConnectionConfig();
@@ -48,6 +51,12 @@ public class Server : MonoBehaviour {
 	
 	private void Update () {
         if (!isStarted) return;
+
+        timer -= Time.deltaTime;
+        if (timer <= 0)
+        {
+            GameOver();
+        }
 
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
@@ -92,6 +101,11 @@ public class Server : MonoBehaviour {
 
         return;
 	}
+
+    private void GameOver()
+    {
+
+    }
 
     // This is where all the work happens.
     private void manageMessageEvents(string message, int connectionId)
