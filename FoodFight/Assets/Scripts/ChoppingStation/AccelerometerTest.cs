@@ -141,12 +141,13 @@ public class AccelerometerTest : MonoBehaviour {
 
     void ChoppingStatus()
     {
-        if (chopCount > 10)
+        if (chopCount > 20)
         {
             status.text =  "Ingredient chopped";
             defaultCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(true);
             Time.timeScale = 0;
+            // Changes the ingredient to chopped
             Player.currentIngred.isChopped = true;
         }
         else
@@ -176,6 +177,12 @@ public class AccelerometerTest : MonoBehaviour {
 
     public void goBack()
     {
+        if (chopCount > 20)
+        {
+            // Sends the chopped ingredient to server
+            player = GameObject.Find("Player").GetComponent<Player>();
+            player.notifyServerAboutIngredientPlaced();
+        }
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
@@ -187,10 +194,9 @@ public class AccelerometerTest : MonoBehaviour {
         /* Draw ingredient models in pan */
         foreach (Ingredient ingredient in newBoardContents)
         {
-            Debug.Log(ingredient);
             if (boardContents.IndexOf(ingredient) < 0)
             {
-                GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
+                GameObject model = (GameObject)Resources.Load(ingredient.Model, typeof(GameObject));
                 model = Instantiate(model, new Vector3(0, 0, 0), Quaternion.identity);
                 model.transform.SetParent(startCanvas);
                 boardContents.Add(ingredient);
@@ -207,7 +213,5 @@ public class AccelerometerTest : MonoBehaviour {
             model = Instantiate(model, new Vector3(0, 0, 0), Quaternion.identity);
             model.transform.SetParent(startCanvas);
         }
-        player = GameObject.Find("Player").GetComponent<Player>();
-        player.notifyServerAboutIngredientPlaced();
     }
 }

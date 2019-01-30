@@ -136,6 +136,10 @@ public class Player : MonoBehaviour {
         string message;
         message = currentStation + sendCurrentIngredient(currentIngred);
         network.SendMyMessage("station", message);
+    }
+
+    public void removeCurrentIngredient()
+    {
         currentIngred = null;
     }
 
