@@ -20,10 +20,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/FryingStation/FryingStation.unity
     guid: dc1781f5155a84b4c97991fcbb946400
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Plating/PlatingStation.unity
     guid: d9714aaf340ec104ab70cc0993cdc3a8
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/ChoppingStation/ChoppingStation.unity
     guid: 244a029c188607d4a8c0be584b4ec9b8
   m_configObjects: {}

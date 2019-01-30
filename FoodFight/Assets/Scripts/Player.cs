@@ -60,7 +60,7 @@ public class Player : MonoBehaviour {
             Debug.Log(network.serialiseIngredient(currentIngred));
         }
         /////////////////////////////////////
-        
+
         if (currentItem != null)
         {
             currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
@@ -103,6 +103,7 @@ public class Player : MonoBehaviour {
 
     private void platingStation()
     {
+        ingredientsFromStation = network.getIngredientsFromStation("3");
         SceneManager.LoadScene("PlatingStation");
     }
 
@@ -131,7 +132,7 @@ public class Player : MonoBehaviour {
 
     private void checkStation(string text)
     {
-        
+
         if (currentStation != text)
         {
             switch (text)
