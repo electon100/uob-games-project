@@ -15,16 +15,16 @@ public class AccelerometerTest : MonoBehaviour {
     public Player player;
 
     private float maxAcc = 0.5f;  //The highest acceleration recorded so far
-    private int chopCount = 0;    //number of chops 
+    private int chopCount = 0;    //number of chops
     //private bool gameStarted = false;
 
     // Output text to be displayed on screen
-    public Text yAcc;      //only for testing       
-    public Text chops;      
+    public Text yAcc;      //only for testing
+    public Text chops;
     public Text outCome;
     public Text status;
     public Image shakeImage;
-    
+
     // Sounds to accompany up and down acceleration
     public AudioClip downSound;
     public AudioClip upSound;
@@ -114,6 +114,8 @@ public class AccelerometerTest : MonoBehaviour {
             source.PlayOneShot(downSound);
             //display number of chops completed
             chopCount++;
+
+            Player.currentIngred.numberOfChops++;
             //currentIngredient.noOfChops--;
             chops.text = chopCount.ToString();
         }
@@ -148,7 +150,6 @@ public class AccelerometerTest : MonoBehaviour {
             endCanvas.gameObject.SetActive(true);
             Time.timeScale = 0;
             // Changes the ingredient to chopped
-            Player.currentIngred.isChopped = true;
         }
         else
         {
@@ -162,7 +163,7 @@ public class AccelerometerTest : MonoBehaviour {
         if (currentIngred != null)
         {
             //check if currentIngredient is valid
-            if (currentIngred.isChoppable)
+            if (FoodData.Instance.GetIngredientDescription(currentIngred).choppable)
             {
                 outCome.text = "";
             }
@@ -172,7 +173,6 @@ public class AccelerometerTest : MonoBehaviour {
                 Time.timeScale = 0;     //stops the minigame if ingredient cannot be chopped
             }
         }
-        
     }
 
     public void goBack()

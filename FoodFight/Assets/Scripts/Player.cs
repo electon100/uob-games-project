@@ -78,10 +78,10 @@ public class Player : MonoBehaviour {
 
     public void viewItems()
     {
-        if (currentIngred.isChopped)
-        {
-            mainText.text = "Your ingredient has been chopped";
-        }
+        // if (currentIngred.isChopped)
+        // {
+        //     mainText.text = "Your ingredient has been chopped";
+        // }
         if (currentItem != null)
         {
             GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
