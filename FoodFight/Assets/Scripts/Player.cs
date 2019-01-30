@@ -66,8 +66,6 @@ public class Player : MonoBehaviour {
             currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
         }
 
-        currentIngred = ARCupboard.ingredient;
-
         checkNFC();
     }
 

@@ -64,6 +64,10 @@ public class AccelerometerTest : MonoBehaviour {
         CheckDownMovement();
         CheckUpMovement();
         CheckChopSpeed();
+
+        // Check if ingredient has been chopped a certain number of times
+        // and pass it to Player.
+
     }
 
     public void StartGame()

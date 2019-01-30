@@ -5,15 +5,15 @@ using System.Xml.Serialization;
 [Serializable]
 public class Ingredient {
 
-    public string Name { get; set; }
+  public string Name { get; set; }
 
-    public string Model { get; set; }
+  public string Model { get; set; }
 
-    public int numberOfPanFlips { get; set; }
+  public int numberOfPanFlips { get; set; }
 
-    public int numberOfChops { get; set; }
+  public int numberOfChops { get; set; }
 
-    public Ingredient() {
+  public Ingredient() {
 		Name = "";
 		Model = null;
 		numberOfPanFlips = 0;
