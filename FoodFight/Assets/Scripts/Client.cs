@@ -13,7 +13,7 @@ using System.Reflection;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.100";
+    private const string serverIP = "192.168.0.103";
 
     private int port = 8000;
 
@@ -110,7 +110,7 @@ public class Client : MonoBehaviour {
                 Debug.Log("Broadcast event.");
                 break;
         }
-        
+
     }
 
     public void Connect ()
@@ -175,7 +175,7 @@ public class Client : MonoBehaviour {
         //Serialize the message
         string messageToSend = messageType + "&" + textInput;
         formatter.Serialize(message, messageToSend);
-        
+
         //Send the message from the "client" with the serialized message and the connection information
         NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
 
@@ -241,7 +241,7 @@ public class Client : MonoBehaviour {
     }
 
     public List<Ingredient> getIngredientsFromStation(string stationID)
-    {        
+    {
         return myKitchen[stationID];
     }
 
