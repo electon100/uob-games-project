@@ -59,7 +59,8 @@ public class Frying : MonoBehaviour {
         {
             if (panContents.IndexOf(ingredient) < 0)
             {
-                Instantiate(ingredient.Model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(-90, 0, 0));
+                GameObject model = (GameObject)Resources.Load(ingredient.Model, typeof(GameObject));
+                Instantiate(model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(-90, 0, 0));
                 panContents.Add(ingredient);
             }
         }
@@ -124,7 +125,8 @@ public class Frying : MonoBehaviour {
         if (Player.currentIngred != null)
         {
             panContents.Add(Player.currentIngred);
-            Instantiate(Player.currentIngred.Model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(-90, 0, 0));
+            GameObject model = (GameObject)Resources.Load(Player.currentIngred.Model, typeof(GameObject));
+            Instantiate(model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(-90, 0, 0));
             Debug.Log("Ingredient added to pan: " + Player.currentIngred.Name);
         }
         // Tells the server that this ingredient is put in the pan

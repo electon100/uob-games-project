@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using System.IO;
+using System.Xml.Serialization;
 
+[Serializable]
 public class Ingredient {
 
 	public string Name { get; set; }
 
-	public GameObject Model { get; set; }
+	public string Model { get; set; }
 
 	public int panTosses { get; set; }
 
@@ -15,6 +18,7 @@ public class Ingredient {
 	public bool isCookable { get; set; }
 
 	public bool isChoppable { get; set; }
+    
 
     /*
      * 0 - uncooked
@@ -22,14 +26,24 @@ public class Ingredient {
      * 2 - unchopped
      * 3 - chopped
     */
-    public Ingredient(string name, GameObject model) {
-		Name = name;
-		Model = model;
+    public Ingredient() {
+		Name = "";
+		Model = null;
 		panTosses = 0;
 		isChopped = false;
 		isCookable = true;
 		isChoppable = true;
 	}
+
+    public Ingredient(string name, string model)
+    {
+        Name = name;
+        Model = model;
+        panTosses = 0;
+        isChopped = false;
+        isCookable = true;
+        isChoppable = true;
+    }
 
     public string translateToString ()
     {
@@ -77,5 +91,29 @@ public class Ingredient {
             }
         }
        
+    }
+
+    public static string SerializeObject<Ingredient>(Ingredient toSerialize)
+    {
+        XmlSerializer xmlSerializer = new XmlSerializer(toSerialize.GetType());
+
+        using (StringWriter textWriter = new StringWriter())
+        {
+            xmlSerializer.Serialize(textWriter, toSerialize);
+            return textWriter.ToString();
+        }
+    }
+
+    public static Ingredient XmlDeserializeFromString<Ingredient>(string objectData, Type type)
+    {
+        var serializer = new XmlSerializer(type);
+        Ingredient result;
+
+        using (TextReader reader = new StringReader(objectData))
+        {
+            result = (Ingredient) serializer.Deserialize(reader);
+        }
+
+        return result;
     }
 }
