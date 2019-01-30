@@ -5,8 +5,8 @@ using UnityEngine;
 
 public sealed class FoodData {
 
-	private readonly string relativeRecipePath = "/Data/recipe.json";
-	private readonly string relativeIngredientsPath = "/Data/ingredients.json";
+	// private readonly string relativeRecipePath = "/Data/recipe.json";
+	// private readonly string relativeIngredientsPath = "/Data/ingredients.json";
 
 	private static FoodData instance = null;
 	private static readonly object padlock = new object();
@@ -114,13 +114,19 @@ public sealed class FoodData {
 	}
 
 	FoodData() {
-		/* Read recipe data from JSON file */
-		string recipeFilePath = Application.dataPath + relativeRecipePath;
-		string recipeJSON = File.ReadAllText(recipeFilePath);
+		// /* Read recipe data from JSON file */
+		// string recipeFilePath = Application.dataPath + relativeRecipePath;
+		// string recipeJSON = File.ReadAllText(recipeFilePath);
 
-		/* Read ingredient data from JSON file */
-		string ingredientFilePath = Application.dataPath + relativeIngredientsPath;
-		string ingredientJSON = File.ReadAllText(ingredientFilePath);
+		// /* Read ingredient data from JSON file */
+		// string ingredientFilePath = Application.dataPath + relativeIngredientsPath;
+		// string ingredientJSON = File.ReadAllText(ingredientFilePath);
+
+		TextAsset recipeFile = Resources.Load("ingredients.json") as TextAsset;
+		string recipeJSON = recipeFile.ToString();
+
+		TextAsset ingredientFile = Resources.Load("ingredients.json") as TextAsset;
+		string ingredientJSON = recipeFile.ToString();
 
 		/* Parse recipe JSON data */
 		allRecipes = JsonUtility.FromJson<RecipeDefinitions>(recipeJSON);
