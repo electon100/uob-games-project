@@ -110,11 +110,11 @@ public sealed class FoodData {
 		// string ingredientFilePath = Application.dataPath + relativeIngredientsPath;
 		// string ingredientJSON = File.ReadAllText(ingredientFilePath);
 
-		TextAsset recipeFile = Resources.Load("ingredients.json") as TextAsset;
+		TextAsset recipeFile = Resources.Load("recipe.json") as TextAsset;
 		string recipeJSON = recipeFile.ToString();
 
 		TextAsset ingredientFile = Resources.Load("ingredients.json") as TextAsset;
-		string ingredientJSON = recipeFile.ToString();
+		string ingredientJSON = ingredientFile.ToString();
 
 		/* Parse recipe JSON data */
 		allRecipes = JsonUtility.FromJson<RecipeDefinitions>(recipeJSON);
