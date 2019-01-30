@@ -9,6 +9,7 @@ public sealed class FoodData {
 	private readonly string relativeIngredientsPath = "/Data/ingredients.json";
 
 	private static FoodData instance = null;
+	private static readonly object padlock = new object();
 
 	private static RecipeDefinitions allRecipes;
 	private static IngredientDefinitions allIngredients;
@@ -130,8 +131,10 @@ public sealed class FoodData {
 
 	public static FoodData Instance {
     get {
-			if (instance == null) instance = new FoodData();
-			return instance;
+			lock (padlock) {
+				if (instance == null) instance = new FoodData();
+				return instance;
+			}
 		}
 	}
 
