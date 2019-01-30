@@ -12,6 +12,8 @@ public class AccelerometerTest : MonoBehaviour {
     public Transform warningCanvas;
     public Transform endCanvas;
 
+    public Player player;
+
     private float maxAcc = 0.5f;  //The highest acceleration recorded so far
     private int chopCount = 0;    //number of chops 
     //private bool gameStarted = false;
@@ -30,10 +32,13 @@ public class AccelerometerTest : MonoBehaviour {
     public GameObject blood;
     private AudioSource source;
 
-    private static Ingredient currentIngredient;
+    private static Ingredient currentIngred;
+    public List<Ingredient> boardContents = new List<Ingredient>();
+    public List<Ingredient> newBoardContents = new List<Ingredient>();
 
     private void Start()
     {
+        currentIngred = Player.currentIngred;
         //set up scene
         source = GetComponent<AudioSource>();
         Screen.orientation = ScreenOrientation.LandscapeLeft;
@@ -46,6 +51,8 @@ public class AccelerometerTest : MonoBehaviour {
         CheckIngredientValid();
 
         Time.timeScale = 0;
+
+        boardContents = new List<Ingredient>();
     }
 
     void Update()
@@ -65,18 +72,7 @@ public class AccelerometerTest : MonoBehaviour {
         CheckDownMovement();
         CheckUpMovement();
         CheckChopSpeed();
-
-        // Check if ingredient has been chopped a certain number of times
-        // and pass it to Player.
-        if (chopCount > 10)
-        {
-            Player.currentIngred.isChopped = true;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            SceneManager.LoadScene("PlayerMainScreen");
-        }
+        instantiateIngredientsInStation();
     }
 
     public void StartGame()
@@ -145,12 +141,13 @@ public class AccelerometerTest : MonoBehaviour {
 
     void ChoppingStatus()
     {
-        if (chopCount > 50)
+        if (chopCount > 10)
         {
             status.text =  "Ingredient chopped";
             defaultCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(true);
             Time.timeScale = 0;
+            Player.currentIngred.isChopped = true;
         }
         else
         {
@@ -161,16 +158,56 @@ public class AccelerometerTest : MonoBehaviour {
 
     void CheckIngredientValid()
     {
-        //check if currentIngredient is valid
-        if (currentIngredient.isChoppable)
+        if (currentIngred != null)
         {
-            outCome.text = "";
-        }
-        else
-        {
-            outCome.text = "ingredient cannot be chopped";
-            Time.timeScale = 0;     //stops the minigame if ingredient cannot be chopped
+            //check if currentIngredient is valid
+            if (currentIngred.isChoppable)
+            {
+                outCome.text = "";
+            }
+            else
+            {
+                outCome.text = "ingredient cannot be chopped";
+                Time.timeScale = 0;     //stops the minigame if ingredient cannot be chopped
+            }
         }
         
+    }
+
+    public void goBack()
+    {
+        SceneManager.LoadScene("PlayerMainScreen");
+    }
+
+    public void instantiateIngredientsInStation()
+    {
+        /* If available, add the held ingredient to the pan */
+        newBoardContents = Player.ingredientsFromStation;
+
+        /* Draw ingredient models in pan */
+        foreach (Ingredient ingredient in newBoardContents)
+        {
+            Debug.Log(ingredient);
+            if (boardContents.IndexOf(ingredient) < 0)
+            {
+                GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
+                model = Instantiate(model, new Vector3(0, 0, 0), Quaternion.identity);
+                model.transform.SetParent(startCanvas);
+                boardContents.Add(ingredient);
+            }
+        }
+
+    }
+
+    public void putIngredient()
+    {
+        if (currentIngred != null)
+        {
+            GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
+            model = Instantiate(model, new Vector3(0, 0, 0), Quaternion.identity);
+            model.transform.SetParent(startCanvas);
+        }
+        player = GameObject.Find("Player").GetComponent<Player>();
+        player.notifyServerAboutIngredientPlaced();
     }
 }

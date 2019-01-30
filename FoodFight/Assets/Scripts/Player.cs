@@ -61,7 +61,10 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log(currentIngred.isChopped);
+            foreach (Ingredient ingredient in ingredientsFromStation)
+            {
+                Debug.Log(ingredient.Name);
+            }
         }
         /////////////////////////////////////
         
@@ -79,7 +82,7 @@ public class Player : MonoBehaviour {
         {
             mainText.text = "Your ingredient has been chopped";
         }
-        if (currentItem == null)
+        if (currentItem != null)
         {
             GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
             currentItem = (GameObject)Instantiate(model, new Vector3(0, 0, 80), Quaternion.identity);
@@ -141,7 +144,6 @@ public class Player : MonoBehaviour {
         
         if (currentStation != text)
         {
-            mainText.text = text;
             switch (text)
             {
                 case "0":
@@ -160,12 +162,9 @@ public class Player : MonoBehaviour {
                     break;
                 case "2":
                     currentStation = text;
-                    mainText.text = "Enters1";
                     //Tell server you've logged into the station, holding that food item
                     text += sendCurrentIngredient(null);
-                    mainText.text = "Enters2";
                     network.SendMyMessage("station", text);
-                    mainText.text = "Trying to log in to chopping";
                     choppingStation();
                     break;
                 case "3":
