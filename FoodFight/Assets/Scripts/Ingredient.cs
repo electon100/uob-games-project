@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -50,4 +50,5 @@ public class Ingredient {
 
 		return result;
 	}
+
 }

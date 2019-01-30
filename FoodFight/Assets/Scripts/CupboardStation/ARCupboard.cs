@@ -24,37 +24,37 @@ public class ARCupboard : MonoBehaviour
 
     public void onPotato()
     {
-        ingredient = new Ingredient("Potato", (GameObject) Resources.Load("PotatoesPrefab", typeof(GameObject)));
+        ingredient = new Ingredient("Potato", "PotatoesPrefab");
         foodName.text = "You picked a potato!";
     }
 
     public void onVegetables()
     {
-        ingredient = new Ingredient("Vegetables", (GameObject) Resources.Load("VegetablesPrefab", typeof(GameObject)));
+        ingredient = new Ingredient("Vegetables", "VegetablesPrefab");
         foodName.text = "You picked some vegetables!";
     }
 
     public void onMilk()
     {
-        ingredient = new Ingredient("Milk", (GameObject) Resources.Load("MilkPrefab", typeof(GameObject)));
+        ingredient = new Ingredient("Milk", "MilkPrefab");
         foodName.text = "You picked a bottle of milk!";
     }
 
     public void onEggs()
     {
-        ingredient = new Ingredient("Eggs", (GameObject) Resources.Load("EggsPrefab", typeof(GameObject)));
+        ingredient = new Ingredient("Eggs", "EggsPrefab");
         foodName.text = "You picked some eggs!";
     }
 
     public void onNoodles()
     {
-        ingredient = new Ingredient("Noodles", (GameObject) Resources.Load("NoodlesPrefab", typeof(GameObject)));
+        ingredient = new Ingredient("Noodles", "NoodlesPrefab");
         foodName.text = "You picked a bowl of noodles!";
     }
 
     public void onFlour()
     {
-        ingredient = new Ingredient("Flour", (GameObject)Resources.Load("FlourPrefab", typeof(GameObject)));
+        ingredient = new Ingredient("Flour", "FlourPrefab");
         foodName.text = "You picked a bag of flour!";
     }
 
