@@ -154,7 +154,7 @@ public class Chopping : MonoBehaviour
             endCanvas.gameObject.SetActive(true);
             Time.timeScale = 0;
             choppedIngredients.Add(Player.currentIngred);
-            FoodData.Instance.TryCombineIngredients();
+            FoodData.Instance.TryCombineIngredients(choppedIngredients);
             // Changes the ingredient to chopped
         }
         else

@@ -80,10 +80,7 @@ public class Player : MonoBehaviour {
 
     public void viewItems()
     {
-        if (currentIngred.isChopped)
-        {
-             mainText.text = "Your ingredient has been chopped";
-        }
+        mainText.text = currentIngred.numberOfChops.ToString();
 
         /* If the current item is null, instantiate it when viewing */
         if (currentItem == null)
