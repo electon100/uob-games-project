@@ -159,6 +159,16 @@ public class Chopping : MonoBehaviour {
     {
         if (currentIngred != null)
         {
+            //check if currentIngredient is valid
+            if (FoodData.Instance.isChoppable(currentIngred))
+            {
+                outCome.text = "";
+            }
+            else
+            {
+                outCome.text = "ingredient cannot be chopped";
+                Time.timeScale = 0;     //stops the minigame if ingredient cannot be chopped
+            }
         }
     }
 
