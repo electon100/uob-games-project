@@ -146,13 +146,17 @@ public class Server : MonoBehaviour {
         string stationId = words[0];
 
         string ingredientWithFlags = words[1];
-        Ingredient ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientWithFlags.GetType());
-        Debug.Log("Word 0: " + stationId);
-        Debug.Log("Word 1: " + ingredientWithFlags);
 
-        string[] ingredientAndFlags = decodeMessage(ingredientWithFlags, '^');
-        string ingredient = ingredientAndFlags[0];
-
+        // Be aware of null value here. Shouldn't cause issues, but might
+        Ingredient ingredientToAdd = new Ingredient();
+        string ingredient = "";
+        if (!ingredientWithFlags.Equals(""))
+        {
+            ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
+            ingredient = ingredientToAdd.Name;
+            Debug.Log("Ingredient to add: " + ingredient);
+        }
+      
         // Case where we add a station to a kitchen if it has not been seen before
         addStationToKitchen(stationId, connectionId);
 
@@ -293,6 +297,7 @@ public class Server : MonoBehaviour {
             string messageContent = station + "$";
             foreach (Ingredient ingredient in redKitchen[station])
             {
+                Debug.Log("Sending back: " + ingredient.Name);
                 messageContent += Ingredient.SerializeObject(ingredient);
                 messageContent += "$";
             }
