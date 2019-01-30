@@ -226,7 +226,8 @@ public class Client : MonoBehaviour {
                     if (data[i] != "")
                     {
                         string receivedIngredient = data[i];
-                        Ingredient received = Ingredient.XmlDeserializeFromString<Ingredient>(receivedIngredient, ingredientsInStation.GetType());
+                        Ingredient received = new Ingredient();
+                        received = Ingredient.XmlDeserializeFromString<Ingredient>(receivedIngredient, received.GetType());
                         ingredientsInStation.Add(received);
                     }
                 }

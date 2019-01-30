@@ -126,6 +126,7 @@ public class Player : MonoBehaviour {
         string message;
         message = currentStation + sendCurrentIngredient(currentIngred);
         network.SendMyMessage("station", message);
+        currentIngred = null;
     }
 
     private void checkStation(string text)
