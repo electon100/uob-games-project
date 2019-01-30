@@ -104,7 +104,7 @@ public class Server : MonoBehaviour {
 
     private void GameOver()
     {
-
+        //SceneManager.LoadScene("FryingStation");
     }
 
     // This is where all the work happens.
