@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class Chopping : MonoBehaviour {
+public class Chopping : MonoBehaviour
+{
 
     // Initialise different screens
     public Transform defaultCanvas;
@@ -113,8 +114,17 @@ public class Chopping : MonoBehaviour {
         {
             source.PlayOneShot(downSound);
             //display number of chops completed
-            Player.currentIngred.numberOfChops++;
-            chops.text = Player.currentIngred.numberOfChops.ToString();
+            chopCount++;
+
+            //Player.currentIngred.numberOfChops++;
+            //currentIngredient.noOfChops--;
+            chops.text = chopCount.ToString();
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            chopCount++;
+            //Player.currentIngred.numberOfChops++;
         }
     }
 
@@ -122,7 +132,7 @@ public class Chopping : MonoBehaviour {
     {
         if (maxAcc > 5.0f || maxAcc < -5.0f)
         {
-            outCome.text = "YOU CHOPPED OFF YOUR FINGER!";
+            //outCome.text = "YOU CHOPPED OFF YOUR FINGER!";
             defaultCanvas.gameObject.SetActive(false);
             warningCanvas.gameObject.SetActive(true);
             Time.timeScale = 0;
@@ -130,28 +140,30 @@ public class Chopping : MonoBehaviour {
         }
         else if (maxAcc < 3.5f && maxAcc > -3.5f)
         {
-            outCome.text = "CHOP HARDER!";
+           // outCome.text = "CHOP HARDER!";
         }
         else
         {
-            outCome.text = "";
+           // outCome.text = " ";
         }
     }
 
     void ChoppingStatus()
     {
-        /* Checks whether the ingredient has been chopped the appropriate number of times, based on the json */
-        if (FoodData.Instance.isChopped(Player.currentIngred))
+        IngredientDescription desc = GetIngredientDescription(Player.currentIngred);
+        if (chopCount >= desc.correctChops)
         {
-            status.text = "Ingredient chopped";
+            Debug.Log("true");
+            //status.text = "Ingredient chopped";
             defaultCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(true);
             Time.timeScale = 0;
+            // Changes the ingredient to chopped
         }
-        /* If not, keep chopping */
         else
         {
-            status.text = "";
+            Debug.Log("False");
+            //status.text =  "keep chopping";
         }
     }
 
@@ -160,13 +172,14 @@ public class Chopping : MonoBehaviour {
         if (currentIngred != null)
         {
             //check if currentIngredient is valid
-            if (FoodData.Instance.isChoppable(currentIngred))
+            if (FoodData.Instance.GetIngredientDescription(currentIngred).choppable)
             {
-                outCome.text = "";
+                
+                //outCome.text = "";
             }
             else
             {
-                outCome.text = "ingredient cannot be chopped";
+                //outCome.text = "ingredient cannot be chopped";
                 Time.timeScale = 0;     //stops the minigame if ingredient cannot be chopped
             }
         }
@@ -174,12 +187,9 @@ public class Chopping : MonoBehaviour {
 
     public void goBack()
     {
-        if (chopCount > 20)
-        {
-            // Sends the chopped ingredient to server
-            player = GameObject.Find("Player").GetComponent<Player>();
-            player.notifyServerAboutIngredientPlaced();
-        }
+        // Sends the chopped ingredient to server
+        player = GameObject.Find("Player").GetComponent<Player>();
+        player.notifyServerAboutIngredientPlaced();
         SceneManager.LoadScene("PlayerMainScreen");
     }
 

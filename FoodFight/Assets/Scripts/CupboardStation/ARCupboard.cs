@@ -54,13 +54,14 @@ public class ARCupboard : MonoBehaviour
 
     public void onFlour()
     {
-        ingredient = new Ingredient("Flour", "FlourPrefab");
+        ingredient = new Ingredient("flour", "flourPrefab");
         foodName.text = "You picked a bag of flour!";
     }
 
     public void goBack()
     {
         Player.currentIngred = ingredient;
+        Debug.Log("AR says: " + ingredient.Name + " " + ingredient.Model);
         Player.currentStation = "0";
         SceneManager.LoadScene("PlayerMainScreen");
     }

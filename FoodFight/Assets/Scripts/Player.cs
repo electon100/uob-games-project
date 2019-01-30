@@ -61,7 +61,12 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log(currentIngred);
+            Debug.Log("Player says: " + currentIngred.Name + " " + currentIngred.Model);
+        }
+
+        if (currentIngred != null)
+        {
+            //mainText.text = currentIngred.numberOfChops.ToString();
         }
         /////////////////////////////////////
         
@@ -79,7 +84,9 @@ public class Player : MonoBehaviour {
         // {
         //     mainText.text = "Your ingredient has been chopped";
         // }
-        if (currentItem != null)
+
+        /* If the current item is null, instantiate it when viewing */
+        if (currentItem == null)
         {
             GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
             currentItem = (GameObject)Instantiate(model, new Vector3(0, 0, 80), Quaternion.identity);
