@@ -26,6 +26,16 @@ public sealed class FoodData {
 		}
 	}
 
+	public bool isChopped(Ingredient ingredient) {
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		return desc.choppable && (ingredient.numberOfChops >= desc.correctChops);
+	}
+
+	public bool isCooked(Ingredient ingredient) {
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		return desc.cookable && (ingredient.numberOfPanFlips >= desc.correctFlips);
+	}
+
 	/* Determines whether the input ingredient matches the provided criteria */
 	public bool MatchesCriteria(Ingredient ingredient, IngredientCriteria criteria) {
 		/* Grab corresponding ingredient description (if available) */
