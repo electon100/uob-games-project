@@ -91,7 +91,7 @@ public class Frying : MonoBehaviour {
 
 			/* Increment the number of pan tosses of all ingredients in pan */
 			foreach (Ingredient ingredient in panContents) {
-				ingredient.panTosses++;
+				ingredient.numberOfPanFlips++;
 			}
 
 			/* Update shake text */

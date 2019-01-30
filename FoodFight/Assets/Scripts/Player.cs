@@ -55,9 +55,16 @@ public class Player : MonoBehaviour {
         {
             checkStation("0");
         }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            checkStation("2");
+        }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log(network.serialiseIngredient(currentIngred));
+            foreach (Ingredient ingredient in ingredientsFromStation)
+            {
+                Debug.Log(ingredient.Name);
+            }
         }
         /////////////////////////////////////
 
@@ -66,14 +73,16 @@ public class Player : MonoBehaviour {
             currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
         }
 
-        currentIngred = ARCupboard.ingredient;
-
         checkNFC();
     }
 
     public void viewItems()
     {
-        if (currentItem == null)
+        // if (currentIngred.isChopped)
+        // {
+        //     mainText.text = "Your ingredient has been chopped";
+        // }
+        if (currentItem != null)
         {
             GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
             currentItem = (GameObject)Instantiate(model, new Vector3(0, 0, 80), Quaternion.identity);
@@ -98,6 +107,7 @@ public class Player : MonoBehaviour {
 
     private void choppingStation()
     {
+        ingredientsFromStation = network.getIngredientsFromStation("2");
         SceneManager.LoadScene("ChoppingStation");
     }
 
@@ -127,6 +137,10 @@ public class Player : MonoBehaviour {
         string message;
         message = currentStation + sendCurrentIngredient(currentIngred);
         network.SendMyMessage("station", message);
+    }
+
+    public void removeCurrentIngredient()
+    {
         currentIngred = null;
     }
 
@@ -196,6 +210,7 @@ public class Player : MonoBehaviour {
                         if (j != lastTag)
                         {
                             checkStation(text);
+                            mainText.text = text;
                             lastTag = j;
                         }
                     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class AccelerometerTest : MonoBehaviour {
 
@@ -11,17 +12,19 @@ public class AccelerometerTest : MonoBehaviour {
     public Transform warningCanvas;
     public Transform endCanvas;
 
+    public Player player;
+
     private float maxAcc = 0.5f;  //The highest acceleration recorded so far
-    private int chopCount = 0;    //number of chops 
+    private int chopCount = 0;    //number of chops
     //private bool gameStarted = false;
 
     // Output text to be displayed on screen
-    public Text yAcc;      //only for testing       
-    public Text chops;      
+    public Text yAcc;      //only for testing
+    public Text chops;
     public Text outCome;
     public Text status;
     public Image shakeImage;
-    
+
     // Sounds to accompany up and down acceleration
     public AudioClip downSound;
     public AudioClip upSound;
@@ -29,10 +32,13 @@ public class AccelerometerTest : MonoBehaviour {
     public GameObject blood;
     private AudioSource source;
 
-    private static Ingredient currentIngredient;
+    private static Ingredient currentIngred;
+    public List<Ingredient> boardContents = new List<Ingredient>();
+    public List<Ingredient> newBoardContents = new List<Ingredient>();
 
     private void Start()
     {
+        currentIngred = Player.currentIngred;
         //set up scene
         source = GetComponent<AudioSource>();
         Screen.orientation = ScreenOrientation.LandscapeLeft;
@@ -45,6 +51,8 @@ public class AccelerometerTest : MonoBehaviour {
         CheckIngredientValid();
 
         Time.timeScale = 0;
+
+        boardContents = new List<Ingredient>();
     }
 
     void Update()
@@ -64,6 +72,7 @@ public class AccelerometerTest : MonoBehaviour {
         CheckDownMovement();
         CheckUpMovement();
         CheckChopSpeed();
+        instantiateIngredientsInStation();
     }
 
     public void StartGame()
@@ -105,6 +114,8 @@ public class AccelerometerTest : MonoBehaviour {
             source.PlayOneShot(downSound);
             //display number of chops completed
             chopCount++;
+
+            Player.currentIngred.numberOfChops++;
             //currentIngredient.noOfChops--;
             chops.text = chopCount.ToString();
         }
@@ -132,12 +143,13 @@ public class AccelerometerTest : MonoBehaviour {
 
     void ChoppingStatus()
     {
-        if (chopCount > 50)
+        if (chopCount > 20)
         {
             status.text =  "Ingredient chopped";
             defaultCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(true);
             Time.timeScale = 0;
+            // Changes the ingredient to chopped
         }
         else
         {
@@ -148,16 +160,58 @@ public class AccelerometerTest : MonoBehaviour {
 
     void CheckIngredientValid()
     {
-        //check if currentIngredient is valid
-        if (currentIngredient.isChoppable)
+        if (currentIngred != null)
         {
-            outCome.text = "";
+            //check if currentIngredient is valid
+            if (FoodData.Instance.GetIngredientDescription(currentIngred).choppable)
+            {
+                outCome.text = "";
+            }
+            else
+            {
+                outCome.text = "ingredient cannot be chopped";
+                Time.timeScale = 0;     //stops the minigame if ingredient cannot be chopped
+            }
         }
-        else
+    }
+
+    public void goBack()
+    {
+        if (chopCount > 20)
         {
-            outCome.text = "ingredient cannot be chopped";
-            Time.timeScale = 0;     //stops the minigame if ingredient cannot be chopped
+            // Sends the chopped ingredient to server
+            player = GameObject.Find("Player").GetComponent<Player>();
+            player.notifyServerAboutIngredientPlaced();
         }
-        
+        SceneManager.LoadScene("PlayerMainScreen");
+    }
+
+    public void instantiateIngredientsInStation()
+    {
+        /* If available, add the held ingredient to the pan */
+        newBoardContents = Player.ingredientsFromStation;
+
+        /* Draw ingredient models in pan */
+        foreach (Ingredient ingredient in newBoardContents)
+        {
+            if (boardContents.IndexOf(ingredient) < 0)
+            {
+                GameObject model = (GameObject)Resources.Load(ingredient.Model, typeof(GameObject));
+                model = Instantiate(model, new Vector3(0, 0, 0), Quaternion.identity);
+                model.transform.SetParent(startCanvas);
+                boardContents.Add(ingredient);
+            }
+        }
+
+    }
+
+    public void putIngredient()
+    {
+        if (currentIngred != null)
+        {
+            GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
+            model = Instantiate(model, new Vector3(0, 0, 0), Quaternion.identity);
+            model.transform.SetParent(startCanvas);
+        }
     }
 }
