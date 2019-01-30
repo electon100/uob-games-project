@@ -130,7 +130,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &12499669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1054,7 +1054,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 1592c52886585b241902963bad97dd5d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3b11be895f771134fb6fc582806e693d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1171,7 +1171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1087308460
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1675,7 +1675,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1964602097}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84e7b8e88c71f7547b080760a02c6b07, type: 3}
+  m_Script: {fileID: 11500000, guid: c38c6e63d615e1f4e93d0f052a66d42b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   defaultCanvas: {fileID: 12499672}
@@ -1689,7 +1689,7 @@ MonoBehaviour:
   shakeImage: {fileID: 845719446}
   downSound: {fileID: 8300000, guid: 1f4467ab459863a4f943e0a3c7eb4c1c, type: 3}
   upSound: {fileID: 8300000, guid: f293d79e0a9596d4193f27c1806c5571, type: 3}
-  blood: {fileID: 1752274792570496, guid: 85b641d063289a4449ffadf6e37c9fc6, type: 2}
+  blood: {fileID: 0}
 --- !u!65 &1964602099
 BoxCollider:
   m_ObjectHideFlags: 0
