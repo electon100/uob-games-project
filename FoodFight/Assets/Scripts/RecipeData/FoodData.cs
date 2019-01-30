@@ -9,6 +9,7 @@ public sealed class FoodData {
 	private readonly string relativeIngredientsPath = "/Data/ingredients.json";
 
 	private static FoodData instance = null;
+	private static readonly object padlock = new object();
 
 	private static RecipeDefinitions allRecipes;
 	private static IngredientDefinitions allIngredients;
@@ -33,16 +34,6 @@ public sealed class FoodData {
 	public bool isCooked(Ingredient ingredient) {
 		IngredientDescription desc = GetIngredientDescription(ingredient);
 		return desc.cookable && (ingredient.numberOfPanFlips >= desc.correctFlips);
-	}
-
-	public bool isChoppable(Ingredient ingredient) {
-		IngredientDescription desc = GetIngredientDescription(ingredient);
-		return desc != null && desc.choppable;
-	}
-
-	public bool isCookable(Ingredient ingredient) {
-		IngredientDescription desc = GetIngredientDescription(ingredient);
-		return desc != null && desc.cookable;
 	}
 
 	/* Determines whether the input ingredient matches the provided criteria */
@@ -71,8 +62,6 @@ public sealed class FoodData {
 			IngredientDescription testIngredient = allIngredients.ingredients[i];
 			if (string.Equals(ingredient.Name, testIngredient.name)) return testIngredient;
 		}
-
-		Debug.Log("Could not find matching ingredient description for ingredient: " + ingredient.Name);
 
 		return null;
 	}
@@ -130,8 +119,10 @@ public sealed class FoodData {
 
 	public static FoodData Instance {
     get {
-			if (instance == null) instance = new FoodData();
-			return instance;
+			lock (padlock) {
+				if (instance == null) instance = new FoodData();
+				return instance;
+			}
 		}
 	}
 

@@ -150,7 +150,7 @@ public class Chopping : MonoBehaviour
 
     void ChoppingStatus()
     {
-        IngredientDescription desc = GetIngredientDescription(Player.currentIngred);
+        IngredientDescription desc = FoodData.Instance.GetIngredientDescription(Player.currentIngred);
         if (chopCount >= desc.correctChops)
         {
             Debug.Log("true");
