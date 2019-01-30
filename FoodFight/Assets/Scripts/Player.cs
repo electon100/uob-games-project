@@ -80,10 +80,10 @@ public class Player : MonoBehaviour {
 
     public void viewItems()
     {
-        // if (currentIngred.isChopped)
-        // {
-        //     mainText.text = "Your ingredient has been chopped";
-        // }
+        if (currentIngred.isChopped)
+        {
+             mainText.text = "Your ingredient has been chopped";
+        }
 
         /* If the current item is null, instantiate it when viewing */
         if (currentItem == null)

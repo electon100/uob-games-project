@@ -36,6 +36,7 @@ public class Chopping : MonoBehaviour
     private static Ingredient currentIngred;
     public List<Ingredient> boardContents = new List<Ingredient>();
     public List<Ingredient> newBoardContents = new List<Ingredient>();
+    List<Ingredient> choppedIngredients = new List<Ingredient>();
 
     private void Start()
     {
@@ -116,16 +117,11 @@ public class Chopping : MonoBehaviour
             //display number of chops completed
             chopCount++;
 
-            //Player.currentIngred.numberOfChops++;
+            Player.currentIngred.numberOfChops++;
             //currentIngredient.noOfChops--;
             chops.text = chopCount.ToString();
         }
-
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            chopCount++;
-            //Player.currentIngred.numberOfChops++;
-        }
+        
     }
 
     void CheckChopSpeed()
@@ -150,14 +146,15 @@ public class Chopping : MonoBehaviour
 
     void ChoppingStatus()
     {
-        IngredientDescription desc = FoodData.Instance.GetIngredientDescription(Player.currentIngred);
-        if (chopCount >= desc.correctChops)
+        if (FoodData.Instance.isChopped(Player.currentIngred))
         {
             Debug.Log("true");
             //status.text = "Ingredient chopped";
             defaultCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(true);
             Time.timeScale = 0;
+            choppedIngredients.Add(Player.currentIngred);
+            FoodData.Instance.TryCombineIngredients();
             // Changes the ingredient to chopped
         }
         else
