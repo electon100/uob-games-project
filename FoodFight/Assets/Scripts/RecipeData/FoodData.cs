@@ -36,6 +36,16 @@ public sealed class FoodData {
 		return desc.cookable && (ingredient.numberOfPanFlips >= desc.correctFlips);
 	}
 
+	public bool isChoppable(Ingredient ingredient) {
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		return desc != null && desc.choppable;
+	}
+
+	public bool isCookable(Ingredient ingredient) {
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		return desc != null && desc.cookable;
+	}
+
 	/* Determines whether the input ingredient matches the provided criteria */
 	public bool MatchesCriteria(Ingredient ingredient, IngredientCriteria criteria) {
 		/* Grab corresponding ingredient description (if available) */

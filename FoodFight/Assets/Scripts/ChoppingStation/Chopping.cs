@@ -163,7 +163,7 @@ public class AccelerometerTest : MonoBehaviour {
         if (currentIngred != null)
         {
             //check if currentIngredient is valid
-            if (FoodData.Instance.GetIngredientDescription(currentIngred).choppable)
+            if (FoodData.Instance.isChoppable(currentIngred))
             {
                 outCome.text = "";
             }
