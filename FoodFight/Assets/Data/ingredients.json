@@ -9,7 +9,7 @@
       "correctChops" : 0
     },
     {
-      "name" : "mixed vegetables",
+      "name" : "mixed_vegetables",
       "choppable" : true,
       "cookable" : true,
       "correctFlips" : 10,
@@ -25,7 +25,7 @@
       "correctChops" : 50
     },
     {
-      "name" : "chopped mixed vegetables",
+      "name" : "chopped_mixed_vegetables",
       "choppable" : false,
       "cookable" : true,
       "correctFlips" : 10,
@@ -33,7 +33,7 @@
       "correctChops" : 0
     },
     {
-      "name" : "diced chicken",
+      "name" : "diced_chicken",
       "choppable" : false,
       "cookable" : true,
       "correctFlips" : 30,
@@ -41,7 +41,7 @@
       "correctChops" : 0
     },
     {
-      "name" : "soy sauce",
+      "name" : "soy_sauce",
       "choppable" : false,
       "cookable" : false,
       "correctFlips" : 0,
@@ -57,7 +57,7 @@
       "correctChops" : 0
     },
     {
-      "name" : "stir fry mix",
+      "name" : "stir_fry_mix",
       "choppable" : false,
       "cookable" : true,
       "correctFlips" : 30,
@@ -65,7 +65,7 @@
       "correctChops" : 0
     },
     {
-      "name" : "stir fry",
+      "name" : "stir_fry",
       "choppable" : false,
       "cookable" : false,
       "correctFlips" : 0,
@@ -81,7 +81,7 @@
       "correctChops" : 20
     },
     {
-      "name" : "diced potato",
+      "name" : "diced_potato",
       "choppable" : false,
       "cookable" : true,
       "correctFlips" : 30,

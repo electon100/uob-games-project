@@ -4,14 +4,14 @@
       "name": "chips",
       "ingredients": [
         {
-          "name": "diced potato",
+          "name": "diced_potato",
           "cooked": true,
           "chopped": false
         }
       ]
     },
     {
-      "name": "diced potato",
+      "name": "diced_potato",
       "ingredients": [
         {
           "name": "potato",
@@ -21,7 +21,7 @@
       ]
     },
     {
-      "name": "stir fry mix",
+      "name": "stir_fry_mix",
       "ingredients": [
         {
           "name": "noodles",
@@ -29,34 +29,34 @@
           "chopped": false
         },
         {
-          "name": "chopped mixed vegetables",
+          "name": "chopped_mixed_vegetables",
           "cooked": false,
           "chopped": false
         },
         {
-          "name": "diced chicken",
+          "name": "diced_chicken",
           "cooked": false,
           "chopped": false
         }
       ]
     },
     {
-      "name": "stir fry",
+      "name": "stir_fry",
       "ingredients": [
         {
-          "name": "soy sauce",
+          "name": "soy_sauce",
           "cooked": false,
           "chopped": false
         },
         {
-          "name": "stir fry mix",
+          "name": "stir_fry_mix",
           "cooked": true,
           "chopped": false
         }
       ]
     },
     {
-      "name": "diced chicken",
+      "name": "diced_chicken",
       "ingredients": [
         {
           "name": "chicken",
@@ -66,10 +66,10 @@
       ]
     },
     {
-      "name": "chopped mixed vegetables",
+      "name": "chopped_mixed_vegetables",
       "ingredients": [
         {
-          "name": "mixed vegetables",
+          "name": "mixed_vegetables",
           "cooked": false,
           "chopped": true
         }
