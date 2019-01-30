@@ -60,6 +60,7 @@ public class ARCupboard : MonoBehaviour
 
     public void goBack()
     {
+        Player.currentIngred = ingredient;
         Player.currentStation = "0";
         SceneManager.LoadScene("PlayerMainScreen");
     }
