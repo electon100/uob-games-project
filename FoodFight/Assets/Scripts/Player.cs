@@ -46,6 +46,7 @@ public class Player : MonoBehaviour {
 
 	void Update () {
 
+        //Testing on computer/////////////////
         if (Input.GetKeyDown(KeyCode.T))
         {
             checkStation("1");
@@ -56,11 +57,10 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            foreach (Ingredient ingredient in ingredientsFromStation)
-            {
-                Debug.Log(ingredient.Name);
-            }
+            Debug.Log(network.serialiseIngredient(currentIngred));
         }
+        /////////////////////////////////////
+        
         if (currentItem != null)
         {
             currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
@@ -75,7 +75,8 @@ public class Player : MonoBehaviour {
     {
         if (currentItem == null)
         {
-            currentItem = (GameObject)Instantiate(currentIngred.Model, new Vector3(0, 0, 80), Quaternion.identity);
+            GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
+            currentItem = (GameObject)Instantiate(model, new Vector3(0, 0, 80), Quaternion.identity);
         }
         else
         {
@@ -110,7 +111,7 @@ public class Player : MonoBehaviour {
         string message;
         if (addedIngredient != null)
         {
-            message = "$" + addedIngredient.translateToString();
+            message = "$" + Ingredient.SerializeObject(addedIngredient);
         }
         else
         {
@@ -125,6 +126,7 @@ public class Player : MonoBehaviour {
         string message;
         message = currentStation + sendCurrentIngredient(currentIngred);
         network.SendMyMessage("station", message);
+        currentIngred = null;
     }
 
     private void checkStation(string text)

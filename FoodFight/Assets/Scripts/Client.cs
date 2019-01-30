@@ -13,7 +13,7 @@ using System.Reflection;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.101";
+    private const string serverIP = "192.168.0.100";
 
     private int port = 8000;
 
@@ -133,13 +133,36 @@ public class Client : MonoBehaviour {
         redButton.transform.SetParent(startPanel.transform);//Setting button parent
         redButton.GetComponent<Button>().onClick.AddListener(onClickRed);//Setting what button does when clicked
         redButton.transform.GetChild(0).GetComponent<Text>().text = "Red Team";//Changing text
+        Color redCol;
+        if (ColorUtility.TryParseHtmlString("#FF7000", out redCol))
+        {
+            redButton.GetComponent<Image>().color = redCol;//Changing colour
+        }
 
         GameObject blueButton = (GameObject)Instantiate(buttonPrefab, new Vector3(100, -17, 0), Quaternion.identity);
         blueButton.transform.SetParent(startPanel.transform);//Setting button parent
         blueButton.GetComponent<Button>().onClick.AddListener(onClickBlue);//Setting what button does when clicked
         blueButton.transform.GetChild(0).GetComponent<Text>().text = "Blue Team";//Changing text
+        Color blueCol;
+        if (ColorUtility.TryParseHtmlString("#00ACFF", out blueCol))
+        {
+            blueButton.GetComponent<Image>().color = blueCol;//Changing colour
+        }
 
         Destroy(GameObject.Find("ConnectButton"));
+    }
+
+    public string serialiseIngredient(Ingredient ingredient)
+    {
+        byte[] buffer = new byte[1024];
+        int bufferSize = 1024;
+        Stream message = new MemoryStream(buffer);
+        BinaryFormatter formatter = new BinaryFormatter();
+        //Serialize the message
+        Ingredient ingredientString = ingredient;
+        formatter.Serialize(message, ingredientString);
+
+        return ingredientString.ToString();
     }
 
     public void SendMyMessage(string messageType, string textInput)
@@ -202,13 +225,10 @@ public class Client : MonoBehaviour {
                     //receives whole string with flags, e.g. Eggs^0^2
                     if (data[i] != "")
                     {
-                        string ingredientString = FirstLetterToUpper(data[i]);
-                        string[] ingredientStringList = decodeMessage(ingredientString, '^');
-                        string ingredientName = ingredientStringList[0];
-                        string prefab = ingredientName + "Prefab";
-                        Ingredient ingredientToAdd = new Ingredient(ingredientName, (GameObject)Resources.Load(prefab, typeof(GameObject)));
-                        ingredientToAdd.translateToIngredient(ingredientString);
-                        ingredientsInStation.Add(ingredientToAdd);
+                        string receivedIngredient = data[i];
+                        Ingredient received = new Ingredient();
+                        received = Ingredient.XmlDeserializeFromString<Ingredient>(receivedIngredient, received.GetType());
+                        ingredientsInStation.Add(received);
                     }
                 }
 
