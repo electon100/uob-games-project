@@ -66,7 +66,7 @@ public class Player : MonoBehaviour {
 
         if (currentIngred != null)
         {
-            //mainText.text = currentIngred.numberOfChops.ToString();
+            mainText.text = currentIngred.numberOfChops.ToString();
         }
         /////////////////////////////////////
         

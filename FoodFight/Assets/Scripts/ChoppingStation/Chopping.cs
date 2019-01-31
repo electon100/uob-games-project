@@ -54,6 +54,7 @@ public class Chopping : MonoBehaviour
 
         Time.timeScale = 0;
 
+        /* Needed because the list of ingredients in the stations is constatly updated, so constant drawing is avoided */
         boardContents = new List<Ingredient>();
     }
 
@@ -69,6 +70,11 @@ public class Chopping : MonoBehaviour
             maxAcc = Input.acceleration.y;
             yAcc.text = maxAcc.ToString();
             Destroy(shakeImage);
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            Player.currentIngred.numberOfChops++;
         }
 
         CheckDownMovement();
@@ -111,56 +117,45 @@ public class Chopping : MonoBehaviour
 
     void CheckDownMovement()
     {
+        /* Check if the player has started the movement and increment the number of chops on the ingredient */
         if (Input.acceleration.y > 3.0f)
         {
             source.PlayOneShot(downSound);
-            //display number of chops completed
-            chopCount++;
-
             Player.currentIngred.numberOfChops++;
-            //currentIngredient.noOfChops--;
-            chops.text = chopCount.ToString();
+            chops.text = Player.currentIngred.numberOfChops.ToString();
         }
         
     }
 
+    /* Checks the chopping speed and displays a red sign if it's too fast */
     void CheckChopSpeed()
     {
         if (maxAcc > 5.0f || maxAcc < -5.0f)
         {
-            //outCome.text = "YOU CHOPPED OFF YOUR FINGER!";
             defaultCanvas.gameObject.SetActive(false);
             warningCanvas.gameObject.SetActive(true);
             Time.timeScale = 0;
-            //Instantiate(blood, new Vector3(transform.position.x, transform.position.y, 0f), Quaternion.identity);
         }
         else if (maxAcc < 3.5f && maxAcc > -3.5f)
         {
-           // outCome.text = "CHOP HARDER!";
+            outCome.text = "CHOP HARDER!";
         }
         else
         {
-           // outCome.text = " ";
+            outCome.text = " ";
         }
     }
 
     void ChoppingStatus()
     {
+        /* Checks if the ingredient has been chopped the right amount of times and updates it */
         if (FoodData.Instance.isChopped(Player.currentIngred))
         {
-            Debug.Log("true");
-            //status.text = "Ingredient chopped";
             defaultCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(true);
             Time.timeScale = 0;
             choppedIngredients.Add(Player.currentIngred);
             FoodData.Instance.TryCombineIngredients(choppedIngredients);
-            // Changes the ingredient to chopped
-        }
-        else
-        {
-            Debug.Log("False");
-            //status.text =  "keep chopping";
         }
     }
 
@@ -168,34 +163,35 @@ public class Chopping : MonoBehaviour
     {
         if (currentIngred != null)
         {
-            //check if currentIngredient is valid
+            /* Stops the minigame if ingredient cannot be chopped */
             if (FoodData.Instance.GetIngredientDescription(currentIngred).choppable)
             {
-                
-                //outCome.text = "";
-            }
-            else
-            {
-                //outCome.text = "ingredient cannot be chopped";
-                Time.timeScale = 0;     //stops the minigame if ingredient cannot be chopped
+                Time.timeScale = 0;
             }
         }
     }
 
+    /* Sends the chopped ingredient to server and returns to the main screen */
     public void goBack()
     {
-        // Sends the chopped ingredient to server
         player = GameObject.Find("Player").GetComponent<Player>();
         player.notifyServerAboutIngredientPlaced();
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
+    /* Returns player back to the chopping, after failing the first time */
+    public void tryAgain()
+    {
+        endCanvas.gameObject.SetActive(false);
+        defaultCanvas.gameObject.SetActive(true);
+    }
+
     public void instantiateIngredientsInStation()
     {
-        /* If available, add the held ingredient to the pan */
+        /* If available, restore what was previously in that station */
         newBoardContents = Player.ingredientsFromStation;
 
-        /* Draw ingredient models in pan */
+        /* Needed because the list of ingredients in the stations is constatly updated, so constant drawing is avoided */
         foreach (Ingredient ingredient in newBoardContents)
         {
             if (boardContents.IndexOf(ingredient) < 0)
@@ -206,7 +202,6 @@ public class Chopping : MonoBehaviour
                 boardContents.Add(ingredient);
             }
         }
-
     }
 
     public void putIngredient()

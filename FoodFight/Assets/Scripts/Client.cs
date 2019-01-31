@@ -13,7 +13,7 @@ using System.Reflection;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.103";
+    private const string serverIP = "192.168.0.101";
 
     private int port = 8000;
 
