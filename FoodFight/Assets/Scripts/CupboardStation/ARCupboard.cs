@@ -13,6 +13,7 @@ public class ARCupboard : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        Screen.orientation = ScreenOrientation.Portrait;
         DontDestroyOnLoad(GameObject.Find("Player"));
     }
 
@@ -56,6 +57,12 @@ public class ARCupboard : MonoBehaviour
     {
         ingredient = new Ingredient("flour", "flourPrefab");
         foodName.text = "You picked a bag of flour!";
+    }
+
+    public void onChicken()
+    {
+        ingredient = new Ingredient("chicken", "chickenPrefab");
+        foodName.text = "You picked some chicken!";
     }
 
     public void goBack()
