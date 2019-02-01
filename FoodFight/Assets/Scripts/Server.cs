@@ -5,8 +5,10 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEditor;
+using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.IO.Compression;
 
 public class Server : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
@@ -26,14 +28,10 @@ public class Server : MonoBehaviour {
     public GameObject redPlayer;
     public GameObject bluePlayer;
 
-    private Score redScore;
-    private Score blueScore;
-
-    // Dictionaries of players on each team
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
 
-    // Dictionaries of stations and the ingredients on them
+    // dictionary <station, status>
     IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
     IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
 
@@ -41,30 +39,40 @@ public class Server : MonoBehaviour {
         NetworkTransport.Init();
         ConnectionConfig connectConfig = new ConnectionConfig();
 
+        /* Network configuration */
+        connectConfig.AckDelay = 33;
+        connectConfig.AllCostTimeout = 20;
+        connectConfig.ConnectTimeout = 10000;
+        connectConfig.DisconnectTimeout = 20000;
+        connectConfig.FragmentSize = 500;
+        connectConfig.MaxCombinedReliableMessageCount = 10;
+        connectConfig.MaxCombinedReliableMessageSize = 100;
+        connectConfig.MaxConnectionAttempt = 32;
+        connectConfig.MaxSentMessageQueueSize = 2048;
+        connectConfig.MinUpdateTimeout = 20;
+        connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
+        connectConfig.OverflowDropThreshold = 40; // 
+        connectConfig.PacketSize = 1500;
+        connectConfig.PingTimeout = 500;
+        connectConfig.ReducedPingTimeout = 100;
+        connectConfig.ResendTimeout = 500;
+
         reliableChannel = connectConfig.AddChannel(QosType.ReliableSequenced);
         HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
 
         hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
         webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
-
-        redScore = new Score();
-        blueScore = new Score();
-
         isStarted = true;
     }
 	
 	private void Update () {
         if (!isStarted) return;
 
-        // Check if either team has reached a score of 0 and if they have, end the game
-        if (redScore.getScore() == 0) GameOver("blue");
-        else if (blueScore.getScore() == 0) GameOver("red");
-
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
         int channelID; // ID of channel connected to recHostId;
-        byte[] recBuffer = new byte[1024];
-        int bufferSize = 1024;
+        byte[] recBuffer = new byte[2048];
+        int bufferSize = 2048;
         int dataSize;
         byte error;
 
@@ -141,13 +149,14 @@ public class Server : MonoBehaviour {
         Stream serializedMessage = new MemoryStream(data);
         BinaryFormatter formatter = new BinaryFormatter();
         string message = formatter.Deserialize(serializedMessage).ToString();
+        string decompressedMessage = Unzip(Convert.FromBase64String(message));
 
         //Output the deserialized message as well as the connection information to the console
         Debug.Log("OnData(hostId = " + hostId + ", connectionId = "
             + connectionId + ", channelId = " + channelId + ", data = "
             + message + ", size = " + size + ", error = " + error.ToString() + ")");
 
-        return message;
+        return decompressedMessage;
     }
 
     private void OnStation(string messageContent, int connectionId)
@@ -156,48 +165,32 @@ public class Server : MonoBehaviour {
         string[] words = decodeMessage(messageContent, '$');
         string stationId = words[0];
 
-        // If the player sends back the score of a completed recipe, add that to the teams score
-        bool isScore = false;
-        if (stationId == "3")
+        string ingredientWithFlags = words[1];
+
+        // Be aware of null value here. Shouldn't cause issues, but might
+        Ingredient ingredientToAdd = new Ingredient();
+        string ingredient = "";
+        if (!ingredientWithFlags.Equals(""))
         {
-            float score;
-            isScore = float.TryParse(words[1], out score);
-            if (isScore)
-            {
-                if (redTeam.ContainsKey(connectionId)) redScore.increaseScore(score);
-                else if (blueTeam.ContainsKey(connectionId)) blueScore.increaseScore(score);
-            }
+            ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
+            ingredient = ingredientToAdd.Name;
+            Debug.Log("Ingredient to add: " + ingredient);
         }
+      
+        // Case where we add a station to a kitchen if it has not been seen before
+        addStationToKitchen(stationId, connectionId);
 
-        // Only continue if a score was not sent back
-        if (!isScore) {
-            string ingredientWithFlags = words[1];
+        bool playerOnValidStation = isPlayerOnValidStation(connectionId, stationId);
 
-            // Be aware of null value here. Shouldn't cause issues, but might
-            Ingredient ingredientToAdd = new Ingredient();
-            string ingredient = "";
-            if (!ingredientWithFlags.Equals(""))
-            {
-                ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
-                ingredient = ingredientToAdd.Name;
-                Debug.Log("Ingredient to add: " + ingredient);
-            }
+        if (playerOnValidStation)
+        {
+            // Case where we want to send back ingredients stored at the station to player
+            if (ingredient.Equals(""))
+                sendIngredientsToPlayer(ingredient, stationId, connectionId);
 
-            // Case where we add a station to a kitchen if it has not been seen before
-            addStationToKitchen(stationId, connectionId);
-
-            bool playerOnValidStation = isPlayerOnValidStation(connectionId, stationId);
-
-            if (playerOnValidStation)
-            {
-                // Case where we want to send back ingredients stored at the station to player
-                if (ingredient.Equals(""))
-                    sendIngredientsToPlayer(ingredient, stationId, connectionId);
-
-                //If the player wants to add an ingredient, add it
-                else
-                    addIngredientToStation(stationId, ingredientToAdd, connectionId);
-            }
+            //If the player wants to add an ingredient, add it
+            else
+                addIngredientToStation(stationId, ingredientToAdd, connectionId);
         }
     }
 
@@ -255,12 +248,14 @@ public class Server : MonoBehaviour {
     public void SendMyMessage(string messageType, string textInput, int connectionId)
     {
         byte error;
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[2048];
+        int bufferSize = 2048;
         Stream message = new MemoryStream(buffer);
         BinaryFormatter formatter = new BinaryFormatter();
         //Serialize the message
         string messageToSend = messageType + "&" + textInput;
-        Debug.Log("Sent: " + messageToSend);
+        byte[] compressedMessage = Zip(messageToSend);
+        messageToSend = Convert.ToBase64String(compressedMessage);
         formatter.Serialize(message, messageToSend);
 
         //Send the message from the "client" with the serialized message and the connection information
@@ -268,7 +263,9 @@ public class Server : MonoBehaviour {
 
         //If there is an error, output message error to the console
         if ((NetworkError)error != NetworkError.Ok)
+        {
             Debug.Log("Message send error: " + (NetworkError)error);
+        }
     }
 
     //Allocates a player to a team based on their choice.
@@ -353,19 +350,39 @@ public class Server : MonoBehaviour {
             blueKitchen[stationId].Add(newIngredient);
     }
 
-    private void GameOver(string winningTeam)
-    {
-        // Should call the game over screen, showing the final scores on the main screen
-        // Should tell players on the winning team they have won on their phones
-        // Should tell players on the losing team they have lost on their phones
+    public static void CopyTo(Stream src, Stream dest) {
+        byte[] bytes = new byte[4096];
 
-        if (winningTeam.Equals("blue"))
-        {
+        int cnt;
 
+        while ((cnt = src.Read(bytes, 0, bytes.Length)) != 0) {
+            dest.Write(bytes, 0, cnt);
         }
-        else if (winningTeam.Equals("red"))
-        {
+    }
 
+    public static byte[] Zip(string str) {
+        var bytes = Encoding.UTF8.GetBytes(str);
+
+        using (var msi = new MemoryStream(bytes))
+        using (var mso = new MemoryStream()) {
+            using (var gs = new GZipStream(mso, CompressionMode.Compress)) {
+                //msi.CopyTo(gs);
+                CopyTo(msi, gs);
+            }
+
+            return mso.ToArray();
+        }
+    }
+
+    public static string Unzip(byte[] bytes) {
+        using (var msi = new MemoryStream(bytes))
+        using (var mso = new MemoryStream()) {
+            using (var gs = new GZipStream(msi, CompressionMode.Decompress)) {
+                //gs.CopyTo(mso);
+                CopyTo(gs, mso);
+            }
+
+            return Encoding.UTF8.GetString(mso.ToArray());
         }
     }
 }
