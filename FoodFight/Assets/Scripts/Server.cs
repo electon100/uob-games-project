@@ -59,17 +59,15 @@ public class Server : MonoBehaviour {
 	private void Update () {
         if (!isStarted) return;
 
-<<<<<<< HEAD
         timer -= Time.deltaTime;
         if (timer <= 0)
         {
             GameOver();
         }
-=======
+
         // Check if either team has reached a score of 0 and if they have, end the game
         if (redScore.getScore() == 0) GameOver("blue");
         else if (blueScore.getScore() == 0) GameOver("red");
->>>>>>> valid-plating
 
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
