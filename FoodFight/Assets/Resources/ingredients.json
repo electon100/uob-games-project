@@ -1,0 +1,100 @@
+{
+  "ingredients": [
+    {
+      "name" : "mush",
+      "choppable" : false,
+      "cookable" : false,
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0
+    },
+    {
+      "name" : "mixed_vegetables",
+      "choppable" : true,
+      "cookable" : true,
+      "correctFlips" : 10,
+      "maxFlips" : 20,
+      "correctChops" : 10
+    },
+    {
+      "name" : "chicken",
+      "choppable" : true,
+      "cookable" : true,
+      "correctFlips" : 30,
+      "maxFlips" : 40,
+      "correctChops" : 50
+    },
+    {
+      "name" : "chopped_mixed_vegetables",
+      "choppable" : false,
+      "cookable" : true,
+      "correctFlips" : 10,
+      "maxFlips" : 20,
+      "correctChops" : 0
+    },
+    {
+      "name" : "diced_chicken",
+      "choppable" : false,
+      "cookable" : true,
+      "correctFlips" : 30,
+      "maxFlips" : 40,
+      "correctChops" : 0
+    },
+    {
+      "name" : "soy_sauce",
+      "choppable" : false,
+      "cookable" : false,
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0
+    },
+    {
+      "name" : "noodles",
+      "choppable" : false,
+      "cookable" : true,
+      "correctFlips" : 30,
+      "maxFlips" : 40,
+      "correctChops" : 0
+    },
+    {
+      "name" : "stir_fry_mix",
+      "choppable" : false,
+      "cookable" : true,
+      "correctFlips" : 30,
+      "maxFlips" : 40,
+      "correctChops" : 0
+    },
+    {
+      "name" : "stir_fry",
+      "choppable" : false,
+      "cookable" : false,
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0
+    },
+    {
+      "name" : "potato",
+      "choppable" : true,
+      "cookable" : true,
+      "correctFlips" : 30,
+      "maxFlips" : 40,
+      "correctChops" : 20
+    },
+    {
+      "name" : "diced_potato",
+      "choppable" : false,
+      "cookable" : true,
+      "correctFlips" : 30,
+      "maxFlips" : 40,
+      "correctChops" : 0
+    },
+    {
+      "name" : "chips",
+      "choppable" : false,
+      "cookable" : false,
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0
+    }
+  ]
+}

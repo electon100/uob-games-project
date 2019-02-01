@@ -65,10 +65,12 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            foreach (Ingredient ingredient in ingredientsFromStation)
-            {
-                Debug.Log(ingredient.Name);
-            }
+            Debug.Log("Player says: " + currentIngred.Name + " " + currentIngred.Model);
+        }
+
+        if (currentIngred != null)
+        {
+            mainText.text = currentIngred.numberOfChops.ToString();
         }
         /////////////////////////////////////
 
@@ -82,11 +84,10 @@ public class Player : MonoBehaviour {
 
     public void viewItems()
     {
-        // if (currentIngred.isChopped)
-        // {
-        //     mainText.text = "Your ingredient has been chopped";
-        // }
-        if (currentItem != null)
+        mainText.text = currentIngred.numberOfChops.ToString();
+
+        /* If the current item is null, instantiate it when viewing */
+        if (currentItem == null)
         {
             GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
             currentItem = (GameObject)Instantiate(model, new Vector3(0, 0, 80), Quaternion.identity);
