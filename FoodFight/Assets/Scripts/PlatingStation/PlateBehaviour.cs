@@ -67,9 +67,9 @@ public class PlateBehaviour : MonoBehaviour {
     }
 
     public void addIngredient() {
-      //Ingredient temp = new Ingredient("diced_potato", "");
-      //temp.numberOfPanFlips = 35;
-      //Player.currentIngred = temp;
+      Ingredient temp = new Ingredient("diced_potato", "");
+      temp.numberOfPanFlips = 35;
+      Player.currentIngred = temp;
       ingredientList.Add(Player.currentIngred);
       player.notifyServerAboutIngredientPlaced();
       ingredientList = Player.ingredientsFromStation;
