@@ -34,7 +34,8 @@ public class Frying : MonoBehaviour {
 	public List<Ingredient> newPanContents = new List<Ingredient>();
 
     /* Other */
-    int panShakes = 0;
+    private int panShakes = 0;
+	private bool isHobOn = false;
 
 	void Start () {
 
@@ -48,6 +49,18 @@ public class Frying : MonoBehaviour {
 		lastShake = Time.time;
 
         panContents = new List<Ingredient>();
+
+		/* Create test ingredients */
+		// Ingredient noodles = new Ingredient("noodles", "NoodlesPrefab");
+		// Ingredient veg = new Ingredient("chopped_mixed_vegetables", "VegetablesPrefab");
+		// Ingredient chicken = new Ingredient("diced_chicken", "MilkPrefab");
+
+		// Player.currentIngred = chicken;
+
+		// /* Add ingredients to list */
+		// panContents.Add(noodles);
+		// panContents.Add(veg);
+		// // ingredients.Add(chicken);
     }
 
 	void Update () {
@@ -67,16 +80,19 @@ public class Frying : MonoBehaviour {
         
         if (panContents.Count > 0) {
 
-			/* Read accelerometer data */
-			Vector3 acceleration = Input.acceleration;
-			lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
-			Vector3 deltaAcceleration = acceleration - lowPassValue;
+			if (isHobOn) {
 
-			shakeIfNeeded();
+				/* Read accelerometer data */
+				Vector3 acceleration = Input.acceleration;
+				lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
+				Vector3 deltaAcceleration = acceleration - lowPassValue;
 
-			if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold) {
-				/* Shake detected! */
-				tryStartShake();
+				shakeIfNeeded();
+
+				if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold) {
+					/* Shake detected! */
+					tryStartShake();
+				}
 			}
 		} else {
 			/* TODO: What happens when the player isn't holding an ingredient */
@@ -91,7 +107,7 @@ public class Frying : MonoBehaviour {
 
 			/* Increment the number of pan tosses of all ingredients in pan */
 			foreach (Ingredient ingredient in panContents) {
-				ingredient.panTosses++;
+				ingredient.numberOfPanFlips++;
 			}
 
 			/* Update shake text */
@@ -132,6 +148,17 @@ public class Frying : MonoBehaviour {
         // Tells the server that this ingredient is put in the pan
         player = GameObject.Find("Player").GetComponent<Player>();
         player.notifyServerAboutIngredientPlaced();
+    }
+
+	public void turnOnHob()
+    {
+		Ingredient combinedFood = FoodData.Instance.TryCombineIngredients(panContents);
+
+		// panContents.Clear();
+
+		// panContents.Add(combinedFood);
+
+        isHobOn = true;
     }
 
 	public void goBack() {

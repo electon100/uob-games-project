@@ -55,12 +55,25 @@ public class Player : MonoBehaviour {
         {
             checkStation("0");
         }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            checkStation("2");
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            checkStation("3");
+        }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log(network.serialiseIngredient(currentIngred));
+            Debug.Log("Player says: " + currentIngred.Name + " " + currentIngred.Model);
+        }
+
+        if (currentIngred != null)
+        {
+            mainText.text = currentIngred.numberOfChops.ToString();
         }
         /////////////////////////////////////
-        
+
         if (currentItem != null)
         {
             currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
@@ -71,6 +84,9 @@ public class Player : MonoBehaviour {
 
     public void viewItems()
     {
+        mainText.text = currentIngred.numberOfChops.ToString();
+
+        /* If the current item is null, instantiate it when viewing */
         if (currentItem == null)
         {
             GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
@@ -96,11 +112,13 @@ public class Player : MonoBehaviour {
 
     private void choppingStation()
     {
+        ingredientsFromStation = network.getIngredientsFromStation("2");
         SceneManager.LoadScene("ChoppingStation");
     }
 
     private void platingStation()
     {
+        ingredientsFromStation = network.getIngredientsFromStation("3");
         SceneManager.LoadScene("PlatingStation");
     }
 
@@ -124,12 +142,16 @@ public class Player : MonoBehaviour {
         string message;
         message = currentStation + sendCurrentIngredient(currentIngred);
         network.SendMyMessage("station", message);
+    }
+
+    public void removeCurrentIngredient()
+    {
         currentIngred = null;
     }
 
     private void checkStation(string text)
     {
-        
+
         if (currentStation != text)
         {
             switch (text)
@@ -193,6 +215,7 @@ public class Player : MonoBehaviour {
                         if (j != lastTag)
                         {
                             checkStation(text);
+                            mainText.text = text;
                             lastTag = j;
                         }
                     }

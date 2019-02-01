@@ -26,10 +26,14 @@ public class Server : MonoBehaviour {
     public GameObject redPlayer;
     public GameObject bluePlayer;
 
+    private Score redScore;
+    private Score blueScore;
+
+    // Dictionaries of players on each team
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
 
-    // dictionary <station, status>
+    // Dictionaries of stations and the ingredients on them
     IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
     IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
 
@@ -46,17 +50,26 @@ public class Server : MonoBehaviour {
         hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
         webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
 
+        redScore = new Score();
+        blueScore = new Score();
+
         isStarted = true;
     }
 	
 	private void Update () {
         if (!isStarted) return;
 
+<<<<<<< HEAD
         timer -= Time.deltaTime;
         if (timer <= 0)
         {
             GameOver();
         }
+=======
+        // Check if either team has reached a score of 0 and if they have, end the game
+        if (redScore.getScore() == 0) GameOver("blue");
+        else if (blueScore.getScore() == 0) GameOver("red");
+>>>>>>> valid-plating
 
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
@@ -159,32 +172,48 @@ public class Server : MonoBehaviour {
         string[] words = decodeMessage(messageContent, '$');
         string stationId = words[0];
 
-        string ingredientWithFlags = words[1];
-
-        // Be aware of null value here. Shouldn't cause issues, but might
-        Ingredient ingredientToAdd = new Ingredient();
-        string ingredient = "";
-        if (!ingredientWithFlags.Equals(""))
+        // If the player sends back the score of a completed recipe, add that to the teams score
+        bool isScore = false;
+        if (stationId == "3")
         {
-            ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
-            ingredient = ingredientToAdd.Name;
-            Debug.Log("Ingredient to add: " + ingredient);
+            float score;
+            isScore = float.TryParse(words[1], out score);
+            if (isScore)
+            {
+                if (redTeam.ContainsKey(connectionId)) redScore.increaseScore(score);
+                else if (blueTeam.ContainsKey(connectionId)) blueScore.increaseScore(score);
+            }
         }
-      
-        // Case where we add a station to a kitchen if it has not been seen before
-        addStationToKitchen(stationId, connectionId);
 
-        bool playerOnValidStation = isPlayerOnValidStation(connectionId, stationId);
+        // Only continue if a score was not sent back
+        if (!isScore) {
+            string ingredientWithFlags = words[1];
 
-        if (playerOnValidStation)
-        {
-            // Case where we want to send back ingredients stored at the station to player
-            if (ingredient.Equals(""))
-                sendIngredientsToPlayer(ingredient, stationId, connectionId);
+            // Be aware of null value here. Shouldn't cause issues, but might
+            Ingredient ingredientToAdd = new Ingredient();
+            string ingredient = "";
+            if (!ingredientWithFlags.Equals(""))
+            {
+                ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
+                ingredient = ingredientToAdd.Name;
+                Debug.Log("Ingredient to add: " + ingredient);
+            }
 
-            //If the player wants to add an ingredient, add it
-            else
-                addIngredientToStation(stationId, ingredientToAdd, connectionId);
+            // Case where we add a station to a kitchen if it has not been seen before
+            addStationToKitchen(stationId, connectionId);
+
+            bool playerOnValidStation = isPlayerOnValidStation(connectionId, stationId);
+
+            if (playerOnValidStation)
+            {
+                // Case where we want to send back ingredients stored at the station to player
+                if (ingredient.Equals(""))
+                    sendIngredientsToPlayer(ingredient, stationId, connectionId);
+
+                //If the player wants to add an ingredient, add it
+                else
+                    addIngredientToStation(stationId, ingredientToAdd, connectionId);
+            }
         }
     }
 
@@ -338,5 +367,21 @@ public class Server : MonoBehaviour {
    
         else if (kitchen == "blue")
             blueKitchen[stationId].Add(newIngredient);
+    }
+
+    private void GameOver(string winningTeam)
+    {
+        // Should call the game over screen, showing the final scores on the main screen
+        // Should tell players on the winning team they have won on their phones
+        // Should tell players on the losing team they have lost on their phones
+
+        if (winningTeam.Equals("blue"))
+        {
+
+        }
+        else if (winningTeam.Equals("red"))
+        {
+
+        }
     }
 }
