@@ -5,8 +5,8 @@ using UnityEngine;
 
 public sealed class FoodData {
 
-	private readonly string relativeRecipePath = "/Data/recipe.json";
-	private readonly string relativeIngredientsPath = "/Data/ingredients.json";
+	// private readonly string relativeRecipePath = "/Data/recipe.json";
+	// private readonly string relativeIngredientsPath = "/Data/ingredients.json";
 
 	private static FoodData instance = null;
 	private static readonly object padlock = new object();
@@ -24,6 +24,16 @@ public sealed class FoodData {
 		get {
 			return allIngredients;
 		}
+	}
+
+	public bool isChopped(Ingredient ingredient) {
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		return desc.choppable && (ingredient.numberOfChops >= desc.correctChops);
+	}
+
+	public bool isCooked(Ingredient ingredient) {
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		return desc.cookable && (ingredient.numberOfPanFlips >= desc.correctFlips);
 	}
 
 	/* Determines whether the input ingredient matches the provided criteria */
@@ -92,13 +102,19 @@ public sealed class FoodData {
 	}
 
 	FoodData() {
-		/* Read recipe data from JSON file */
-		string recipeFilePath = Application.dataPath + relativeRecipePath;
-		string recipeJSON = File.ReadAllText(recipeFilePath);
+		// /* Read recipe data from JSON file */
+		// string recipeFilePath = Application.dataPath + relativeRecipePath;
+		// string recipeJSON = File.ReadAllText(recipeFilePath);
 
-		/* Read ingredient data from JSON file */
-		string ingredientFilePath = Application.dataPath + relativeIngredientsPath;
-		string ingredientJSON = File.ReadAllText(ingredientFilePath);
+		// /* Read ingredient data from JSON file */
+		// string ingredientFilePath = Application.dataPath + relativeIngredientsPath;
+		// string ingredientJSON = File.ReadAllText(ingredientFilePath);
+
+		TextAsset recipeFile = (TextAsset) Resources.Load("recipe", typeof(TextAsset));
+		string recipeJSON = recipeFile.ToString();
+
+		TextAsset ingredientFile = (TextAsset)Resources.Load("ingredients", typeof(TextAsset));
+        string ingredientJSON = ingredientFile.ToString();
 
 		/* Parse recipe JSON data */
 		allRecipes = JsonUtility.FromJson<RecipeDefinitions>(recipeJSON);

@@ -379,7 +379,7 @@ GameObject:
   - component: {fileID: 33699575646591876}
   - component: {fileID: 23872622304024786}
   m_Layer: 0
-  m_Name: NoodlesPrefab
+  m_Name: noodlesPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
