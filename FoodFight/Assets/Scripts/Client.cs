@@ -14,7 +14,7 @@ using System.IO.Compression;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.25";
+    private const string serverIP = "192.168.0.62";
 
     private int port = 8000;
 
@@ -79,8 +79,8 @@ public class Client : MonoBehaviour {
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
         int channelID; // ID of channel connected to recHostId.
-        byte[] recBuffer = new byte[1024];
-        int bufferSize = 1024;
+        byte[] recBuffer = new byte[4096];
+        int bufferSize = 4096;
         int dataSize;
         byte error;
 
@@ -122,8 +122,8 @@ public class Client : MonoBehaviour {
         /* Network configuration */
         connectConfig.AckDelay = 33;
         connectConfig.AllCostTimeout = 20;
-        connectConfig.ConnectTimeout = 10000;
-        connectConfig.DisconnectTimeout = 20000;
+        connectConfig.ConnectTimeout = 1000;
+        connectConfig.DisconnectTimeout = 2000;
         connectConfig.FragmentSize = 500;
         connectConfig.MaxCombinedReliableMessageCount = 10;
         connectConfig.MaxCombinedReliableMessageSize = 100;
@@ -173,8 +173,8 @@ public class Client : MonoBehaviour {
 
     public string serialiseIngredient(Ingredient ingredient)
     {
-        byte[] buffer = new byte[2048];
-        int bufferSize = 2048;
+        byte[] buffer = new byte[4096];
+        int bufferSize = 4096;
         Stream message = new MemoryStream(buffer);
         BinaryFormatter formatter = new BinaryFormatter();
         //Serialize the message
@@ -187,14 +187,12 @@ public class Client : MonoBehaviour {
     public void SendMyMessage(string messageType, string textInput)
     {
         byte error;
-        byte[] buffer = new byte[2048];
-        int bufferSize = 2048;
+        byte[] buffer = new byte[4096];
+        int bufferSize = 4096;
         Stream message = new MemoryStream(buffer);
         BinaryFormatter formatter = new BinaryFormatter();
         //Serialize the message
         string messageToSend = messageType + "&" + textInput;
-        byte[] compressedMessage = Zip(messageToSend);
-        messageToSend = Convert.ToBase64String(compressedMessage);
         formatter.Serialize(message, messageToSend);
 
         //Send the message from the "client" with the serialized message and the connection information
@@ -222,50 +220,13 @@ public class Client : MonoBehaviour {
         Stream serializedMessage = new MemoryStream(data);
         BinaryFormatter formatter = new BinaryFormatter();
         string message = formatter.Deserialize(serializedMessage).ToString();
-        string decompressedMessage = Unzip(Convert.FromBase64String(message));
 
         //Output the deserialized message as well as the connection information to the console
         Debug.Log("OnData(hostId = " + hostId + ", connectionId = "
             + connectionId + ", channelId = " + channelId + ", data = "
             + message + ", size = " + size + ", error = " + error.ToString() + ")");
 
-        return decompressedMessage;
-    }
-
-    public static void CopyTo(Stream src, Stream dest) {
-        byte[] bytes = new byte[4096];
-
-        int cnt;
-
-        while ((cnt = src.Read(bytes, 0, bytes.Length)) != 0) {
-            dest.Write(bytes, 0, cnt);
-        }
-    }
-
-    public static byte[] Zip(string str) {
-        var bytes = Encoding.UTF8.GetBytes(str);
-
-        using (var msi = new MemoryStream(bytes))
-        using (var mso = new MemoryStream()) {
-            using (var gs = new GZipStream(mso, CompressionMode.Compress)) {
-                //msi.CopyTo(gs);
-                CopyTo(msi, gs);
-            }
-
-            return mso.ToArray();
-        }
-    }
-
-    public static string Unzip(byte[] bytes) {
-        using (var msi = new MemoryStream(bytes))
-        using (var mso = new MemoryStream()) {
-            using (var gs = new GZipStream(msi, CompressionMode.Decompress)) {
-                //gs.CopyTo(mso);
-                CopyTo(gs, mso);
-            }
-
-            return Encoding.UTF8.GetString(mso.ToArray());
-        }
+        return message;
     }
 
     public void manageReceiveFromServer(string message)
