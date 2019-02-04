@@ -18,9 +18,6 @@ public class PlateBehaviour : MonoBehaviour {
     Ingredient recipe = null;
     // Cameras
     Camera camera;
-    //Prefabs
-    public GameObject mush;
-    public GameObject goodFood;
     //Final model to display on Plate
     GameObject model;
 
@@ -46,34 +43,44 @@ public class PlateBehaviour : MonoBehaviour {
       }
     }
 
-    bool checkRecipe() {
+    void checkRecipe() {
       recipe = FoodData.Instance.TryCombineIngredients(ingredientList);
       Debug.Log(recipe.Name);
-      return !(string.Equals(recipe.Name, "mush"));
     }
 
     void displayFood() {
-       bool validRecipe = checkRecipe();
-       if (ingredientList.Count > 0 && !validRecipe) {
-         model  = Instantiate(mush, new Vector3(0,0,0), Quaternion.identity);
-       } else if (ingredientList.Count > 0 && validRecipe) {
-         model  = Instantiate(goodFood, new Vector3(0,0,0), Quaternion.identity);
-       }
-       updateTextList();
+      checkRecipe();
+      if (ingredientList.Count > 0) {
+        GameObject food = (GameObject) Resources.Load(recipe.Name + "PlatePrefab", typeof(GameObject));
+        if (food == null) {
+          food = (GameObject) Resources.Load("mushPlatePrefab", typeof(GameObject));
+        }
+        model  = Instantiate(food, new Vector3(0,0,0), Quaternion.identity);
+      } else {
+        model = null;
+      }
+      updateTextList();
     }
 
     public void serveFood() {
       //TODO serve food
+      if (!string.Equals(recipe.Name, "mush")) {
+        ingredientList.Clear();
+        Destroy(model, 0.0f);
+        displayFood();
+      }
     }
 
     public void addIngredient() {
       Ingredient temp = new Ingredient("diced_potato", "");
-      temp.numberOfPanFlips = 35;
+      temp.numberOfPanFlips = 30;
       Player.currentIngred = temp;
-      ingredientList.Add(Player.currentIngred);
-      player.notifyServerAboutIngredientPlaced();
-      ingredientList = Player.ingredientsFromStation;
-      Debug.Log(ingredientList.Count);
-      displayFood();
+      if (Player.currentIngred != null) {
+        ingredientList.Add(Player.currentIngred);
+        player.removeCurrentIngredient();
+        player.notifyServerAboutIngredientPlaced();
+        ingredientList = Player.ingredientsFromStation;
+        displayFood();
+      }
     }
 }
