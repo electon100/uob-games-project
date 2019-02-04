@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Score : MonoBehaviour {
 
-    float score;
+    private float score;
 
     /*
      * Score works as follows:
