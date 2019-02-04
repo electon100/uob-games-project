@@ -447,6 +447,6 @@ public class Server : MonoBehaviour {
         TimeSpan t = TimeSpan.FromSeconds(timer);
         string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
         timerText.text = "Time left " + timerFormatted;
-        Debug.Log(timerText.text);
+        // Debug.Log(timerText.text);
     }
 }
