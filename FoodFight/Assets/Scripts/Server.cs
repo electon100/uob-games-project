@@ -8,7 +8,11 @@ using UnityEditor;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+<<<<<<< HEAD
 using System.IO.Compression;
+=======
+using UnityEngine.SceneManagement;
+>>>>>>> origin/gameOverScreen
 
 public class Server : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
@@ -28,12 +32,25 @@ public class Server : MonoBehaviour {
     public GameObject redPlayer;
     public GameObject bluePlayer;
 
+<<<<<<< HEAD
+=======
+    private Score redScore;
+    private Score blueScore;
+
+    public static float finalRedScore;
+    public static float finalBlueScore;
+
+    // Dictionaries of players on each team
+>>>>>>> origin/gameOverScreen
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
 
     // dictionary <station, status>
     IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
     IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
+
+    // Timer variable
+    float timer = 2.0f;
 
     private void Start () {
         NetworkTransport.Init();
@@ -67,6 +84,19 @@ public class Server : MonoBehaviour {
 	
 	private void Update () {
         if (!isStarted) return;
+
+        timer -= Time.deltaTime;
+        if (timer <= 0)
+        {
+            if (redScore.getScore() > blueScore.getScore()) GameOver("red");
+            else if (blueScore.getScore() > redScore.getScore()) GameOver("blue");
+            // Defaults to red winning if it is a tie
+            else GameOver("red");
+        }
+
+        // Check if either team has reached a score of 0 and if they have, end the game
+        if (redScore.getScore() == 0) GameOver("blue");
+        else if (blueScore.getScore() == 0) GameOver("red");
 
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
@@ -347,4 +377,22 @@ public class Server : MonoBehaviour {
             blueKitchen[stationId].Add(newIngredient);
     }
 
+    private void GameOver(string winningTeam)
+    {
+        // Should call the game over screen, showing the final scores on the main screen
+        // Should tell players on the winning team they have won on their phones
+        // Should tell players on the losing team they have lost on their phones
+
+        finalBlueScore = blueScore.getScore();
+        finalRedScore = redScore.getScore();
+
+        if (winningTeam.Equals("blue"))
+        {
+            SceneManager.LoadScene("GameOverScreen");
+        }
+        else if (winningTeam.Equals("red"))
+        {
+            SceneManager.LoadScene("GameOverScreen");
+        }
+    }
 }
