@@ -86,6 +86,7 @@ public class Server : MonoBehaviour {
         timerText = GameObject.Find("TimerText").GetComponent<Text>();
         redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
         blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
+        updateScores();
         timer = 300.0f;
         displayTime();
     }
@@ -431,8 +432,8 @@ public class Server : MonoBehaviour {
 
     private void updateScores()
     {
-        redScoreText.text = redScore.getScore().ToString();
-        blueScoreText.text = blueScore.getScore().ToString();
+        redScoreText.text = "Red Score " + redScore.getScore().ToString();
+        blueScoreText.text = "Blue Score " + blueScore.getScore().ToString();
     }
 
     private void displayTime()
