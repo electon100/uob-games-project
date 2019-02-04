@@ -8,11 +8,8 @@ using UnityEditor;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-<<<<<<< HEAD
 using System.IO.Compression;
-=======
 using UnityEngine.SceneManagement;
->>>>>>> origin/gameOverScreen
 
 public class Server : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
@@ -32,8 +29,6 @@ public class Server : MonoBehaviour {
     public GameObject redPlayer;
     public GameObject bluePlayer;
 
-<<<<<<< HEAD
-=======
     private Score redScore;
     private Score blueScore;
 
@@ -41,7 +36,6 @@ public class Server : MonoBehaviour {
     public static float finalBlueScore;
 
     // Dictionaries of players on each team
->>>>>>> origin/gameOverScreen
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
 
