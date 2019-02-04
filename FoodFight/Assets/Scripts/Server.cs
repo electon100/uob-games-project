@@ -26,6 +26,7 @@ public class Server : MonoBehaviour {
 
     private byte error;
 
+    // Spawning and movement
     public GameObject redPlayer;
     public GameObject bluePlayer;
 
