@@ -190,11 +190,13 @@ public class Player : MonoBehaviour {
                     break;
                 case "8":
                     // Join red team
+                    network.Connect();
                     network.SendMyMessage("jointeam", text);
                     SceneManager.LoadScene("PlayerMainScreen");
                     break;
                 case "9":
                     // Join blue team
+                    network.Connect();
                     network.SendMyMessage("jointeam", text);
                     SceneManager.LoadScene("PlayerMainScreen");
                     break;
