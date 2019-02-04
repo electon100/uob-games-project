@@ -29,6 +29,10 @@ public class Server : MonoBehaviour {
     public GameObject redPlayer;
     public GameObject bluePlayer;
 
+    // Scoring
+    public Text redScoreText;
+    public Text blueScoreText;
+
     private Score redScore;
     private Score blueScore;
 
@@ -80,6 +84,8 @@ public class Server : MonoBehaviour {
         blueScore = new Score();
 
         timerText = GameObject.Find("TimerText").GetComponent<Text>();
+        redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
+        blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
         timer = 300.0f;
         displayTime();
     }
@@ -423,11 +429,16 @@ public class Server : MonoBehaviour {
         }
     }
 
+    private void updateScores()
+    {
+        redScoreText.text = redScore.getScore().ToString();
+        blueScoreText.text = blueScore.getScore().ToString();
+    }
+
     private void displayTime()
     {
         TimeSpan t = TimeSpan.FromSeconds(timer);
         string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
         timerText.text = "Time left " + timerFormatted;
-        Debug.Log(timerText.text);
     }
 }
