@@ -190,15 +190,17 @@ public class Player : MonoBehaviour {
                     break;
                 case "8":
                     // Join red team
-                    network.Connect();
-                    network.SendMyMessage("jointeam", text);
-                    SceneManager.LoadScene("PlayerMainScreen");
+                    if (!network.isConnected) {
+                      network.Connect();
+                    }
+                    network.onClickRed();
                     break;
                 case "9":
                     // Join blue team
-                    network.Connect();
-                    network.SendMyMessage("jointeam", text);
-                    SceneManager.LoadScene("PlayerMainScreen");
+                    if (!network.isConnected) {
+                      network.Connect();
+                    }
+                    network.onClickBlue();
                     break;
                 default:
                     currentStation = "-1";

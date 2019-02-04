@@ -173,10 +173,6 @@ public class Server : MonoBehaviour {
             case "score":
                 OnScore(messageContent, connectionId);
                 break;
-            case "jointeam":
-                Debug.Log(messageContent);
-                allocateToTeam(connectionId, string.Equals(messageContent, "8") ? "red" : "blue");
-                break;
         }
     }
 

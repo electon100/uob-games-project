@@ -27,7 +27,7 @@ public class Client : MonoBehaviour {
 
     private int connectionId;
 
-    private bool isConnected = false;
+    public bool isConnected = false;
     private bool areButtonsHere = false;
 
     private byte error;
