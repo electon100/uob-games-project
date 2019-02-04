@@ -250,7 +250,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 534669902}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 6, z: 0}
+  m_LocalPosition: {x: 0, y: 7, z: 0}
   m_LocalScale: {x: 11.9528475, y: 11.9528475, z: 11.9528475}
   m_Children: []
   m_Father: {fileID: 0}
@@ -716,6 +716,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   mush: {fileID: 1302634214843716, guid: 6a2e3218e977948b4a6e3092f6bcb4b9, type: 2}
+  goodFood: {fileID: 1643660241378588, guid: fa7ea9ff3736e4d799cec83c8d200015, type: 2}
 --- !u!4 &1894842584
 Transform:
   m_ObjectHideFlags: 0

@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23307931477631846}
   - component: {fileID: 135670979748087502}
   m_Layer: 0
-  m_Name: Mush
+  m_Name: mushPlatePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
