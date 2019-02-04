@@ -226,11 +226,18 @@ public class Server : MonoBehaviour {
         // Be aware of null value here. Shouldn't cause issues, but might
         Ingredient ingredientToAdd = new Ingredient();
         string ingredient = "";
+
+        /* If a player sends back a list of ingredients, or another message, deal with that */
         if (!ingredientWithFlags.Equals(""))
         {
-            ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
-            ingredient = ingredientToAdd.Name;
-            Debug.Log("Ingredient to add: " + ingredient);
+            if (ingredientWithFlags == "clear") {
+                clearStationInKitchen(connectionId, stationId);
+            }
+            else {
+                ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
+                ingredient = ingredientToAdd.Name;
+                Debug.Log("Ingredient to add: " + ingredient);
+            }
         }
       
         // Case where we add a station to a kitchen if it has not been seen before
@@ -404,6 +411,15 @@ public class Server : MonoBehaviour {
             blueKitchen[stationId].Add(newIngredient);
     }
 
+    private void clearStationInKitchen(int connectionID, string stationID) {
+        if (redTeam.ContainsKey(connectionID)) {
+            redKitchen[stationID] = new List<Ingredient>();
+        }
+        else if (blueTeam.ContainsKey(connectionID)) {
+            blueKitchen[stationID] = new List<Ingredient>();
+        }
+    }
+
     private void GameOver(string winningTeam)
     {
         // Should call the game over screen, showing the final scores on the main screen
@@ -428,6 +444,6 @@ public class Server : MonoBehaviour {
         TimeSpan t = TimeSpan.FromSeconds(timer);
         string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
         timerText.text = "Time left " + timerFormatted;
-        Debug.Log(timerText.text);
+        // Debug.Log(timerText.text);
     }
 }

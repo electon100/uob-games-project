@@ -33,14 +33,13 @@ public class Chopping : MonoBehaviour
     public GameObject blood;
     private AudioSource source;
 
-    private static Ingredient currentIngred;
     public List<Ingredient> boardContents = new List<Ingredient>();
     public List<Ingredient> newBoardContents = new List<Ingredient>();
     List<Ingredient> choppedIngredients = new List<Ingredient>();
 
     private void Start()
     {
-        currentIngred = Player.currentIngred;
+        player = GameObject.Find("Player").GetComponent<Player>();
         //set up scene
         source = GetComponent<AudioSource>();
         Screen.orientation = ScreenOrientation.LandscapeLeft;
@@ -60,7 +59,7 @@ public class Chopping : MonoBehaviour
 
     void Update()
     {
-
+        instantiateIngredientsInStation();
         ChoppingStatus();
 
         MoveKnife();
@@ -80,7 +79,7 @@ public class Chopping : MonoBehaviour
         CheckDownMovement();
         CheckUpMovement();
         CheckChopSpeed();
-        instantiateIngredientsInStation();
+        
     }
 
     public void StartGame()
@@ -161,20 +160,19 @@ public class Chopping : MonoBehaviour
 
     void CheckIngredientValid()
     {
-        if (currentIngred != null)
+        if (Player.currentIngred != null)
         {
             /* Stops the minigame if ingredient cannot be chopped */
-            if (FoodData.Instance.GetIngredientDescription(currentIngred).choppable)
-            {
-                Time.timeScale = 0;
-            }
+            // if (FoodData.Instance.GetIngredientDescription(Player.currentIngred).choppable)
+            // {
+            //     Time.timeScale = 0;
+            // }
         }
     }
 
     /* Sends the chopped ingredient to server and returns to the main screen */
     public void goBack()
     {
-        player = GameObject.Find("Player").GetComponent<Player>();
         player.notifyServerAboutIngredientPlaced();
         SceneManager.LoadScene("PlayerMainScreen");
     }
@@ -190,10 +188,11 @@ public class Chopping : MonoBehaviour
     {
         /* If available, restore what was previously in that station */
         newBoardContents = Player.ingredientsFromStation;
-
+        Debug.Log(newBoardContents.Count);
         /* Needed because the list of ingredients in the stations is constatly updated, so constant drawing is avoided */
         foreach (Ingredient ingredient in newBoardContents)
         {
+            Debug.Log(ingredient.Name);
             if (boardContents.IndexOf(ingredient) < 0)
             {
                 GameObject model = (GameObject)Resources.Load(ingredient.Model, typeof(GameObject));
@@ -206,11 +205,15 @@ public class Chopping : MonoBehaviour
 
     public void putIngredient()
     {
-        if (currentIngred != null)
+        if (Player.currentIngred != null)
         {
-            GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
+            GameObject model = (GameObject)Resources.Load(Player.currentIngred.Model, typeof(GameObject));
             model = Instantiate(model, new Vector3(0, 0, 0), Quaternion.identity);
             model.transform.SetParent(startCanvas);
         }
+    }
+
+    public void clearChoppingBoard() {
+        player.clearIngredientsInStation("2");
     }
 }

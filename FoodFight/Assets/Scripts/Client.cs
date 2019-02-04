@@ -14,7 +14,7 @@ using System.IO.Compression;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.62";
+    private const string serverIP = "192.168.0.103";
 
     private int port = 8000;
 
@@ -260,6 +260,7 @@ public class Client : MonoBehaviour {
 
     public List<Ingredient> getIngredientsFromStation(string stationID)
     {
+        Debug.Log("Ingredients in station with id: " + stationID + "are " + myKitchen[stationID].Count);
         return myKitchen[stationID];
     }
 

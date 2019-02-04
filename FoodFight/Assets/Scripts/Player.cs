@@ -65,7 +65,9 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("Player says: " + currentIngred.Name + " " + currentIngred.Model);
+            foreach(Ingredient ingredient in ingredientsFromStation) {
+                Debug.Log("Player says: " + ingredient.Name + " " + ingredient.Model);
+            }
         }
 
         if (currentIngred != null)
@@ -73,7 +75,7 @@ public class Player : MonoBehaviour {
             mainText.text = currentIngred.numberOfChops.ToString();
         }
         /////////////////////////////////////
-
+        
         if (currentItem != null)
         {
             currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
@@ -141,6 +143,12 @@ public class Player : MonoBehaviour {
     {
         string message;
         message = currentStation + sendCurrentIngredient(currentIngred);
+        network.SendMyMessage("station", message);
+    }
+
+    public void clearIngredientsInStation(string stationID) {
+        string message;
+        message = stationID + "$" + "clear";
         network.SendMyMessage("station", message);
     }
 
