@@ -52,16 +52,16 @@ public class Frying : MonoBehaviour {
 		List<Ingredient> ingredientsFromStation = new List<Ingredient>();
 
 		/* Create test ingredients */
-		Ingredient noodles = new Ingredient("noodles", "NoodlesPrefab");
-		Ingredient veg = new Ingredient("chopped_mixed_vegetables", "VegetablesPrefab");
-		Ingredient chicken = new Ingredient("diced_chicken", "MilkPrefab");
+		Ingredient noodles = new Ingredient("noodles", "noodlesPrefab");
+		Ingredient veg = new Ingredient("chopped_mixed_vegetables", "chopped_mixed_vegetablesPrefab");
+		Ingredient chicken = new Ingredient("diced_chicken", "EggsPrefab");
 
-		Player.currentIngred = chicken;
+		// Player.currentIngred = noodles;
 
 		/* Add ingredients to list */
-		ingredientsFromStation.Add(noodles);
-		ingredientsFromStation.Add(veg);
+		// ingredientsFromStation.Add(noodles);
 		ingredientsFromStation.Add(chicken);
+		ingredientsFromStation.Add(veg);
 
 		clearPan();
 
