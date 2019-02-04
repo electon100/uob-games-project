@@ -911,7 +911,6 @@ MonoBehaviour:
   test_text: {fileID: 1111359503}
   player: {fileID: 0}
   panContents: []
-  newPanContents: []
 --- !u!1 &1501227111
 GameObject:
   m_ObjectHideFlags: 0
@@ -1087,7 +1086,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1173477902}
-        m_MethodName: putIngredientInPan
+        m_MethodName: placeHeldIngredientInPan
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

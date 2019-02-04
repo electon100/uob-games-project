@@ -8,10 +8,10 @@ using System.Text;
 public class Frying : MonoBehaviour {
 
 	public Text test_text;
-    public Player player;
+	public Player player;
 
-    /* Phone motion stuff */
-    private float accelerometerUpdateInterval = 1.0f / 60.0f;
+	/* Phone motion stuff */
+	private float accelerometerUpdateInterval = 1.0f / 60.0f;
 	private float lowPassKernelWidthInSeconds = 1.0f;
 	private float shakeDetectionThreshold = 2.0f;
 	private float lowPassFilterFactor;
@@ -30,11 +30,11 @@ public class Frying : MonoBehaviour {
 
 	/* List of ingredients in the pan, with current shake count applied.
 		  -> Can be used externally to retrieve ingredients from pan */
-    public List<Ingredient> panContents = new List<Ingredient>();
-	public List<Ingredient> newPanContents = new List<Ingredient>();
+	public List<Ingredient> panContents = new List<Ingredient>();
+	private List<GameObject> panContentsObjects = new List<GameObject>();
 
     /* Other */
-    private int panShakes = 0;
+	private int panShakes = 0;
 	private bool isHobOn = false;
 
 	void Start () {
@@ -43,42 +43,35 @@ public class Frying : MonoBehaviour {
 
 		test_text.text = "Pan shakes: 0";
 		lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
-        shakeDetectionThreshold *= shakeDetectionThreshold;
-        lowPassValue = Input.acceleration;
+		shakeDetectionThreshold *= shakeDetectionThreshold;
+		lowPassValue = Input.acceleration;
 		originalPos = gameObject.transform.position;
 		lastShake = Time.time;
 
-        panContents = new List<Ingredient>();
+		// List<Ingredient> ingredientsFromStation = Player.ingredientsFromStation;
+		List<Ingredient> ingredientsFromStation = new List<Ingredient>();
 
 		/* Create test ingredients */
-		// Ingredient noodles = new Ingredient("noodles", "NoodlesPrefab");
-		// Ingredient veg = new Ingredient("chopped_mixed_vegetables", "VegetablesPrefab");
-		// Ingredient chicken = new Ingredient("diced_chicken", "MilkPrefab");
+		Ingredient noodles = new Ingredient("noodles", "noodlesPrefab");
+		Ingredient veg = new Ingredient("chopped_mixed_vegetables", "chopped_mixed_vegetablesPrefab");
+		Ingredient chicken = new Ingredient("diced_chicken", "EggsPrefab");
 
-		// Player.currentIngred = chicken;
+		// Player.currentIngred = noodles;
 
-		// /* Add ingredients to list */
-		// panContents.Add(noodles);
-		// panContents.Add(veg);
-		// // ingredients.Add(chicken);
-    }
+		/* Add ingredients to list */
+		// ingredientsFromStation.Add(noodles);
+		ingredientsFromStation.Add(chicken);
+		ingredientsFromStation.Add(veg);
+
+		clearPan();
+
+		foreach (Ingredient ingredient in ingredientsFromStation) {
+			addIngredientToPan(ingredient);
+		}
+	}
 
 	void Update () {
-        /* If available, add the held ingredient to the pan */
-        newPanContents = Player.ingredientsFromStation;
-
-        /* Draw ingredient models in pan */
-        foreach (Ingredient ingredient in newPanContents)
-        {
-            if (panContents.IndexOf(ingredient) < 0)
-            {
-                GameObject model = (GameObject)Resources.Load(ingredient.Model, typeof(GameObject));
-                Instantiate(model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(-90, 0, 0));
-                panContents.Add(ingredient);
-            }
-        }
-        
-        if (panContents.Count > 0) {
+		if (panContents.Count > 0) {
 
 			if (isHobOn) {
 
@@ -95,7 +88,7 @@ public class Frying : MonoBehaviour {
 				}
 			}
 		} else {
-			/* TODO: What happens when the player isn't holding an ingredient */
+			/* TODO: What happens when pan is empty */
 		}
 	}
 
@@ -135,34 +128,54 @@ public class Frying : MonoBehaviour {
 		}
 	}
 
-    public void putIngredientInPan()
-    {
-        // Instantiates the ingredient and adds it to the pan contents list.
-        if (Player.currentIngred != null)
-        {
-            panContents.Add(Player.currentIngred);
-            GameObject model = (GameObject)Resources.Load(Player.currentIngred.Model, typeof(GameObject));
-            Instantiate(model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(-90, 0, 0));
-            Debug.Log("Ingredient added to pan: " + Player.currentIngred.Name);
-        }
-        // Tells the server that this ingredient is put in the pan
-        player = GameObject.Find("Player").GetComponent<Player>();
-        player.notifyServerAboutIngredientPlaced();
-    }
+	public void placeHeldIngredientInPan()
+	{
+		/* Add ingredient */
+		if (Player.currentIngred != null) {
+			addIngredientToPan(Player.currentIngred);
+
+			/* Notify server that player has placed ingredient */
+			player = GameObject.Find("Player").GetComponent<Player>();
+			player.notifyServerAboutIngredientPlaced();
+		} else {
+			/* TODO: What happens when player is not holding an ingredient */
+		}
+	}
 
 	public void turnOnHob()
-    {
+	{
+		/* Try and combine the ingredients */
 		Ingredient combinedFood = FoodData.Instance.TryCombineIngredients(panContents);
 
-		// panContents.Clear();
+		/* Set the pan contents to the new combined recipe */
+		clearPan();
+		addIngredientToPan(combinedFood);
 
-		// panContents.Add(combinedFood);
+		/* The hob is now on, the player can cook */
+		isHobOn = true;
+	}
 
-        isHobOn = true;
-    }
+	private void addIngredientToPan(Ingredient ingredient)
+	{
+		GameObject model = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
+		GameObject inst = Instantiate(model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(-90, 0, 0));
+		panContents.Add(ingredient);
+		panContentsObjects.Add(inst);
+	}
 
-	public void goBack() {
-        Player.currentStation = "1";
-        SceneManager.LoadScene("PlayerMainScreen");
+	private void clearPan()
+	{
+		foreach (GameObject go in panContentsObjects) Destroy(go);
+
+		panContents.Clear();
+		panContentsObjects.Clear();
+
+		/* TODO: Notify server that pan has been cleared */
+	}
+
+	public void goBack()
+	{
+		Player.currentStation = "1";
+		SceneManager.LoadScene("PlayerMainScreen");
 	}
 }
