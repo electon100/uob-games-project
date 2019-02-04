@@ -77,7 +77,7 @@ public class Server : MonoBehaviour {
         redScore = new Score();
         blueScore = new Score();
     }
-	
+
 	private void Update () {
         if (!isStarted) return;
 
@@ -149,22 +149,23 @@ public class Server : MonoBehaviour {
             // Player chooses team to play on
             case "connect":
                 // Allocate the player to the team if they are not already on a team
-                if (!redTeam.ContainsKey(connectionId) && !blueTeam.ContainsKey(connectionId)) { 
+                if (!redTeam.ContainsKey(connectionId) && !blueTeam.ContainsKey(connectionId)) {
                     allocateToTeam(connectionId, messageContent);
                 }
                 break;
-
             // Player connects to a work station
             case "station":
                 OnStation(messageContent, connectionId);
                 break;
-
             // Player sends NFC data
             case "NFC":
                 //Do NFC stuff
                 Debug.Log("Player " + connectionId + " has sent: " + messageContent);
                 break;
-
+            // Player sends recipe to score
+            case "score":
+                OnScore(messageContent, connectionId);
+                break;
         }
     }
 
@@ -182,6 +183,29 @@ public class Server : MonoBehaviour {
             + message + ", size = " + size + ", error = " + error.ToString() + ")");
 
         return message;
+    }
+
+    private void OnScore(string messageContent, int connectionId) {
+        Ingredient recipe = new Ingredient();
+        recipe = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, recipe.GetType());
+
+        int recipeScore = scoreRecipe(recipe);
+
+        if (redTeam.ContainsKey(connectionId)) {
+          // Add score to red team
+          redScore.increaseScore(recipeScore);
+        } else if (blueTeam.ContainsKey(connectionId)) {
+          // Add score to blue team
+          blueScore.increaseScore(recipeScore);
+        }
+
+        Debug.Log(messageContent);
+    }
+
+    private int scoreRecipe(Ingredient recipe) {
+      int score = 100;
+
+      return score;
     }
 
     private void OnStation(string messageContent, int connectionId)
@@ -255,7 +279,7 @@ public class Server : MonoBehaviour {
 
     // Add to a station if it exists
     private void addIngredientToStation(string stationId, Ingredient ingredientToAdd, int connectionId)
-    { 
+    {
         if (redKitchen.ContainsKey(stationId))
         {
             AddIngredientToList(stationId, ingredientToAdd, "red");
@@ -368,7 +392,7 @@ public class Server : MonoBehaviour {
     {
         if (kitchen == "red")
             redKitchen[stationId].Add(newIngredient);
-   
+
         else if (kitchen == "blue")
             blueKitchen[stationId].Add(newIngredient);
     }
