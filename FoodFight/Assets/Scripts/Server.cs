@@ -8,11 +8,7 @@ using UnityEditor;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-<<<<<<< HEAD
-using System.IO.Compression;
-=======
 using UnityEngine.SceneManagement;
->>>>>>> origin/gameOverScreen
 
 public class Server : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
@@ -32,6 +28,13 @@ public class Server : MonoBehaviour {
     public GameObject redPlayer;
     public GameObject bluePlayer;
 
+    private Score redScore;
+    private Score blueScore;
+
+    public static float finalRedScore;
+    public static float finalBlueScore;
+
+    // Dictionaries of players on each team
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
 
@@ -40,7 +43,7 @@ public class Server : MonoBehaviour {
     IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
 
     // Timer variable
-    float timer = 2.0f;
+    float timer = 300.0f;
 
     private void Start () {
         NetworkTransport.Init();
@@ -70,6 +73,9 @@ public class Server : MonoBehaviour {
         hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
         webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
         isStarted = true;
+
+        redScore = new Score();
+        blueScore = new Score();
     }
 	
 	private void Update () {
