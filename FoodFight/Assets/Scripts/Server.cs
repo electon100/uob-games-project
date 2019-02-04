@@ -32,16 +32,6 @@ public class Server : MonoBehaviour {
     public GameObject redPlayer;
     public GameObject bluePlayer;
 
-<<<<<<< HEAD
-=======
-    private Score redScore;
-    private Score blueScore;
-
-    public static float finalRedScore;
-    public static float finalBlueScore;
-
-    // Dictionaries of players on each team
->>>>>>> origin/gameOverScreen
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
 
