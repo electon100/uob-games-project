@@ -63,7 +63,7 @@ public class Server : MonoBehaviour {
         connectConfig.MaxSentMessageQueueSize = 2048;
         connectConfig.MinUpdateTimeout = 20;
         connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
-        connectConfig.OverflowDropThreshold = 40; // 
+        connectConfig.OverflowDropThreshold = 40; //
         connectConfig.PacketSize = 1500;
         connectConfig.PingTimeout = 500;
         connectConfig.ReducedPingTimeout = 100;
@@ -232,7 +232,7 @@ public class Server : MonoBehaviour {
             ingredient = ingredientToAdd.Name;
             Debug.Log("Ingredient to add: " + ingredient);
         }
-      
+
         // Case where we add a station to a kitchen if it has not been seen before
         addStationToKitchen(stationId, connectionId);
 
@@ -428,6 +428,6 @@ public class Server : MonoBehaviour {
         TimeSpan t = TimeSpan.FromSeconds(timer);
         string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
         timerText.text = "Time left " + timerFormatted;
-        Debug.Log(timerText.text);
+        //Debug.Log(timerText.text);
     }
 }
