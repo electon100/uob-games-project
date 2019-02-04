@@ -9,6 +9,7 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Server : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
@@ -43,7 +44,8 @@ public class Server : MonoBehaviour {
     IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
 
     // Timer variable
-    float timer = 300.0f;
+    private float timer;
+    public Text timerText;
 
     private void Start () {
         NetworkTransport.Init();
@@ -76,6 +78,10 @@ public class Server : MonoBehaviour {
 
         redScore = new Score();
         blueScore = new Score();
+
+        timerText = GameObject.Find("TimerText").GetComponent<Text>();
+        timer = 300.0f;
+        displayTime();
     }
 	
 	private void Update () {
@@ -89,6 +95,7 @@ public class Server : MonoBehaviour {
             // Defaults to red winning if it is a tie
             else GameOver("red");
         }
+        displayTime();
 
         // Check if either team has reached a score of 0 and if they have, end the game
         if (redScore.getScore() == 0) GameOver("blue");
@@ -390,5 +397,13 @@ public class Server : MonoBehaviour {
         {
             SceneManager.LoadScene("GameOverScreen");
         }
+    }
+
+    private void displayTime()
+    {
+        TimeSpan t = TimeSpan.FromSeconds(timer);
+        string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
+        timerText.text = "Time left " + timerFormatted;
+        Debug.Log(timerText.text);
     }
 }
