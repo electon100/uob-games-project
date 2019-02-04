@@ -10,62 +10,77 @@ using System.Text;
 public class PlateBehaviour : MonoBehaviour {
 
     public Player player;
-    // Ingredient the player is holding
-    string newIngredient;
     // All ingredients on the plate
-    List<string> ingredients = new List<string>();
-    List<Ingredient> ingredientList;
+    public List<Ingredient> ingredientList = new List<Ingredient>();
+    // Text representation of ingredients on Screen
+    public Text ingredientListText;
     // Holds the name of the recipe
-    string recipe = null;
-    // The text list of ingredients to be displayed
-    Text ingList;
-
+    Ingredient recipe = null;
     // Cameras
-    Camera cameraEmpty;
-
-    //Plates
-    public GameObject mush;
-
+    Camera camera;
+    //Final model to display on Plate
     GameObject model;
 
     // Use this for initialization
     void Start () {
-
-        // Get all camera objects
-        cameraEmpty = GameObject.Find("Camera1").GetComponent<Camera>();
-
-        ingList = GameObject.Find("Ingredient List").GetComponent<Text>();
-
-        ingredientList = new List<Ingredient>() { new Ingredient() };
-
+        DontDestroyOnLoad(GameObject.Find("Player"));
+        camera = GameObject.Find("Camera1").GetComponent<Camera>();
+        ingredientListText = GameObject.Find("Ingredient List").GetComponent<Text>();
+        player = GameObject.Find("Player").GetComponent<Player>();
+        ingredientList = Player.ingredientsFromStation;
         displayFood();
+	  }
 
-	}
+    void Update() {
+      ingredientList = Player.ingredientsFromStation;
+    }
 
-    bool checkRecipe() {
-        return false;
-        //TODO call API to check valid recipe
+    void updateTextList() {
+      ingredientListText.text = "Current Ingredients:\n";
 
+      for(int i = 0; i < ingredientList.Count; i++) {
+        ingredientListText.text += ingredientList[i].Name + "\n";
+      }
+    }
+
+    void checkRecipe() {
+      recipe = FoodData.Instance.TryCombineIngredients(ingredientList);
+      Debug.Log(recipe.Name);
     }
 
     void displayFood() {
-       if (ingredientList.Count > 0 && !checkRecipe()) {
-
-         //Vector3 newPosition = new Vector3(spawnPoint.transform.position.x,spawnPoint.transform.position.y,spawnPoint.transform.position.z);
-         //mush.position = newPosition;
-        model  = Instantiate(mush, new Vector3(0,0,0), Quaternion.identity);
-       } else if (ingredientList.Count > 0 && checkRecipe()) {
-         //TODO put good prefab in
-       }
+      checkRecipe();
+      if (ingredientList.Count > 0) {
+        GameObject food = (GameObject) Resources.Load(recipe.Name + "PlatePrefab", typeof(GameObject));
+        if (food == null) {
+          food = (GameObject) Resources.Load("mushPlatePrefab", typeof(GameObject));
+        }
+        model  = Instantiate(food, new Vector3(0,0,0), Quaternion.identity);
+      } else {
+        model = null;
+      }
+      updateTextList();
     }
 
     public void serveFood() {
+      //TODO serve food
+      if (!string.Equals(recipe.Name, "mush")) {
+        ingredientList.Clear();
+        Destroy(model, 0.0f);
+        displayFood();
+      }
     }
 
     public void addIngredient() {
-        //player = GameObject.Find("Player").GetComponent<Player>();
-        //player.notifyServerAboutIngredientPlaced();
-        //ingredientList = Player.ingredientsFromStation;
+      Ingredient temp = new Ingredient("diced_potato", "");
+      temp.numberOfPanFlips = 30;
+      Player.currentIngred = temp;
+      if (Player.currentIngred != null) {
+        ingredientList.Add(Player.currentIngred);
+        player.removeCurrentIngredient();
+        player.notifyServerAboutIngredientPlaced();
+        ingredientList = Player.ingredientsFromStation;
         displayFood();
+      }
     }
 }

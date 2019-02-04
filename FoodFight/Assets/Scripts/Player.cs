@@ -59,6 +59,10 @@ public class Player : MonoBehaviour {
         {
             checkStation("2");
         }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            checkStation("3");
+        }
         if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("Player says: " + currentIngred.Name + " " + currentIngred.Model);
