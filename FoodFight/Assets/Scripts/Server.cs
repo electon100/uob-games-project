@@ -165,6 +165,9 @@ public class Server : MonoBehaviour {
                 OnStation(messageContent, connectionId);
                 break;
             // Player sends NFC data
+            case "clear":
+                OnClearStation(messageContent, connectionId);
+                break;
             case "NFC":
                 //Do NFC stuff
                 Debug.Log("Player " + connectionId + " has sent: " + messageContent);
@@ -215,6 +218,11 @@ public class Server : MonoBehaviour {
       return score;
     }
 
+    private void OnClearStation(string stationId, int connectionId) {
+        clearStationInKitchen(connectionId, stationId);
+        sendIngredientsToPlayer("", stationId, connectionId);
+    }
+
     private void OnStation(string messageContent, int connectionId)
     {
         //If this station already exists, check what's in it and send it back to player.
@@ -243,18 +251,12 @@ public class Server : MonoBehaviour {
         if (playerOnValidStation)
         {
             // Case where we want to send back ingredients stored at the station to player
-            if (ingredient.Equals("")) {
+            if (ingredient.Equals(""))
                 sendIngredientsToPlayer(ingredient, stationId, connectionId);
-            }
-            // Case where the player wants to clear what's stored in the station
-            else if (ingredient.Equals("clear")) {
-                clearStationInKitchen(connectionId, stationId);
-                sendIngredientsToPlayer(ingredient, stationId, connectionId);
-            }
+
             //If the player wants to add an ingredient, add it
-            else {
+            else
                 addIngredientToStation(stationId, ingredientToAdd, connectionId);
-            }
         }
     }
 
