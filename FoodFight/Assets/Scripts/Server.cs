@@ -220,7 +220,7 @@ public class Server : MonoBehaviour {
 
     private void OnClearStation(string stationId, int connectionId) {
         clearStationInKitchen(connectionId, stationId);
-        sendIngredientsToPlayer("", stationId, connectionId);
+        sendIngredientsToPlayer(stationId, connectionId);
     }
 
     private void OnStation(string messageContent, int connectionId)
@@ -252,7 +252,7 @@ public class Server : MonoBehaviour {
         {
             // Case where we want to send back ingredients stored at the station to player
             if (ingredient.Equals(""))
-                sendIngredientsToPlayer(ingredient, stationId, connectionId);
+                sendIngredientsToPlayer(stationId, connectionId);
 
             //If the player wants to add an ingredient, add it
             else
@@ -285,7 +285,7 @@ public class Server : MonoBehaviour {
         }
     }
 
-    private void sendIngredientsToPlayer(string ingredient, string stationId, int connectionId)
+    private void sendIngredientsToPlayer(string stationId, int connectionId)
     {
         if (redKitchen.ContainsKey(stationId))
             checkCurrentIngredient("station", "red", stationId, connectionId);
@@ -416,10 +416,10 @@ public class Server : MonoBehaviour {
 
     private void clearStationInKitchen(int connectionID, string stationID) {
         if (redTeam.ContainsKey(connectionID)) {
-            redKitchen[stationID] = new List<Ingredient>();
+            redKitchen[stationID].Clear();
         }
         else if (blueTeam.ContainsKey(connectionID)) {
-            blueKitchen[stationID] = new List<Ingredient>();
+            blueKitchen[stationID].Clear();
         }
     }
 
