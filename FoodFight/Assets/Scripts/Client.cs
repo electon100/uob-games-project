@@ -9,11 +9,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System;
 using System.Reflection;
+using System.IO.Compression;
 
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.48";
+    private const string serverIP = "192.168.0.62";
 
     private int port = 8000;
 
@@ -78,8 +79,8 @@ public class Client : MonoBehaviour {
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
         int channelID; // ID of channel connected to recHostId.
-        byte[] recBuffer = new byte[1024];
-        int bufferSize = 1024;
+        byte[] recBuffer = new byte[4096];
+        int bufferSize = 4096;
         int dataSize;
         byte error;
 
@@ -118,6 +119,24 @@ public class Client : MonoBehaviour {
         NetworkTransport.Init();
         connectConfig = new ConnectionConfig();
 
+        /* Network configuration */
+        connectConfig.AckDelay = 33;
+        connectConfig.AllCostTimeout = 20;
+        connectConfig.ConnectTimeout = 1000;
+        connectConfig.DisconnectTimeout = 2000;
+        connectConfig.FragmentSize = 500;
+        connectConfig.MaxCombinedReliableMessageCount = 10;
+        connectConfig.MaxCombinedReliableMessageSize = 100;
+        connectConfig.MaxConnectionAttempt = 32;
+        connectConfig.MaxSentMessageQueueSize = 2048;
+        connectConfig.MinUpdateTimeout = 20;
+        connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
+        connectConfig.OverflowDropThreshold = 40; // 
+        connectConfig.PacketSize = 1500;
+        connectConfig.PingTimeout = 500;
+        connectConfig.ReducedPingTimeout = 100;
+        connectConfig.ResendTimeout = 500;
+
         reliableChannel = connectConfig.AddChannel(QosType.ReliableSequenced);
         HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
 
@@ -154,8 +173,8 @@ public class Client : MonoBehaviour {
 
     public string serialiseIngredient(Ingredient ingredient)
     {
-        byte[] buffer = new byte[1024];
-        int bufferSize = 1024;
+        byte[] buffer = new byte[4096];
+        int bufferSize = 4096;
         Stream message = new MemoryStream(buffer);
         BinaryFormatter formatter = new BinaryFormatter();
         //Serialize the message
@@ -168,8 +187,8 @@ public class Client : MonoBehaviour {
     public void SendMyMessage(string messageType, string textInput)
     {
         byte error;
-        byte[] buffer = new byte[1024];
-        int bufferSize = 1024;
+        byte[] buffer = new byte[4096];
+        int bufferSize = 4096;
         Stream message = new MemoryStream(buffer);
         BinaryFormatter formatter = new BinaryFormatter();
         //Serialize the message

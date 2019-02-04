@@ -5,8 +5,10 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEditor;
+using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class Server : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
@@ -29,32 +31,64 @@ public class Server : MonoBehaviour {
     private Score redScore;
     private Score blueScore;
 
+    public static float finalRedScore;
+    public static float finalBlueScore;
+
     // Dictionaries of players on each team
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
 
-    // Dictionaries of stations and the ingredients on them
+    // dictionary <station, status>
     IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
     IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
+
+    // Timer variable
+    float timer = 300.0f;
 
     private void Start () {
         NetworkTransport.Init();
         ConnectionConfig connectConfig = new ConnectionConfig();
+
+        /* Network configuration */
+        connectConfig.AckDelay = 33;
+        connectConfig.AllCostTimeout = 20;
+        connectConfig.ConnectTimeout = 1000;
+        connectConfig.DisconnectTimeout = 2000;
+        connectConfig.FragmentSize = 500;
+        connectConfig.MaxCombinedReliableMessageCount = 10;
+        connectConfig.MaxCombinedReliableMessageSize = 100;
+        connectConfig.MaxConnectionAttempt = 32;
+        connectConfig.MaxSentMessageQueueSize = 2048;
+        connectConfig.MinUpdateTimeout = 20;
+        connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
+        connectConfig.OverflowDropThreshold = 40; // 
+        connectConfig.PacketSize = 1500;
+        connectConfig.PingTimeout = 500;
+        connectConfig.ReducedPingTimeout = 100;
+        connectConfig.ResendTimeout = 500;
 
         reliableChannel = connectConfig.AddChannel(QosType.ReliableSequenced);
         HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
 
         hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
         webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
+        isStarted = true;
 
         redScore = new Score();
         blueScore = new Score();
-
-        isStarted = true;
     }
 	
 	private void Update () {
         if (!isStarted) return;
+
+        timer -= Time.deltaTime;
+        if (timer <= 0)
+        {
+            if (redScore.getScore() > blueScore.getScore()) GameOver("red");
+            else if (blueScore.getScore() > redScore.getScore()) GameOver("blue");
+            // Defaults to red winning if it is a tie
+            else GameOver("red");
+        }
 
         // Check if either team has reached a score of 0 and if they have, end the game
         if (redScore.getScore() == 0) GameOver("blue");
@@ -63,8 +97,8 @@ public class Server : MonoBehaviour {
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
         int channelID; // ID of channel connected to recHostId;
-        byte[] recBuffer = new byte[1024];
-        int bufferSize = 1024;
+        byte[] recBuffer = new byte[4096];
+        int bufferSize = 4096;
         int dataSize;
         byte error;
 
@@ -156,48 +190,32 @@ public class Server : MonoBehaviour {
         string[] words = decodeMessage(messageContent, '$');
         string stationId = words[0];
 
-        // If the player sends back the score of a completed recipe, add that to the teams score
-        bool isScore = false;
-        if (stationId == "3")
+        string ingredientWithFlags = words[1];
+
+        // Be aware of null value here. Shouldn't cause issues, but might
+        Ingredient ingredientToAdd = new Ingredient();
+        string ingredient = "";
+        if (!ingredientWithFlags.Equals(""))
         {
-            float score;
-            isScore = float.TryParse(words[1], out score);
-            if (isScore)
-            {
-                if (redTeam.ContainsKey(connectionId)) redScore.increaseScore(score);
-                else if (blueTeam.ContainsKey(connectionId)) blueScore.increaseScore(score);
-            }
+            ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
+            ingredient = ingredientToAdd.Name;
+            Debug.Log("Ingredient to add: " + ingredient);
         }
+      
+        // Case where we add a station to a kitchen if it has not been seen before
+        addStationToKitchen(stationId, connectionId);
 
-        // Only continue if a score was not sent back
-        if (!isScore) {
-            string ingredientWithFlags = words[1];
+        bool playerOnValidStation = isPlayerOnValidStation(connectionId, stationId);
 
-            // Be aware of null value here. Shouldn't cause issues, but might
-            Ingredient ingredientToAdd = new Ingredient();
-            string ingredient = "";
-            if (!ingredientWithFlags.Equals(""))
-            {
-                ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
-                ingredient = ingredientToAdd.Name;
-                Debug.Log("Ingredient to add: " + ingredient);
-            }
+        if (playerOnValidStation)
+        {
+            // Case where we want to send back ingredients stored at the station to player
+            if (ingredient.Equals(""))
+                sendIngredientsToPlayer(ingredient, stationId, connectionId);
 
-            // Case where we add a station to a kitchen if it has not been seen before
-            addStationToKitchen(stationId, connectionId);
-
-            bool playerOnValidStation = isPlayerOnValidStation(connectionId, stationId);
-
-            if (playerOnValidStation)
-            {
-                // Case where we want to send back ingredients stored at the station to player
-                if (ingredient.Equals(""))
-                    sendIngredientsToPlayer(ingredient, stationId, connectionId);
-
-                //If the player wants to add an ingredient, add it
-                else
-                    addIngredientToStation(stationId, ingredientToAdd, connectionId);
-            }
+            //If the player wants to add an ingredient, add it
+            else
+                addIngredientToStation(stationId, ingredientToAdd, connectionId);
         }
     }
 
@@ -255,12 +273,12 @@ public class Server : MonoBehaviour {
     public void SendMyMessage(string messageType, string textInput, int connectionId)
     {
         byte error;
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[4096];
+        int bufferSize = 4096;
         Stream message = new MemoryStream(buffer);
         BinaryFormatter formatter = new BinaryFormatter();
         //Serialize the message
         string messageToSend = messageType + "&" + textInput;
-        Debug.Log("Sent: " + messageToSend);
         formatter.Serialize(message, messageToSend);
 
         //Send the message from the "client" with the serialized message and the connection information
@@ -268,7 +286,9 @@ public class Server : MonoBehaviour {
 
         //If there is an error, output message error to the console
         if ((NetworkError)error != NetworkError.Ok)
+        {
             Debug.Log("Message send error: " + (NetworkError)error);
+        }
     }
 
     //Allocates a player to a team based on their choice.
@@ -359,13 +379,16 @@ public class Server : MonoBehaviour {
         // Should tell players on the winning team they have won on their phones
         // Should tell players on the losing team they have lost on their phones
 
+        finalBlueScore = blueScore.getScore();
+        finalRedScore = redScore.getScore();
+
         if (winningTeam.Equals("blue"))
         {
-
+            SceneManager.LoadScene("GameOverScreen");
         }
         else if (winningTeam.Equals("red"))
         {
-
+            SceneManager.LoadScene("GameOverScreen");
         }
     }
 }
