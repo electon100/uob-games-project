@@ -188,6 +188,16 @@ public class Player : MonoBehaviour {
                     network.SendMyMessage("station", text);
                     platingStation();
                     break;
+                case "8":
+                    // Join red team
+                    network.SendMyMessage("jointeam", text);
+                    SceneManager.LoadScene("PlayerMainScreen");
+                    break;
+                case "9":
+                    // Join blue team
+                    network.SendMyMessage("jointeam", text);
+                    SceneManager.LoadScene("PlayerMainScreen");
+                    break;
                 default:
                     currentStation = "-1";
                     break;
