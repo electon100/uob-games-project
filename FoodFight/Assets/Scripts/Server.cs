@@ -29,6 +29,9 @@ public class Server : MonoBehaviour {
     public GameObject redPlayer;
     public GameObject bluePlayer;
 
+    public GameObject blueStation;
+    public GameObject redStation;
+
     // Scoring
     public Text redScoreText;
     public Text blueScoreText;
@@ -441,5 +444,27 @@ public class Server : MonoBehaviour {
         TimeSpan t = TimeSpan.FromSeconds(timer);
         string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
         timerText.text = "Time left " + timerFormatted;
+    }
+
+    private void movePlayer(int connectionId, string stationId)
+    {
+        string stationText = "";
+        if (redTeam.ContainsKey(connectionId))
+        {
+            stationText = "RedStation" + stationId;
+            redStation = GameObject.Find(stationText);
+            Vector3 newPosition = redStation.transform.position;
+            newPosition.x -= 1.0f;
+            redTeam[connectionId].transform.position = newPosition;
+
+        }
+        else if (blueTeam.ContainsKey(connectionId))
+        {
+            stationText = "BlueStation" + stationId;
+            blueStation = GameObject.Find(stationText);
+            Vector3 newPosition = blueStation.transform.position;
+            newPosition.x += 1.0f;
+            blueTeam[connectionId].transform.position = newPosition;
+        }
     }
 }
