@@ -154,7 +154,7 @@ public class Server : MonoBehaviour {
         //Output the deserialized message as well as the connection information to the console
         Debug.Log("OnData(hostId = " + hostId + ", connectionId = "
             + connectionId + ", channelId = " + channelId + ", data = "
-            + message + ", size = " + size + ", error = " + error.ToString() + ")");
+            + decompressedMessage + ", size = " + size + ", error = " + error.ToString() + ")");
 
         return decompressedMessage;
     }
