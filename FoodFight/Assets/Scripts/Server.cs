@@ -26,8 +26,16 @@ public class Server : MonoBehaviour {
 
     private byte error;
 
+    // Spawning and movement
     public GameObject redPlayer;
     public GameObject bluePlayer;
+
+    public GameObject blueStation;
+    public GameObject redStation;
+
+    // Scoring
+    public Text redScoreText;
+    public Text blueScoreText;
 
     private Score redScore;
     private Score blueScore;
@@ -80,6 +88,9 @@ public class Server : MonoBehaviour {
         blueScore = new Score();
 
         timerText = GameObject.Find("TimerText").GetComponent<Text>();
+        redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
+        blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
+        updateScores();
         timer = 300.0f;
         displayTime();
     }
@@ -220,6 +231,8 @@ public class Server : MonoBehaviour {
         //If this station already exists, check what's in it and send it back to player.
         string[] words = decodeMessage(messageContent, '$');
         string stationId = words[0];
+
+        movePlayer(connectionId, stationId);
 
         string ingredientWithFlags = words[1];
 
@@ -423,11 +436,38 @@ public class Server : MonoBehaviour {
         }
     }
 
+    private void updateScores()
+    {
+        redScoreText.text = "Red Score " + redScore.getScore().ToString();
+        blueScoreText.text = "Blue Score " + blueScore.getScore().ToString();
+    }
+
     private void displayTime()
     {
         TimeSpan t = TimeSpan.FromSeconds(timer);
         string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
         timerText.text = "Time left " + timerFormatted;
-        //Debug.Log(timerText.text);
+    }
+
+    private void movePlayer(int connectionId, string stationId)
+    {
+        string stationText = "";
+        if (redTeam.ContainsKey(connectionId))
+        {
+            stationText = "RedStation" + stationId;
+            redStation = GameObject.Find(stationText);
+            Vector3 newPosition = redStation.transform.position;
+            newPosition.x -= 10.0f;
+            redTeam[connectionId].transform.position = newPosition;
+
+        }
+        else if (blueTeam.ContainsKey(connectionId))
+        {
+            stationText = "BlueStation" + stationId;
+            blueStation = GameObject.Find(stationText);
+            Vector3 newPosition = blueStation.transform.position;
+            newPosition.x += 10.0f;
+            blueTeam[connectionId].transform.position = newPosition;
+        }
     }
 }
