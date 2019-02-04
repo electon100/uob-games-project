@@ -230,15 +230,9 @@ public class Server : MonoBehaviour {
         /* If a player sends back a list of ingredients, or another message, deal with that */
         if (!ingredientWithFlags.Equals(""))
         {
-            if (ingredientWithFlags == "clear") {
-                clearStationInKitchen(connectionId, stationId);
-                sendIngredientsToPlayer(ingredient, stationId, connectionId);
-            }
-            else {
-                ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
-                ingredient = ingredientToAdd.Name;
-                Debug.Log("Ingredient to add: " + ingredient);
-            }
+            ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
+            ingredient = ingredientToAdd.Name;
+            Debug.Log("Ingredient to add: " + ingredient);
         }
       
         // Case where we add a station to a kitchen if it has not been seen before
@@ -249,12 +243,18 @@ public class Server : MonoBehaviour {
         if (playerOnValidStation)
         {
             // Case where we want to send back ingredients stored at the station to player
-            if (ingredient.Equals(""))
+            if (ingredient.Equals("")) {
                 sendIngredientsToPlayer(ingredient, stationId, connectionId);
-
+            }
+            // Case where the player wants to clear what's stored in the station
+            else if (ingredient.Equals("clear")) {
+                clearStationInKitchen(connectionId, stationId);
+                sendIngredientsToPlayer(ingredient, stationId, connectionId);
+            }
             //If the player wants to add an ingredient, add it
-            else
+            else {
                 addIngredientToStation(stationId, ingredientToAdd, connectionId);
+            }
         }
     }
 
@@ -445,6 +445,6 @@ public class Server : MonoBehaviour {
         TimeSpan t = TimeSpan.FromSeconds(timer);
         string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
         timerText.text = "Time left " + timerFormatted;
-        // Debug.Log(timerText.text);
+        Debug.Log(timerText.text);
     }
 }
