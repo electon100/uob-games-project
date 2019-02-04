@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Text;
@@ -81,5 +82,10 @@ public class PlateBehaviour : MonoBehaviour {
         ingredientList = Player.ingredientsFromStation;
         displayFood();
       }
+    }
+
+    public void goBack() {
+          Player.currentStation = "1";
+          SceneManager.LoadScene("PlayerMainScreen");
     }
 }

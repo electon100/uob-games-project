@@ -150,7 +150,7 @@ public class Player : MonoBehaviour {
     }
 
     public void sendRecipeToScore(Ingredient recipe) {
-        client.SendMyMessage("score", client.serialiseIngredient(recipe));
+        network.SendMyMessage("score", network.serialiseIngredient(recipe));
     }
 
     private void checkStation(string text)
