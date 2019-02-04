@@ -67,14 +67,13 @@ public class PlateBehaviour : MonoBehaviour {
       if (!string.Equals(recipe.Name, "mush")) {
         ingredientList.Clear();
         Destroy(model, 0.0f);
+        player.sendRecipeToScore(recipe);
+        recipe = null;
         displayFood();
       }
     }
 
     public void addIngredient() {
-      Ingredient temp = new Ingredient("diced_potato", "");
-      temp.numberOfPanFlips = 30;
-      Player.currentIngred = temp;
       if (Player.currentIngred != null) {
         ingredientList.Add(Player.currentIngred);
         player.removeCurrentIngredient();

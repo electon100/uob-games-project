@@ -193,7 +193,6 @@ public class Client : MonoBehaviour {
         return splitted;
     }
 
-
     //This function is called when data is sent
     private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error)
     {

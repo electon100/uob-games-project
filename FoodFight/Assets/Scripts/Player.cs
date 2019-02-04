@@ -149,6 +149,10 @@ public class Player : MonoBehaviour {
         currentIngred = null;
     }
 
+    public void sendRecipeToScore(Ingredient recipe) {
+        client.SendMyMessage("score", client.serialiseIngredient(recipe));
+    }
+
     private void checkStation(string text)
     {
 
