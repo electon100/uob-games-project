@@ -149,6 +149,10 @@ public class Player : MonoBehaviour {
         currentIngred = null;
     }
 
+    public void sendRecipeToScore(Ingredient recipe) {
+        network.SendMyMessage("score", network.serialiseIngredient(recipe));
+    }
+
     private void checkStation(string text)
     {
 
@@ -183,6 +187,20 @@ public class Player : MonoBehaviour {
                     text += sendCurrentIngredient(null);
                     network.SendMyMessage("station", text);
                     platingStation();
+                    break;
+                case "8":
+                    // Join red team
+                    if (!network.isConnected) {
+                      network.Connect();
+                    }
+                    network.onClickRed();
+                    break;
+                case "9":
+                    // Join blue team
+                    if (!network.isConnected) {
+                      network.Connect();
+                    }
+                    network.onClickBlue();
                     break;
                 default:
                     currentStation = "-1";

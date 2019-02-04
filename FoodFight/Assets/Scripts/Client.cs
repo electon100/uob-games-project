@@ -14,7 +14,7 @@ using System.IO.Compression;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.62";
+    private const string serverIP = "192.168.0.106";
 
     private int port = 8000;
 
@@ -27,7 +27,7 @@ public class Client : MonoBehaviour {
 
     private int connectionId;
 
-    private bool isConnected = false;
+    public bool isConnected = false;
     private bool areButtonsHere = false;
 
     private byte error;
@@ -131,7 +131,7 @@ public class Client : MonoBehaviour {
         connectConfig.MaxSentMessageQueueSize = 2048;
         connectConfig.MinUpdateTimeout = 20;
         connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
-        connectConfig.OverflowDropThreshold = 40; // 
+        connectConfig.OverflowDropThreshold = 40; //
         connectConfig.PacketSize = 1500;
         connectConfig.PingTimeout = 500;
         connectConfig.ReducedPingTimeout = 100;
@@ -211,7 +211,6 @@ public class Client : MonoBehaviour {
         string[] splitted = message.Split(character);
         return splitted;
     }
-
 
     //This function is called when data is sent
     private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error)

@@ -7,5 +7,5 @@ public class IngredientDefinitions {
 public class IngredientDescription {
 	public string name;
 	public bool choppable, cookable;
-	public int correctFlips, maxFlips, correctChops;
+	public int correctFlips, maxFlips, correctChops, score;
 }

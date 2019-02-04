@@ -9,6 +9,7 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Server : MonoBehaviour {
     private const int MAX_CONNECTION = 10;
@@ -25,8 +26,16 @@ public class Server : MonoBehaviour {
 
     private byte error;
 
+    // Spawning and movement
     public GameObject redPlayer;
     public GameObject bluePlayer;
+
+    public GameObject blueStation;
+    public GameObject redStation;
+
+    // Scoring
+    public Text redScoreText;
+    public Text blueScoreText;
 
     private Score redScore;
     private Score blueScore;
@@ -43,7 +52,8 @@ public class Server : MonoBehaviour {
     IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
 
     // Timer variable
-    float timer = 300.0f;
+    private float timer;
+    public Text timerText;
 
     private void Start () {
         NetworkTransport.Init();
@@ -61,7 +71,7 @@ public class Server : MonoBehaviour {
         connectConfig.MaxSentMessageQueueSize = 2048;
         connectConfig.MinUpdateTimeout = 20;
         connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
-        connectConfig.OverflowDropThreshold = 40; // 
+        connectConfig.OverflowDropThreshold = 40; //
         connectConfig.PacketSize = 1500;
         connectConfig.PingTimeout = 500;
         connectConfig.ReducedPingTimeout = 100;
@@ -76,8 +86,15 @@ public class Server : MonoBehaviour {
 
         redScore = new Score();
         blueScore = new Score();
+
+        timerText = GameObject.Find("TimerText").GetComponent<Text>();
+        redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
+        blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
+        updateScores();
+        timer = 300.0f;
+        displayTime();
     }
-	
+
 	private void Update () {
         if (!isStarted) return;
 
@@ -89,6 +106,7 @@ public class Server : MonoBehaviour {
             // Defaults to red winning if it is a tie
             else GameOver("red");
         }
+        displayTime();
 
         // Check if either team has reached a score of 0 and if they have, end the game
         if (redScore.getScore() == 0) GameOver("blue");
@@ -149,22 +167,23 @@ public class Server : MonoBehaviour {
             // Player chooses team to play on
             case "connect":
                 // Allocate the player to the team if they are not already on a team
-                if (!redTeam.ContainsKey(connectionId) && !blueTeam.ContainsKey(connectionId)) { 
+                if (!redTeam.ContainsKey(connectionId) && !blueTeam.ContainsKey(connectionId)) {
                     allocateToTeam(connectionId, messageContent);
                 }
                 break;
-
             // Player connects to a work station
             case "station":
                 OnStation(messageContent, connectionId);
                 break;
-
             // Player sends NFC data
             case "NFC":
                 //Do NFC stuff
                 Debug.Log("Player " + connectionId + " has sent: " + messageContent);
                 break;
-
+            // Player sends recipe to score
+            case "score":
+                OnScore(messageContent, connectionId);
+                break;
         }
     }
 
@@ -184,11 +203,36 @@ public class Server : MonoBehaviour {
         return message;
     }
 
+    private void OnScore(string messageContent, int connectionId) {
+        Ingredient recipe = new Ingredient();
+        recipe = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, recipe.GetType());
+
+        int recipeScore = scoreRecipe(recipe);
+
+        if (redTeam.ContainsKey(connectionId)) {
+          // Add score to red team
+          redScore.increaseScore(recipeScore);
+        } else if (blueTeam.ContainsKey(connectionId)) {
+          // Add score to blue team
+          blueScore.increaseScore(recipeScore);
+        }
+
+        Debug.Log(messageContent);
+    }
+
+    private int scoreRecipe(Ingredient recipe) {
+      int score = 100;
+
+      return score;
+    }
+
     private void OnStation(string messageContent, int connectionId)
     {
         //If this station already exists, check what's in it and send it back to player.
         string[] words = decodeMessage(messageContent, '$');
         string stationId = words[0];
+
+        movePlayer(connectionId, stationId);
 
         string ingredientWithFlags = words[1];
 
@@ -201,7 +245,7 @@ public class Server : MonoBehaviour {
             ingredient = ingredientToAdd.Name;
             Debug.Log("Ingredient to add: " + ingredient);
         }
-      
+
         // Case where we add a station to a kitchen if it has not been seen before
         addStationToKitchen(stationId, connectionId);
 
@@ -255,7 +299,7 @@ public class Server : MonoBehaviour {
 
     // Add to a station if it exists
     private void addIngredientToStation(string stationId, Ingredient ingredientToAdd, int connectionId)
-    { 
+    {
         if (redKitchen.ContainsKey(stationId))
         {
             AddIngredientToList(stationId, ingredientToAdd, "red");
@@ -368,7 +412,7 @@ public class Server : MonoBehaviour {
     {
         if (kitchen == "red")
             redKitchen[stationId].Add(newIngredient);
-   
+
         else if (kitchen == "blue")
             blueKitchen[stationId].Add(newIngredient);
     }
@@ -389,6 +433,41 @@ public class Server : MonoBehaviour {
         else if (winningTeam.Equals("red"))
         {
             SceneManager.LoadScene("GameOverScreen");
+        }
+    }
+
+    private void updateScores()
+    {
+        redScoreText.text = "Red Score " + redScore.getScore().ToString();
+        blueScoreText.text = "Blue Score " + blueScore.getScore().ToString();
+    }
+
+    private void displayTime()
+    {
+        TimeSpan t = TimeSpan.FromSeconds(timer);
+        string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
+        timerText.text = "Time left " + timerFormatted;
+    }
+
+    private void movePlayer(int connectionId, string stationId)
+    {
+        string stationText = "";
+        if (redTeam.ContainsKey(connectionId))
+        {
+            stationText = "RedStation" + stationId;
+            redStation = GameObject.Find(stationText);
+            Vector3 newPosition = redStation.transform.position;
+            newPosition.x -= 10.0f;
+            redTeam[connectionId].transform.position = newPosition;
+
+        }
+        else if (blueTeam.ContainsKey(connectionId))
+        {
+            stationText = "BlueStation" + stationId;
+            blueStation = GameObject.Find(stationText);
+            Vector3 newPosition = blueStation.transform.position;
+            newPosition.x += 10.0f;
+            blueTeam[connectionId].transform.position = newPosition;
         }
     }
 }

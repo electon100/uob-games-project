@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -34,6 +35,11 @@ public sealed class FoodData {
 	public bool isCooked(Ingredient ingredient) {
 		IngredientDescription desc = GetIngredientDescription(ingredient);
 		return desc.cookable && (ingredient.numberOfPanFlips >= desc.correctFlips);
+	}
+
+	public int getScoreForIngredient(Ingredient ingredient) {
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		return desc != null ? desc.score : 0;
 	}
 
 	/* Determines whether the input ingredient matches the provided criteria */
