@@ -38,7 +38,7 @@ public sealed class FoodData {
 
 	public int getScoreForIngredient(Ingredient ingredient) {
 		IngredientDescription desc = GetIngredientDescription(ingredient);
-		return desc.score;
+		return desc != null ? desc.score : 0;
 	}
 
 	/* Determines whether the input ingredient matches the provided criteria */
