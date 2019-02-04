@@ -232,6 +232,7 @@ public class Server : MonoBehaviour {
         {
             if (ingredientWithFlags == "clear") {
                 clearStationInKitchen(connectionId, stationId);
+                sendIngredientsToPlayer(ingredient, stationId, connectionId);
             }
             else {
                 ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
