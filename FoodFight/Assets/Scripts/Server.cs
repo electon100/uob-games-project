@@ -446,7 +446,7 @@ public class Server : MonoBehaviour {
         timerText.text = "Time left " + timerFormatted;
     }
 
-    private void movePlayer(int connectionId, string stationId)
+    private void moveSeverPlayer(int connectionId, string stationId)
     {
         string stationText = "";
         if (redTeam.ContainsKey(connectionId))
@@ -455,7 +455,8 @@ public class Server : MonoBehaviour {
             redStation = GameObject.Find(stationText);
             Vector3 newPosition = redStation.transform.position;
             newPosition.x -= 1.0f;
-            redTeam[connectionId].transform.position = newPosition;
+            PlayerMovement.movePlayer(newPosition, redTeam[connectionId]);
+            //redTeam[connectionId].transform.position = newPosition;
 
         }
         else if (blueTeam.ContainsKey(connectionId))
@@ -464,7 +465,8 @@ public class Server : MonoBehaviour {
             blueStation = GameObject.Find(stationText);
             Vector3 newPosition = blueStation.transform.position;
             newPosition.x += 1.0f;
-            blueTeam[connectionId].transform.position = newPosition;
+            PlayerMovement.movePlayer(newPosition, blueTeam[connectionId]);
+            //blueTeam[connectionId].transform.position = newPosition;
         }
     }
 }
