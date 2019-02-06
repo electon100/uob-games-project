@@ -64,11 +64,11 @@ public class PlateBehaviour : MonoBehaviour {
     }
 
     public void serveFood() {
-      //TODO serve food
       if (!string.Equals(recipe.Name, "mush")) {
         ingredientList.Clear();
         Destroy(model, 0.0f);
         player.sendRecipeToScore(recipe);
+        player.clearIngredientsInStation("3");
         recipe = null;
         displayFood();
       }
