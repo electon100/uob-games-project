@@ -147,6 +147,8 @@ public class Player : MonoBehaviour {
     }
 
     public void clearIngredientsInStation(string stationID) {
+        ingredientsFromStation.Clear();
+        network.ingredientsInStation.Clear();
         network.SendMyMessage("clear", stationID);
     }
 

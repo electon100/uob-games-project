@@ -33,6 +33,8 @@ public class Chopping : MonoBehaviour
     public GameObject blood;
     private AudioSource source;
 
+    public GameObject ingredientModel;
+
     public List<Ingredient> boardContents = new List<Ingredient>();
     public List<Ingredient> newBoardContents = new List<Ingredient>();
     List<Ingredient> choppedIngredients = new List<Ingredient>();
@@ -207,13 +209,18 @@ public class Chopping : MonoBehaviour
     {
         if (Player.currentIngred != null)
         {
-            GameObject model = (GameObject)Resources.Load(Player.currentIngred.Model, typeof(GameObject));
-            model = Instantiate(model, new Vector3(0, 0, 0), Quaternion.identity);
-            model.transform.SetParent(startCanvas);
+            ingredientModel = (GameObject)Resources.Load(Player.currentIngred.Model, typeof(GameObject));
+            ingredientModel = Instantiate(ingredientModel, new Vector3(0, 0, 0), Quaternion.identity);
+            ingredientModel.transform.SetParent(startCanvas);
         }
     }
 
     public void clearChoppingBoard() {
+        Debug.Log("Cleared");
+        GameObject toDestroy = GameObject.Find(Player.currentIngred.Model).GetComponent<GameObject>();
+        Destroy(toDestroy);
+        boardContents.Clear();
+        newBoardContents.Clear();
         player.clearIngredientsInStation("2");
     }
 }
