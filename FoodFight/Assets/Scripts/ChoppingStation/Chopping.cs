@@ -33,15 +33,19 @@ public class Chopping : MonoBehaviour
     public GameObject blood;
     private AudioSource source;
 
-    public GameObject ingredientModel;
-
-    public List<Ingredient> boardContents = new List<Ingredient>();
-    public List<Ingredient> newBoardContents = new List<Ingredient>();
+    private Ingredient currentChoppingIngred;
+    private List<GameObject> ingredientModels;
+    private List<Ingredient> boardContents = new List<Ingredient>();
+    private List<Ingredient> newBoardContents = new List<Ingredient>();
     List<Ingredient> choppedIngredients = new List<Ingredient>();
 
     private void Start()
     {
+        /* Instantiates the player to access functions and sets the 
+        current chopping ingredient to whatever the Player's currently holding. */
         player = GameObject.Find("Player").GetComponent<Player>();
+        currentChoppingIngred = Player.currentIngred;
+
         //set up scene
         source = GetComponent<AudioSource>();
         Screen.orientation = ScreenOrientation.LandscapeLeft;
@@ -165,17 +169,17 @@ public class Chopping : MonoBehaviour
         if (Player.currentIngred != null)
         {
             /* Stops the minigame if ingredient cannot be chopped */
-            // if (FoodData.Instance.GetIngredientDescription(Player.currentIngred).choppable)
-            // {
-            //     Time.timeScale = 0;
-            // }
+            if (FoodData.Instance.GetIngredientDescription(Player.currentIngred).choppable)
+            {
+                Time.timeScale = 0;
+            }
         }
     }
 
     /* Sends the chopped ingredient to server and returns to the main screen */
     public void goBack()
     {
-        player.notifyServerAboutIngredientPlaced();
+        player.notifyServerAboutIngredientPlaced(currentChoppingIngred);
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
@@ -190,17 +194,17 @@ public class Chopping : MonoBehaviour
     {
         /* If available, restore what was previously in that station */
         newBoardContents = Player.ingredientsFromStation;
-        Debug.Log(newBoardContents.Count);
+
         /* Needed because the list of ingredients in the stations is constatly updated, so constant drawing is avoided */
         foreach (Ingredient ingredient in newBoardContents)
         {
-            Debug.Log(ingredient.Name);
             if (boardContents.IndexOf(ingredient) < 0)
             {
                 GameObject model = (GameObject)Resources.Load(ingredient.Model, typeof(GameObject));
                 model = Instantiate(model, new Vector3(0, 0, 0), Quaternion.identity);
                 model.transform.SetParent(startCanvas);
                 boardContents.Add(ingredient);
+                ingredientModels.Add(model);
             }
         }
     }
@@ -209,20 +213,25 @@ public class Chopping : MonoBehaviour
     {
         if (Player.currentIngred != null)
         {
-            ingredientModel = (GameObject)Resources.Load(Player.currentIngred.Model, typeof(GameObject));
+            GameObject ingredientModel = (GameObject)Resources.Load(Player.currentIngred.Model, typeof(GameObject));
             ingredientModel = Instantiate(ingredientModel, new Vector3(0, 0, 0), Quaternion.identity);
             ingredientModel.transform.SetParent(startCanvas);
-            Player.currentIngred = null;
+            boardContents.Add(Player.currentIngred);
+            ingredientModels.Add(ingredientModel);
+            player.notifyServerAboutIngredientPlaced(currentChoppingIngred);
         }
     }
 
     public void clearChoppingBoard() {
-        Debug.Log("Cleared");
-        Debug.Log(ingredientModel);
-        Destroy(ingredientModel);
-        Debug.Log(ingredientModel);
+        foreach (GameObject ingredient in ingredientModels) {
+            Debug.Log(ingredient);
+            /* If the model exists, then destroy it */
+            if (ingredient) {
+                Destroy (ingredient, 0.0f);
+                Debug.Log(ingredient + "has been destroyed.");
+            }
+        }
         boardContents.Clear();
-        newBoardContents.Clear();
         player.clearIngredientsInStation("2");
     }
 }

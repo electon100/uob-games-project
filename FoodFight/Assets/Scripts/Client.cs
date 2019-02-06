@@ -260,7 +260,6 @@ public class Client : MonoBehaviour {
 
     public List<Ingredient> getIngredientsFromStation(string stationID)
     {
-        Debug.Log("Ingredients in station with id: " + stationID + "are " + myKitchen[stationID].Count);
         return myKitchen[stationID];
     }
 
