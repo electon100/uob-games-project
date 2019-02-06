@@ -28,26 +28,18 @@ public sealed class FoodData {
 	}
 
 	public bool isChopped(Ingredient ingredient) {
-		IngredientDescription desc = new IngredientDescription();
-		if (ingredient != null) {
-			desc = GetIngredientDescription(ingredient);
-			return desc.choppable && (ingredient.numberOfChops >= desc.correctChops);
-		}
-		else {
-			return false;
-		}
+		if (ingredient == null) return false;
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		return desc == null ? false : desc.choppable && (ingredient.numberOfChops >= desc.correctChops);
 	}
 
 	public bool isCooked(Ingredient ingredient) {
-		IngredientDescription desc = new IngredientDescription();
-		if (ingredient != null) {
-			desc = GetIngredientDescription(ingredient);
-			return desc.cookable && (ingredient.numberOfPanFlips >= desc.correctFlips);
-		}
-		else {
-			return false;
-		}
+		if (ingredient == null) return false;
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		return desc == null ? false : desc.cookable && (ingredient.numberOfPanFlips >= desc.correctFlips);
 	}
+
+	/* TODO: Add (back) choppable and cookable checks */
 
 	public int getScoreForIngredient(Ingredient ingredient) {
 		IngredientDescription desc = GetIngredientDescription(ingredient);
