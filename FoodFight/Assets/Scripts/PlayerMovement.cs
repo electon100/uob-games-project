@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-static public class PlayerMovement {
+public class PlayerMovement : MonoBehaviour{
 
     static float speed = 1.0f;
 
     static public void movePlayer(Vector3 stationPosition, GameObject player)
     {
-        player.transform.position = stationPosition;  
+        player.transform.position = stationPosition;
+        Debug.Log("Trying to move");
 
         while (player.transform.position != stationPosition)
         {

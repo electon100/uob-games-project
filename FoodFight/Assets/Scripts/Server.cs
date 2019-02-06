@@ -446,7 +446,7 @@ public class Server : MonoBehaviour {
         timerText.text = "Time left " + timerFormatted;
     }
 
-    private void moveSeverPlayer(int connectionId, string stationId)
+    private void moveServerPlayer(int connectionId, string stationId)
     {
         string stationText = "";
         if (redTeam.ContainsKey(connectionId))
