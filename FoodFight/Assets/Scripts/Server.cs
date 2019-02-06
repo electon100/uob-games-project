@@ -456,7 +456,7 @@ public class Server : MonoBehaviour {
             stationText = "RedStation" + stationId;
             redStation = GameObject.Find(stationText);
             Vector3 newPosition = redStation.transform.position;
-            newPosition.x -= 1.0f;
+            newPosition.x -= 10.0f;
             PlayerMovement.movePlayer(newPosition, redTeam[connectionId]);
             //redTeam[connectionId].transform.position = newPosition;
 
@@ -466,7 +466,7 @@ public class Server : MonoBehaviour {
             stationText = "BlueStation" + stationId;
             blueStation = GameObject.Find(stationText);
             Vector3 newPosition = blueStation.transform.position;
-            newPosition.x += 1.0f;
+            newPosition.x += 10.0f;
             PlayerMovement.movePlayer(newPosition, blueTeam[connectionId]);
             //blueTeam[connectionId].transform.position = newPosition;
         }
