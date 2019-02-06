@@ -221,7 +221,7 @@ public class Server : MonoBehaviour {
     }
 
     private int scoreRecipe(Ingredient recipe) {
-      int score = 100;
+      int score = FoodData.Instance.getScoreForIngredient(recipe);
 
       return score;
     }
