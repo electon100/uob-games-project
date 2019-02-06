@@ -231,6 +231,8 @@ public class Server : MonoBehaviour {
         string[] words = decodeMessage(messageContent, '$');
         string stationId = words[0];
 
+        moveServerPlayer(connectionId, stationId);
+
         string ingredientWithFlags = words[1];
 
         // Be aware of null value here. Shouldn't cause issues, but might
