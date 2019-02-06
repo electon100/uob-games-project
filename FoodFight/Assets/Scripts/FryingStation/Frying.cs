@@ -7,7 +7,7 @@ using System.Text;
 
 public class Frying : MonoBehaviour {
 
-	private sealed string stationID = "1";
+	private readonly string stationID = "1";
 
 	public Text test_text;
 	public Player player;
@@ -50,20 +50,20 @@ public class Frying : MonoBehaviour {
 		originalPos = gameObject.transform.position;
 		lastShake = Time.time;
 
-		// List<Ingredient> ingredientsFromStation = Player.ingredientsFromStation;
-		List<Ingredient> ingredientsFromStation = new List<Ingredient>();
+		List<Ingredient> ingredientsFromStation = Player.ingredientsFromStation;
+		// List<Ingredient> ingredientsFromStation = new List<Ingredient>();
 
 		/* Create test ingredients */
-		Ingredient noodles = new Ingredient("noodles", "noodlesPrefab");
-		Ingredient veg = new Ingredient("chopped_mixed_vegetables", "chopped_mixed_vegetablesPrefab");
-		Ingredient chicken = new Ingredient("diced_chicken", "EggsPrefab");
+		// Ingredient noodles = new Ingredient("noodles", "noodlesPrefab");
+		// Ingredient veg = new Ingredient("chopped_mixed_vegetables", "chopped_mixed_vegetablesPrefab");
+		// Ingredient chicken = new Ingredient("diced_chicken", "EggsPrefab");
 
 		// Player.currentIngred = noodles;
 
 		/* Add ingredients to list */
 		// ingredientsFromStation.Add(noodles);
-		ingredientsFromStation.Add(chicken);
-		ingredientsFromStation.Add(veg);
+		// ingredientsFromStation.Add(chicken);
+		// ingredientsFromStation.Add(veg);
 
 		clearPan();
 
@@ -137,8 +137,7 @@ public class Frying : MonoBehaviour {
 			addIngredientToPan(Player.currentIngred);
 
 			/* Notify server that player has placed ingredient */
-			player = GameObject.Find("Player").GetComponent<Player>();
-			player.notifyServerAboutIngredientPlaced(Player.currentIngred);
+			Player.notifyServerAboutIngredientPlaced(Player.currentIngred);
 		} else {
 			/* TODO: What happens when player is not holding an ingredient */
 		}
@@ -152,7 +151,8 @@ public class Frying : MonoBehaviour {
 		/* Set the pan contents to the new combined recipe */
 		clearPan();
 		addIngredientToPan(combinedFood);
-		notifyServerAboutIngredientPlaced(combinedFood);
+
+		Player.notifyServerAboutIngredientPlaced(combinedFood);
 
 		/* The hob is now on, the player can cook */
 		isHobOn = true;
@@ -173,7 +173,7 @@ public class Frying : MonoBehaviour {
 		panContents.Clear();
 		panContentsObjects.Clear();
 
-		clearIngredientsInStation(stationID);
+		Player.clearIngredientsInStation(stationID);
 	}
 
 	public void goBack()
