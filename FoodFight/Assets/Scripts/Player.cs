@@ -65,7 +65,7 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("Player says: " + currentIngred.Name + " " + currentIngred.Model);
+            Debug.Log(Player.currentIngred.Name);
         }
 
         if (currentIngred != null)
@@ -73,7 +73,7 @@ public class Player : MonoBehaviour {
             mainText.text = currentIngred.numberOfChops.ToString();
         }
         /////////////////////////////////////
-
+        
         if (currentItem != null)
         {
             currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
@@ -137,11 +137,18 @@ public class Player : MonoBehaviour {
         return message;
     }
 
-    public void notifyServerAboutIngredientPlaced()
+    public void notifyServerAboutIngredientPlaced(Ingredient ingredient)
     {
         string message;
-        message = currentStation + sendCurrentIngredient(currentIngred);
+        message = currentStation + sendCurrentIngredient(ingredient);
         network.SendMyMessage("station", message);
+        Player.currentIngred = null;
+    }
+
+    public void clearIngredientsInStation(string stationID) {
+        ingredientsFromStation.Clear();
+        network.myKitchen[stationID].Clear();
+        network.SendMyMessage("clear", stationID);
     }
 
     public void removeCurrentIngredient()

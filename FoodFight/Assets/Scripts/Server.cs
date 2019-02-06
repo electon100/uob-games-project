@@ -176,6 +176,9 @@ public class Server : MonoBehaviour {
                 OnStation(messageContent, connectionId);
                 break;
             // Player sends NFC data
+            case "clear":
+                OnClearStation(messageContent, connectionId);
+                break;
             case "NFC":
                 //Do NFC stuff
                 Debug.Log("Player " + connectionId + " has sent: " + messageContent);
@@ -226,6 +229,11 @@ public class Server : MonoBehaviour {
       return score;
     }
 
+    private void OnClearStation(string stationId, int connectionId) {
+        clearStationInKitchen(connectionId, stationId);
+        sendIngredientsToPlayer(stationId, connectionId);
+    }
+
     private void OnStation(string messageContent, int connectionId)
     {
         //If this station already exists, check what's in it and send it back to player.
@@ -239,6 +247,8 @@ public class Server : MonoBehaviour {
         // Be aware of null value here. Shouldn't cause issues, but might
         Ingredient ingredientToAdd = new Ingredient();
         string ingredient = "";
+
+        /* If a player sends back a list of ingredients, or another message, deal with that */
         if (!ingredientWithFlags.Equals(""))
         {
             ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
@@ -255,7 +265,7 @@ public class Server : MonoBehaviour {
         {
             // Case where we want to send back ingredients stored at the station to player
             if (ingredient.Equals(""))
-                sendIngredientsToPlayer(ingredient, stationId, connectionId);
+                sendIngredientsToPlayer(stationId, connectionId);
 
             //If the player wants to add an ingredient, add it
             else
@@ -288,7 +298,7 @@ public class Server : MonoBehaviour {
         }
     }
 
-    private void sendIngredientsToPlayer(string ingredient, string stationId, int connectionId)
+    private void sendIngredientsToPlayer(string stationId, int connectionId)
     {
         if (redKitchen.ContainsKey(stationId))
             checkCurrentIngredient("station", "red", stationId, connectionId);
@@ -417,6 +427,15 @@ public class Server : MonoBehaviour {
             blueKitchen[stationId].Add(newIngredient);
     }
 
+    private void clearStationInKitchen(int connectionID, string stationID) {
+        if (redTeam.ContainsKey(connectionID)) {
+            redKitchen[stationID].Clear();
+        }
+        else if (blueTeam.ContainsKey(connectionID)) {
+            blueKitchen[stationID].Clear();
+        }
+    }
+
     private void GameOver(string winningTeam)
     {
         // Should call the game over screen, showing the final scores on the main screen
@@ -447,6 +466,8 @@ public class Server : MonoBehaviour {
         TimeSpan t = TimeSpan.FromSeconds(timer);
         string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
         timerText.text = "Time left " + timerFormatted;
+        // Debug.Log(timerText.text);
+
     }
 
     private void movePlayer(int connectionId, string stationId)

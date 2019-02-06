@@ -33,14 +33,19 @@ public class Chopping : MonoBehaviour
     public GameObject blood;
     private AudioSource source;
 
-    private static Ingredient currentIngred;
-    public List<Ingredient> boardContents = new List<Ingredient>();
-    public List<Ingredient> newBoardContents = new List<Ingredient>();
+    private Ingredient currentChoppingIngred;
+    private List<GameObject> ingredientModels;
+    private List<Ingredient> boardContents = new List<Ingredient>();
+    private List<Ingredient> newBoardContents = new List<Ingredient>();
     List<Ingredient> choppedIngredients = new List<Ingredient>();
 
     private void Start()
     {
-        currentIngred = Player.currentIngred;
+        /* Instantiates the player to access functions and sets the 
+        current chopping ingredient to whatever the Player's currently holding. */
+        player = GameObject.Find("Player").GetComponent<Player>();
+        currentChoppingIngred = Player.currentIngred;
+
         //set up scene
         source = GetComponent<AudioSource>();
         Screen.orientation = ScreenOrientation.LandscapeLeft;
@@ -60,7 +65,7 @@ public class Chopping : MonoBehaviour
 
     void Update()
     {
-
+        instantiateIngredientsInStation();
         ChoppingStatus();
 
         MoveKnife();
@@ -80,7 +85,7 @@ public class Chopping : MonoBehaviour
         CheckDownMovement();
         CheckUpMovement();
         CheckChopSpeed();
-        instantiateIngredientsInStation();
+        
     }
 
     public void StartGame()
@@ -161,10 +166,10 @@ public class Chopping : MonoBehaviour
 
     void CheckIngredientValid()
     {
-        if (currentIngred != null)
+        if (Player.currentIngred != null)
         {
             /* Stops the minigame if ingredient cannot be chopped */
-            if (FoodData.Instance.GetIngredientDescription(currentIngred).choppable)
+            if (FoodData.Instance.GetIngredientDescription(Player.currentIngred).choppable)
             {
                 Time.timeScale = 0;
             }
@@ -174,8 +179,7 @@ public class Chopping : MonoBehaviour
     /* Sends the chopped ingredient to server and returns to the main screen */
     public void goBack()
     {
-        player = GameObject.Find("Player").GetComponent<Player>();
-        player.notifyServerAboutIngredientPlaced();
+        player.notifyServerAboutIngredientPlaced(currentChoppingIngred);
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
@@ -200,17 +204,34 @@ public class Chopping : MonoBehaviour
                 model = Instantiate(model, new Vector3(0, 0, 0), Quaternion.identity);
                 model.transform.SetParent(startCanvas);
                 boardContents.Add(ingredient);
+                ingredientModels.Add(model);
             }
         }
     }
 
     public void putIngredient()
     {
-        if (currentIngred != null)
+        if (Player.currentIngred != null)
         {
-            GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
-            model = Instantiate(model, new Vector3(0, 0, 0), Quaternion.identity);
-            model.transform.SetParent(startCanvas);
+            GameObject ingredientModel = (GameObject)Resources.Load(Player.currentIngred.Model, typeof(GameObject));
+            ingredientModel = Instantiate(ingredientModel, new Vector3(0, 0, 0), Quaternion.identity);
+            ingredientModel.transform.SetParent(startCanvas);
+            boardContents.Add(Player.currentIngred);
+            ingredientModels.Add(ingredientModel);
+            player.notifyServerAboutIngredientPlaced(currentChoppingIngred);
         }
+    }
+
+    public void clearChoppingBoard() {
+        foreach (GameObject ingredient in ingredientModels) {
+            Debug.Log(ingredient);
+            /* If the model exists, then destroy it */
+            if (ingredient) {
+                Destroy (ingredient, 0.0f);
+                Debug.Log(ingredient + "has been destroyed.");
+            }
+        }
+        boardContents.Clear();
+        player.clearIngredientsInStation("2");
     }
 }
