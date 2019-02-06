@@ -73,7 +73,7 @@ public class Player : MonoBehaviour {
             mainText.text = currentIngred.numberOfChops.ToString();
         }
         /////////////////////////////////////
-        
+
         if (currentItem != null)
         {
             currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
@@ -142,7 +142,6 @@ public class Player : MonoBehaviour {
         string message;
         message = currentStation + sendCurrentIngredient(ingredient);
         network.SendMyMessage("station", message);
-        Player.currentIngred = null;
     }
 
     public void clearIngredientsInStation(string stationID) {
