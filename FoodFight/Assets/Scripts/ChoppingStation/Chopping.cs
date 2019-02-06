@@ -212,13 +212,15 @@ public class Chopping : MonoBehaviour
             ingredientModel = (GameObject)Resources.Load(Player.currentIngred.Model, typeof(GameObject));
             ingredientModel = Instantiate(ingredientModel, new Vector3(0, 0, 0), Quaternion.identity);
             ingredientModel.transform.SetParent(startCanvas);
+            Player.currentIngred = null;
         }
     }
 
     public void clearChoppingBoard() {
         Debug.Log("Cleared");
-        GameObject toDestroy = GameObject.Find(Player.currentIngred.Model).GetComponent<GameObject>();
-        Destroy(toDestroy);
+        Debug.Log(ingredientModel);
+        Destroy(ingredientModel);
+        Debug.Log(ingredientModel);
         boardContents.Clear();
         newBoardContents.Clear();
         player.clearIngredientsInStation("2");
