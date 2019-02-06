@@ -7,6 +7,8 @@ using System.Text;
 
 public class Frying : MonoBehaviour {
 
+	private sealed string stationID = "1";
+
 	public Text test_text;
 	public Player player;
 
@@ -136,7 +138,7 @@ public class Frying : MonoBehaviour {
 
 			/* Notify server that player has placed ingredient */
 			player = GameObject.Find("Player").GetComponent<Player>();
-			player.notifyServerAboutIngredientPlaced();
+			player.notifyServerAboutIngredientPlaced(Player.currentIngred);
 		} else {
 			/* TODO: What happens when player is not holding an ingredient */
 		}
@@ -150,6 +152,7 @@ public class Frying : MonoBehaviour {
 		/* Set the pan contents to the new combined recipe */
 		clearPan();
 		addIngredientToPan(combinedFood);
+		notifyServerAboutIngredientPlaced(combinedFood);
 
 		/* The hob is now on, the player can cook */
 		isHobOn = true;
@@ -170,12 +173,12 @@ public class Frying : MonoBehaviour {
 		panContents.Clear();
 		panContentsObjects.Clear();
 
-		/* TODO: Notify server that pan has been cleared */
+		clearIngredientsInStation(stationID);
 	}
 
 	public void goBack()
 	{
-		Player.currentStation = "1";
+		Player.currentStation = stationID;
 		SceneManager.LoadScene("PlayerMainScreen");
 	}
 }
