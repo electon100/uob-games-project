@@ -67,7 +67,8 @@ public class PlateBehaviour : MonoBehaviour {
       if (!string.Equals(recipe.Name, "mush")) {
         ingredientList.Clear();
         Destroy(model, 0.0f);
-        player.sendRecipeToScore(recipe);
+        int score = FoodData.Instance.getScoreForIngredient(recipe);
+        player.sendScoreToServer(score);
         player.clearIngredientsInStation("3");
         recipe = null;
         displayFood();
