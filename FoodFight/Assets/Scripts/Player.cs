@@ -155,8 +155,9 @@ public class Player : MonoBehaviour {
         currentIngred = null;
     }
 
-    public void sendScoreToServer(float score) {
-        network.SendMyMessage("score", score.ToString());
+    public void sendScoreToServer(Ingredient recipe) {
+        string message = Ingredient.SerializeObject(recipe);
+        network.SendMyMessage("score", message);
     }
 
     private void checkStation(string text)

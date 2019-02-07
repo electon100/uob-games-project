@@ -17,15 +17,13 @@ public class PlateBehaviour : MonoBehaviour {
     public Text ingredientListText;
     // Holds the name of the recipe
     Ingredient recipe = null;
-    // Cameras
-    Camera camera;
+
     //Final model to display on Plate
     GameObject model;
 
     // Use this for initialization
     void Start () {
         DontDestroyOnLoad(GameObject.Find("Player"));
-        camera = GameObject.Find("Camera1").GetComponent<Camera>();
         ingredientListText = GameObject.Find("Ingredient List").GetComponent<Text>();
         player = GameObject.Find("Player").GetComponent<Player>();
         ingredientList = Player.ingredientsFromStation;
@@ -52,7 +50,7 @@ public class PlateBehaviour : MonoBehaviour {
     void displayFood() {
       checkRecipe();
       if (ingredientList.Count > 0) {
-        GameObject food = (GameObject) Resources.Load(recipe.Name + "PlatePrefab", typeof(GameObject));
+        GameObject food = (GameObject) Resources.Load(recipe.Model, typeof(GameObject));
         if (food == null) {
           food = (GameObject) Resources.Load("mushPlatePrefab", typeof(GameObject));
         }
@@ -67,8 +65,8 @@ public class PlateBehaviour : MonoBehaviour {
       if (!string.Equals(recipe.Name, "mush")) {
         ingredientList.Clear();
         Destroy(model, 0.0f);
-        int score = FoodData.Instance.getScoreForIngredient(recipe);
-        player.sendScoreToServer(score);
+        //int score = FoodData.Instance.getScoreForIngredient(recipe);
+        player.sendScoreToServer(recipe);
         player.clearIngredientsInStation("3");
         recipe = null;
         displayFood();
@@ -86,7 +84,6 @@ public class PlateBehaviour : MonoBehaviour {
     }
 
     public void goBack() {
-          Player.currentStation = "1";
-          SceneManager.LoadScene("PlayerMainScreen");
+      SceneManager.LoadScene("PlayerMainScreen");
     }
 }
