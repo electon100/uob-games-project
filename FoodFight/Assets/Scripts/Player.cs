@@ -68,10 +68,6 @@ public class Player : MonoBehaviour {
             Debug.Log(Player.currentIngred.Name);
         }
 
-        if (currentIngred != null)
-        {
-            mainText.text = currentIngred.numberOfChops.ToString();
-        }
         /////////////////////////////////////
 
         if (currentItem != null)
