@@ -65,7 +65,7 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("Player says: " + currentIngred.Name + " " + currentIngred.Model);
+            Debug.Log(Player.currentIngred.Name);
         }
 
         if (currentIngred != null)
@@ -137,11 +137,17 @@ public class Player : MonoBehaviour {
         return message;
     }
 
-    public void notifyServerAboutIngredientPlaced()
+    public void notifyServerAboutIngredientPlaced(Ingredient ingredient)
     {
         string message;
-        message = currentStation + sendCurrentIngredient(currentIngred);
+        message = currentStation + sendCurrentIngredient(ingredient);
         network.SendMyMessage("station", message);
+    }
+
+    public void clearIngredientsInStation(string stationID) {
+        ingredientsFromStation.Clear();
+        network.myKitchen[stationID].Clear();
+        network.SendMyMessage("clear", stationID);
     }
 
     public void removeCurrentIngredient()
@@ -149,8 +155,8 @@ public class Player : MonoBehaviour {
         currentIngred = null;
     }
 
-    public void sendRecipeToScore(Ingredient recipe) {
-        network.SendMyMessage("score", network.serialiseIngredient(recipe));
+    public void sendScoreToServer(float score) {
+        network.SendMyMessage("score", score.ToString());
     }
 
     private void checkStation(string text)
@@ -187,6 +193,20 @@ public class Player : MonoBehaviour {
                     text += sendCurrentIngredient(null);
                     network.SendMyMessage("station", text);
                     platingStation();
+                    break;
+                case "8":
+                    // Join red team
+                    if (!network.isConnected) {
+                      network.Connect();
+                    }
+                    network.onClickRed();
+                    break;
+                case "9":
+                    // Join blue team
+                    if (!network.isConnected) {
+                      network.Connect();
+                    }
+                    network.onClickBlue();
                     break;
                 default:
                     currentStation = "-1";

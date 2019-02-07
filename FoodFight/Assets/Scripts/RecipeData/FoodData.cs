@@ -28,14 +28,18 @@ public sealed class FoodData {
 	}
 
 	public bool isChopped(Ingredient ingredient) {
+		if (ingredient == null) return false;
 		IngredientDescription desc = GetIngredientDescription(ingredient);
-		return desc.choppable && (ingredient.numberOfChops >= desc.correctChops);
+		return desc == null ? false : desc.choppable && (ingredient.numberOfChops >= desc.correctChops);
 	}
 
 	public bool isCooked(Ingredient ingredient) {
+		if (ingredient == null) return false;
 		IngredientDescription desc = GetIngredientDescription(ingredient);
-		return desc.cookable && (ingredient.numberOfPanFlips >= desc.correctFlips);
+		return desc == null ? false : desc.cookable && (ingredient.numberOfPanFlips >= desc.correctFlips);
 	}
+
+	/* TODO: Add (back) choppable and cookable checks */
 
 	public int getScoreForIngredient(Ingredient ingredient) {
 		IngredientDescription desc = GetIngredientDescription(ingredient);
@@ -62,14 +66,14 @@ public sealed class FoodData {
 
 	/* Returns the description corresponding to an ingredient, if possible */
 	public IngredientDescription GetIngredientDescription(Ingredient ingredient) {
-
-		/* Iterate through all ingredient descriptions, finding and returning one with a matchign name */
-		for (int i = 0; i < allIngredients.ingredients.Length; i++) {
-			IngredientDescription testIngredient = allIngredients.ingredients[i];
-			if (string.Equals(ingredient.Name, testIngredient.name)) return testIngredient;
+		if (ingredient != null) {
+			/* Iterate through all ingredient descriptions, finding and returning one with a matchign name */
+			for (int i = 0; i < allIngredients.ingredients.Length; i++) {
+				IngredientDescription testIngredient = allIngredients.ingredients[i];
+				if (string.Equals(ingredient.Name, testIngredient.name)) return testIngredient;
+			}
 		}
-
-		return null;
+			return null;
 	}
 
 	public Ingredient TryCombineIngredients(List<Ingredient> ingredients) {

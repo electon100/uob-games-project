@@ -26,6 +26,7 @@ public class Server : MonoBehaviour {
 
     private byte error;
 
+    // Spawning and movement
     public GameObject redPlayer;
     public GameObject bluePlayer;
 
@@ -70,7 +71,7 @@ public class Server : MonoBehaviour {
         connectConfig.MaxSentMessageQueueSize = 2048;
         connectConfig.MinUpdateTimeout = 20;
         connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
-        connectConfig.OverflowDropThreshold = 40; // 
+        connectConfig.OverflowDropThreshold = 40; //
         connectConfig.PacketSize = 1500;
         connectConfig.PingTimeout = 500;
         connectConfig.ReducedPingTimeout = 100;
@@ -175,6 +176,9 @@ public class Server : MonoBehaviour {
                 OnStation(messageContent, connectionId);
                 break;
             // Player sends NFC data
+            case "clear":
+                OnClearStation(messageContent, connectionId);
+                break;
             case "NFC":
                 //Do NFC stuff
                 Debug.Log("Player " + connectionId + " has sent: " + messageContent);
@@ -220,9 +224,14 @@ public class Server : MonoBehaviour {
     }
 
     private int scoreRecipe(Ingredient recipe) {
-      int score = 100;
+      int score = FoodData.Instance.getScoreForIngredient(recipe);
 
       return score;
+    }
+
+    private void OnClearStation(string stationId, int connectionId) {
+        clearStationInKitchen(connectionId, stationId);
+        sendIngredientsToPlayer(stationId, connectionId);
     }
 
     private void OnStation(string messageContent, int connectionId)
@@ -232,19 +241,21 @@ public class Server : MonoBehaviour {
         string stationId = words[0];
 
         moveServerPlayer(connectionId, stationId);
-
+      
         string ingredientWithFlags = words[1];
 
         // Be aware of null value here. Shouldn't cause issues, but might
         Ingredient ingredientToAdd = new Ingredient();
         string ingredient = "";
+
+        /* If a player sends back a list of ingredients, or another message, deal with that */
         if (!ingredientWithFlags.Equals(""))
         {
             ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(ingredientWithFlags, ingredientToAdd.GetType());
             ingredient = ingredientToAdd.Name;
             Debug.Log("Ingredient to add: " + ingredient);
         }
-      
+
         // Case where we add a station to a kitchen if it has not been seen before
         addStationToKitchen(stationId, connectionId);
 
@@ -254,7 +265,7 @@ public class Server : MonoBehaviour {
         {
             // Case where we want to send back ingredients stored at the station to player
             if (ingredient.Equals(""))
-                sendIngredientsToPlayer(ingredient, stationId, connectionId);
+                sendIngredientsToPlayer(stationId, connectionId);
 
             //If the player wants to add an ingredient, add it
             else
@@ -287,7 +298,7 @@ public class Server : MonoBehaviour {
         }
     }
 
-    private void sendIngredientsToPlayer(string ingredient, string stationId, int connectionId)
+    private void sendIngredientsToPlayer(string stationId, int connectionId)
     {
         if (redKitchen.ContainsKey(stationId))
             checkCurrentIngredient("station", "red", stationId, connectionId);
@@ -416,6 +427,15 @@ public class Server : MonoBehaviour {
             blueKitchen[stationId].Add(newIngredient);
     }
 
+    private void clearStationInKitchen(int connectionID, string stationID) {
+        if (redTeam.ContainsKey(connectionID)) {
+            redKitchen[stationID].Clear();
+        }
+        else if (blueTeam.ContainsKey(connectionID)) {
+            blueKitchen[stationID].Clear();
+        }
+    }
+
     private void GameOver(string winningTeam)
     {
         // Should call the game over screen, showing the final scores on the main screen
@@ -446,6 +466,8 @@ public class Server : MonoBehaviour {
         TimeSpan t = TimeSpan.FromSeconds(timer);
         string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
         timerText.text = "Time left " + timerFormatted;
+        // Debug.Log(timerText.text);
+
     }
 
     private void moveServerPlayer(int connectionId, string stationId)
@@ -458,8 +480,6 @@ public class Server : MonoBehaviour {
             Vector3 newPosition = redStation.transform.position;
             newPosition.x -= 10.0f;
             PlayerMovement.movePlayer(newPosition, redTeam[connectionId]);
-            //redTeam[connectionId].transform.position = newPosition;
-
         }
         else if (blueTeam.ContainsKey(connectionId))
         {
@@ -468,7 +488,6 @@ public class Server : MonoBehaviour {
             Vector3 newPosition = blueStation.transform.position;
             newPosition.x += 10.0f;
             PlayerMovement.movePlayer(newPosition, blueTeam[connectionId]);
-            //blueTeam[connectionId].transform.position = newPosition;
         }
     }
 }

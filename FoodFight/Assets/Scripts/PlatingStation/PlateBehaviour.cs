@@ -64,11 +64,12 @@ public class PlateBehaviour : MonoBehaviour {
     }
 
     public void serveFood() {
-      //TODO serve food
       if (!string.Equals(recipe.Name, "mush")) {
         ingredientList.Clear();
         Destroy(model, 0.0f);
-        player.sendRecipeToScore(recipe);
+        int score = FoodData.Instance.getScoreForIngredient(recipe);
+        player.sendScoreToServer(score);
+        player.clearIngredientsInStation("3");
         recipe = null;
         displayFood();
       }
@@ -78,7 +79,7 @@ public class PlateBehaviour : MonoBehaviour {
       if (Player.currentIngred != null) {
         ingredientList.Add(Player.currentIngred);
         player.removeCurrentIngredient();
-        player.notifyServerAboutIngredientPlaced();
+        player.notifyServerAboutIngredientPlaced(Player.currentIngred);
         ingredientList = Player.ingredientsFromStation;
         displayFood();
       }
