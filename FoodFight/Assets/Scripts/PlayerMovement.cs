@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour{
 
         while (player.transform.position != stationPosition)
         {
-            float step = 0.1f; // calculate distance to move
+            float step = 0.01f; // calculate distance to move
             player.transform.position = Vector3.MoveTowards(player.transform.position, stationPosition, step);
 
             if (Vector3.Distance(player.transform.position, stationPosition) < 0.001f)
