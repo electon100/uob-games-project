@@ -5,7 +5,7 @@ using WiimoteApi;
 
 public class WiimoteBehaviour : MonoBehaviour {
 
-    public WiimoteModel model;
+    private Wiimote wiimote1, wiimote2;
 
 	// Use this for initialization
 	void Start () {
@@ -14,6 +14,9 @@ public class WiimoteBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        if (!WiimoteManager.HasWiimote()) return;
+
+        wiimote1 = WiimoteManager.Wiimotes[0];
+        if (WiimoteManager.Wiimotes.Count > 1) wiimote2 = WiimoteManager.Wiimotes[1];
 	}
 }
