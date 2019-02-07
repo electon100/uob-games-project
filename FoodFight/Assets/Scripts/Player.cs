@@ -55,30 +55,38 @@ public class Player : MonoBehaviour {
         {
             checkStation("0");
         }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            checkStation("2");
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            checkStation("3");
+        }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            foreach (Ingredient ingredient in ingredientsFromStation)
-            {
-                Debug.Log(ingredient.Name);
-            }
+            Debug.Log(Player.currentIngred.Name);
         }
+
         /////////////////////////////////////
-        
+
         if (currentItem != null)
         {
             currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
         }
-
-        currentIngred = ARCupboard.ingredient;
 
         checkNFC();
     }
 
     public void viewItems()
     {
+        mainText.text = currentIngred.numberOfChops.ToString();
+
+        /* If the current item is null, instantiate it when viewing */
         if (currentItem == null)
         {
-            currentItem = (GameObject)Instantiate(currentIngred.Model, new Vector3(0, 0, 80), Quaternion.identity);
+            GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
+            currentItem = (GameObject)Instantiate(model, new Vector3(0, 0, 80), Quaternion.identity);
         }
         else
         {
@@ -100,11 +108,13 @@ public class Player : MonoBehaviour {
 
     private void choppingStation()
     {
+        ingredientsFromStation = network.getIngredientsFromStation("2");
         SceneManager.LoadScene("ChoppingStation");
     }
 
     private void platingStation()
     {
+        ingredientsFromStation = network.getIngredientsFromStation("3");
         SceneManager.LoadScene("PlatingStation");
     }
 
@@ -113,7 +123,7 @@ public class Player : MonoBehaviour {
         string message;
         if (addedIngredient != null)
         {
-            message = "$" + addedIngredient.translateToString();
+            message = "$" + Ingredient.SerializeObject(addedIngredient);
         }
         else
         {
@@ -123,16 +133,31 @@ public class Player : MonoBehaviour {
         return message;
     }
 
-    public void notifyServerAboutIngredientPlaced()
+    public void notifyServerAboutIngredientPlaced(Ingredient ingredient)
     {
         string message;
-        message = currentStation + sendCurrentIngredient(currentIngred);
+        message = currentStation + sendCurrentIngredient(ingredient);
         network.SendMyMessage("station", message);
+    }
+
+    public void clearIngredientsInStation(string stationID) {
+        ingredientsFromStation.Clear();
+        network.myKitchen[stationID].Clear();
+        network.SendMyMessage("clear", stationID);
+    }
+
+    public void removeCurrentIngredient()
+    {
+        currentIngred = null;
+    }
+
+    public void sendScoreToServer(float score) {
+        network.SendMyMessage("score", score.ToString());
     }
 
     private void checkStation(string text)
     {
-        
+
         if (currentStation != text)
         {
             switch (text)
@@ -165,6 +190,20 @@ public class Player : MonoBehaviour {
                     network.SendMyMessage("station", text);
                     platingStation();
                     break;
+                case "8":
+                    // Join red team
+                    if (!network.isConnected) {
+                      network.Connect();
+                    }
+                    network.onClickRed();
+                    break;
+                case "9":
+                    // Join blue team
+                    if (!network.isConnected) {
+                      network.Connect();
+                    }
+                    network.onClickBlue();
+                    break;
                 default:
                     currentStation = "-1";
                     break;
@@ -196,6 +235,7 @@ public class Player : MonoBehaviour {
                         if (j != lastTag)
                         {
                             checkStation(text);
+                            mainText.text = text;
                             lastTag = j;
                         }
                     }

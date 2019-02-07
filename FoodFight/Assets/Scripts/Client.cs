@@ -9,11 +9,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System;
 using System.Reflection;
+using System.IO.Compression;
 
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.101";
+    private const string serverIP = "192.168.0.62";
 
     private int port = 8000;
 
@@ -26,7 +27,7 @@ public class Client : MonoBehaviour {
 
     private int connectionId;
 
-    private bool isConnected = false;
+    public bool isConnected = false;
     private bool areButtonsHere = false;
 
     private byte error;
@@ -78,15 +79,15 @@ public class Client : MonoBehaviour {
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
         int channelID; // ID of channel connected to recHostId.
-        byte[] recBuffer = new byte[1024];
-        int bufferSize = 1024;
+        byte[] recBuffer = new byte[4096];
+        int bufferSize = 4096;
         int dataSize;
         byte error;
 
         NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
                                                             recBuffer, bufferSize, out dataSize, out error);
 
-        if (!areButtonsHere)
+        if (!areButtonsHere && isConnected)
         {
             initialiseStartButtons();
             areButtonsHere = true;
@@ -110,13 +111,31 @@ public class Client : MonoBehaviour {
                 Debug.Log("Broadcast event.");
                 break;
         }
-        
+
     }
 
     public void Connect ()
     {
         NetworkTransport.Init();
         connectConfig = new ConnectionConfig();
+
+        /* Network configuration */
+        connectConfig.AckDelay = 33;
+        connectConfig.AllCostTimeout = 20;
+        connectConfig.ConnectTimeout = 1000;
+        connectConfig.DisconnectTimeout = 2000;
+        connectConfig.FragmentSize = 500;
+        connectConfig.MaxCombinedReliableMessageCount = 10;
+        connectConfig.MaxCombinedReliableMessageSize = 100;
+        connectConfig.MaxConnectionAttempt = 32;
+        connectConfig.MaxSentMessageQueueSize = 2048;
+        connectConfig.MinUpdateTimeout = 20;
+        connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
+        connectConfig.OverflowDropThreshold = 40; //
+        connectConfig.PacketSize = 1500;
+        connectConfig.PingTimeout = 500;
+        connectConfig.ReducedPingTimeout = 100;
+        connectConfig.ResendTimeout = 500;
 
         reliableChannel = connectConfig.AddChannel(QosType.ReliableSequenced);
         HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
@@ -152,17 +171,30 @@ public class Client : MonoBehaviour {
         Destroy(GameObject.Find("ConnectButton"));
     }
 
+    public string serialiseIngredient(Ingredient ingredient)
+    {
+        byte[] buffer = new byte[4096];
+        int bufferSize = 4096;
+        Stream message = new MemoryStream(buffer);
+        BinaryFormatter formatter = new BinaryFormatter();
+        //Serialize the message
+        Ingredient ingredientString = ingredient;
+        formatter.Serialize(message, ingredientString);
+
+        return ingredientString.ToString();
+    }
+
     public void SendMyMessage(string messageType, string textInput)
     {
         byte error;
-        byte[] buffer = new byte[1024];
-        int bufferSize = 1024;
+        byte[] buffer = new byte[4096];
+        int bufferSize = 4096;
         Stream message = new MemoryStream(buffer);
         BinaryFormatter formatter = new BinaryFormatter();
         //Serialize the message
         string messageToSend = messageType + "&" + textInput;
         formatter.Serialize(message, messageToSend);
-        
+
         //Send the message from the "client" with the serialized message and the connection information
         NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
 
@@ -179,7 +211,6 @@ public class Client : MonoBehaviour {
         string[] splitted = message.Split(character);
         return splitted;
     }
-
 
     //This function is called when data is sent
     private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error)
@@ -212,13 +243,10 @@ public class Client : MonoBehaviour {
                     //receives whole string with flags, e.g. Eggs^0^2
                     if (data[i] != "")
                     {
-                        string ingredientString = FirstLetterToUpper(data[i]);
-                        string[] ingredientStringList = decodeMessage(ingredientString, '^');
-                        string ingredientName = ingredientStringList[0];
-                        string prefab = ingredientName + "Prefab";
-                        Ingredient ingredientToAdd = new Ingredient(ingredientName, (GameObject)Resources.Load(prefab, typeof(GameObject)));
-                        ingredientToAdd.translateToIngredient(ingredientString);
-                        ingredientsInStation.Add(ingredientToAdd);
+                        string receivedIngredient = data[i];
+                        Ingredient received = new Ingredient();
+                        received = Ingredient.XmlDeserializeFromString<Ingredient>(receivedIngredient, received.GetType());
+                        ingredientsInStation.Add(received);
                     }
                 }
 
@@ -231,7 +259,7 @@ public class Client : MonoBehaviour {
     }
 
     public List<Ingredient> getIngredientsFromStation(string stationID)
-    {        
+    {
         return myKitchen[stationID];
     }
 

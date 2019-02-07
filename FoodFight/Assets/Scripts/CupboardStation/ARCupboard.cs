@@ -13,6 +13,7 @@ public class ARCupboard : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        Screen.orientation = ScreenOrientation.Portrait;
         DontDestroyOnLoad(GameObject.Find("Player"));
     }
 
@@ -24,42 +25,50 @@ public class ARCupboard : MonoBehaviour
 
     public void onPotato()
     {
-        ingredient = new Ingredient("Potato", (GameObject) Resources.Load("PotatoesPrefab", typeof(GameObject)));
+        ingredient = new Ingredient("potato", "potatoPrefab");
         foodName.text = "You picked a potato!";
     }
 
     public void onVegetables()
     {
-        ingredient = new Ingredient("Vegetables", (GameObject) Resources.Load("VegetablesPrefab", typeof(GameObject)));
+        ingredient = new Ingredient("mixed_vegetables", "vegetablesPrefab");
         foodName.text = "You picked some vegetables!";
     }
 
     public void onMilk()
     {
-        ingredient = new Ingredient("Milk", (GameObject) Resources.Load("MilkPrefab", typeof(GameObject)));
+        ingredient = new Ingredient("milk", "milkPrefab");
         foodName.text = "You picked a bottle of milk!";
     }
 
     public void onEggs()
     {
-        ingredient = new Ingredient("Eggs", (GameObject) Resources.Load("EggsPrefab", typeof(GameObject)));
+        ingredient = new Ingredient("eggs", "eggsPrefab");
         foodName.text = "You picked some eggs!";
     }
 
     public void onNoodles()
     {
-        ingredient = new Ingredient("Noodles", (GameObject) Resources.Load("NoodlesPrefab", typeof(GameObject)));
+        ingredient = new Ingredient("noodles", "noodlesPrefab");
         foodName.text = "You picked a bowl of noodles!";
     }
 
     public void onFlour()
     {
-        ingredient = new Ingredient("Flour", (GameObject)Resources.Load("FlourPrefab", typeof(GameObject)));
+        ingredient = new Ingredient("flour", "flourPrefab");
         foodName.text = "You picked a bag of flour!";
+    }
+
+    public void onChicken()
+    {
+        ingredient = new Ingredient("chicken", "chickenPrefab");
+        foodName.text = "You picked some chicken!";
     }
 
     public void goBack()
     {
+        Player.currentIngred = ingredient;
+        Debug.Log("AR says: " + ingredient.Name + " " + ingredient.Model);
         Player.currentStation = "0";
         SceneManager.LoadScene("PlayerMainScreen");
     }
