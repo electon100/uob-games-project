@@ -6,9 +6,6 @@ using UnityEngine;
 
 public sealed class FoodData {
 
-	// private readonly string relativeRecipePath = "/Data/recipe.json";
-	// private readonly string relativeIngredientsPath = "/Data/ingredients.json";
-
 	private static FoodData instance = null;
 	private static readonly object padlock = new object();
 
@@ -27,20 +24,35 @@ public sealed class FoodData {
 		}
 	}
 
+	/* Determines whether the given ingredient is chopped */
 	public bool isChopped(Ingredient ingredient) {
 		if (ingredient == null) return false;
 		IngredientDescription desc = GetIngredientDescription(ingredient);
 		return desc == null ? false : desc.choppable && (ingredient.numberOfChops >= desc.correctChops);
 	}
 
+	/* Determines whether the given ingredient is cooked */
 	public bool isCooked(Ingredient ingredient) {
 		if (ingredient == null) return false;
 		IngredientDescription desc = GetIngredientDescription(ingredient);
 		return desc == null ? false : desc.cookable && (ingredient.numberOfPanFlips >= desc.correctFlips);
 	}
 
-	/* TODO: Add (back) choppable and cookable checks */
+	/* Determines whether the given ingredient is choppable */
+	public bool isChoppable(Ingredient ingredient) {
+		if (ingredient == null) return false;
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		return desc != null && desc.choppable;
+	}
 
+	/* Determines whether the given ingredient is cookable */
+	public bool isCookable(Ingredient ingredient) {
+		if (ingredient == null) return false;
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		return desc != null && desc.cookable;
+	}
+
+	/* Gets the score corresponding to an ingredient */
 	public int getScoreForIngredient(Ingredient ingredient) {
 		IngredientDescription desc = GetIngredientDescription(ingredient);
 		return desc != null ? desc.score : 0;
@@ -57,8 +69,10 @@ public sealed class FoodData {
 			chopped = desc.choppable && (ingredient.numberOfChops >= desc.correctChops);
 			cooked = desc.cookable && (ingredient.numberOfPanFlips >= desc.correctFlips);
 
+			bool nameMatches = string.Equals(desc.name, criteria.name);
+
 			/* Check ingredient status against criteria */
-			if (criteria.cooked == cooked && criteria.chopped == chopped) return true;
+			if (nameMatches && criteria.cooked == cooked && criteria.chopped == chopped) return true;
 		}
 
 		return false;
@@ -112,19 +126,13 @@ public sealed class FoodData {
 	}
 
 	FoodData() {
-		// /* Read recipe data from JSON file */
-		// string recipeFilePath = Application.dataPath + relativeRecipePath;
-		// string recipeJSON = File.ReadAllText(recipeFilePath);
-
-		// /* Read ingredient data from JSON file */
-		// string ingredientFilePath = Application.dataPath + relativeIngredientsPath;
-		// string ingredientJSON = File.ReadAllText(ingredientFilePath);
-
+		/* Read recipe data from JSON file */
 		TextAsset recipeFile = (TextAsset) Resources.Load("recipe", typeof(TextAsset));
 		string recipeJSON = recipeFile.ToString();
 
+		/* Read ingredient data from JSON file */
 		TextAsset ingredientFile = (TextAsset)Resources.Load("ingredients", typeof(TextAsset));
-        string ingredientJSON = ingredientFile.ToString();
+		string ingredientJSON = ingredientFile.ToString();
 
 		/* Parse recipe JSON data */
 		allRecipes = JsonUtility.FromJson<RecipeDefinitions>(recipeJSON);
