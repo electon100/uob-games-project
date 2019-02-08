@@ -65,13 +65,9 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log(Player.currentIngred.Name);
+            Debug.Log(Player.currentIngred.Model);
         }
 
-        if (currentIngred != null)
-        {
-            mainText.text = currentIngred.numberOfChops.ToString();
-        }
         /////////////////////////////////////
 
         if (currentItem != null)
@@ -84,7 +80,6 @@ public class Player : MonoBehaviour {
 
     public void viewItems()
     {
-        mainText.text = currentIngred.numberOfChops.ToString();
 
         /* If the current item is null, instantiate it when viewing */
         if (currentItem == null)
@@ -155,8 +150,9 @@ public class Player : MonoBehaviour {
         currentIngred = null;
     }
 
-    public void sendScoreToServer(float score) {
-        network.SendMyMessage("score", score.ToString());
+    public void sendScoreToServer(Ingredient recipe) {
+        string message = Ingredient.SerializeObject(recipe);
+        network.SendMyMessage("score", message);
     }
 
     private void checkStation(string text)
