@@ -15,6 +15,7 @@ public class ARCupboard : MonoBehaviour
     {
         Screen.orientation = ScreenOrientation.Portrait;
         DontDestroyOnLoad(GameObject.Find("Player"));
+        onPotato();
     }
 
     // Update is called once per frame

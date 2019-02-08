@@ -65,7 +65,7 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log(Player.currentIngred.Name);
+            Debug.Log(Player.currentIngred.Model);
         }
 
         /////////////////////////////////////
@@ -80,7 +80,6 @@ public class Player : MonoBehaviour {
 
     public void viewItems()
     {
-        mainText.text = currentIngred.numberOfChops.ToString();
 
         /* If the current item is null, instantiate it when viewing */
         if (currentItem == null)

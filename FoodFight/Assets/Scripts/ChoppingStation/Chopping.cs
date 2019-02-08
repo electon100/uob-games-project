@@ -45,6 +45,8 @@ public class Chopping : MonoBehaviour
         /* Set up scene */
         source = GetComponent<AudioSource>();
         Screen.orientation = ScreenOrientation.LandscapeLeft;
+
+        outCome.text = "START CHOPPING";
     }
 
     void Update()
