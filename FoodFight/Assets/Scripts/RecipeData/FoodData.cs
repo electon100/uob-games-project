@@ -57,8 +57,10 @@ public sealed class FoodData {
 			chopped = desc.choppable && (ingredient.numberOfChops >= desc.correctChops);
 			cooked = desc.cookable && (ingredient.numberOfPanFlips >= desc.correctFlips);
 
+			bool nameMatches = string.Equals(desc.name, criteria.name);
+
 			/* Check ingredient status against criteria */
-			if (criteria.cooked == cooked && criteria.chopped == chopped) return true;
+			if (nameMatches && criteria.cooked == cooked && criteria.chopped == chopped) return true;
 		}
 
 		return false;
