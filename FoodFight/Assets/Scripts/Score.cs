@@ -24,7 +24,6 @@ public class Score : MonoBehaviour {
 	public void increaseScore(float scoreChange)
     {
         score += scoreChange;
-        if (score > 100) score = 100;
     }
 
     public void decreaseScore(float scoreChange)
