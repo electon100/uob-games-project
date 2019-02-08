@@ -653,8 +653,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4301ffd2055c6045bc253dde74c901d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crosshairRed: {fileID: 1629164286}
-  crosshairBlue: {fileID: 1342026372}
   ir_pointerRed: {fileID: 1629164286}
   ir_pointerBlue: {fileID: 1342026372}
 --- !u!4 &443328157
@@ -1394,7 +1392,7 @@ GameObject:
   - component: {fileID: 1342026374}
   - component: {fileID: 1342026373}
   m_Layer: 5
-  m_Name: Image
+  m_Name: BlueCrosshair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1827,7 +1825,7 @@ GameObject:
   - component: {fileID: 1629164288}
   - component: {fileID: 1629164287}
   m_Layer: 5
-  m_Name: Image
+  m_Name: RedCrosshair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
