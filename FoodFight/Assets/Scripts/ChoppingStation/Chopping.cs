@@ -44,9 +44,9 @@ public class Chopping : MonoBehaviour
 
         /* Set up scene */
         source = GetComponent<AudioSource>();
-        Screen.orientation = ScreenOrientation.LandscapeRight;
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
 
-        Time.timeScale = 0;
+        outCome.text = "START CHOPPING";
     }
 
     void Update()
@@ -86,7 +86,6 @@ public class Chopping : MonoBehaviour
         {
             startCanvas.gameObject.SetActive(false);
             defaultCanvas.gameObject.SetActive(true);
-            Time.timeScale = 1;
         }
         else {
             /* Generate a warning canvas for an unchoppable ingredient. */
@@ -119,7 +118,6 @@ public class Chopping : MonoBehaviour
         {
             defaultCanvas.gameObject.SetActive(false);
             warningCanvas.gameObject.SetActive(true);
-            Time.timeScale = 0;
         }
         else if (maxAcc < 3.5f && maxAcc > -3.5f)
         {
@@ -138,7 +136,6 @@ public class Chopping : MonoBehaviour
         {
             defaultCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(true);
-            Time.timeScale = 0;
             /* Create a new list containing only this ingredient, so that we get the chopped version. */
             List<Ingredient> choppedIngredients = new List<Ingredient>();
             choppedIngredients.Add(Player.currentIngred);
@@ -167,7 +164,7 @@ public class Chopping : MonoBehaviour
     /* Sends the chopped ingredient to server and returns to the main screen */
     public void goBack()
     {
-        player.notifyServerAboutIngredientPlaced(currentChoppingIngred);
+        // player.notifyServerAboutIngredientPlaced(currentChoppingIngred);
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
