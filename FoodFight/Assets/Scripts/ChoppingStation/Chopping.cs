@@ -18,7 +18,7 @@ public class Chopping : MonoBehaviour
     public Text chops;
     public Text outCome;
     public Text status;
-    public Image shakeImage;
+    public Text notChoppable;
 
     /* Sounds for up and down acceleration */
     public AudioClip downSound;
@@ -46,7 +46,16 @@ public class Chopping : MonoBehaviour
         source = GetComponent<AudioSource>();
         Screen.orientation = ScreenOrientation.LandscapeLeft;
 
-        outCome.text = "START CHOPPING";
+        /* Displays "INGREDIENT CANNOT BE CHOPPED" if appropriate */
+        notChoppable = GameObject.Find("NotChoppableText").GetComponent<Text>();
+        StartGame();
+
+        /* Instantiate all text info */
+        outCome = GameObject.Find("OutcomeText").GetComponent<Text>();
+        chops = GameObject.Find("ChopsText").GetComponent<Text>();
+        yAcc = GameObject.Find("AccValText").GetComponent<Text>();
+        status = GameObject.Find("StatusText").GetComponent<Text>();
+        
     }
 
     void Update()
@@ -60,7 +69,6 @@ public class Chopping : MonoBehaviour
         {
             maxAcc = Input.acceleration.y;
             yAcc.text = maxAcc.ToString();
-            Destroy(shakeImage);
         }
 
         /* For desktop tests. */
@@ -88,6 +96,7 @@ public class Chopping : MonoBehaviour
             defaultCanvas.gameObject.SetActive(true);
         }
         else {
+            notChoppable.text = "Ingredient cannot be chopped";
             /* Generate a warning canvas for an unchoppable ingredient. */
         }
     }
@@ -149,7 +158,7 @@ public class Chopping : MonoBehaviour
         if (Player.currentIngred != null)
         {
             /* Stops the minigame if ingredient cannot be chopped */
-            if (FoodData.Instance.GetIngredientDescription(Player.currentIngred).choppable)
+            if (1 > 0)
             {
                 return true;
             }

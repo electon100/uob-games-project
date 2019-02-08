@@ -182,7 +182,7 @@ public class Frying : MonoBehaviour {
 	private void addIngredientToPan(Ingredient ingredient)
 	{
 		GameObject model = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
-		GameObject inst = Instantiate(model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(0, 0, 0));
+		GameObject inst = Instantiate(model, new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), 85), Quaternion.Euler(0, 0, 0));
 		panContents.Add(ingredient);
 		panContentsObjects.Add(inst);
 	}
