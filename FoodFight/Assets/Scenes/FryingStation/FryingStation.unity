@@ -411,7 +411,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Turn on hob
+  m_Text: Combine ingredients
 --- !u!222 &858828494
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -565,8 +565,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 617436402}
-        m_MethodName: turnOnHob
+      - m_Target: {fileID: 1173477902}
+        m_MethodName: combineIngredientsInPan
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

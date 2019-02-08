@@ -94,7 +94,7 @@
       "name" : "diced_potato",
       "choppable" : false,
       "cookable" : true,
-      "correctFlips" : 30,
+      "correctFlips" : 5,
       "maxFlips" : 40,
       "correctChops" : 0,
       "score" : 50

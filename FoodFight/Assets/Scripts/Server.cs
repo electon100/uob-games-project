@@ -207,8 +207,7 @@ public class Server : MonoBehaviour {
     }
 
     private void OnScore(string messageContent, int connectionId) {
-        Ingredient recipe = new Ingredient();
-        recipe = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, recipe.GetType());
+        Ingredient recipe = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, (new Ingredient()).GetType());
 
         int recipeScore = scoreRecipe(recipe);
 
@@ -219,6 +218,8 @@ public class Server : MonoBehaviour {
           // Add score to blue team
           blueScore.increaseScore(recipeScore);
         }
+
+        updateScores();
 
         Debug.Log(messageContent);
     }
