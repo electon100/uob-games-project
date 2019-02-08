@@ -54,7 +54,7 @@ public class PlateBehaviour : MonoBehaviour {
         if (food == null) {
           food = (GameObject) Resources.Load("mushPlatePrefab", typeof(GameObject));
         }
-        model  = Instantiate(food, new Vector3(0,0,0), Quaternion.identity);
+        model  = Instantiate(food, new Vector3(0,0,0), Quaternion.Euler(90, 0, 10));
       } else {
         model = null;
       }
