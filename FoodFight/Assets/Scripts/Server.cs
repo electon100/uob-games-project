@@ -241,8 +241,8 @@ public class Server : MonoBehaviour {
         string[] words = decodeMessage(messageContent, '$');
         string stationId = words[0];
 
-        movePlayer(connectionId, stationId);
-
+        moveServerPlayer(connectionId, stationId);
+      
         string ingredientWithFlags = words[1];
 
         // Be aware of null value here. Shouldn't cause issues, but might
@@ -471,7 +471,7 @@ public class Server : MonoBehaviour {
 
     }
 
-    private void movePlayer(int connectionId, string stationId)
+    private void moveServerPlayer(int connectionId, string stationId)
     {
         string stationText = "";
         if (redTeam.ContainsKey(connectionId))
@@ -480,8 +480,7 @@ public class Server : MonoBehaviour {
             redStation = GameObject.Find(stationText);
             Vector3 newPosition = redStation.transform.position;
             newPosition.x -= 10.0f;
-            redTeam[connectionId].transform.position = newPosition;
-
+            PlayerMovement.movePlayer(newPosition, redTeam[connectionId]);
         }
         else if (blueTeam.ContainsKey(connectionId))
         {
@@ -489,7 +488,7 @@ public class Server : MonoBehaviour {
             blueStation = GameObject.Find(stationText);
             Vector3 newPosition = blueStation.transform.position;
             newPosition.x += 10.0f;
-            blueTeam[connectionId].transform.position = newPosition;
+            PlayerMovement.movePlayer(newPosition, blueTeam[connectionId]);
         }
     }
 }
