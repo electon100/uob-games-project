@@ -106,6 +106,12 @@ public class Frying : MonoBehaviour {
 		} else {
 			/* TODO: What happens when pan is empty */
 		}
+		if (Input.GetKeyDown(KeyCode.E))
+        {
+            foreach (Ingredient ingredient in panContents) {
+				Debug.Log(ingredient.Name);
+			}
+        }
 	}
 
 	private void tryStartShake() {
@@ -173,6 +179,9 @@ public class Frying : MonoBehaviour {
 
 		/* Set the pan contents to the new combined recipe */
 		clearPan();
+		/* I had to transfer this here because we don't wanna delete the ingredients
+		from the server on Start. */
+		player.clearIngredientsInStation(stationID);
 		addIngredientToPan(combinedFood);
 
 		player = GameObject.Find("Player").GetComponent<Player>();
@@ -195,7 +204,6 @@ public class Frying : MonoBehaviour {
 		panContentsObjects.Clear();
 
 		player = GameObject.Find("Player").GetComponent<Player>();
-		player.clearIngredientsInStation(stationID);
 	}
 
 	public void goBack()
