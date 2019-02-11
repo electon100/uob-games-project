@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23464529822830980}
   - component: {fileID: 135849168495020816}
   m_Layer: 0
-  m_Name: diced_potatoPlatePrefab 1
+  m_Name: diced_chickenPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
