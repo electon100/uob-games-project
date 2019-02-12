@@ -91,8 +91,6 @@ public class ARCupboard : MonoBehaviour
     public void goBack()
     {
         Player.currentIngred = ingredient;
-        Debug.Log("AR says: " + ingredient.Name + " " + ingredient.Model);
-        Player.currentStation = "0";
         SceneManager.LoadScene("PlayerMainScreen");
     }
 

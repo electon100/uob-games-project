@@ -536,7 +536,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2ffe48b4e37b9642a41cd892cd96752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainText: {fileID: 0}
+  mainText: {fileID: 1035238257}
+  mainPanel: {fileID: 1534472249}
   tag_output_text: {fileID: 0}
 --- !u!4 &1039418509
 Transform:

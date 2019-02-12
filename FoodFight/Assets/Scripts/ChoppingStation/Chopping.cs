@@ -92,8 +92,8 @@ public class Chopping : MonoBehaviour
             source.PlayOneShot(chopSound);
             transform.Rotate(0, 5, 0);
         }
-
         
+        transform.position = originalPos;
         /* Check if the player has started the movement and increment the number of chops on the ingredient */
         CheckDownMovement();
         /* For sound effect. */
@@ -122,10 +122,11 @@ public class Chopping : MonoBehaviour
     {
         if (Input.acceleration.y < -3.0f)
         {
-            source.PlayOneShot(chopSound);
+            // source.PlayOneShot(chopSound);
             transform.Rotate(0, 5, 0);
         }
     }
+
 
     void CheckDownMovement()
     {
@@ -133,7 +134,6 @@ public class Chopping : MonoBehaviour
         {
             source.PlayOneShot(chopSound);
             Player.currentIngred.numberOfChops++;
-            chops.text = Player.currentIngred.numberOfChops.ToString();
             transform.Rotate(0, -5, 0);
         }
         
@@ -150,6 +150,7 @@ public class Chopping : MonoBehaviour
         else if (maxAcc < 3.5f && maxAcc > -3.5f)
         {
             outCome.text = "CHOP HARDER!";
+
         }
         else
         {

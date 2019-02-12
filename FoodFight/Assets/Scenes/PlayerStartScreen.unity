@@ -520,6 +520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainText: {fileID: 0}
+  mainPanel: {fileID: 0}
   tag_output_text: {fileID: 0}
 --- !u!1 &1141996558
 GameObject:

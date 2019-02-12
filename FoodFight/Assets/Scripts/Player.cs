@@ -30,6 +30,7 @@ public class Player : MonoBehaviour {
     public static Ingredient currentIngred;
     public static List<Ingredient> ingredientsFromStation;
     public Text mainText;
+    public GameObject mainPanel;
 
     //NFC Stuff:
     public Text tag_output_text;
@@ -42,6 +43,7 @@ public class Player : MonoBehaviour {
         networkClient = GameObject.Find("Client");
         network = networkClient.GetComponent<Client>();
         DontDestroyOnLoad(GameObject.Find("Player"));
+        //currentIngred = new Ingredient("mixed_vegetables", "vegetablePrefab");
     }
 
 	void Update () {
@@ -86,6 +88,8 @@ public class Player : MonoBehaviour {
         {
             GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
             currentItem = (GameObject)Instantiate(model, new Vector3(0, 0, 80), Quaternion.identity);
+            currentItem.transform.SetParent(mainPanel.transform);
+            mainText.text = currentIngred.Name; 
         }
         else
         {
@@ -160,6 +164,7 @@ public class Player : MonoBehaviour {
 
         if (currentStation != text)
         {
+            mainText.text = text;
             switch (text)
             {
                 case "0":
@@ -235,7 +240,6 @@ public class Player : MonoBehaviour {
                         if (j != lastTag)
                         {
                             checkStation(text);
-                            mainText.text = text;
                             lastTag = j;
                         }
                     }
