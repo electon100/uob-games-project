@@ -74,6 +74,336 @@
           "chopped": true
         }
       ]
+    },
+    {
+      "name": "raw_duck_confit",
+      "ingredients": [
+        {
+          "name": "duck",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "mixed_vegetables",
+          "cooked": false,
+          "chopped": true
+        }
+      ]
+    },
+    {
+      "name": "duck_confit",
+      "ingredients": [
+        {
+          "name": "raw_duck_confit",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "steak",
+      "ingredients": [
+        {
+          "name": "raw_steak",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "steak_hache",
+      "ingredients": [
+        {
+          "name": "steak",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "chips",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "raw_omlette",
+      "ingredients": [
+        {
+          "name": "eggs",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "cheese",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "omlette",
+      "ingredients": [
+        {
+          "name": "raw_omlette",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "nicoise_salad",
+      "ingredients": [
+        {
+          "name": "tuna",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "mixed_salad",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "frogs_legs",
+      "ingredients": [
+        {
+          "name": "raw_frogs_legs",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "diced_mushroom",
+      "ingredients": [
+        {
+          "name": "mushroom",
+          "cooked": false,
+          "chopped": true
+        }
+      ]
+    },
+    {
+      "name": "risotto_mix",
+      "ingredients": [
+        {
+          "name": "diced_mushroom",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "veg_stock",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "rice",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "risotto",
+      "ingredients": [
+        {
+          "name": "risotto_mix",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "crepe_mix",
+      "ingredients": [
+        {
+          "name": "flour",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "eggs",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "milk",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "crepe",
+      "ingredients": [
+        {
+          "name": "crepe_mix",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "taco",
+      "ingredients": [
+        {
+          "name": "taco_mix",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "shredded_beef",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "taco_shell",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "hot_dog",
+      "ingredients": [
+        {
+          "name": "raw_hot_dog",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "salchipapas",
+      "ingredients": [
+        {
+          "name": "hot_dog",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "chips",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "avocado_salad",
+      "ingredients": [
+        {
+          "name": "avocado",
+          "cooked": false,
+          "chopped": true
+        },
+        {
+          "name": "tomato",
+          "cooked": false,
+          "chopped": true
+        },
+        {
+          "name": "onion",
+          "cooked": false,
+          "chopped": true
+        }
+      ]
+    },
+    {
+      "name": "nachos",
+      "ingredients": [
+        {
+          "name": "tortilla_chips",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "guacamole",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "cheese",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "quinoa_salad",
+      "ingredients": [
+        {
+          "name": "quinoa",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "onion",
+          "cooked": false,
+          "chopped": true
+        }
+      ]
+    },
+    {
+      "name": "paella_mix",
+      "ingredients": [
+        {
+          "name": "rice",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "shrimp",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "peas",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "paella",
+      "ingredients": [
+        {
+          "name": "paella_mix",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "fajita_mix",
+      "ingredients": [
+        {
+          "name": "diced_chicken",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "chopped_mixed_vegetables",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "fajita",
+      "ingredients": [
+        {
+          "name": "fajita_mix",
+          "cooked": true,
+          "chopped": false
+        },
+        {
+          "name": "tortilla",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
     }
   ]
 }
