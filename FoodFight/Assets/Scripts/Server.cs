@@ -365,13 +365,13 @@ public class Server : MonoBehaviour {
 
     private void createRedPlayer(int connectionId)
     {
-        GameObject newRedPlayer = (GameObject) Instantiate(redPlayer, new Vector3(-5*(redTeam.Count + 1), 2, 1 * (redTeam.Count + 1)), Quaternion.identity);
+        GameObject newRedPlayer = (GameObject) Instantiate(redPlayer, new Vector3(-40, 2, 5 * (redTeam.Count + 1)), Quaternion.identity);
         redTeam.Add(connectionId, newRedPlayer);
     }
 
     private void createBluePlayer(int connectiondId)
     {
-        GameObject newBluePlayer = (GameObject) Instantiate(bluePlayer, new Vector3(5 * (redTeam.Count + 1), 2, 1 * (redTeam.Count + 1)), Quaternion.identity);
+        GameObject newBluePlayer = (GameObject) Instantiate(bluePlayer, new Vector3(40, 2, 5 * (blueTeam.Count + 1)), Quaternion.identity);
         blueTeam.Add(connectiondId, newBluePlayer);
     }
 

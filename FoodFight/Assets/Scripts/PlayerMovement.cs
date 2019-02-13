@@ -37,7 +37,8 @@ public class PlayerMovement : MonoBehaviour{
 
     static public void movePlayer(Vector3 stationPosition, GameObject player)
     {
-        if (movingPlayers.ContainsKey(player)) {
+        if (movingPlayers.ContainsKey(player))
+        {
             movingPlayers[player] = stationPosition;
         }
         else movingPlayers.Add(player, stationPosition);
