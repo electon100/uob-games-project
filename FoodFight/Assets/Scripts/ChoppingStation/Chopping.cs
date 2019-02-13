@@ -18,17 +18,25 @@ public class Chopping : MonoBehaviour
     public Text chops;
     public Text outCome;
     public Text status;
-    public Image shakeImage;
+    public Text notChoppable;
 
     /* Sounds for up and down acceleration */
-    public AudioClip downSound;
-    public AudioClip upSound;
+    public AudioClip chopSound;
     private AudioSource source;
 
     /* Highest acceleration recorded so far */
     private float maxAcc = 0.5f; 
 
-    public Player player;
+    /* Movement stuff */
+	private float shakeSpeed = 10.0f; // Speed of pan shake
+	private float shakeAmount = 2f; // Amplitude of pan shake
+	private bool shouldShake = false;
+	private int negSinCount = 0, posSinCount = 0;
+	private Vector3 originalPos;
+	private float lastChop;
+    private float yTransform;
+
+    private Player player;
     private Ingredient currentChoppingIngred;
 
     private List<GameObject> ingredientModels;
@@ -45,8 +53,19 @@ public class Chopping : MonoBehaviour
         /* Set up scene */
         source = GetComponent<AudioSource>();
         Screen.orientation = ScreenOrientation.LandscapeLeft;
+        originalPos = gameObject.transform.position;
+		lastChop = Time.time;
 
-        outCome.text = "START CHOPPING";
+        /* Displays "INGREDIENT CANNOT BE CHOPPED" if appropriate */
+        notChoppable = GameObject.Find("NotChoppableText").GetComponent<Text>();
+        StartGame();
+
+        /* Instantiate all text info */
+        outCome = GameObject.Find("OutcomeText").GetComponent<Text>();
+        chops = GameObject.Find("ChopText").GetComponent<Text>();
+        yAcc = GameObject.Find("AccValText").GetComponent<Text>();
+        status = GameObject.Find("StatusText").GetComponent<Text>();
+        
     }
 
     void Update()
@@ -60,21 +79,35 @@ public class Chopping : MonoBehaviour
         {
             maxAcc = Input.acceleration.y;
             yAcc.text = maxAcc.ToString();
-            Destroy(shakeImage);
         }
 
         /* For desktop tests. */
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
+            transform.Rotate(0, -10, 0);
             Player.currentIngred.numberOfChops++;
+            source.PlayOneShot(chopSound);
+            lastChop = Time.time;
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            transform.Rotate(0, 10, 0);
         }
 
+        /* Updates the chops count on the screen. */
+        chops.text = Player.currentIngred.numberOfChops.ToString();
+        /* Simulates the movement of the knife. */
+        KnifeMovement();
         /* Check if the player has started the movement and increment the number of chops on the ingredient */
         CheckDownMovement();
         /* For sound effect. */
         CheckUpMovement();
         /* Uncomment to make game more interesting and add sliced fingers. */
-        // CheckChopSpeed();
+        CheckChopSpeed();
+
+        if ((Player.currentIngred.numberOfChops % 5) == 0) {
+            transform.position = originalPos;
+        }
         
     }
 
@@ -89,6 +122,7 @@ public class Chopping : MonoBehaviour
         }
         else {
             /* Generate a warning canvas for an unchoppable ingredient. */
+            notChoppable.text = "Ingredient cannot be chopped";
         }
     }
 
@@ -96,17 +130,18 @@ public class Chopping : MonoBehaviour
     {
         if (Input.acceleration.y < -3.0f)
         {
-            source.PlayOneShot(downSound);
+            source.PlayOneShot(chopSound);
         }
     }
+
 
     void CheckDownMovement()
     {
         if (Input.acceleration.y > 3.0f)
         {
-            source.PlayOneShot(downSound);
+            source.PlayOneShot(chopSound);
             Player.currentIngred.numberOfChops++;
-            chops.text = Player.currentIngred.numberOfChops.ToString();
+            lastChop = Time.time;
         }
         
     }
@@ -122,10 +157,30 @@ public class Chopping : MonoBehaviour
         else if (maxAcc < 3.5f && maxAcc > -3.5f)
         {
             outCome.text = "CHOP HARDER!";
+
         }
         else
         {
             outCome.text = " ";
+        }
+    }
+
+    void KnifeMovement() 
+    {
+        if (Input.acceleration.y > 0) {
+            float xTransform = -1 * Mathf.Sin((Time.time - lastChop) * shakeSpeed) * shakeAmount;
+
+			if (negSinCount > 0 && posSinCount > 0 && xTransform < 0) {
+				gameObject.transform.position = originalPos;
+				negSinCount = 0; posSinCount = 0;
+				shouldShake = false;
+			}	else if (xTransform < 0) {
+				transform.Rotate(0, xTransform, 0);
+				negSinCount++;
+			} else if (xTransform > 0) {
+				transform.Rotate(0, xTransform, 0);
+				posSinCount++;
+			}
         }
     }
 
@@ -149,7 +204,7 @@ public class Chopping : MonoBehaviour
         if (Player.currentIngred != null)
         {
             /* Stops the minigame if ingredient cannot be chopped */
-            if (FoodData.Instance.GetIngredientDescription(Player.currentIngred).choppable)
+            if (1 > 0)
             {
                 return true;
             }
@@ -175,35 +230,4 @@ public class Chopping : MonoBehaviour
         defaultCanvas.gameObject.SetActive(true);
     }
     
-    // public void instantiateIngredientsInStation()
-    // {
-    //     /* If available, restore what was previously in that station */
-    //     newBoardContents = Player.ingredientsFromStation;
-
-    //     /* Needed because the list of ingredients in the stations is constatly updated, so constant drawing is avoided */
-    //     foreach (Ingredient ingredient in newBoardContents)
-    //     {
-    //         if (boardContents.IndexOf(ingredient) < 0)
-    //         {
-    //             GameObject model = (GameObject)Resources.Load(ingredient.Model, typeof(GameObject));
-    //             model = Instantiate(model, new Vector3(0, 0, 0), Quaternion.identity);
-    //             model.transform.SetParent(startCanvas);
-    //             boardContents.Add(ingredient);
-    //             ingredientModels.Add(model);
-    //         }
-    //     }
-    // }
-
-    // public void clearChoppingBoard() {
-    //     foreach (GameObject ingredient in ingredientModels) {
-    //         Debug.Log(ingredient);
-    //         /* If the model exists, then destroy it */
-    //         if (ingredient) {
-    //             Destroy (ingredient, 0.0f);
-    //             Debug.Log(ingredient + "has been destroyed.");
-    //         }
-    //     }
-    //     boardContents.Clear();
-    //     player.clearIngredientsInStation("2");
-    // }
 }
