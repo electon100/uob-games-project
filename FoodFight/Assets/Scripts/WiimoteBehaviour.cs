@@ -16,6 +16,8 @@ public class WiimoteBehaviour : MonoBehaviour {
     public Transform blueTimeOverPanel;
     public Transform redTimeOverPanel;
 
+
+
     // Use this for initialization
     void Start () {
         redIsSet = false;
@@ -27,8 +29,6 @@ public class WiimoteBehaviour : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        
-        
         WiimoteManager.FindWiimotes();
         if (!WiimoteManager.HasWiimote()) return;
 
@@ -58,7 +58,15 @@ public class WiimoteBehaviour : MonoBehaviour {
                     redTimeOverPanel.gameObject.SetActive(true);
                     redTime = 0f;
                 }
-            }     
+            }
+
+            /*check if b button pressed and check accel data*/
+            else
+            {
+                Vector3 accelData = GetAccelVector(wiimoteRed);
+                Debug.Log(accelData.ToString());
+                //throw some projectile
+            }
         }
         if (blueIsSet)
         {
@@ -72,7 +80,15 @@ public class WiimoteBehaviour : MonoBehaviour {
                     blueTimeOverPanel.gameObject.SetActive(true);
                     blueTime = 0f;
                 }
-            }       
+            }
+
+            /*check if b button pressed and check accel data*/
+            else
+            {
+                Vector3 accelData = GetAccelVector(wiimoteBlue);
+                Debug.Log(accelData.ToString());
+                //throw some projectile
+            }
         }
         displayTime();
     }
@@ -102,6 +118,20 @@ public class WiimoteBehaviour : MonoBehaviour {
         {
             ret = wiimote.ReadWiimoteData();
         } while (ret > 0);
+    }
+
+    private Vector3 GetAccelVector(Wiimote wiimote)
+    {
+        float accel_x;
+        float accel_y;
+        float accel_z;
+
+        float[] accel = wiimote.Accel.GetCalibratedAccelData();
+        accel_x = accel[0];
+        accel_y = -accel[2];
+        accel_z = -accel[1];
+
+        return new Vector3(accel_x, accel_y, accel_z);
     }
 
     private void OnApplicationQuit()
