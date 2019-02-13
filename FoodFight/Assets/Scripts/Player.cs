@@ -40,10 +40,10 @@ public class Player : MonoBehaviour {
     private int lastTag = -1;
 
     void Start () {
+        Screen.orientation = ScreenOrientation.Portrait;
         networkClient = GameObject.Find("Client");
         network = networkClient.GetComponent<Client>();
         DontDestroyOnLoad(GameObject.Find("Player"));
-        //currentIngred = new Ingredient("mixed_vegetables", "vegetablePrefab");
     }
 
 	void Update () {

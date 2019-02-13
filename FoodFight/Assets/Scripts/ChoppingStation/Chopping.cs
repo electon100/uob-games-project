@@ -29,11 +29,11 @@ public class Chopping : MonoBehaviour
 
     /* Movement stuff */
 	private float shakeSpeed = 10.0f; // Speed of pan shake
-	private float shakeAmount = 1.2f; // Amplitude of pan shake
+	private float shakeAmount = 2f; // Amplitude of pan shake
 	private bool shouldShake = false;
 	private int negSinCount = 0, posSinCount = 0;
 	private Vector3 originalPos;
-	private float lastShake;
+	private float lastChop;
     private float yTransform;
 
     private Player player;
@@ -54,7 +54,7 @@ public class Chopping : MonoBehaviour
         source = GetComponent<AudioSource>();
         Screen.orientation = ScreenOrientation.LandscapeLeft;
         originalPos = gameObject.transform.position;
-		lastShake = Time.time;
+		lastChop = Time.time;
 
         /* Displays "INGREDIENT CANNOT BE CHOPPED" if appropriate */
         notChoppable = GameObject.Find("NotChoppableText").GetComponent<Text>();
@@ -84,22 +84,30 @@ public class Chopping : MonoBehaviour
         /* For desktop tests. */
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
+            transform.Rotate(0, -10, 0);
             Player.currentIngred.numberOfChops++;
             source.PlayOneShot(chopSound);
-            transform.Rotate(0, -5, 0);
+            lastChop = Time.time;
         }
-        if (Input.GetKeyDown(KeyCode.UpArrow)) {
-            source.PlayOneShot(chopSound);
-            transform.Rotate(0, 5, 0);
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            transform.Rotate(0, 10, 0);
         }
-        
-        transform.position = originalPos;
+
+        /* Updates the chops count on the screen. */
+        chops.text = Player.currentIngred.numberOfChops.ToString();
+        /* Simulates the movement of the knife. */
+        KnifeMovement();
         /* Check if the player has started the movement and increment the number of chops on the ingredient */
         CheckDownMovement();
         /* For sound effect. */
         CheckUpMovement();
         /* Uncomment to make game more interesting and add sliced fingers. */
-        // CheckChopSpeed();
+        CheckChopSpeed();
+
+        if ((Player.currentIngred.numberOfChops % 5) == 0) {
+            transform.position = originalPos;
+        }
         
     }
 
@@ -113,8 +121,8 @@ public class Chopping : MonoBehaviour
             defaultCanvas.gameObject.SetActive(true);
         }
         else {
-            notChoppable.text = "Ingredient cannot be chopped";
             /* Generate a warning canvas for an unchoppable ingredient. */
+            notChoppable.text = "Ingredient cannot be chopped";
         }
     }
 
@@ -122,8 +130,7 @@ public class Chopping : MonoBehaviour
     {
         if (Input.acceleration.y < -3.0f)
         {
-            // source.PlayOneShot(chopSound);
-            transform.Rotate(0, 5, 0);
+            source.PlayOneShot(chopSound);
         }
     }
 
@@ -134,7 +141,7 @@ public class Chopping : MonoBehaviour
         {
             source.PlayOneShot(chopSound);
             Player.currentIngred.numberOfChops++;
-            transform.Rotate(0, -5, 0);
+            lastChop = Time.time;
         }
         
     }
@@ -155,6 +162,25 @@ public class Chopping : MonoBehaviour
         else
         {
             outCome.text = " ";
+        }
+    }
+
+    void KnifeMovement() 
+    {
+        if (Input.acceleration.y > 0) {
+            float xTransform = -1 * Mathf.Sin((Time.time - lastChop) * shakeSpeed) * shakeAmount;
+
+			if (negSinCount > 0 && posSinCount > 0 && xTransform < 0) {
+				gameObject.transform.position = originalPos;
+				negSinCount = 0; posSinCount = 0;
+				shouldShake = false;
+			}	else if (xTransform < 0) {
+				transform.Rotate(0, xTransform, 0);
+				negSinCount++;
+			} else if (xTransform > 0) {
+				transform.Rotate(0, xTransform, 0);
+				posSinCount++;
+			}
         }
     }
 

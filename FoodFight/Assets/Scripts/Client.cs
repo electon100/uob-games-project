@@ -14,7 +14,7 @@ using System.IO.Compression;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.102";
+    private const string serverIP = "192.168.0.103";
 
     private int port = 8000;
 
@@ -34,6 +34,7 @@ public class Client : MonoBehaviour {
 
     public GameObject buttonPrefab;
     public GameObject startPanel;
+    public GameObject warningText;
 
     //NFC Stuff:
     public Text tag_output_text;
@@ -42,8 +43,6 @@ public class Client : MonoBehaviour {
 	private AndroidJavaObject mIntent;
 	private string sAction;
 	private int lastTag = -1;
-
-    private GameObject currentItem;
 
     // List of ingredient for each station.
     public List<Ingredient> ingredientsInStation;
@@ -74,8 +73,9 @@ public class Client : MonoBehaviour {
 
     private void Update()
     {
-        if (!isConnected) return;
-
+        if (!isConnected) {
+            return;
+        }          
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
         int channelID; // ID of channel connected to recHostId.
@@ -87,17 +87,16 @@ public class Client : MonoBehaviour {
         NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
                                                             recBuffer, bufferSize, out dataSize, out error);
 
-        if (!areButtonsHere && isConnected)
-        {
-            initialiseStartButtons();
-            areButtonsHere = true;
-        }
 
         switch (recData)
         {
             case NetworkEventType.Nothing:
                 break;
             case NetworkEventType.ConnectEvent:
+                if (!areButtonsHere) {
+                    initialiseStartButtons();
+                    areButtonsHere = true;
+                }
                 Debug.Log("Player " + connectionId + " has been connected to server.");
                 break;
             case NetworkEventType.DataEvent:
@@ -143,7 +142,16 @@ public class Client : MonoBehaviour {
         hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
         connectionId = NetworkTransport.Connect(hostId, serverIP, port, 0, out error);
 
-        isConnected = true;
+        /* Check for if there is an error */
+        if ((NetworkError)error != NetworkError.Ok)
+        {
+            //Output this message in the console with the Network Error
+            Debug.Log("There was this error : " + (NetworkError)error);
+            warningText.SetActive(true);
+        }
+        else {
+            isConnected = true;
+        }
     }
 
     private void initialiseStartButtons ()
