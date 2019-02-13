@@ -15,7 +15,7 @@ public class ARCupboard : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Screen.orientation = ScreenOrientation.Portrait;
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
         DontDestroyOnLoad(GameObject.Find("Player"));
     }
 
@@ -41,7 +41,6 @@ public class ARCupboard : MonoBehaviour
     public void onVegetables()
     {
         toggleButtons();
-        goBackButton.SetActive(true);
         ingredient = new Ingredient("mixed_vegetables", "vegetablesPrefab");
         foodName.text = "You picked some vegetables!";
     }
@@ -91,8 +90,6 @@ public class ARCupboard : MonoBehaviour
     public void goBack()
     {
         Player.currentIngred = ingredient;
-        Debug.Log("AR says: " + ingredient.Name + " " + ingredient.Model);
-        Player.currentStation = "0";
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
