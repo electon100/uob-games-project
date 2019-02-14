@@ -37,7 +37,9 @@ public class PlateBehaviour : MonoBehaviour {
     void updateTextList() {
       ingredientListText.text = "Current Ingredients:\n";
 
-      ingredientListText.text += recipe.Name + "\n";
+      foreach(Ingredient ingredient in ingredientList) {
+        ingredientListText.text += ingredient.Name + "\n";
+      }
     }
 
     void checkRecipe() {
