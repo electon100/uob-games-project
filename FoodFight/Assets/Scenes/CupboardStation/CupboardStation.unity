@@ -216,23 +216,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 1908641396}
---- !u!1 &107369234 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100002, guid: af61917fe8981a14396548db0bd125b1,
-    type: 3}
-  m_PrefabInternal: {fileID: 918939540}
---- !u!114 &107369236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 107369234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61703f8520d22bb4b97dd3a1fa1151ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  control: {fileID: 0}
 --- !u!1 &162041686
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,7 +806,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4701457005156208, guid: 78044e0099ad288428891df7b6f2adb3, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4701457005156208, guid: 78044e0099ad288428891df7b6f2adb3, type: 2}
       propertyPath: m_LocalScale.x
@@ -987,7 +970,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
       propertyPath: m_LocalScale.x
@@ -1114,11 +1097,40 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 384a0d8cc71cef74a873b3353337ea2c, type: 2}
   m_IsPrefabAsset: 0
---- !u!1 &639727669 stripped
+--- !u!1 &639727669
 GameObject:
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 100000, guid: af61917fe8981a14396548db0bd125b1,
     type: 3}
-  m_PrefabInternal: {fileID: 918939540}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 639727670}
+  - component: {fileID: 639727674}
+  - component: {fileID: 639727673}
+  - component: {fileID: 639727671}
+  - component: {fileID: 639727672}
+  m_Layer: 0
+  m_Name: Shrimp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &639727670
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 400000, guid: af61917fe8981a14396548db0bd125b1,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 639727669}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0.3999023, y: 0.012000004, z: -0.08000002}
+  m_LocalScale: {x: 0.0032358512, y: 0.0032358498, z: 0.0032358496}
+  m_Children: []
+  m_Father: {fileID: 1908641395}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &639727671
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1132,6 +1144,62 @@ CapsuleCollider:
   m_Height: 23.863005
   m_Direction: 1
   m_Center: {x: 0.0000007152558, y: -0.7584998, z: 5.789801}
+--- !u!114 &639727672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 639727669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61703f8520d22bb4b97dd3a1fa1151ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  control: {fileID: 0}
+--- !u!23 &639727673
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 2300000, guid: af61917fe8981a14396548db0bd125b1,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 639727669}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 2100000, guid: af61917fe8981a14396548db0bd125b1, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &639727674
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 3300000, guid: af61917fe8981a14396548db0bd125b1,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 639727669}
+  m_Mesh: {fileID: 4300000, guid: af61917fe8981a14396548db0bd125b1, type: 3}
 --- !u!1 &702427574
 GameObject:
   m_ObjectHideFlags: 0
@@ -1628,72 +1696,6 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!1001 &918939540
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1908641395}
-    m_Modifications:
-    - target: {fileID: 400002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.3999023
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.012
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.08
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.003235848
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.0032358475
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.0032358475
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-      propertyPath: m_Name
-      value: Shrimp
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: af61917fe8981a14396548db0bd125b1, type: 3}
-  m_IsPrefabAsset: 0
 --- !u!1 &956362583 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100002, guid: bf065d28c0bd96d45965803b8060242f,
@@ -2561,7 +2563,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: bf065d28c0bd96d45965803b8060242f, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: bf065d28c0bd96d45965803b8060242f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3054,7 +3056,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: da2ff3ec274c05440b98715bf8b384fe, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: da2ff3ec274c05440b98715bf8b384fe, type: 3}
       propertyPath: m_LocalScale.x
