@@ -343,7 +343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4701457005156208}
   m_Layer: 0
-  m_Name: NoodlesPrefab
+  m_Name: noodlesPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1021,7 +1021,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1606288150859480}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -68.78362, y: 278.60837, z: -350.1067}
   m_LocalScale: {x: 20, y: 20, z: 20}
   m_Children:
@@ -1063,7 +1063,7 @@ Transform:
   - {fileID: 4155726348436720}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!4 &4710194871555876
 Transform:
   m_ObjectHideFlags: 1
