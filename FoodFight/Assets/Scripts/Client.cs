@@ -14,7 +14,7 @@ using System.IO.Compression;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.103";
+    private const string serverIP = "192.168.0.104";
 
     private int port = 8000;
 
@@ -122,7 +122,7 @@ public class Client : MonoBehaviour {
         connectConfig.AckDelay = 33;
         connectConfig.AllCostTimeout = 20;
         connectConfig.ConnectTimeout = 1000;
-        connectConfig.DisconnectTimeout = 2000;
+        connectConfig.DisconnectTimeout = 5000;
         connectConfig.FragmentSize = 500;
         connectConfig.MaxCombinedReliableMessageCount = 10;
         connectConfig.MaxCombinedReliableMessageSize = 100;
@@ -148,10 +148,12 @@ public class Client : MonoBehaviour {
             //Output this message in the console with the Network Error
             Debug.Log("There was this error : " + (NetworkError)error);
             warningText.SetActive(true);
+            isConnected = false;
         }
         else {
             isConnected = true;
         }
+        
     }
 
     private void initialiseStartButtons ()

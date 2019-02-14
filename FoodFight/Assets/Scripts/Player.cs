@@ -164,7 +164,7 @@ public class Player : MonoBehaviour {
 
         if (currentStation != text)
         {
-            mainText.text = text;
+            mainText.text = "Logging into station " + text + "...";
             switch (text)
             {
                 case "0":

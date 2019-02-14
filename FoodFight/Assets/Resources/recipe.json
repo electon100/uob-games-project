@@ -114,12 +114,12 @@
       "name": "steak_hache",
       "ingredients": [
         {
-          "name": "steak",
-          "cooked": false,
+          "name": "raw_steak",
+          "cooked": true,
           "chopped": false
         },
         {
-          "name": "chips",
+          "name": "diced_potato",
           "cooked": true,
           "chopped": false
         }

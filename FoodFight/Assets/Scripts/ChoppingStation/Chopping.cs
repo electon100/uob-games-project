@@ -103,9 +103,9 @@ public class Chopping : MonoBehaviour
         /* For sound effect. */
         CheckUpMovement();
         /* Uncomment to make game more interesting and add sliced fingers. */
-        CheckChopSpeed();
+        // CheckChopSpeed();
 
-        if ((Player.currentIngred.numberOfChops % 5) == 0) {
+        if ((Player.currentIngred.numberOfChops % 3) == 0) {
             transform.position = originalPos;
         }
         
@@ -204,7 +204,7 @@ public class Chopping : MonoBehaviour
         if (Player.currentIngred != null)
         {
             /* Stops the minigame if ingredient cannot be chopped */
-            if (1 > 0)
+            if (FoodData.Instance.isChoppable(Player.currentIngred))
             {
                 return true;
             }

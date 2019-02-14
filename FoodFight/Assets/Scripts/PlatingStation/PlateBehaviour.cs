@@ -37,9 +37,7 @@ public class PlateBehaviour : MonoBehaviour {
     void updateTextList() {
       ingredientListText.text = "Current Ingredients:\n";
 
-      for(int i = 0; i < ingredientList.Count; i++) {
-        ingredientListText.text += ingredientList[i].Name + "\n";
-      }
+      ingredientListText.text += recipe.Name + "\n";
     }
 
     void checkRecipe() {
@@ -49,12 +47,15 @@ public class PlateBehaviour : MonoBehaviour {
 
     void displayFood() {
       checkRecipe();
+      Destroy(model, 0.0f);
       if (ingredientList.Count > 0) {
         GameObject food = (GameObject) Resources.Load(recipe.Model, typeof(GameObject));
+        Transform modelTransform = food.GetComponentsInChildren<Transform>(true)[0];
+     	  Quaternion modelRotation = modelTransform.rotation;
         if (food == null) {
           food = (GameObject) Resources.Load("mushPlatePrefab", typeof(GameObject));
         }
-        model  = (GameObject) Instantiate(food, new Vector3(0,0,0), Quaternion.Euler(90, 0, 10));
+        model  = (GameObject) Instantiate(food, new Vector3(0,0,0), modelRotation);
       } else {
         model = null;
       }

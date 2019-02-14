@@ -63,7 +63,7 @@ public class ARCupboard : MonoBehaviour
     {
         toggleButtons();
         ingredient = new Ingredient("noodles", "noodlesPrefab");
-        foodName.text = "You picked a bowl of noodles!";
+        foodName.text = "You picked some noodles!";
     }
 
     public void onFlour()
@@ -85,6 +85,34 @@ public class ARCupboard : MonoBehaviour
         toggleButtons();
         ingredient = new Ingredient("soy_sauce", "soy_saucePrefab");
         foodName.text = "You picked some soy sauce!";
+    }
+
+    public void onSteak()
+    {
+        toggleButtons();
+        ingredient = new Ingredient("raw_steak", "raw_steakPrefab");
+        foodName.text = "You picked a raw steak!";
+    }
+
+    public void onPeas()
+    {
+        toggleButtons();
+        ingredient = new Ingredient("peas", "peasPrefab");
+        foodName.text = "You picked some peas!";
+    }
+
+    public void onDuck()
+    {
+        toggleButtons();
+        ingredient = new Ingredient("duck", "duckPrefab");
+        foodName.text = "You picked some duck!";
+    }
+
+    public void onShrimp()
+    {
+        toggleButtons();
+        ingredient = new Ingredient("shrimp", "shrimpPrefab");
+        foodName.text = "You picked some shrimps!";
     }
 
     public void goBack()
