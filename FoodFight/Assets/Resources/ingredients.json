@@ -13,7 +13,7 @@
       "name" : "mixed_vegetables",
       "choppable" : true,
       "cookable" : true,
-      "correctFlips" : 10,
+      "correctFlips" : 5,
       "maxFlips" : 20,
       "correctChops" : 10,
       "score" : 20
@@ -22,16 +22,16 @@
       "name" : "chicken",
       "choppable" : true,
       "cookable" : true,
-      "correctFlips" : 30,
+      "correctFlips" : 5,
       "maxFlips" : 40,
-      "correctChops" : 50,
+      "correctChops" : 15,
       "score" : 20
     },
     {
       "name" : "chopped_mixed_vegetables",
       "choppable" : false,
       "cookable" : true,
-      "correctFlips" : 10,
+      "correctFlips" : 5,
       "maxFlips" : 20,
       "correctChops" : 0,
       "score" : 50
@@ -40,7 +40,7 @@
       "name" : "diced_chicken",
       "choppable" : false,
       "cookable" : true,
-      "correctFlips" : 30,
+      "correctFlips" : 5,
       "maxFlips" : 40,
       "correctChops" : 0,
       "score" : 50
@@ -58,7 +58,7 @@
       "name" : "noodles",
       "choppable" : false,
       "cookable" : true,
-      "correctFlips" : 30,
+      "correctFlips" : 5,
       "maxFlips" : 40,
       "correctChops" : 0,
       "score" : 20
@@ -67,7 +67,7 @@
       "name" : "stir_fry_mix",
       "choppable" : false,
       "cookable" : true,
-      "correctFlips" : 30,
+      "correctFlips" : 5,
       "maxFlips" : 40,
       "correctChops" : 0,
       "score" : 50
