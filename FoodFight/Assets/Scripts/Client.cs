@@ -14,7 +14,7 @@ using System.IO.Compression;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.100";
+    private const string serverIP = "192.168.0.107";
 
     private int port = 8000;
 
@@ -48,8 +48,6 @@ public class Client : MonoBehaviour {
     public List<Ingredient> ingredientsInStation;
     // A kitchen is a dictionary of different stations and their associated ingredients.
     public IDictionary<string, List<Ingredient>> myKitchen = new Dictionary<string, List<Ingredient>>();
-
-    private string currentStation = "-1";
 
     /* Current ingredient that the player is holding
        -> Can be used externally */
@@ -86,7 +84,6 @@ public class Client : MonoBehaviour {
 
         NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
                                                             recBuffer, bufferSize, out dataSize, out error);
-
 
         switch (recData)
         {
@@ -261,7 +258,31 @@ public class Client : MonoBehaviour {
                 }
 
                 myKitchen[stationId] = ingredientsInStation;
+                logAppropriateStation(stationId);
                 ingredientsInStation = new List<Ingredient>();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void logAppropriateStation(string stationId) {
+        switch(stationId) {
+            case "0":
+                Player.ingredientsFromStation = getIngredientsFromStation("0");
+                SceneManager.LoadScene("CupboardStation");
+                break;
+            case "1":
+                Player.ingredientsFromStation = getIngredientsFromStation("1");
+                SceneManager.LoadScene("FryingStation");
+                break;
+            case "2":
+                Player.ingredientsFromStation = getIngredientsFromStation("2");
+                SceneManager.LoadScene("ChoppingStation");
+                break;
+            case "3":
+                Player.ingredientsFromStation = getIngredientsFromStation("3");
+                SceneManager.LoadScene("PlatingStation");
                 break;
             default:
                 break;

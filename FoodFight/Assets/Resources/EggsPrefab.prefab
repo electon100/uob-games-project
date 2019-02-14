@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33282572757523958}
   - component: {fileID: 23787427603117886}
   m_Layer: 0
-  m_Name: eggsPrefab
+  m_Name: EggsPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
