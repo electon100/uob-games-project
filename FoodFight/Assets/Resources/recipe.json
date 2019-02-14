@@ -279,13 +279,13 @@
       "name": "salchipapas",
       "ingredients": [
         {
-          "name": "hot_dog",
-          "cooked": false,
+          "name": "raw_hot_dog",
+          "cooked": true,
           "chopped": false
         },
         {
-          "name": "chips",
-          "cooked": false,
+          "name": "diced_potato",
+          "cooked": true,
           "chopped": false
         }
       ]
