@@ -49,13 +49,13 @@ public class Player : MonoBehaviour {
 	void Update () {
 
         //Testing on computer/////////////////
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            checkStation("1");
-        }
         if (Input.GetKeyDown(KeyCode.R))
         {
             checkStation("0");
+        }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            checkStation("1");
         }
         if (Input.GetKeyDown(KeyCode.Y))
         {

@@ -399,11 +399,11 @@ public class Server : MonoBehaviour {
             string messageContent = station + "$";
             foreach (Ingredient ingredient in redKitchen[station])
             {
-                Debug.Log("Sending back: " + ingredient.Name);
                 messageContent += Ingredient.SerializeObject(ingredient);
                 messageContent += "$";
             }
 
+            Debug.Log("Sending back: " + messageContent);
             SendMyMessage(messageType, messageContent, hostId);
         }
         else if (kitchen == "blue")
@@ -415,6 +415,7 @@ public class Server : MonoBehaviour {
                 messageContent += "$";
             }
 
+            Debug.Log("Sending back: " + messageContent);
             SendMyMessage(messageType, messageContent, hostId);
         }
     }
