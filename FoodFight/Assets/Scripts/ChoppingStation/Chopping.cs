@@ -130,7 +130,7 @@ public class Chopping : MonoBehaviour
     {
         if (Input.acceleration.y < -3.0f)
         {
-            source.PlayOneShot(chopSound);
+            // source.PlayOneShot(chopSound);
         }
     }
 
