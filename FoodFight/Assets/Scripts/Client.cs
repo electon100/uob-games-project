@@ -36,8 +36,11 @@ public class Client : MonoBehaviour {
 
     public GameObject buttonPrefab;
     public GameObject startPanel;
-    public GameObject buttonsPanel;
     public GameObject warningText;
+    public GameObject connectButton;
+    public GameObject diffIPButton;
+    public GameObject inputField;
+    public GameObject changeIPButton;
 
     //NFC Stuff:
     public Text tag_output_text;
@@ -96,10 +99,7 @@ public class Client : MonoBehaviour {
             case NetworkEventType.Nothing:
                 break;
             case NetworkEventType.ConnectEvent:
-                if (!areButtonsHere) {
-                    initialiseStartButtons();
-                    areButtonsHere = true;
-                }
+                SceneManager.LoadScene("PickTeamScreen");
                 Debug.Log("Player " + connectionId + " has been connected to server.");
                 break;
             case NetworkEventType.DataEvent:
@@ -162,35 +162,6 @@ public class Client : MonoBehaviour {
             isConnected = true;
         }
         
-    }
-
-    private void initialiseStartButtons ()
-    {
-
-        SceneManager.LoadScene("PickTeamScreen");
-        
-        // GameObject redButton = (GameObject) Instantiate(buttonPrefab, new Vector3(-100, -17, 0), Quaternion.identity);
-        // redButton.transform.SetParent(startPanel.transform);//Setting button parent
-        // redButton.GetComponent<Button>().onClick.AddListener(onClickRed);//Setting what button does when clicked
-        // redButton.transform.GetChild(0).GetComponent<Text>().text = "Red Team";//Changing text
-        // Color redCol;
-        // if (ColorUtility.TryParseHtmlString("#FF7000", out redCol))
-        // {
-        //     redButton.GetComponent<Image>().color = redCol;//Changing colour
-        // }
-
-        // GameObject blueButton = (GameObject)Instantiate(buttonPrefab, new Vector3(100, -17, 0), Quaternion.identity);
-        // blueButton.transform.SetParent(startPanel.transform);//Setting button parent
-        // blueButton.GetComponent<Button>().onClick.AddListener(onClickBlue);//Setting what button does when clicked
-        // blueButton.transform.GetChild(0).GetComponent<Text>().text = "Blue Team";//Changing text
-        // Color blueCol;
-        // if (ColorUtility.TryParseHtmlString("#00ACFF", out blueCol))
-        // {
-        //     blueButton.GetComponent<Image>().color = blueCol;//Changing colour
-        // }
-
-        Destroy(GameObject.Find("ConnectButton"));
-        Destroy(GameObject.Find("ChangeIPButton"));
     }
 
     public string serialiseIngredient(Ingredient ingredient)
@@ -321,11 +292,20 @@ public class Client : MonoBehaviour {
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
+    public void useDifferentIP() {
+        connectButton.SetActive(false);
+        diffIPButton.SetActive(false);
+        inputField.SetActive(true);
+        changeIPButton.SetActive(true);
+    }
+
     public void changeIP()
     {
         serverIP = Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
-        Debug.Log(serverIP);
-        SceneManager.LoadScene("PlayerStartScreen");
+        inputField.SetActive(false);
+        changeIPButton.SetActive(false);
+        connectButton.SetActive(true);
+        diffIPButton.SetActive(true);
     }
 
     private string FirstLetterToUpper(string str)
