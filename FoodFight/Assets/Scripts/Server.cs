@@ -91,7 +91,7 @@ public class Server : MonoBehaviour {
         redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
         blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
         updateScores();
-        timer = 300.0f;
+        timer = 1300.0f;
         displayTime();
     }
 

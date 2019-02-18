@@ -343,7 +343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4701457005156208}
   m_Layer: 0
-  m_Name: noodlesPrefab
+  m_Name: NoodlesPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

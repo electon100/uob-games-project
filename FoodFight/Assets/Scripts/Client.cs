@@ -14,7 +14,7 @@ using System.IO.Compression;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.104";
+    private string serverIP = "192.168.0.104";
 
     private int port = 8000;
 
@@ -54,6 +54,8 @@ public class Client : MonoBehaviour {
     /* Current ingredient that the player is holding
        -> Can be used externally */
     public static Ingredient currentIngred;
+
+    public Text changeIPText;
 
     public void Start()
     {
@@ -283,6 +285,12 @@ public class Client : MonoBehaviour {
     {
         SendMyMessage("connect", "blue");
         SceneManager.LoadScene("PlayerMainScreen");
+    }
+
+    public void changeIP()
+    {
+        serverIP = changeIPText.ToString();
+        SceneManager.LoadScene("PlayerStartScreen");
     }
 
     private string FirstLetterToUpper(string str)

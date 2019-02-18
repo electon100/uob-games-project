@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameOverScreen.unity
     guid: 4e92bf559359cee499509bfa3ae241f5
+  - enabled: 1
+    path: Assets/Scenes/PlayerChangeIPScreen.unity
+    guid: 007ffb1a0a1ff4f0e87dcb95a62ff0bd
   m_configObjects: {}
