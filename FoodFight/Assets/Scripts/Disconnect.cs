@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ public class Disconnect : MonoBehaviour {
 
 	public GameObject networkClient;
 	private Client network;
+	private bool connected;
 
 	void Start () {
 		networkClient = GameObject.Find("Client");
@@ -14,8 +16,14 @@ public class Disconnect : MonoBehaviour {
 	}
 	
 	public void ConnectAgain() {
-		Debug.Log("here");
-		network.Connect();
+		int hostId = network.hostId;
+		string serverIP = network.serverIP;
+		int port = network.port;
+		byte error;
+		int connectionId = NetworkTransport.Connect(hostId, serverIP, port, 0, out error);
+		network.connectionId = connectionId;
+		network.isConnected = true;
+		connected = true;
 	}
 
 	public void ExitGame() {
@@ -23,8 +31,8 @@ public class Disconnect : MonoBehaviour {
 	}
 
 	void Update () {
-		if (network.isConnected) {
-			SceneManager.LoadScene("PlayerMainScreen");
+		if (connected) {
+			SceneManager.LoadScene("PickTeamScreen");
 		}
 	}
 }
