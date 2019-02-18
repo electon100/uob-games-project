@@ -37,7 +37,9 @@ public class PlateBehaviour : MonoBehaviour {
     void updateTextList() {
       ingredientListText.text = "Current Ingredients:\n";
 
-      ingredientListText.text += recipe.Name + "\n";
+      foreach(Ingredient ingredient in ingredientList) {
+        ingredientListText.text += ingredient.Name + "\n";
+      }
     }
 
     void checkRecipe() {
@@ -55,7 +57,7 @@ public class PlateBehaviour : MonoBehaviour {
         if (food == null) {
           food = (GameObject) Resources.Load("mushPlatePrefab", typeof(GameObject));
         }
-        model  = (GameObject) Instantiate(food, new Vector3(0,0,0), modelRotation);
+        model  = (GameObject) Instantiate(food, modelTransform.position, modelRotation);
       } else {
         model = null;
       }
