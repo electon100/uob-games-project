@@ -123,7 +123,7 @@ public class Client : MonoBehaviour {
         connectConfig.AckDelay = 33;
         connectConfig.AllCostTimeout = 20;
         connectConfig.ConnectTimeout = 1000;
-        connectConfig.DisconnectTimeout = 5000;
+        connectConfig.DisconnectTimeout = 1000;
         connectConfig.FragmentSize = 500;
         connectConfig.MaxCombinedReliableMessageCount = 10;
         connectConfig.MaxCombinedReliableMessageSize = 100;
