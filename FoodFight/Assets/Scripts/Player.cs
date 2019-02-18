@@ -32,6 +32,8 @@ public class Player : MonoBehaviour {
     public Text mainText;
     public GameObject mainPanel;
 
+    public InputField changeIPField;
+
     //NFC Stuff:
     public Text tag_output_text;
     private AndroidJavaObject mActivity;
@@ -95,6 +97,40 @@ public class Player : MonoBehaviour {
         {
             Destroy(currentItem);
         }
+    }
+
+    private void cupboardStation()
+    {
+        ingredientsFromStation = network.getIngredientsFromStation("0");
+        SceneManager.LoadScene("CupboardStation");
+    }
+
+    private void fryingStation()
+    {
+        ingredientsFromStation = network.getIngredientsFromStation("1");
+        SceneManager.LoadScene("FryingStation");
+    }
+
+    private void choppingStation()
+    {
+        ingredientsFromStation = network.getIngredientsFromStation("2");
+        SceneManager.LoadScene("ChoppingStation");
+    }
+
+    private void platingStation()
+    {
+        ingredientsFromStation = network.getIngredientsFromStation("3");
+        SceneManager.LoadScene("PlatingStation");
+    }
+
+    public void changeIPStation()
+    {
+        SceneManager.LoadScene("PlayerChangeIPScreen");
+    }
+
+    public void changeIP()
+    {
+        SceneManager.LoadScene("PlayerStartScreen");
     }
 
     private string sendCurrentIngredient(Ingredient addedIngredient)

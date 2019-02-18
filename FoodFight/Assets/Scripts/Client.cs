@@ -10,11 +10,13 @@ using System.IO;
 using System;
 using System.Reflection;
 using System.IO.Compression;
+using System.Text.RegularExpressions;
 
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    public string serverIP = "192.168.0.102";
+  
+    public static string serverIP = "192.168.0.102";
 
     public int port = 8000;
 
@@ -54,8 +56,11 @@ public class Client : MonoBehaviour {
        -> Can be used externally */
     public static Ingredient currentIngred;
 
+    public InputField changeIPText;
+
     public void Start()
     {
+        //NetworkServer.Reset();
         ingredientsInStation = new List<Ingredient>();
         
         for (int i = 0; i < 4; i++)
@@ -118,6 +123,8 @@ public class Client : MonoBehaviour {
     {
         NetworkTransport.Init();
         connectConfig = new ConnectionConfig();
+
+        Debug.Log(serverIP);
 
         /* Network configuration */
         connectConfig.AckDelay = 33;
@@ -183,6 +190,7 @@ public class Client : MonoBehaviour {
         // }
 
         Destroy(GameObject.Find("ConnectButton"));
+        Destroy(GameObject.Find("ChangeIPButton"));
     }
 
     public string serialiseIngredient(Ingredient ingredient)
@@ -311,6 +319,13 @@ public class Client : MonoBehaviour {
     {
         SendMyMessage("connect", "blue");
         SceneManager.LoadScene("PlayerMainScreen");
+    }
+
+    public void changeIP()
+    {
+        serverIP = Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
+        Debug.Log(serverIP);
+        SceneManager.LoadScene("PlayerStartScreen");
     }
 
     private string FirstLetterToUpper(string str)

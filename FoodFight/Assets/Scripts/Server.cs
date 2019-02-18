@@ -80,6 +80,7 @@ public class Server : MonoBehaviour {
         reliableChannel = connectConfig.AddChannel(QosType.ReliableSequenced);
         HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
 
+        //NetworkServer.Reset();
         hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
         webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
         isStarted = true;
@@ -91,7 +92,7 @@ public class Server : MonoBehaviour {
         redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
         blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
         updateScores();
-        timer = 300.0f;
+        timer = 1300.0f;
         displayTime();
     }
 
