@@ -289,12 +289,12 @@ public class Server : MonoBehaviour {
     {
         if (redTeam.ContainsKey(connectionId))
         {
-            if (!redKitchen.ContainsKey(stationId) && !blueKitchen.ContainsKey(stationId))
+            if (!redKitchen.ContainsKey(stationId))
                 redKitchen.Add(stationId, new List<Ingredient>());
         }
         else if (blueTeam.ContainsKey(connectionId))
         {
-            if (!blueKitchen.ContainsKey(stationId) && !redKitchen.ContainsKey(stationId))
+            if (!blueKitchen.ContainsKey(stationId))
                 blueKitchen.Add(stationId, new List<Ingredient>());
         }
     }

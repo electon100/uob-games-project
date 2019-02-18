@@ -14,7 +14,7 @@ using System.IO.Compression;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.100";
+    private const string serverIP = "192.168.0.25";
 
     private int port = 8000;
 
@@ -124,7 +124,7 @@ public class Client : MonoBehaviour {
         connectConfig.MaxCombinedReliableMessageCount = 10;
         connectConfig.MaxCombinedReliableMessageSize = 100;
         connectConfig.MaxConnectionAttempt = 32;
-        connectConfig.MaxSentMessageQueueSize = 2048;
+        connectConfig.MaxSentMessageQueueSize = 4096;
         connectConfig.MinUpdateTimeout = 20;
         connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
         connectConfig.OverflowDropThreshold = 40; //
