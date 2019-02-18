@@ -13,7 +13,6 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
 
-    private GameObject currentItem;
     private GameObject networkClient;
     private Client network;
 
@@ -72,29 +71,7 @@ public class Player : MonoBehaviour {
 
         /////////////////////////////////////
 
-        if (currentItem != null)
-        {
-            currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
-        }
-
         checkNFC();
-    }
-
-    public void viewItems()
-    {
-
-        /* If the current item is null, instantiate it when viewing */
-        if (currentItem == null)
-        {
-            GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
-            currentItem = (GameObject)Instantiate(model, new Vector3(0, 0, 80), Quaternion.identity);
-            currentItem.transform.SetParent(mainPanel.transform);
-            mainText.text = currentIngred.Name; 
-        }
-        else
-        {
-            Destroy(currentItem);
-        }
     }
 
     private void cupboardStation()
