@@ -154,6 +154,11 @@ public class Player : MonoBehaviour {
         currentIngred = null;
     }
 
+    public static bool isHoldingIngredient()
+    {
+        return currentIngred != null;
+    }
+
     public void sendScoreToServer(Ingredient recipe) {
         string message = Ingredient.SerializeObject(recipe);
         network.SendMyMessage("score", message);

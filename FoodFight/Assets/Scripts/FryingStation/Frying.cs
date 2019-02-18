@@ -9,6 +9,7 @@ public class Frying : MonoBehaviour {
 
 	private readonly string stationID = "1";
 
+	public Button goBackBtn, putBtn, pickBtn, clearBtn, combineBtn;
 	public Text test_text;
 	public Player player;
 	public AudioClip fryingSound;
@@ -58,6 +59,9 @@ public class Frying : MonoBehaviour {
 	}
 
 	void Update () {
+		/* Ensure correct buttons are interactable */
+		updateButtonStates();
+
 		if (panContents.Count == 1) {
 
 			/* Read accelerometer data */
@@ -152,18 +156,28 @@ public class Frying : MonoBehaviour {
 
 	public void combineIngredientsInPan()
 	{
-		/* Try and combine the ingredients */
-		Ingredient combinedFood = FoodData.Instance.TryCombineIngredients(panContents);
+		if (panContents.Count > 1) {
+			/* Try and combine the ingredients */
+			Ingredient combinedFood = FoodData.Instance.TryCombineIngredients(panContents);
 
-		/* Set the pan contents to the new combined recipe */
+			if (combinedFood.Name == "mush") {
+				test_text.text = "Ingredients do not combine";
+			} else {
+				/* Set the pan contents to the new combined recipe */
+				clearStation();
+
+				addIngredientToPan(combinedFood);
+				player.notifyServerAboutIngredientPlaced(combinedFood);
+			}
+		} else {
+			test_text.text = "No ingredients to combine";
+		}
+	}
+
+	public void clearStation() {
 		clearPan();
-		/* I had to transfer this here because we don't wanna delete the ingredients
-		from the server on Start. */
 		player = GameObject.Find("Player").GetComponent<Player>();
 		player.clearIngredientsInStation(stationID);
-
-		addIngredientToPan(combinedFood);
-		player.notifyServerAboutIngredientPlaced(combinedFood);
 	}
 
 	public void pickUpIngredient()
@@ -189,11 +203,22 @@ public class Frying : MonoBehaviour {
 	{
 		GameObject model = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
 		Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
-     	Quaternion modelRotation = modelTransform.rotation;
+		Quaternion modelRotation = modelTransform.rotation;
 
 		GameObject inst = Instantiate(model, new Vector3(Random.Range(-14, -8), Random.Range(1, 9), 85), modelRotation);
 		panContents.Add(ingredient);
 		panContentsObjects.Add(inst);
+	}
+
+	private void updateButtonStates() {
+		setButtonInteractable(putBtn, Player.isHoldingIngredient());
+		setButtonInteractable(clearBtn, panContents.Count > 0);
+		setButtonInteractable(pickBtn, panContents.Count == 1);
+		setButtonInteractable(combineBtn, panContents.Count > 1);
+	}
+
+	private void setButtonInteractable(Button btn, bool interactable) {
+		btn.interactable = interactable;
 	}
 
 	private void clearPan()
