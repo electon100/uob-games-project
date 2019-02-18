@@ -15,7 +15,6 @@ using System.Text.RegularExpressions;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-  
     public static string serverIP = "192.168.0.100";
 
     public int port = 8000;
