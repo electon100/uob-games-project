@@ -66,14 +66,9 @@ public class PlateBehaviour : MonoBehaviour {
 
     public void serveFood() {
       if (!string.Equals(recipe.Name, "mush")) {
-        ingredientList.Clear();
-        Destroy(model, 0.0f);
-        //int score = FoodData.Instance.getScoreForIngredient(recipe);
         player.sendScoreToServer(recipe);
-        player.clearIngredientsInStation("3");
-        recipe = null;
-        displayFood();
-      }
+        clearPlate();
+        }
     }
 
     public void addIngredient() {
@@ -88,5 +83,14 @@ public class PlateBehaviour : MonoBehaviour {
 
     public void goBack() {
       SceneManager.LoadScene("PlayerMainScreen");
+    }
+
+    public void clearPlate()
+    {
+        ingredientList.Clear();
+        player.clearIngredientsInStation("3");
+        Destroy(model, 0.0f);
+        recipe = null;
+        displayFood();
     }
 }
