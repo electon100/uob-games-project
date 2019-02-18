@@ -14,18 +14,18 @@ using System.IO.Compression;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.25";
+    public string serverIP = "192.168.0.102";
 
-    private int port = 8000;
+    public int port = 8000;
 
-    private int hostId;
+    public int hostId;
 
     private int reliableChannel;
     private int unreliableChannel;
 
     ConnectionConfig connectConfig;
 
-    private int connectionId;
+    public int connectionId;
 
     public bool isConnected = false;
     private bool areButtonsHere = false;
@@ -34,6 +34,7 @@ public class Client : MonoBehaviour {
 
     public GameObject buttonPrefab;
     public GameObject startPanel;
+    public GameObject buttonsPanel;
     public GameObject warningText;
 
     //NFC Stuff:
@@ -56,7 +57,7 @@ public class Client : MonoBehaviour {
     public void Start()
     {
         ingredientsInStation = new List<Ingredient>();
-
+        
         for (int i = 0; i < 4; i++)
         {
             string stationId = i.ToString();
@@ -102,6 +103,9 @@ public class Client : MonoBehaviour {
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has been disconnected to server");
+                NetworkTransport.Disconnect(recHostId, connectionId, out error);
+                isConnected = false;
+                SceneManager.LoadScene("DisconnectScreen");
                 break;
             case NetworkEventType.BroadcastEvent:
                 Debug.Log("Broadcast event.");
@@ -155,25 +159,28 @@ public class Client : MonoBehaviour {
 
     private void initialiseStartButtons ()
     {
-        GameObject redButton = (GameObject) Instantiate(buttonPrefab, new Vector3(-100, -17, 0), Quaternion.identity);
-        redButton.transform.SetParent(startPanel.transform);//Setting button parent
-        redButton.GetComponent<Button>().onClick.AddListener(onClickRed);//Setting what button does when clicked
-        redButton.transform.GetChild(0).GetComponent<Text>().text = "Red Team";//Changing text
-        Color redCol;
-        if (ColorUtility.TryParseHtmlString("#FF7000", out redCol))
-        {
-            redButton.GetComponent<Image>().color = redCol;//Changing colour
-        }
 
-        GameObject blueButton = (GameObject)Instantiate(buttonPrefab, new Vector3(100, -17, 0), Quaternion.identity);
-        blueButton.transform.SetParent(startPanel.transform);//Setting button parent
-        blueButton.GetComponent<Button>().onClick.AddListener(onClickBlue);//Setting what button does when clicked
-        blueButton.transform.GetChild(0).GetComponent<Text>().text = "Blue Team";//Changing text
-        Color blueCol;
-        if (ColorUtility.TryParseHtmlString("#00ACFF", out blueCol))
-        {
-            blueButton.GetComponent<Image>().color = blueCol;//Changing colour
-        }
+        SceneManager.LoadScene("PickTeamScreen");
+        
+        // GameObject redButton = (GameObject) Instantiate(buttonPrefab, new Vector3(-100, -17, 0), Quaternion.identity);
+        // redButton.transform.SetParent(startPanel.transform);//Setting button parent
+        // redButton.GetComponent<Button>().onClick.AddListener(onClickRed);//Setting what button does when clicked
+        // redButton.transform.GetChild(0).GetComponent<Text>().text = "Red Team";//Changing text
+        // Color redCol;
+        // if (ColorUtility.TryParseHtmlString("#FF7000", out redCol))
+        // {
+        //     redButton.GetComponent<Image>().color = redCol;//Changing colour
+        // }
+
+        // GameObject blueButton = (GameObject)Instantiate(buttonPrefab, new Vector3(100, -17, 0), Quaternion.identity);
+        // blueButton.transform.SetParent(startPanel.transform);//Setting button parent
+        // blueButton.GetComponent<Button>().onClick.AddListener(onClickBlue);//Setting what button does when clicked
+        // blueButton.transform.GetChild(0).GetComponent<Text>().text = "Blue Team";//Changing text
+        // Color blueCol;
+        // if (ColorUtility.TryParseHtmlString("#00ACFF", out blueCol))
+        // {
+        //     blueButton.GetComponent<Image>().color = blueCol;//Changing colour
+        // }
 
         Destroy(GameObject.Find("ConnectButton"));
     }
