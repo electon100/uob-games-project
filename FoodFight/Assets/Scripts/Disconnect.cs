@@ -17,7 +17,7 @@ public class Disconnect : MonoBehaviour {
 	
 	public void ConnectAgain() {
 		int hostId = network.hostId;
-		string serverIP = network.serverIP;
+		string serverIP = Client.serverIP;
 		int port = network.port;
 		byte error;
 		int connectionId = NetworkTransport.Connect(hostId, serverIP, port, 0, out error);
