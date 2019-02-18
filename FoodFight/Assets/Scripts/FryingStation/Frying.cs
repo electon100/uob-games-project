@@ -203,9 +203,10 @@ public class Frying : MonoBehaviour {
 	{
 		GameObject model = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
 		Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
-		Quaternion modelRotation = modelTransform.rotation;
 
-		GameObject inst = Instantiate(model, new Vector3(Random.Range(-14, -8), Random.Range(1, 9), 85), modelRotation);
+    Quaternion modelRotation = modelTransform.rotation;
+		Vector3 modelPosition = modelTransform.position + new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), 0);
+		GameObject inst = Instantiate(model, modelPosition, modelRotation);
 		panContents.Add(ingredient);
 		panContentsObjects.Add(inst);
 	}

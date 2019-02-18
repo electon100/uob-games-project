@@ -115,6 +115,13 @@ public class ARCupboard : MonoBehaviour
         foodName.text = "You picked some shrimps!";
     }
 
+    public void onRice()
+    {
+        toggleButtons();
+        ingredient = new Ingredient("rice", "ricePrefab");
+        foodName.text = "You picked some rice!";
+    }
+
     public void goBack()
     {
         Player.currentIngred = ingredient;

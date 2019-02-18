@@ -63,7 +63,7 @@ public class Server : MonoBehaviour {
         connectConfig.AckDelay = 33;
         connectConfig.AllCostTimeout = 20;
         connectConfig.ConnectTimeout = 1000;
-        connectConfig.DisconnectTimeout = 5000;
+        connectConfig.DisconnectTimeout = 1000;
         connectConfig.FragmentSize = 500;
         connectConfig.MaxCombinedReliableMessageCount = 10;
         connectConfig.MaxCombinedReliableMessageSize = 100;
@@ -80,6 +80,7 @@ public class Server : MonoBehaviour {
         reliableChannel = connectConfig.AddChannel(QosType.ReliableSequenced);
         HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
 
+        //NetworkServer.Reset();
         hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
         webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
         isStarted = true;
@@ -91,7 +92,7 @@ public class Server : MonoBehaviour {
         redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
         blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
         updateScores();
-        timer = 300.0f;
+        timer = 1300.0f;
         displayTime();
     }
 
@@ -289,12 +290,12 @@ public class Server : MonoBehaviour {
     {
         if (redTeam.ContainsKey(connectionId))
         {
-            if (!redKitchen.ContainsKey(stationId) && !blueKitchen.ContainsKey(stationId))
+            if (!redKitchen.ContainsKey(stationId))
                 redKitchen.Add(stationId, new List<Ingredient>());
         }
         else if (blueTeam.ContainsKey(connectionId))
         {
-            if (!blueKitchen.ContainsKey(stationId) && !redKitchen.ContainsKey(stationId))
+            if (!blueKitchen.ContainsKey(stationId))
                 blueKitchen.Add(stationId, new List<Ingredient>());
         }
     }
@@ -399,11 +400,11 @@ public class Server : MonoBehaviour {
             string messageContent = station + "$";
             foreach (Ingredient ingredient in redKitchen[station])
             {
-                Debug.Log("Sending back: " + ingredient.Name);
                 messageContent += Ingredient.SerializeObject(ingredient);
                 messageContent += "$";
             }
 
+            Debug.Log("Sending back: " + messageContent);
             SendMyMessage(messageType, messageContent, hostId);
         }
         else if (kitchen == "blue")
@@ -415,6 +416,7 @@ public class Server : MonoBehaviour {
                 messageContent += "$";
             }
 
+            Debug.Log("Sending back: " + messageContent);
             SendMyMessage(messageType, messageContent, hostId);
         }
     }

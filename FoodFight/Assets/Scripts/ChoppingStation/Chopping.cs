@@ -120,17 +120,13 @@ public class Chopping : MonoBehaviour
             startCanvas.gameObject.SetActive(false);
             defaultCanvas.gameObject.SetActive(true);
         }
-        else {
-            /* Generate a warning canvas for an unchoppable ingredient. */
-            notChoppable.text = "Ingredient cannot be chopped";
-        }
     }
 
     void CheckUpMovement()
     {
         if (Input.acceleration.y < -3.0f)
         {
-            source.PlayOneShot(chopSound);
+            // source.PlayOneShot(chopSound);
         }
     }
 
@@ -209,10 +205,13 @@ public class Chopping : MonoBehaviour
                 return true;
             }
             else {
+                notChoppable.text = "Ingredient cannot be chopped";
                 return false;
             }
         }
-        
+        else {
+            notChoppable.text = "You are not holding any ingredients";
+        }
         return false;
     }
 

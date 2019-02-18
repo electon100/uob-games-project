@@ -10,22 +10,23 @@ using System.IO;
 using System;
 using System.Reflection;
 using System.IO.Compression;
+using System.Text.RegularExpressions;
 
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.102";
+    public static string serverIP = "192.168.0.100";
 
-    private int port = 8000;
+    public int port = 8000;
 
-    private int hostId;
+    public int hostId;
 
     private int reliableChannel;
     private int unreliableChannel;
 
     ConnectionConfig connectConfig;
 
-    private int connectionId;
+    public int connectionId;
 
     public bool isConnected = false;
     private bool areButtonsHere = false;
@@ -35,6 +36,10 @@ public class Client : MonoBehaviour {
     public GameObject buttonPrefab;
     public GameObject startPanel;
     public GameObject warningText;
+    public GameObject connectButton;
+    public GameObject diffIPButton;
+    public GameObject inputField;
+    public GameObject changeIPButton;
 
     //NFC Stuff:
     public Text tag_output_text;
@@ -49,16 +54,17 @@ public class Client : MonoBehaviour {
     // A kitchen is a dictionary of different stations and their associated ingredients.
     public IDictionary<string, List<Ingredient>> myKitchen = new Dictionary<string, List<Ingredient>>();
 
-    private string currentStation = "-1";
-
     /* Current ingredient that the player is holding
        -> Can be used externally */
     public static Ingredient currentIngred;
 
+    public InputField changeIPText;
+
     public void Start()
     {
+        //NetworkServer.Reset();
         ingredientsInStation = new List<Ingredient>();
-
+        
         for (int i = 0; i < 4; i++)
         {
             string stationId = i.ToString();
@@ -87,16 +93,12 @@ public class Client : MonoBehaviour {
         NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
                                                             recBuffer, bufferSize, out dataSize, out error);
 
-
         switch (recData)
         {
             case NetworkEventType.Nothing:
                 break;
             case NetworkEventType.ConnectEvent:
-                if (!areButtonsHere) {
-                    initialiseStartButtons();
-                    areButtonsHere = true;
-                }
+                SceneManager.LoadScene("PickTeamScreen");
                 Debug.Log("Player " + connectionId + " has been connected to server.");
                 break;
             case NetworkEventType.DataEvent:
@@ -105,6 +107,9 @@ public class Client : MonoBehaviour {
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has been disconnected to server");
+                NetworkTransport.Disconnect(recHostId, connectionId, out error);
+                isConnected = false;
+                SceneManager.LoadScene("DisconnectScreen");
                 break;
             case NetworkEventType.BroadcastEvent:
                 Debug.Log("Broadcast event.");
@@ -118,16 +123,18 @@ public class Client : MonoBehaviour {
         NetworkTransport.Init();
         connectConfig = new ConnectionConfig();
 
+        Debug.Log(serverIP);
+
         /* Network configuration */
         connectConfig.AckDelay = 33;
         connectConfig.AllCostTimeout = 20;
         connectConfig.ConnectTimeout = 1000;
-        connectConfig.DisconnectTimeout = 5000;
+        connectConfig.DisconnectTimeout = 1000;
         connectConfig.FragmentSize = 500;
         connectConfig.MaxCombinedReliableMessageCount = 10;
         connectConfig.MaxCombinedReliableMessageSize = 100;
         connectConfig.MaxConnectionAttempt = 32;
-        connectConfig.MaxSentMessageQueueSize = 2048;
+        connectConfig.MaxSentMessageQueueSize = 4096;
         connectConfig.MinUpdateTimeout = 20;
         connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
         connectConfig.OverflowDropThreshold = 40; //
@@ -154,31 +161,6 @@ public class Client : MonoBehaviour {
             isConnected = true;
         }
         
-    }
-
-    private void initialiseStartButtons ()
-    {
-        GameObject redButton = (GameObject) Instantiate(buttonPrefab, new Vector3(-100, -17, 0), Quaternion.identity);
-        redButton.transform.SetParent(startPanel.transform);//Setting button parent
-        redButton.GetComponent<Button>().onClick.AddListener(onClickRed);//Setting what button does when clicked
-        redButton.transform.GetChild(0).GetComponent<Text>().text = "Red Team";//Changing text
-        Color redCol;
-        if (ColorUtility.TryParseHtmlString("#FF7000", out redCol))
-        {
-            redButton.GetComponent<Image>().color = redCol;//Changing colour
-        }
-
-        GameObject blueButton = (GameObject)Instantiate(buttonPrefab, new Vector3(100, -17, 0), Quaternion.identity);
-        blueButton.transform.SetParent(startPanel.transform);//Setting button parent
-        blueButton.GetComponent<Button>().onClick.AddListener(onClickBlue);//Setting what button does when clicked
-        blueButton.transform.GetChild(0).GetComponent<Text>().text = "Blue Team";//Changing text
-        Color blueCol;
-        if (ColorUtility.TryParseHtmlString("#00ACFF", out blueCol))
-        {
-            blueButton.GetComponent<Image>().color = blueCol;//Changing colour
-        }
-
-        Destroy(GameObject.Find("ConnectButton"));
     }
 
     public string serialiseIngredient(Ingredient ingredient)
@@ -261,7 +243,31 @@ public class Client : MonoBehaviour {
                 }
 
                 myKitchen[stationId] = ingredientsInStation;
+                logAppropriateStation(stationId);
                 ingredientsInStation = new List<Ingredient>();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void logAppropriateStation(string stationId) {
+        switch(stationId) {
+            case "0":
+                Player.ingredientsFromStation = getIngredientsFromStation("0");
+                SceneManager.LoadScene("CupboardStation");
+                break;
+            case "1":
+                Player.ingredientsFromStation = getIngredientsFromStation("1");
+                SceneManager.LoadScene("FryingStation");
+                break;
+            case "2":
+                Player.ingredientsFromStation = getIngredientsFromStation("2");
+                SceneManager.LoadScene("ChoppingStation");
+                break;
+            case "3":
+                Player.ingredientsFromStation = getIngredientsFromStation("3");
+                SceneManager.LoadScene("PlatingStation");
                 break;
             default:
                 break;
@@ -283,6 +289,22 @@ public class Client : MonoBehaviour {
     {
         SendMyMessage("connect", "blue");
         SceneManager.LoadScene("PlayerMainScreen");
+    }
+
+    public void useDifferentIP() {
+        connectButton.SetActive(false);
+        diffIPButton.SetActive(false);
+        inputField.SetActive(true);
+        changeIPButton.SetActive(true);
+    }
+
+    public void changeIP()
+    {
+        serverIP = Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
+        inputField.SetActive(false);
+        changeIPButton.SetActive(false);
+        connectButton.SetActive(true);
+        diffIPButton.SetActive(true);
     }
 
     private string FirstLetterToUpper(string str)
