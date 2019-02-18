@@ -14,7 +14,7 @@ using System.IO.Compression;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    private const string serverIP = "192.168.0.25";
+    private const string serverIP = "192.168.0.102";
 
     private int port = 8000;
 
@@ -102,6 +102,8 @@ public class Client : MonoBehaviour {
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Player " + connectionId + " has been disconnected to server");
+                NetworkTransport.Disconnect(recHostId, connectionId, out error);
+                SceneManager.LoadScene("DisconnectScreen");
                 break;
             case NetworkEventType.BroadcastEvent:
                 Debug.Log("Broadcast event.");

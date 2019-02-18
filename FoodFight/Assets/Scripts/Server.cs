@@ -143,6 +143,7 @@ public class Server : MonoBehaviour {
                 Debug.Log("Player " + connectionId + " has disconnected");
                 IDictionary<int, GameObject> teamToDestroyFrom = getTeam(connectionId);
                 // Player with id connectionId has left the game, so destroy its object instance.
+                NetworkTransport.Disconnect(recHostId, connectionId, out error);
                 if (teamToDestroyFrom != null)
                 {
                     destroyPlayer(teamToDestroyFrom, connectionId);
