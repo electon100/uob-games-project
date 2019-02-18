@@ -733,6 +733,11 @@ Prefab:
       value: 
       objectReference: {fileID: 1490162572571936, guid: 9aa39a92ae0f8ef4aa310c4fd1d94f89,
         type: 2}
+    - target: {fileID: 114053177565313616, guid: 714a7fc035a2b9941bc52e4abf34c4b5,
+        type: 2}
+      propertyPath: changeIPText
+      value: 
+      objectReference: {fileID: 333564621}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 714a7fc035a2b9941bc52e4abf34c4b5, type: 2}
   m_IsPrefabAsset: 0

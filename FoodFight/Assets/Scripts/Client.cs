@@ -10,6 +10,7 @@ using System.IO;
 using System;
 using System.Reflection;
 using System.IO.Compression;
+using System.Text.RegularExpressions;
 
 public class Client : MonoBehaviour {
 
@@ -55,10 +56,11 @@ public class Client : MonoBehaviour {
        -> Can be used externally */
     public static Ingredient currentIngred;
 
-    public Text changeIPText;
+    public InputField changeIPText;
 
     public void Start()
     {
+        //NetworkServer.Reset();
         ingredientsInStation = new List<Ingredient>();
 
         for (int i = 0; i < 4; i++)
@@ -120,6 +122,8 @@ public class Client : MonoBehaviour {
         NetworkTransport.Init();
         connectConfig = new ConnectionConfig();
 
+        Debug.Log(serverIP);
+
         /* Network configuration */
         connectConfig.AckDelay = 33;
         connectConfig.AllCostTimeout = 20;
@@ -129,7 +133,7 @@ public class Client : MonoBehaviour {
         connectConfig.MaxCombinedReliableMessageCount = 10;
         connectConfig.MaxCombinedReliableMessageSize = 100;
         connectConfig.MaxConnectionAttempt = 32;
-        connectConfig.MaxSentMessageQueueSize = 2048;
+        connectConfig.MaxSentMessageQueueSize = 4096;
         connectConfig.MinUpdateTimeout = 20;
         connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
         connectConfig.OverflowDropThreshold = 40; //
@@ -289,7 +293,8 @@ public class Client : MonoBehaviour {
 
     public void changeIP()
     {
-        serverIP = changeIPText.ToString();
+        serverIP = Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
+        Debug.Log(serverIP);
         SceneManager.LoadScene("PlayerStartScreen");
     }
 
