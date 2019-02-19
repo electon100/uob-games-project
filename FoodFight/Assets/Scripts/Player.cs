@@ -42,6 +42,7 @@ public class Player : MonoBehaviour {
         Screen.orientation = ScreenOrientation.Portrait;
         networkClient = GameObject.Find("Client");
         network = networkClient.GetComponent<Client>();
+        currentIngred = new Ingredient("chicken", "chickenPrefab");
     }
 
     void Awake() {
@@ -49,7 +50,6 @@ public class Player : MonoBehaviour {
     }
     
 	void Update () {
-
         //Testing on computer/////////////////
         if (Input.GetKeyDown(KeyCode.R))
         {
