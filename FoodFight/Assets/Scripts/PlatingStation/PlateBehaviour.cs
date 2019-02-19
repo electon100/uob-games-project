@@ -77,16 +77,16 @@ public class PlateBehaviour : MonoBehaviour {
       if (!string.Equals(recipe.Name, "mush")) {
         player.sendScoreToServer(recipe);
         clearPlate();
-        }
+      }
     }
 
     public void addIngredient() {
       if (Player.currentIngred != null) {
-        ingredientList.Add(Player.currentIngred);
         addIngredientToPlate(Player.currentIngred);
         player.notifyServerAboutIngredientPlaced(Player.currentIngred);
         player.removeCurrentIngredient();
         ingredientList = Player.ingredientsFromStation;
+        displayFood();
       }
     }
 
