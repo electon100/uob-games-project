@@ -82,6 +82,9 @@ public class PlateBehaviour : MonoBehaviour {
     }
 
     public void goBack() {
+      /* Notify server that player has left the station */
+      player = GameObject.Find("Player").GetComponent<Player>();
+      player.notifyAboutStationLeft("3");
       SceneManager.LoadScene("PlayerMainScreen");
     }
 

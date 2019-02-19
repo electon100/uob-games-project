@@ -219,6 +219,9 @@ public class Chopping : MonoBehaviour
     public void goBack()
     {
         // player.notifyServerAboutIngredientPlaced(currentChoppingIngred);
+        /* Notify server that player has left the station */
+		player = GameObject.Find("Player").GetComponent<Player>();
+		player.notifyAboutStationLeft("2");
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
