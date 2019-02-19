@@ -66,7 +66,7 @@ public class Server : MonoBehaviour {
         connectConfig.AckDelay = 33;
         connectConfig.AllCostTimeout = 20;
         connectConfig.ConnectTimeout = 1000;
-        connectConfig.DisconnectTimeout = 1000;
+        connectConfig.DisconnectTimeout = 5000;
         connectConfig.FragmentSize = 500;
         connectConfig.MaxCombinedReliableMessageCount = 10;
         connectConfig.MaxCombinedReliableMessageSize = 100;
@@ -191,6 +191,9 @@ public class Server : MonoBehaviour {
             case "score":
                 OnScore(messageContent, connectionId);
                 break;
+            case "leave":
+                OnLeave(messageContent, connectionId);
+                break;
         }
     }
 
@@ -226,6 +229,19 @@ public class Server : MonoBehaviour {
         updateScores();
 
         Debug.Log(messageContent);
+    }
+
+    private void OnLeave(string messageContent, int connectionId)
+    {
+        string stationId = messageContent;
+        if (redTeam.ContainsKey(connectionId) && redOccupied.ContainsKey(stationId))
+        {
+            redOccupied[stationId] = false;
+        }
+        if (blueTeam.ContainsKey(connectionId) && blueOccupied.ContainsKey(stationId))
+        {
+            blueOccupied[stationId] = false;
+        }
     }
 
     private int scoreRecipe(Ingredient recipe) {
@@ -281,9 +297,25 @@ public class Server : MonoBehaviour {
     private bool isPlayerOnValidStation(int connectionId, string stationId)
     {
         if (redTeam.ContainsKey(connectionId) && redKitchen.ContainsKey(stationId))
-            return true;
-        else if (blueTeam.ContainsKey(connectionId) && blueKitchen.ContainsKey(stationId))
-            return true;
+        {
+            if (!redOccupied[stationId])
+            {
+                redOccupied[stationId] = true;
+                Debug.Log("Red Station now occupied");
+                return true;
+            }  
+            else return false;
+        }
+        if (blueTeam.ContainsKey(connectionId) && blueKitchen.ContainsKey(stationId))
+        {
+            if (!blueOccupied[stationId])
+            {
+                blueOccupied[stationId] = true;
+                Debug.Log("Blue Station now occupied");
+                return true;
+            }      
+            else return false;
+        }
         else
             return false;
     }
@@ -294,12 +326,20 @@ public class Server : MonoBehaviour {
         if (redTeam.ContainsKey(connectionId))
         {
             if (!redKitchen.ContainsKey(stationId))
+            {
                 redKitchen.Add(stationId, new List<Ingredient>());
+                redOccupied.Add(stationId, false);
+                Debug.Log("Red Station Created");
+            }
         }
         else if (blueTeam.ContainsKey(connectionId))
         {
             if (!blueKitchen.ContainsKey(stationId))
+            {
                 blueKitchen.Add(stationId, new List<Ingredient>());
+                blueOccupied.Add(stationId, false);
+                Debug.Log("Blue Station Created");
+            }
         }
     }
 
