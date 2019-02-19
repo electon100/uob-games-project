@@ -51,6 +51,9 @@ public class Server : MonoBehaviour {
     IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
     IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
 
+    IDictionary<string, bool> redOccupied = new Dictionary<string, bool>();
+    IDictionary<string, bool> blueOccupied = new Dictionary<string, bool>();
+
     // Timer variable
     private float timer;
     public Text timerText;
