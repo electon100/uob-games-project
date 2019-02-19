@@ -233,6 +233,9 @@ public class Frying : MonoBehaviour {
 	public void goBack()
 	{
 		/* TODO: Need to notify server of local updates to ingredients in pan before leaving */
+		/* Notify server that player has left the station */
+		player = GameObject.Find("Player").GetComponent<Player>();
+		player.notifyAboutStationLeft("1");
 		SceneManager.LoadScene("PlayerMainScreen");
 	}
 }

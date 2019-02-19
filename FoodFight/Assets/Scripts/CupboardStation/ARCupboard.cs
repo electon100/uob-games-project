@@ -11,6 +11,7 @@ public class ARCupboard : MonoBehaviour
     public Text foodName;
     public GameObject goBackButton;
     public GameObject goBackButtonBig;
+    private Player player;
 
     // Use this for initialization
     void Start()
@@ -125,6 +126,9 @@ public class ARCupboard : MonoBehaviour
     public void goBack()
     {
         Player.currentIngred = ingredient;
+        /* Notify server that player has left the station */
+		player = GameObject.Find("Player").GetComponent<Player>();
+		player.notifyAboutStationLeft("0");
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
