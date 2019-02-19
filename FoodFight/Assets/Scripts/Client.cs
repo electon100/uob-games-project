@@ -15,8 +15,12 @@ using System.Text.RegularExpressions;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
+<<<<<<< HEAD
 
     public static string serverIP = "192.168.0.102";
+=======
+    public static string serverIP = "192.168.0.100";
+>>>>>>> develop
 
     public int port = 8000;
 
@@ -123,9 +127,7 @@ public class Client : MonoBehaviour {
     {
         NetworkTransport.Init();
         connectConfig = new ConnectionConfig();
-
-        Debug.Log(serverIP);
-
+        
         /* Network configuration */
         connectConfig.AckDelay = 33;
         connectConfig.AllCostTimeout = 20;
@@ -147,6 +149,9 @@ public class Client : MonoBehaviour {
         reliableChannel = connectConfig.AddChannel(QosType.ReliableSequenced);
         HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
 
+        if (hostId >= 0) {
+            NetworkTransport.RemoveHost(hostId);
+        }
         hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
         connectionId = NetworkTransport.Connect(hostId, serverIP, port, 0, out error);
 

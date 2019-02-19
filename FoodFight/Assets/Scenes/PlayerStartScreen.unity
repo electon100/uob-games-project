@@ -472,7 +472,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &726056365
 RectTransform:
   m_ObjectHideFlags: 0
@@ -482,7 +482,7 @@ RectTransform:
   m_GameObject: {fileID: 726056364}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.5688899, y: 3.5688899, z: 3.5688899}
+  m_LocalScale: {x: 2.8464394, y: 2.8464394, z: 2.8464394}
   m_Children:
   - {fileID: 1398775171}
   m_Father: {fileID: 56282970}
@@ -490,7 +490,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -181}
+  m_AnchoredPosition: {x: 0, y: -153.72998}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &726056366
@@ -797,6 +797,21 @@ Prefab:
       propertyPath: changeIPButton
       value: 
       objectReference: {fileID: 2075162575}
+    - target: {fileID: 114053177565313616, guid: 714a7fc035a2b9941bc52e4abf34c4b5,
+        type: 2}
+      propertyPath: changeIPText
+      value: 
+      objectReference: {fileID: 2064015141}
+    - target: {fileID: 114053177565313616, guid: 714a7fc035a2b9941bc52e4abf34c4b5,
+        type: 2}
+      propertyPath: connectButton
+      value: 
+      objectReference: {fileID: 1847535569}
+    - target: {fileID: 114053177565313616, guid: 714a7fc035a2b9941bc52e4abf34c4b5,
+        type: 2}
+      propertyPath: diffIPButton
+      value: 
+      objectReference: {fileID: 726056364}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 714a7fc035a2b9941bc52e4abf34c4b5, type: 2}
   m_IsPrefabAsset: 0
@@ -818,7 +833,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainText: {fileID: 0}
   mainPanel: {fileID: 56282966}
-  changeIPField: {fileID: 2064015141}
   tag_output_text: {fileID: 0}
 --- !u!1 &1100489092
 GameObject:
@@ -1187,7 +1201,7 @@ Prefab:
     - target: {fileID: 224841404960797538, guid: 5f1ce651aa958e84db74687760fa28a0,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 63
+      value: 40.878
       objectReference: {fileID: 0}
     - target: {fileID: 224841404960797538, guid: 5f1ce651aa958e84db74687760fa28a0,
         type: 2}
@@ -1237,17 +1251,17 @@ Prefab:
     - target: {fileID: 224841404960797538, guid: 5f1ce651aa958e84db74687760fa28a0,
         type: 2}
       propertyPath: m_LocalScale.x
-      value: 5.264305
+      value: 4.198652
       objectReference: {fileID: 0}
     - target: {fileID: 224841404960797538, guid: 5f1ce651aa958e84db74687760fa28a0,
         type: 2}
       propertyPath: m_LocalScale.y
-      value: 5.264305
+      value: 4.198652
       objectReference: {fileID: 0}
     - target: {fileID: 224841404960797538, guid: 5f1ce651aa958e84db74687760fa28a0,
         type: 2}
       propertyPath: m_LocalScale.z
-      value: 5.264305
+      value: 4.198652
       objectReference: {fileID: 0}
     - target: {fileID: 1411581202713964, guid: 5f1ce651aa958e84db74687760fa28a0, type: 2}
       propertyPath: m_Name
@@ -1255,11 +1269,16 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1411581202713964, guid: 5f1ce651aa958e84db74687760fa28a0, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f1ce651aa958e84db74687760fa28a0, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1 &1847535569 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1411581202713964, guid: 5f1ce651aa958e84db74687760fa28a0,
+    type: 2}
+  m_PrefabInternal: {fileID: 1448481833}
 --- !u!114 &1873204604 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114053177565313616, guid: 714a7fc035a2b9941bc52e4abf34c4b5,
@@ -1350,7 +1369,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2064015141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1454,7 +1473,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainText: {fileID: 0}
   mainPanel: {fileID: 0}
-  changeIPField: {fileID: 0}
   tag_output_text: {fileID: 0}
 --- !u!222 &2064015144
 CanvasRenderer:
@@ -1501,7 +1519,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2075162576
 RectTransform:
   m_ObjectHideFlags: 0
