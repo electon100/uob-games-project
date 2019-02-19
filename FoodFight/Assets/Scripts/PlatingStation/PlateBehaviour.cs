@@ -13,6 +13,7 @@ public class PlateBehaviour : MonoBehaviour {
     public Player player;
     // All ingredients on the plate
     public List<Ingredient> ingredientList = new List<Ingredient>();
+    public List<GameObject> ingredientObjects = new List<GameObject>();
     // Text representation of ingredients on Screen
     public Text ingredientListText;
     // Holds the name of the recipe
@@ -53,11 +54,19 @@ public class PlateBehaviour : MonoBehaviour {
       if (ingredientList.Count > 0) {
         GameObject food = (GameObject) Resources.Load(recipe.Model, typeof(GameObject));
         Transform modelTransform = food.GetComponentsInChildren<Transform>(true)[0];
-     	  Quaternion modelRotation = modelTransform.rotation;
+        Quaternion modelRotation = modelTransform.rotation;
+        clearPlateObjects();
         if (food == null) {
-          food = (GameObject) Resources.Load("mushPlatePrefab", typeof(GameObject));
+            //food = (GameObject) Resources.Load("mushPlatePrefab", typeof(GameObject));
+            if (ingredientList.Count > ingredientObjects.Count)
+            {
+                foreach (Ingredient ingred in ingredientList)
+                {
+                    addIngredientToPlate(ingred);
+                }
+            }
         }
-        model  = (GameObject) Instantiate(food, modelTransform.position, modelRotation);
+        model = (GameObject)Instantiate(food, modelTransform.position, modelRotation);
       } else {
         model = null;
       }
@@ -74,11 +83,21 @@ public class PlateBehaviour : MonoBehaviour {
     public void addIngredient() {
       if (Player.currentIngred != null) {
         ingredientList.Add(Player.currentIngred);
+        addIngredientToPlate(Player.currentIngred);
         player.notifyServerAboutIngredientPlaced(Player.currentIngred);
         player.removeCurrentIngredient();
         ingredientList = Player.ingredientsFromStation;
-        displayFood();
       }
+    }
+
+    private void addIngredientToPlate(Ingredient ingredient)
+    {
+        GameObject ingred = (GameObject)Resources.Load(ingredient.Model, typeof(GameObject));
+        Transform ingredTransform = ingred.GetComponentsInChildren<Transform>(true)[0];
+        Quaternion ingredRotation = ingredTransform.rotation;
+        Vector3 ingredPosition = ingredTransform.position + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0);
+        GameObject inst = Instantiate(ingred, ingredPosition, ingredRotation);
+        ingredientObjects.Add(inst);
     }
 
     public void goBack() {
@@ -89,8 +108,15 @@ public class PlateBehaviour : MonoBehaviour {
     {
         ingredientList.Clear();
         player.clearIngredientsInStation("3");
-        Destroy(model, 0.0f);
         recipe = null;
-        displayFood();
+        clearPlateObjects();
+    }
+
+    private void clearPlateObjects()
+    {
+        foreach(GameObject ingred in ingredientObjects) Destroy(ingred, 0.0f);
+
+        ingredientObjects.Clear();
+        Destroy(model, 0.0f);
     }
 }

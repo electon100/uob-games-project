@@ -15,8 +15,8 @@ using System.Text.RegularExpressions;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-  
-    public static string serverIP = "192.168.0.100";
+
+    public static string serverIP = "192.168.0.102";
 
     public int port = 8000;
 
@@ -65,7 +65,7 @@ public class Client : MonoBehaviour {
     {
         //NetworkServer.Reset();
         ingredientsInStation = new List<Ingredient>();
-        
+
         for (int i = 0; i < 4; i++)
         {
             string stationId = i.ToString();
@@ -82,7 +82,7 @@ public class Client : MonoBehaviour {
     {
         if (!isConnected) {
             return;
-        }          
+        }
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
         int channelID; // ID of channel connected to recHostId.
@@ -161,7 +161,7 @@ public class Client : MonoBehaviour {
         else {
             isConnected = true;
         }
-        
+
     }
 
     public string serialiseIngredient(Ingredient ingredient)
