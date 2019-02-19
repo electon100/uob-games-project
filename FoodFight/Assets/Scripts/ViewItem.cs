@@ -20,13 +20,15 @@ public class ViewItem : MonoBehaviour {
 		/* If the current item is null, instantiate it when viewing */
 		if (Player.isHoldingIngredient()) {
 			/* TODO: Sort out the scaling in unity I hate it I hate it */
-			// GameObject model = (GameObject) Resources.Load(Player.currentIngred.Model, typeof(GameObject));
-			// currentItem = (GameObject) Instantiate(model, new Vector3(45, 60, -200), Quaternion.identity);
-			// currentItem.transform.SetParent(mainPanel.transform);
-			// currentItem.transform.localScale = new Vector3(500.0f, 500.0f, 500.0f);
+			GameObject model = (GameObject) Resources.Load(Player.currentIngred.Model, typeof(GameObject));
+			Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
+			Quaternion modelRotation = modelTransform.rotation;
+			currentItem = (GameObject) Instantiate(model, new Vector3(0, 0, 0), modelRotation);
 			ingredText.text = Player.currentIngred.Name;
 		}
-		ingredText.text = "Nothing";
+		else {
+			ingredText.text = "Nothing";
+		}
 	}
 
 	// Update is called once per frame
