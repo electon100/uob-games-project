@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33652150516619240}
   - component: {fileID: 23518826505742080}
   m_Layer: 0
-  m_Name: EggsPrefab
+  m_Name: eggsPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +35,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1108457865802324}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -3.3, y: 2.6, z: 88.8}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.03435, y: 0.03435, z: 0.03435}
   m_Children: []
   m_Father: {fileID: 0}
