@@ -9,8 +9,10 @@ public class Frying : MonoBehaviour {
 
 	private readonly string stationID = "1";
 
+	public Button goBackBtn, putBtn, pickBtn, clearBtn, combineBtn;
 	public Text test_text;
 	public Player player;
+	public AudioClip fryingSound;
 
 	/* Phone motion stuff */
 	private float accelerometerUpdateInterval = 1.0f / 60.0f;
@@ -27,17 +29,13 @@ public class Frying : MonoBehaviour {
 	private Vector3 originalPos;
 	private float lastShake;
 	private int minimumShakeInterval = 1; // (seconds)
+	private AudioSource source;
 
 	/* Ingredient stuff */
-
-	/* List of ingredients in the pan, with current shake count applied.
-		  -> Can be used externally to retrieve ingredients from pan */
 	public List<Ingredient> panContents = new List<Ingredient>();
 	private List<GameObject> panContentsObjects = new List<GameObject>();
 
-    /* Other */
-	private int panShakes = 0;
-	private bool isHobOn = false;
+	/* Other */
 
 	void Start () {
 
@@ -49,22 +47,10 @@ public class Frying : MonoBehaviour {
 		lowPassValue = Input.acceleration;
 		originalPos = gameObject.transform.position;
 		lastShake = Time.time;
+		source = GetComponent<AudioSource>();
 
 		List<Ingredient> ingredientsFromStation = Player.ingredientsFromStation;
-		// List<Ingredient> ingredientsFromStation = new List<Ingredient>();
-
-		/* Create test ingredients */
-		// Ingredient noodles = new Ingredient("noodles", "noodlesPrefab");
-		// Ingredient veg = new Ingredient("chopped_mixed_vegetables", "chopped_mixed_vegetablesPrefab");
-		// Ingredient chicken = new Ingredient("diced_chicken", "EggsPrefab");
-
-		// Player.currentIngred = noodles;
-
-		/* Add ingredients to list */
-		// ingredientsFromStation.Add(noodles);
-		// ingredientsFromStation.Add(chicken);
-		// ingredientsFromStation.Add(veg);
-
+		
 		clearPan();
 
 		foreach (Ingredient ingredient in ingredientsFromStation) {
@@ -73,24 +59,40 @@ public class Frying : MonoBehaviour {
 	}
 
 	void Update () {
-		if (panContents.Count > 0) {
+		/* Ensure correct buttons are interactable */
+		updateButtonStates();
 
-			if (isHobOn) {
+		if (panContents.Count == 1) {
 
-				/* Read accelerometer data */
-				Vector3 acceleration = Input.acceleration;
-				lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
-				Vector3 deltaAcceleration = acceleration - lowPassValue;
+			/* Read accelerometer data */
+			Vector3 acceleration = Input.acceleration;
+			lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
+			Vector3 deltaAcceleration = acceleration - lowPassValue;
 
-				shakeIfNeeded();
+			shakeIfNeeded();
 
-				if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold) {
-					/* Shake detected! */
-					tryStartShake();
-				}
+			/* For desktop tests. */
+			if (Input.GetKeyDown(KeyCode.DownArrow)) {
+				tryStartShake();
 			}
+
+			if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold) {
+				/* Shake detected! */
+				tryStartShake();
+			}
+
 		} else {
-			/* TODO: What happens when pan is empty */
+			if (panContents.Count == 0) {
+				test_text.text = "Pan is empty";
+			} else {
+				test_text.text = "Combine ingredients to cook";
+			}
+			/* TODO: What happens when pan is empty or too full */
+		}
+		if (Input.GetKeyDown(KeyCode.E)) {
+			foreach (Ingredient ingredient in panContents) {
+				Debug.Log(ingredient.Name);
+			}
 		}
 	}
 
@@ -98,16 +100,21 @@ public class Frying : MonoBehaviour {
 		/* Make sure shake is not too soon after previous shake */
 		if ((Time.time - lastShake) > minimumShakeInterval) {
 			shouldShake = true;
-			panShakes++;
+
+			source.PlayOneShot(fryingSound);
 
 			/* Increment the number of pan tosses of all ingredients in pan */
 			foreach (Ingredient ingredient in panContents) {
 				ingredient.numberOfPanFlips++;
+				if (FoodData.Instance.isCooked(ingredient)) {
+					test_text.text = "Ingredient cooked!";
+				} else {
+					/* Update shake text */
+					test_text.text = "Pan shakes: " + ingredient.numberOfPanFlips;
+				}
+				lastShake = Time.time;
 			}
 
-			/* Update shake text */
-			test_text.text = "Pan shakes: " + panShakes;
-			lastShake = Time.time;
 		}
 	}
 
@@ -139,33 +146,80 @@ public class Frying : MonoBehaviour {
 			/* Notify server that player has placed ingredient */
 			player = GameObject.Find("Player").GetComponent<Player>();
 			player.notifyServerAboutIngredientPlaced(Player.currentIngred);
+
+			player.removeCurrentIngredient();
 		} else {
 			/* TODO: What happens when player is not holding an ingredient */
+			test_text.text = "No held ingredient";
 		}
 	}
 
-	public void turnOnHob()
+	public void combineIngredientsInPan()
 	{
-		/* Try and combine the ingredients */
-		Ingredient combinedFood = FoodData.Instance.TryCombineIngredients(panContents);
+		if (panContents.Count > 1) {
+			/* Try and combine the ingredients */
+			Ingredient combinedFood = FoodData.Instance.TryCombineIngredients(panContents);
 
-		/* Set the pan contents to the new combined recipe */
+			if (combinedFood.Name == "mush") {
+				test_text.text = "Ingredients do not combine";
+			} else {
+				/* Set the pan contents to the new combined recipe */
+				clearStation();
+
+				addIngredientToPan(combinedFood);
+				player.notifyServerAboutIngredientPlaced(combinedFood);
+			}
+		} else {
+			test_text.text = "No ingredients to combine";
+		}
+	}
+
+	public void clearStation() {
 		clearPan();
-		addIngredientToPan(combinedFood);
-
 		player = GameObject.Find("Player").GetComponent<Player>();
-		player.notifyServerAboutIngredientPlaced(combinedFood);
+		player.clearIngredientsInStation(stationID);
+	}
 
-		/* The hob is now on, the player can cook */
-		isHobOn = true;
+	public void pickUpIngredient()
+	{
+		if (panContents.Count == 1) {
+			/* Set the players current ingredient to the pan contents */
+			foreach (Ingredient ingredient in panContents) {
+				Player.currentIngred = ingredient;
+			}
+
+			/* Clear the pan */
+			clearPan();
+			player = GameObject.Find("Player").GetComponent<Player>();
+			player.clearIngredientsInStation(stationID);
+		} else {
+			/* What to do if there are more than (or fewer than) 1 ingredients in the pan*/
+			Debug.Log("Unable to pick up");
+			test_text.text = "Unable to pick up";
+		}
 	}
 
 	private void addIngredientToPan(Ingredient ingredient)
 	{
 		GameObject model = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
-		GameObject inst = Instantiate(model, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 85), Quaternion.Euler(-90, 0, 0));
+		Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
+
+    	Quaternion modelRotation = modelTransform.rotation;
+		Vector3 modelPosition = modelTransform.position;
+		GameObject inst = Instantiate(model, modelPosition, modelRotation);
 		panContents.Add(ingredient);
 		panContentsObjects.Add(inst);
+	}
+
+	private void updateButtonStates() {
+		setButtonInteractable(putBtn, Player.isHoldingIngredient());
+		setButtonInteractable(clearBtn, panContents.Count > 0);
+		setButtonInteractable(pickBtn, panContents.Count == 1);
+		setButtonInteractable(combineBtn, panContents.Count > 1);
+	}
+
+	private void setButtonInteractable(Button btn, bool interactable) {
+		btn.interactable = interactable;
 	}
 
 	private void clearPan()
@@ -174,14 +228,14 @@ public class Frying : MonoBehaviour {
 
 		panContents.Clear();
 		panContentsObjects.Clear();
-
-		player = GameObject.Find("Player").GetComponent<Player>();
-		player.clearIngredientsInStation(stationID);
 	}
 
 	public void goBack()
 	{
-		Player.currentStation = stationID;
+		/* TODO: Need to notify server of local updates to ingredients in pan before leaving */
+		/* Notify server that player has left the station */
+		player = GameObject.Find("Player").GetComponent<Player>();
+		player.notifyAboutStationLeft("1");
 		SceneManager.LoadScene("PlayerMainScreen");
 	}
 }

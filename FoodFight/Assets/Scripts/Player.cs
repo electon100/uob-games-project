@@ -13,7 +13,6 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
 
-    private GameObject currentItem;
     private GameObject networkClient;
     private Client network;
 
@@ -30,6 +29,7 @@ public class Player : MonoBehaviour {
     public static Ingredient currentIngred;
     public static List<Ingredient> ingredientsFromStation;
     public Text mainText;
+    public GameObject mainPanel;
 
     //NFC Stuff:
     public Text tag_output_text;
@@ -39,21 +39,25 @@ public class Player : MonoBehaviour {
     private int lastTag = -1;
 
     void Start () {
+        Screen.orientation = ScreenOrientation.Portrait;
         networkClient = GameObject.Find("Client");
         network = networkClient.GetComponent<Client>();
-        DontDestroyOnLoad(GameObject.Find("Player"));
     }
 
+    void Awake() {
+        DontDestroyOnLoad(GameObject.Find("Player"));
+    }
+    
 	void Update () {
 
         //Testing on computer/////////////////
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            checkStation("1");
-        }
         if (Input.GetKeyDown(KeyCode.R))
         {
             checkStation("0");
+        }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            checkStation("1");
         }
         if (Input.GetKeyDown(KeyCode.Y))
         {
@@ -65,33 +69,12 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log(Player.currentIngred.Name);
+            Debug.Log(Player.currentIngred.Model);
         }
 
         /////////////////////////////////////
 
-        if (currentItem != null)
-        {
-            currentItem.transform.Rotate(0, Time.deltaTime*20, 0);
-        }
-
         checkNFC();
-    }
-
-    public void viewItems()
-    {
-        mainText.text = currentIngred.numberOfChops.ToString();
-
-        /* If the current item is null, instantiate it when viewing */
-        if (currentItem == null)
-        {
-            GameObject model = (GameObject)Resources.Load(currentIngred.Model, typeof(GameObject));
-            currentItem = (GameObject)Instantiate(model, new Vector3(0, 0, 80), Quaternion.identity);
-        }
-        else
-        {
-            Destroy(currentItem);
-        }
     }
 
     private void cupboardStation()
@@ -146,13 +129,23 @@ public class Player : MonoBehaviour {
         network.SendMyMessage("clear", stationID);
     }
 
+    public void notifyAboutStationLeft(string stationID) {
+        network.SendMyMessage("leave", stationID);
+    }
+    
     public void removeCurrentIngredient()
     {
         currentIngred = null;
     }
 
-    public void sendScoreToServer(float score) {
-        network.SendMyMessage("score", score.ToString());
+    public static bool isHoldingIngredient()
+    {
+        return currentIngred != null;
+    }
+
+    public void sendScoreToServer(Ingredient recipe) {
+        string message = Ingredient.SerializeObject(recipe);
+        network.SendMyMessage("score", message);
     }
 
     private void checkStation(string text)
@@ -160,6 +153,7 @@ public class Player : MonoBehaviour {
 
         if (currentStation != text)
         {
+            // mainText.text = "Logging into station " + text + "...";
             switch (text)
             {
                 case "0":
@@ -167,28 +161,24 @@ public class Player : MonoBehaviour {
                     //Tell server you've logged into the station, holding that food item
                     text += sendCurrentIngredient(null);
                     network.SendMyMessage("station", text);
-                    cupboardStation();
                     break;
                 case "1":
                     currentStation = text;
                     //Tell server you've logged into the station, holding that food item
                     text += sendCurrentIngredient(null);
                     network.SendMyMessage("station", text);
-                    fryingStation();
                     break;
                 case "2":
                     currentStation = text;
                     //Tell server you've logged into the station, holding that food item
                     text += sendCurrentIngredient(null);
                     network.SendMyMessage("station", text);
-                    choppingStation();
                     break;
                 case "3":
                     currentStation = text;
                     //Tell server you've logged into the station, holding that food item
                     text += sendCurrentIngredient(null);
                     network.SendMyMessage("station", text);
-                    platingStation();
                     break;
                 case "8":
                     // Join red team
@@ -235,7 +225,6 @@ public class Player : MonoBehaviour {
                         if (j != lastTag)
                         {
                             checkStation(text);
-                            mainText.text = text;
                             lastTag = j;
                         }
                     }

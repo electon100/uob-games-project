@@ -17,15 +17,13 @@ public class PlateBehaviour : MonoBehaviour {
     public Text ingredientListText;
     // Holds the name of the recipe
     Ingredient recipe = null;
-    // Cameras
-    Camera camera;
+
     //Final model to display on Plate
     GameObject model;
 
     // Use this for initialization
     void Start () {
         DontDestroyOnLoad(GameObject.Find("Player"));
-        camera = GameObject.Find("Camera1").GetComponent<Camera>();
         ingredientListText = GameObject.Find("Ingredient List").GetComponent<Text>();
         player = GameObject.Find("Player").GetComponent<Player>();
         ingredientList = Player.ingredientsFromStation;
@@ -39,8 +37,8 @@ public class PlateBehaviour : MonoBehaviour {
     void updateTextList() {
       ingredientListText.text = "Current Ingredients:\n";
 
-      for(int i = 0; i < ingredientList.Count; i++) {
-        ingredientListText.text += ingredientList[i].Name + "\n";
+      foreach(Ingredient ingredient in ingredientList) {
+        ingredientListText.text += ingredient.Name + "\n";
       }
     }
 
@@ -51,12 +49,15 @@ public class PlateBehaviour : MonoBehaviour {
 
     void displayFood() {
       checkRecipe();
+      Destroy(model, 0.0f);
       if (ingredientList.Count > 0) {
-        GameObject food = (GameObject) Resources.Load(recipe.Name + "PlatePrefab", typeof(GameObject));
+        GameObject food = (GameObject) Resources.Load(recipe.Model, typeof(GameObject));
+        Transform modelTransform = food.GetComponentsInChildren<Transform>(true)[0];
+     	  Quaternion modelRotation = modelTransform.rotation;
         if (food == null) {
           food = (GameObject) Resources.Load("mushPlatePrefab", typeof(GameObject));
         }
-        model  = Instantiate(food, new Vector3(0,0,0), Quaternion.identity);
+        model  = (GameObject) Instantiate(food, modelTransform.position, modelRotation);
       } else {
         model = null;
       }
@@ -65,28 +66,34 @@ public class PlateBehaviour : MonoBehaviour {
 
     public void serveFood() {
       if (!string.Equals(recipe.Name, "mush")) {
-        ingredientList.Clear();
-        Destroy(model, 0.0f);
-        int score = FoodData.Instance.getScoreForIngredient(recipe);
-        player.sendScoreToServer(score);
-        player.clearIngredientsInStation("3");
-        recipe = null;
-        displayFood();
-      }
+        player.sendScoreToServer(recipe);
+        clearPlate();
+        }
     }
 
     public void addIngredient() {
       if (Player.currentIngred != null) {
         ingredientList.Add(Player.currentIngred);
-        player.removeCurrentIngredient();
         player.notifyServerAboutIngredientPlaced(Player.currentIngred);
+        player.removeCurrentIngredient();
         ingredientList = Player.ingredientsFromStation;
         displayFood();
       }
     }
 
     public void goBack() {
-          Player.currentStation = "1";
-          SceneManager.LoadScene("PlayerMainScreen");
+      /* Notify server that player has left the station */
+      player = GameObject.Find("Player").GetComponent<Player>();
+      player.notifyAboutStationLeft("3");
+      SceneManager.LoadScene("PlayerMainScreen");
+    }
+
+    public void clearPlate()
+    {
+        ingredientList.Clear();
+        player.clearIngredientsInStation("3");
+        Destroy(model, 0.0f);
+        recipe = null;
+        displayFood();
     }
 }
