@@ -95,7 +95,7 @@ public class Server : MonoBehaviour {
         redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
         blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
         updateScores();
-        timer = 1300.0f;
+        timer = 1200.0f;
         displayTime();
     }
 
@@ -307,7 +307,7 @@ public class Server : MonoBehaviour {
             }  
             else return false;
         }
-        if (blueTeam.ContainsKey(connectionId) && blueKitchen.ContainsKey(stationId))
+        else if (blueTeam.ContainsKey(connectionId) && blueKitchen.ContainsKey(stationId))
         {
             if (blueOccupied[stationId] == blueTeam[connectionId]) return true;
             else if (blueOccupied[stationId] == null)
@@ -346,24 +346,26 @@ public class Server : MonoBehaviour {
 
     private void sendIngredientsToPlayer(string stationId, int connectionId)
     {
-        if (redKitchen.ContainsKey(stationId))
+        if (redKitchen.ContainsKey(stationId) && redTeam.ContainsKey(connectionId))
             checkCurrentIngredient("station", "red", stationId, connectionId);
 
-        else if (blueKitchen.ContainsKey(stationId))
+        else if (blueKitchen.ContainsKey(stationId) && blueTeam.ContainsKey(connectionId))
             checkCurrentIngredient("station", "blue", stationId, connectionId);
     }
 
     // Add to a station if it exists
     private void addIngredientToStation(string stationId, Ingredient ingredientToAdd, int connectionId)
     {
-        if (redKitchen.ContainsKey(stationId))
+        if (redKitchen.ContainsKey(stationId) && redTeam.ContainsKey(connectionId))
         {
+            Debug.Log("Adding ingredient to red");
             AddIngredientToList(stationId, ingredientToAdd, "red");
             checkCurrentIngredient("station", "red", stationId, connectionId);
         }
 
-        else if (blueKitchen.ContainsKey(stationId))
+        else if (blueKitchen.ContainsKey(stationId) && blueTeam.ContainsKey(connectionId))
         {
+            Debug.Log("Adding ingredient to blue");
             AddIngredientToList(stationId, ingredientToAdd, "blue");
             checkCurrentIngredient("station", "blue", stationId, connectionId);
         }
@@ -448,7 +450,7 @@ public class Server : MonoBehaviour {
                 messageContent += "$";
             }
 
-            Debug.Log("Sending back: " + messageContent);
+            Debug.Log("Sending back to red: " + messageContent);
             SendMyMessage(messageType, messageContent, hostId);
         }
         else if (kitchen == "blue")
@@ -460,7 +462,7 @@ public class Server : MonoBehaviour {
                 messageContent += "$";
             }
 
-            Debug.Log("Sending back: " + messageContent);
+            Debug.Log("Sending back to blue: " + messageContent);
             SendMyMessage(messageType, messageContent, hostId);
         }
     }
