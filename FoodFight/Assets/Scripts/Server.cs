@@ -51,6 +51,9 @@ public class Server : MonoBehaviour {
     IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
     IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
 
+    IDictionary<string, GameObject> redOccupied = new Dictionary<string, GameObject>();
+    IDictionary<string, GameObject> blueOccupied = new Dictionary<string, GameObject>();
+
     // Timer variable
     private float timer;
     public Text timerText;
@@ -63,7 +66,7 @@ public class Server : MonoBehaviour {
         connectConfig.AckDelay = 33;
         connectConfig.AllCostTimeout = 20;
         connectConfig.ConnectTimeout = 1000;
-        connectConfig.DisconnectTimeout = 1000;
+        connectConfig.DisconnectTimeout = 5000;
         connectConfig.FragmentSize = 500;
         connectConfig.MaxCombinedReliableMessageCount = 10;
         connectConfig.MaxCombinedReliableMessageSize = 100;
@@ -92,7 +95,7 @@ public class Server : MonoBehaviour {
         redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
         blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
         updateScores();
-        timer = 1300.0f;
+        timer = 1200.0f;
         displayTime();
     }
 
@@ -188,6 +191,9 @@ public class Server : MonoBehaviour {
             case "score":
                 OnScore(messageContent, connectionId);
                 break;
+            case "leave":
+                OnLeave(messageContent, connectionId);
+                break;
         }
     }
 
@@ -223,6 +229,19 @@ public class Server : MonoBehaviour {
         updateScores();
 
         Debug.Log(messageContent);
+    }
+
+    private void OnLeave(string messageContent, int connectionId)
+    {
+        string stationId = messageContent;
+        if (redTeam.ContainsKey(connectionId) && redOccupied.ContainsKey(stationId))
+        {
+            redOccupied[stationId] = null;
+        }
+        if (blueTeam.ContainsKey(connectionId) && blueOccupied.ContainsKey(stationId))
+        {
+            blueOccupied[stationId] = null;
+        }
     }
 
     private int scoreRecipe(Ingredient recipe) {
@@ -278,11 +297,28 @@ public class Server : MonoBehaviour {
     private bool isPlayerOnValidStation(int connectionId, string stationId)
     {
         if (redTeam.ContainsKey(connectionId) && redKitchen.ContainsKey(stationId))
-            return true;
+        {
+            if (redOccupied[stationId] == redTeam[connectionId]) return true;
+            else if (redOccupied[stationId] == null)
+            {
+                redOccupied[stationId] = redTeam[connectionId];
+                Debug.Log("Red Station now occupied");
+                return true;
+            }  
+            else return false;
+        }
         else if (blueTeam.ContainsKey(connectionId) && blueKitchen.ContainsKey(stationId))
-            return true;
-        else
-            return false;
+        {
+            if (blueOccupied[stationId] == blueTeam[connectionId]) return true;
+            else if (blueOccupied[stationId] == null)
+            {
+                blueOccupied[stationId] = blueTeam[connectionId];
+                Debug.Log("Blue Station now occupied");
+                return true;
+            }      
+            else return false;
+        }
+        return false;
     }
 
     // Add station to correct kitchen if it does not exist
@@ -291,35 +327,45 @@ public class Server : MonoBehaviour {
         if (redTeam.ContainsKey(connectionId))
         {
             if (!redKitchen.ContainsKey(stationId))
+            {
                 redKitchen.Add(stationId, new List<Ingredient>());
+                redOccupied.Add(stationId, null);
+                Debug.Log("Red Station Created");
+            }
         }
         else if (blueTeam.ContainsKey(connectionId))
         {
             if (!blueKitchen.ContainsKey(stationId))
+            {
                 blueKitchen.Add(stationId, new List<Ingredient>());
+                blueOccupied.Add(stationId, null);
+                Debug.Log("Blue Station Created");
+            }
         }
     }
 
     private void sendIngredientsToPlayer(string stationId, int connectionId)
     {
-        if (redKitchen.ContainsKey(stationId))
+        if (redKitchen.ContainsKey(stationId) && redTeam.ContainsKey(connectionId))
             checkCurrentIngredient("station", "red", stationId, connectionId);
 
-        else if (blueKitchen.ContainsKey(stationId))
+        else if (blueKitchen.ContainsKey(stationId) && blueTeam.ContainsKey(connectionId))
             checkCurrentIngredient("station", "blue", stationId, connectionId);
     }
 
     // Add to a station if it exists
     private void addIngredientToStation(string stationId, Ingredient ingredientToAdd, int connectionId)
     {
-        if (redKitchen.ContainsKey(stationId))
+        if (redKitchen.ContainsKey(stationId) && redTeam.ContainsKey(connectionId))
         {
+            Debug.Log("Adding ingredient to red");
             AddIngredientToList(stationId, ingredientToAdd, "red");
             checkCurrentIngredient("station", "red", stationId, connectionId);
         }
 
-        else if (blueKitchen.ContainsKey(stationId))
+        else if (blueKitchen.ContainsKey(stationId) && blueTeam.ContainsKey(connectionId))
         {
+            Debug.Log("Adding ingredient to blue");
             AddIngredientToList(stationId, ingredientToAdd, "blue");
             checkCurrentIngredient("station", "blue", stationId, connectionId);
         }
@@ -404,7 +450,7 @@ public class Server : MonoBehaviour {
                 messageContent += "$";
             }
 
-            Debug.Log("Sending back: " + messageContent);
+            Debug.Log("Sending back to red: " + messageContent);
             SendMyMessage(messageType, messageContent, hostId);
         }
         else if (kitchen == "blue")
@@ -416,7 +462,7 @@ public class Server : MonoBehaviour {
                 messageContent += "$";
             }
 
-            Debug.Log("Sending back: " + messageContent);
+            Debug.Log("Sending back to blue: " + messageContent);
             SendMyMessage(messageType, messageContent, hostId);
         }
     }

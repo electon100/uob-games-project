@@ -49,7 +49,6 @@ public class Player : MonoBehaviour {
     }
     
 	void Update () {
-
         //Testing on computer/////////////////
         if (Input.GetKeyDown(KeyCode.R))
         {

@@ -64,7 +64,7 @@ public class Client : MonoBehaviour {
     {
         //NetworkServer.Reset();
         ingredientsInStation = new List<Ingredient>();
-        
+
         for (int i = 0; i < 4; i++)
         {
             string stationId = i.ToString();
@@ -81,7 +81,7 @@ public class Client : MonoBehaviour {
     {
         if (!isConnected) {
             return;
-        }          
+        }
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
         int channelID; // ID of channel connected to recHostId.
@@ -122,8 +122,7 @@ public class Client : MonoBehaviour {
     {
         NetworkTransport.Init();
         connectConfig = new ConnectionConfig();
-        
-        Debug.Log(serverIP);
+
         /* Network configuration */
         connectConfig.AckDelay = 33;
         connectConfig.AllCostTimeout = 20;
@@ -162,7 +161,7 @@ public class Client : MonoBehaviour {
         else {
             isConnected = true;
         }
-        
+
     }
 
     public string serialiseIngredient(Ingredient ingredient)
