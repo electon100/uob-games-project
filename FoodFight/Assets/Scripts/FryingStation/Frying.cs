@@ -50,7 +50,7 @@ public class Frying : MonoBehaviour {
 		source = GetComponent<AudioSource>();
 
 		List<Ingredient> ingredientsFromStation = Player.ingredientsFromStation;
-
+		
 		clearPan();
 
 		foreach (Ingredient ingredient in ingredientsFromStation) {
@@ -204,8 +204,8 @@ public class Frying : MonoBehaviour {
 		GameObject model = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
 		Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
 
-    Quaternion modelRotation = modelTransform.rotation;
-		Vector3 modelPosition = modelTransform.position + new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), 0);
+    	Quaternion modelRotation = modelTransform.rotation;
+		Vector3 modelPosition = modelTransform.position;
 		GameObject inst = Instantiate(model, modelPosition, modelRotation);
 		panContents.Add(ingredient);
 		panContentsObjects.Add(inst);
@@ -233,6 +233,9 @@ public class Frying : MonoBehaviour {
 	public void goBack()
 	{
 		/* TODO: Need to notify server of local updates to ingredients in pan before leaving */
+		/* Notify server that player has left the station */
+		player = GameObject.Find("Player").GetComponent<Player>();
+		player.notifyAboutStationLeft("1");
 		SceneManager.LoadScene("PlayerMainScreen");
 	}
 }

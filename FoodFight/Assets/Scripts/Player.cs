@@ -129,6 +129,10 @@ public class Player : MonoBehaviour {
         network.SendMyMessage("clear", stationID);
     }
 
+    public void notifyAboutStationLeft(string stationID) {
+        network.SendMyMessage("leave", stationID);
+    }
+    
     public void removeCurrentIngredient()
     {
         currentIngred = null;
