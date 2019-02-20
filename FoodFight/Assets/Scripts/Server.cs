@@ -51,8 +51,8 @@ public class Server : MonoBehaviour {
     IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
     IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
 
-    IDictionary<string, bool> redOccupied = new Dictionary<string, bool>();
-    IDictionary<string, bool> blueOccupied = new Dictionary<string, bool>();
+    IDictionary<string, GameObject> redOccupied = new Dictionary<string, GameObject>();
+    IDictionary<string, GameObject> blueOccupied = new Dictionary<string, GameObject>();
 
     // Timer variable
     private float timer;
@@ -236,11 +236,11 @@ public class Server : MonoBehaviour {
         string stationId = messageContent;
         if (redTeam.ContainsKey(connectionId) && redOccupied.ContainsKey(stationId))
         {
-            redOccupied[stationId] = false;
+            redOccupied[stationId] = null;
         }
         if (blueTeam.ContainsKey(connectionId) && blueOccupied.ContainsKey(stationId))
         {
-            blueOccupied[stationId] = false;
+            blueOccupied[stationId] = null;
         }
     }
 
@@ -298,9 +298,10 @@ public class Server : MonoBehaviour {
     {
         if (redTeam.ContainsKey(connectionId) && redKitchen.ContainsKey(stationId))
         {
-            if (!redOccupied[stationId])
+            if (redOccupied[stationId] == redTeam[connectionId]) return true;
+            else if (redOccupied[stationId] == null)
             {
-                redOccupied[stationId] = true;
+                redOccupied[stationId] = redTeam[connectionId];
                 Debug.Log("Red Station now occupied");
                 return true;
             }  
@@ -308,16 +309,16 @@ public class Server : MonoBehaviour {
         }
         if (blueTeam.ContainsKey(connectionId) && blueKitchen.ContainsKey(stationId))
         {
-            if (!blueOccupied[stationId])
+            if (blueOccupied[stationId] == blueTeam[connectionId]) return true;
+            else if (blueOccupied[stationId] == null)
             {
-                blueOccupied[stationId] = true;
+                blueOccupied[stationId] = blueTeam[connectionId];
                 Debug.Log("Blue Station now occupied");
                 return true;
             }      
             else return false;
         }
-        else
-            return false;
+        return false;
     }
 
     // Add station to correct kitchen if it does not exist
@@ -328,7 +329,7 @@ public class Server : MonoBehaviour {
             if (!redKitchen.ContainsKey(stationId))
             {
                 redKitchen.Add(stationId, new List<Ingredient>());
-                redOccupied.Add(stationId, false);
+                redOccupied.Add(stationId, null);
                 Debug.Log("Red Station Created");
             }
         }
@@ -337,7 +338,7 @@ public class Server : MonoBehaviour {
             if (!blueKitchen.ContainsKey(stationId))
             {
                 blueKitchen.Add(stationId, new List<Ingredient>());
-                blueOccupied.Add(stationId, false);
+                blueOccupied.Add(stationId, null);
                 Debug.Log("Blue Station Created");
             }
         }
