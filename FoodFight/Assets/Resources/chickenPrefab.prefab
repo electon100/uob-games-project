@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 4926551497490542}
   - component: {fileID: 54168602222523158}
   m_Layer: 0
-  m_Name: chickenPrefab 1
+  m_Name: chickenPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
