@@ -247,6 +247,9 @@ public class Client : MonoBehaviour {
                 logAppropriateStation(stationId);
                 ingredientsInStation = new List<Ingredient>();
                 break;
+            case "endgame":
+                Debug.Log("END GAME");
+                break;
             default:
                 break;
         }
