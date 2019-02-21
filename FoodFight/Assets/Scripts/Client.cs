@@ -250,8 +250,17 @@ public class Client : MonoBehaviour {
             case "endgame":
                 string[] details = messageContent.Split('$');
                 string winningTeam = details[0];
-                string redScore = details[1];
-                string blueScore = details[2];
+                string redScoreStr = details[1];
+                string blueScoreStr = details[2];
+
+                int redScore = 0;
+                int blueScore = 0;
+
+                int.TryParse(redScoreStr, out redScore);
+                int.TryParse(blueScoreStr, out blueScore);
+
+                GameEndState gameEndState = new GameEndState(winningTeam, redScore, blueScore);
+                Player.setGameEndState(gameEndState);
 
                 Debug.Log("END GAME: " + winningTeam + " " + redScore + " " + blueScore);
                 break;

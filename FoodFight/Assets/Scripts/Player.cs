@@ -38,16 +38,21 @@ public class Player : MonoBehaviour {
     private string sAction;
     private int lastTag = -1;
 
+    // Game end values
+    private static GameEndState gameEndState;
+
     void Start () {
         Screen.orientation = ScreenOrientation.Portrait;
         networkClient = GameObject.Find("Client");
         network = networkClient.GetComponent<Client>();
+
+        gameEndState = new GameEndState();
     }
 
     void Awake() {
         DontDestroyOnLoad(GameObject.Find("Player"));
     }
-    
+
 	void Update () {
         //Testing on computer/////////////////
         if (Input.GetKeyDown(KeyCode.R))
@@ -131,7 +136,7 @@ public class Player : MonoBehaviour {
     public void notifyAboutStationLeft(string stationID) {
         network.SendMyMessage("leave", stationID);
     }
-    
+
     public void removeCurrentIngredient()
     {
         currentIngred = null;
@@ -145,6 +150,14 @@ public class Player : MonoBehaviour {
     public void sendScoreToServer(Ingredient recipe) {
         string message = Ingredient.SerializeObject(recipe);
         network.SendMyMessage("score", message);
+    }
+
+    public static GameEndState getGameEndState() {
+      return gameEndState;
+    }
+
+    public static void setGameEndState(GameEndState newGameEndState) {
+      gameEndState = newGameEndState;
     }
 
     private void checkStation(string text)
