@@ -11,6 +11,8 @@ public class Frying : MonoBehaviour {
 
 	public Button goBackBtn, putBtn, pickBtn, clearBtn, combineBtn;
 	public Text test_text;
+	public Material success;
+	public Renderer background;
 	public Player player;
 	public AudioClip fryingSound;
 
@@ -108,6 +110,7 @@ public class Frying : MonoBehaviour {
 				ingredient.numberOfPanFlips++;
 				if (FoodData.Instance.isCooked(ingredient)) {
 					test_text.text = "Ingredient cooked!";
+					background.material = success;
 				} else {
 					/* Update shake text */
 					test_text.text = "Pan shakes: " + ingredient.numberOfPanFlips;

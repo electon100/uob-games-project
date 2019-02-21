@@ -192,11 +192,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goBackBtn: {fileID: 0}
-  putBtn: {fileID: 0}
-  pickBtn: {fileID: 0}
-  clearBtn: {fileID: 0}
-  combineBtn: {fileID: 0}
+  putBtn: {fileID: 1178504888}
+  pickBtn: {fileID: 1492814961}
+  clearBtn: {fileID: 2074220057}
+  combineBtn: {fileID: 967720546}
   test_text: {fileID: 1111359503}
+  success: {fileID: 2100000, guid: 2f3446cdf9a18cf4bbca0a1aec19befe, type: 2}
+  background: {fileID: 689764448}
   player: {fileID: 0}
   fryingSound: {fileID: 8300000, guid: d974dcdf0fd03a4499ddd0cb93652706, type: 3}
   panContents: []
