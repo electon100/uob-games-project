@@ -194,7 +194,6 @@ public class ARCupboard : MonoBehaviour
     }
 
     public void pickAgain() {
-        StartCoroutine(ShowMessage("Abc", 10));
         goBackButtonBig.SetActive(false);
         backArrow.SetActive(false);
         foodName.text = "";
@@ -202,7 +201,6 @@ public class ARCupboard : MonoBehaviour
     }
 
     IEnumerator ShowMessage (string message, float delay) {
-        Debug.Log("hi");
         foodName.text = message;
         foodName.enabled = true;
         yield return new WaitForSeconds(delay);
