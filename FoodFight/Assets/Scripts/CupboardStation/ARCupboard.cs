@@ -103,7 +103,7 @@ public class ARCupboard : MonoBehaviour
     public void onVegetables()
     {
         toggleButtons();
-        ingredient = new Ingredient("mixed_vegetables", "vegetablesPrefab");
+        ingredient = new Ingredient("mixed_vegetables", "mixed_vegetablesPrefab");
         foodName.text = "You picked some vegetables!";
     }
 
