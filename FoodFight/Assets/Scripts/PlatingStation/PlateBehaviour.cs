@@ -39,7 +39,7 @@ public class PlateBehaviour : MonoBehaviour {
       ingredientListText.text = "Current Ingredients:\n";
 
       foreach(Ingredient ingredient in ingredientList) {
-        ingredientListText.text += ingredient.Name + "\n";
+        ingredientListText.text += ingredient.ToString() + "\n";
       }
     }
 
