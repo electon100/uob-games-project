@@ -10,6 +10,9 @@ public class GameOverScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+        DontDestroyOnLoad(GameObject.Find("Client"));
+        DontDestroyOnLoad(GameObject.Find("Player"));
+
         Image img = GameObject.Find("Panel").GetComponent<Image>();
 
         redScoreText = GameObject.Find("RedScore").GetComponent<Text>();

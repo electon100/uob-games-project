@@ -98,7 +98,7 @@ public class Server : MonoBehaviour {
         redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
         blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
         updateScores();
-        timer = 1200.0f;
+        timer = 30.0f;
         displayTime();
     }
 
@@ -271,7 +271,7 @@ public class Server : MonoBehaviour {
         string stationId = words[0];
 
         moveServerPlayer(connectionId, stationId);
-      
+
         string ingredientWithFlags = words[1];
 
         // Be aware of null value here. Shouldn't cause issues, but might
@@ -315,7 +315,7 @@ public class Server : MonoBehaviour {
                 redOccupied[stationId] = redTeam[connectionId];
                 Debug.Log("Red Station now occupied");
                 return true;
-            }  
+            }
             else return false;
         }
         else if (blueTeam.ContainsKey(connectionId) && blueKitchen.ContainsKey(stationId))
@@ -326,7 +326,7 @@ public class Server : MonoBehaviour {
                 blueOccupied[stationId] = blueTeam[connectionId];
                 Debug.Log("Blue Station now occupied");
                 return true;
-            }      
+            }
             else return false;
         }
         return false;
@@ -516,6 +516,14 @@ public class Server : MonoBehaviour {
         else if (winningTeam.Equals("red"))
         {
             SceneManager.LoadScene("GameOverScreen");
+        }
+
+        foreach(KeyValuePair<int, GameObject> player in redTeam) {
+            SendMyMessage("endgame", winningTeam + "$" + redScore.getScore() + "$" + blueScore.getScore(), player.Key);
+        }
+
+        foreach(KeyValuePair<int, GameObject> player in blueTeam) {
+            SendMyMessage("endgame", winningTeam + "$" + redScore.getScore() + "$" + blueScore.getScore(), player.Key);
         }
     }
 

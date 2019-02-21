@@ -247,6 +247,30 @@ public class Client : MonoBehaviour {
                 logAppropriateStation(stationId);
                 ingredientsInStation = new List<Ingredient>();
                 break;
+            case "endgame":
+                string[] details = messageContent.Split('$');
+                string winningTeam = details[0];
+                string redScoreStr = details[1];
+                string blueScoreStr = details[2];
+
+                int redScore = 0;
+                int blueScore = 0;
+
+                int.TryParse(redScoreStr, out redScore);
+                int.TryParse(blueScoreStr, out blueScore);
+
+                GameEndState gameEndState = new GameEndState(winningTeam, redScore, blueScore);
+                Player.setGameEndState(gameEndState);
+                Player.gameEndState = gameEndState;
+
+                Debug.Log("END GAME: " + winningTeam + " " + redScore + " " + blueScore);
+                Debug.Log("ACTUAL END GAME: " + Player.getGameEndState().getWinningTeam() + " " + Player.getGameEndState().getRedScore() +
+                " " + Player.getGameEndState().getBlueScore());
+                Debug.Log("ACTUAL END GAME 2: " + Player.gameEndState.getWinningTeam() + " " + Player.gameEndState.getRedScore() +
+                " " + Player.gameEndState.getBlueScore());
+
+                SceneManager.LoadScene("PlayerGameOverScreen");
+                break;
             default:
                 break;
         }
