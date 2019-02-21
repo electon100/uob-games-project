@@ -98,7 +98,7 @@ public class Server : MonoBehaviour {
         redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
         blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
         updateScores();
-        timer = 1200.0f;
+        timer = 30.0f;
         displayTime();
     }
 
@@ -519,11 +519,11 @@ public class Server : MonoBehaviour {
         }
 
         foreach(KeyValuePair<int, GameObject> player in redTeam) {
-            SendMyMessage("endgame", winningTeam + "$" + redScore + "$" + blueScore, player.Key);
+            SendMyMessage("endgame", winningTeam + "$" + redScore.getScore() + "$" + blueScore.getScore(), player.Key);
         }
 
         foreach(KeyValuePair<int, GameObject> player in blueTeam) {
-            SendMyMessage("endgame", winningTeam + "$" + redScore + "$" + blueScore, player.Key);
+            SendMyMessage("endgame", winningTeam + "$" + redScore.getScore() + "$" + blueScore.getScore(), player.Key);
         }
     }
 
