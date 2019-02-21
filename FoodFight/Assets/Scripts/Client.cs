@@ -263,6 +263,8 @@ public class Client : MonoBehaviour {
                 Player.setGameEndState(gameEndState);
 
                 Debug.Log("END GAME: " + winningTeam + " " + redScore + " " + blueScore);
+
+                SceneManager.LoadScene("PlayerGameOverScreen");
                 break;
             default:
                 break;
