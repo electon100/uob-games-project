@@ -70,8 +70,8 @@ public class Player : MonoBehaviour {
 
         /////////////////////////////////////
 
+        /* Check for any NFC scans, forwarding to checkStation if present */
         string lastTag = nfcHandler.getScannedTag();
-        mainText.text = "lastTag: " + lastTag;
         if (lastTag != "-1") {
             checkStation(lastTag);
         }

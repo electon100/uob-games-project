@@ -33,10 +33,10 @@ public sealed class NFCHandler {
 
 					if (mNdefMessage != null) {
 						string nfcValue = System.Text.Encoding.UTF8.GetString(payLoad);
+						mIntent.Call("removeExtra", "android.nfc.extra.NDEF_MESSAGES");
+						mIntent.Call("removeExtra", "android.nfc.extra.TAG");
 						if (validValues.Contains(nfcValue)) return nfcValue;
 					}
-					mIntent.Call("removeExtra", "android.nfc.extra.NDEF_MESSAGES");
-					mIntent.Call("removeExtra", "android.nfc.extra.TAG");
 				}
 			}	catch (Exception ex) { }
 		}
