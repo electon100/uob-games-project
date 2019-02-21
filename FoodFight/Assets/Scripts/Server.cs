@@ -519,11 +519,11 @@ public class Server : MonoBehaviour {
         }
 
         foreach(KeyValuePair<int, GameObject> player in redTeam) {
-            SendMyMessage("endgame", "hello", player.Key);
+            SendMyMessage("endgame", winningTeam + "$" + redScore + "$" + blueScore, player.Key);
         }
 
         foreach(KeyValuePair<int, GameObject> player in blueTeam) {
-            SendMyMessage("endgame", "hello", player.Key);
+            SendMyMessage("endgame", winningTeam + "$" + redScore + "$" + blueScore, player.Key);
         }
     }
 

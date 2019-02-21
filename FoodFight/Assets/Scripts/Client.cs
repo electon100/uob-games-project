@@ -248,7 +248,12 @@ public class Client : MonoBehaviour {
                 ingredientsInStation = new List<Ingredient>();
                 break;
             case "endgame":
-                Debug.Log("END GAME");
+                string[] details = messageContent.Split('$');
+                string winningTeam = details[0];
+                string redScore = details[1];
+                string blueScore = details[2];
+
+                Debug.Log("END GAME: " + winningTeam + " " + redScore + " " + blueScore);
                 break;
             default:
                 break;
