@@ -15,7 +15,7 @@ public class GameEndState {
 	}
 
 	public GameEndState() {
-		this.winningTeam = "red";
+		this.winningTeam = "uh oh";
 		this.redScore = 0;
 		this.blueScore = 0;
 	}

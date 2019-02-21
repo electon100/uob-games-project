@@ -261,8 +261,13 @@ public class Client : MonoBehaviour {
 
                 GameEndState gameEndState = new GameEndState(winningTeam, redScore, blueScore);
                 Player.setGameEndState(gameEndState);
+                Player.gameEndState = gameEndState;
 
                 Debug.Log("END GAME: " + winningTeam + " " + redScore + " " + blueScore);
+                Debug.Log("ACTUAL END GAME: " + Player.getGameEndState().getWinningTeam() + " " + Player.getGameEndState().getRedScore() +
+                " " + Player.getGameEndState().getBlueScore());
+                Debug.Log("ACTUAL END GAME 2: " + Player.gameEndState.getWinningTeam() + " " + Player.gameEndState.getRedScore() +
+                " " + Player.gameEndState.getBlueScore());
 
                 SceneManager.LoadScene("PlayerGameOverScreen");
                 break;

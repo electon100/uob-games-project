@@ -39,7 +39,7 @@ public class Player : MonoBehaviour {
     private int lastTag = -1;
 
     // Game end values
-    private static GameEndState gameEndState;
+    public static GameEndState gameEndState;
 
     void Start () {
         Screen.orientation = ScreenOrientation.Portrait;
