@@ -33,10 +33,7 @@ public class Player : MonoBehaviour {
 
     //NFC Stuff:
     public Text tag_output_text;
-    private AndroidJavaObject mActivity;
-    private AndroidJavaObject mIntent;
-    private string sAction;
-    private int lastTag = -1;
+    private NFCHandler nfcHandler = new NFCHandler();
 
     void Start () {
         Screen.orientation = ScreenOrientation.Portrait;
@@ -47,7 +44,7 @@ public class Player : MonoBehaviour {
     void Awake() {
         DontDestroyOnLoad(GameObject.Find("Player"));
     }
-    
+
 	void Update () {
         //Testing on computer/////////////////
         if (Input.GetKeyDown(KeyCode.R))
@@ -73,7 +70,11 @@ public class Player : MonoBehaviour {
 
         /////////////////////////////////////
 
-        checkNFC();
+        /* Check for any NFC scans, forwarding to checkStation if present */
+        string lastTag = nfcHandler.getScannedTag();
+        if (lastTag != "-1") {
+            checkStation(lastTag);
+        }
     }
 
     private void cupboardStation()
@@ -130,8 +131,9 @@ public class Player : MonoBehaviour {
 
     public void notifyAboutStationLeft(string stationID) {
         network.SendMyMessage("leave", stationID);
+        resetCurrentStation();
     }
-    
+
     public void removeCurrentIngredient()
     {
         currentIngred = null;
@@ -142,6 +144,10 @@ public class Player : MonoBehaviour {
         return currentIngred != null;
     }
 
+    private void resetCurrentStation() {
+        currentStation = "-1";
+    }
+
     public void sendScoreToServer(Ingredient recipe) {
         string message = Ingredient.SerializeObject(recipe);
         network.SendMyMessage("score", message);
@@ -149,7 +155,6 @@ public class Player : MonoBehaviour {
 
     private void checkStation(string text)
     {
-
         if (currentStation != text)
         {
             // mainText.text = "Logging into station " + text + "...";
@@ -196,62 +201,6 @@ public class Player : MonoBehaviour {
                 default:
                     currentStation = "-1";
                     break;
-            }
-        }
-    }
-
-    private void checkNFC()
-    {
-        if (Application.platform == RuntimePlatform.Android)
-        {
-            try
-            {
-                mActivity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
-                mIntent = mActivity.Call<AndroidJavaObject>("getIntent");
-                sAction = mIntent.Call<String>("getAction");
-                if (sAction == "android.nfc.action.NDEF_DISCOVERED")
-                {
-                     AndroidJavaObject[] mNdefMessage = mIntent.Call<AndroidJavaObject[]>("getParcelableArrayExtra", "android.nfc.extra.NDEF_MESSAGES");
-                    AndroidJavaObject[] mNdefRecord = mNdefMessage[0].Call<AndroidJavaObject[]>("getRecords");
-                    byte[] payLoad = mNdefRecord[0].Call<byte[]>("getPayload");
-
-                    if (mNdefMessage != null)
-                    {
-                        string text = System.Text.Encoding.UTF8.GetString(payLoad);
-                        int j = -1;
-                        Int32.TryParse(text, out j);
-
-                        if (j != lastTag)
-                        {
-                            checkStation(text);
-                            lastTag = j;
-                        }
-                    }
-                    else
-                    {
-                        tag_output_text.text = "No ID found !";
-                    }
-                    mIntent.Call("removeExtra", "android.nfc.extra.TAG");
-                    return;
-                }
-                else if (sAction == "android.nfc.action.TECH_DISCOVERED")
-                {
-                   tag_output_text.text = "Tech discovered tag";
-                }
-                else if (sAction == "android.nfc.action.TAG_DISCOVERED")
-                {
-                    tag_output_text.text = "Tag not supported";
-                }
-                else
-                {
-                    tag_output_text.text = "Scan a NFC tag...";
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                string text = ex.Message;
-                tag_output_text.text = text;
             }
         }
     }

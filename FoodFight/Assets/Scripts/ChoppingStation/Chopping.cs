@@ -11,10 +11,10 @@ public class Chopping : MonoBehaviour
     public Transform defaultCanvas;
     public Transform startCanvas;
     public Transform warningCanvas;
+    public Transform notChoppableCanvas;
     public Transform endCanvas;
 
     /* Output text to be displayed on screen */
-    public Text yAcc;
     public Text chops;
     public Text outCome;
     public Text status;
@@ -36,6 +36,9 @@ public class Chopping : MonoBehaviour
 	private float lastChop;
     private float yTransform;
 
+    /* Check if the ingredient is choppable */
+    bool startChopping;
+
     private Player player;
     private Ingredient currentChoppingIngred;
 
@@ -56,69 +59,71 @@ public class Chopping : MonoBehaviour
         originalPos = gameObject.transform.position;
 		lastChop = Time.time;
 
-        /* Displays "INGREDIENT CANNOT BE CHOPPED" if appropriate */
-        notChoppable = GameObject.Find("NotChoppableText").GetComponent<Text>();
-        StartGame();
+        startChopping = CheckIngredientValid();
 
-        /* Instantiate all text info */
-        outCome = GameObject.Find("OutcomeText").GetComponent<Text>();
-        chops = GameObject.Find("ChopText").GetComponent<Text>();
-        yAcc = GameObject.Find("AccValText").GetComponent<Text>();
-        status = GameObject.Find("StatusText").GetComponent<Text>();
-        
+        StartGame();
     }
 
     void Update()
     {
+        if (startChopping) {
+            /* Constantly checks if ingredient is correctly chopped and displays success screen. */
+            ChoppingStatus();
 
-        /* Constantly checks if ingredient is correctly chopped and displays success screen. */
-        ChoppingStatus();
+            /* Getting rid of the intro screen when player starts chopping. */
+            if (Input.acceleration.y > maxAcc)
+            {
+                maxAcc = Input.acceleration.y;
+            }
 
-        /* Getting rid of the intro screen when player starts chopping. */
-        if (Input.acceleration.y > maxAcc)
-        {
-            maxAcc = Input.acceleration.y;
-            yAcc.text = maxAcc.ToString();
-        }
+            /* For desktop tests. */
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                transform.Rotate(0, -10, 0);
+                Player.currentIngred.numberOfChops++;
+                source.PlayOneShot(chopSound);
+                lastChop = Time.time;
+            }
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                transform.Rotate(0, 10, 0);
+            }
+            
+            /* Updates the chops count on the screen. */
+            chops.text = Player.currentIngred.numberOfChops.ToString();
+            /* Simulates the movement of the knife. */
+            KnifeMovement();
+            /* Check if the player has started the movement and increment the number of chops on the ingredient */
+            CheckDownMovement();
+            /* For sound effect. */
+            CheckUpMovement();
+            /* Uncomment to make game more interesting and add sliced fingers. */
+            // CheckChopSpeed();
 
-        /* For desktop tests. */
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            transform.Rotate(0, -10, 0);
-            Player.currentIngred.numberOfChops++;
-            source.PlayOneShot(chopSound);
-            lastChop = Time.time;
-        }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            transform.Rotate(0, 10, 0);
-        }
-
-        /* Updates the chops count on the screen. */
-        chops.text = Player.currentIngred.numberOfChops.ToString();
-        /* Simulates the movement of the knife. */
-        KnifeMovement();
-        /* Check if the player has started the movement and increment the number of chops on the ingredient */
-        CheckDownMovement();
-        /* For sound effect. */
-        CheckUpMovement();
-        /* Uncomment to make game more interesting and add sliced fingers. */
-        // CheckChopSpeed();
-
-        if ((Player.currentIngred.numberOfChops % 3) == 0) {
-            transform.position = originalPos;
-        }
-        
+            if ((Player.currentIngred.numberOfChops % 3) == 0) {
+                transform.position = originalPos;
+            }
+        } 
     }
 
     public void StartGame()
     {
-        /* Check if the ingredient is choppable */
-        bool startChopping = CheckIngredientValid();
         if (startChopping)
         {
             startCanvas.gameObject.SetActive(false);
             defaultCanvas.gameObject.SetActive(true);
+            /* Instantiate all text info */
+            outCome = GameObject.Find("OutcomeText").GetComponent<Text>();
+            chops = GameObject.Find("ChopText").GetComponent<Text>();
+            status = GameObject.Find("StatusText").GetComponent<Text>();
+
+            Debug.Log(Player.currentIngred.Model);
+            GameObject model = (GameObject) Resources.Load(Player.currentIngred.Model, typeof(GameObject));
+            Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
+
+            Quaternion modelRotation = modelTransform.rotation;
+            Vector3 modelPosition = modelTransform.position;
+            GameObject inst = Instantiate(model, modelPosition, modelRotation);
         }
     }
 
@@ -205,11 +210,15 @@ public class Chopping : MonoBehaviour
                 return true;
             }
             else {
+                defaultCanvas.gameObject.SetActive(false);
+                notChoppableCanvas.gameObject.SetActive(true);
                 notChoppable.text = "Ingredient cannot be chopped";
                 return false;
             }
         }
         else {
+            defaultCanvas.gameObject.SetActive(false);
+            notChoppableCanvas.gameObject.SetActive(true);
             notChoppable.text = "You are not holding any ingredients";
         }
         return false;

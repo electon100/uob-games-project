@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Xml.Serialization;
+using System.Linq;
 
 [Serializable]
 public class Ingredient {
@@ -50,5 +51,9 @@ public class Ingredient {
 
 		return result;
 	}
+
+  public string ToString() {
+    return Name.First().ToString().ToUpper() + Name.Replace('_', ' ').Substring(1);
+  }
 
 }

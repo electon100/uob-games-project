@@ -9,9 +9,13 @@ public class ARCupboard : MonoBehaviour
 {
     public static Ingredient ingredient;
     public Text foodName;
+    public GameObject imageTarget;
     public GameObject goBackButton;
     public GameObject goBackButtonBig;
+    public GameObject backArrow;
     private Player player;
+    private RaycastHit hit;
+    private Ray ray;
 
     // Use this for initialization
     void Start()
@@ -23,13 +27,70 @@ public class ARCupboard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        bool isDesktop = Input.GetMouseButtonDown(0);
+        bool isMobile = (Input.touchCount > 0) && (Input.GetTouch(0).phase == TouchPhase.Began);
+        if (isDesktop || isMobile) {
+            Ray raycast = (isDesktop) ? Camera.main.ScreenPointToRay(Input.mousePosition) :
+                                        Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            RaycastHit raycastHit;
+            if (Physics.Raycast(raycast, out raycastHit)) {
+                checkItemPressed(raycastHit.transform.gameObject.name);
+            }
+        }
+
+    }
+
+    public void checkItemPressed(string itemName) {
+        switch(itemName) {
+            case "Potatoes":
+                onPotato();
+                break;
+            case "Vegetables":
+                onVegetables();
+                break;
+            case "Milk":
+                onMilk();
+                break;
+            case "Eggs":
+                onEggs();
+                break;
+            case "Noodles":
+                onNoodles();
+                break;
+            case "Flour":
+                onFlour();
+                break;
+            case "Chicken":
+                onChicken();
+                break;
+            case "SoySauce":
+                onSoySauce();
+                break;
+            case "Steak":
+                onSteak();
+                break;
+            case "GreenPeas":
+                onPeas();
+                break;
+            case "Duck":
+                onDuck();
+                break;
+            case "Shrimp":
+                onShrimp();
+                break;
+            case "Rice":
+                onRice();
+                break;
+            default:
+                break;
+        }
 
     }
 
     public void toggleButtons() {
-        goBackButton.SetActive(false);
         goBackButtonBig.SetActive(true);
-        GameObject.Find("ImageTarget").SetActive(false);
+        backArrow.SetActive(true);
+        imageTarget.SetActive(false);
     }
 
     public void onPotato()
@@ -42,7 +103,7 @@ public class ARCupboard : MonoBehaviour
     public void onVegetables()
     {
         toggleButtons();
-        ingredient = new Ingredient("mixed_vegetables", "vegetablesPrefab");
+        ingredient = new Ingredient("mixed_vegetables", "mixed_vegetablesPrefab");
         foodName.text = "You picked some vegetables!";
     }
 
@@ -130,6 +191,20 @@ public class ARCupboard : MonoBehaviour
 		player = GameObject.Find("Player").GetComponent<Player>();
 		player.notifyAboutStationLeft("0");
         SceneManager.LoadScene("PlayerMainScreen");
+    }
+
+    public void pickAgain() {
+        goBackButtonBig.SetActive(false);
+        backArrow.SetActive(false);
+        foodName.text = "";
+        imageTarget.SetActive(true);
+    }
+
+    IEnumerator ShowMessage (string message, float delay) {
+        foodName.text = message;
+        foodName.enabled = true;
+        yield return new WaitForSeconds(delay);
+        foodName.enabled = false;
     }
 
 }

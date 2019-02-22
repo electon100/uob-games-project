@@ -2793,7 +2793,7 @@ GameObject:
   - component: {fileID: 33444650413218002}
   - component: {fileID: 23952420923572416}
   m_Layer: 0
-  m_Name: stir_fryPrefab(Clone)
+  m_Name: stir_fryPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

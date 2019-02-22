@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    public static string serverIP = "192.168.0.104";
+    public static string serverIP = "192.168.0.100";
 
     public int port = 8000;
 
@@ -40,6 +40,8 @@ public class Client : MonoBehaviour {
     public GameObject diffIPButton;
     public GameObject inputField;
     public GameObject changeIPButton;
+    public GameObject goBackButton;
+    public GameObject defaultIP;
 
     //NFC Stuff:
     public Text tag_output_text;
@@ -58,12 +60,18 @@ public class Client : MonoBehaviour {
        -> Can be used externally */
     public static Ingredient currentIngred;
 
+    public GameEndState gameEndState;
+
+    public string team;
+
     public InputField changeIPText;
 
     public void Start()
     {
         //NetworkServer.Reset();
         ingredientsInStation = new List<Ingredient>();
+
+        gameEndState = new GameEndState();
 
         for (int i = 0; i < 4; i++)
         {
@@ -247,6 +255,27 @@ public class Client : MonoBehaviour {
                 logAppropriateStation(stationId);
                 ingredientsInStation = new List<Ingredient>();
                 break;
+            case "endgame":
+                string[] details = messageContent.Split('$');
+                string winningTeam = details[0];
+                string redScoreStr = details[1];
+                string blueScoreStr = details[2];
+
+                int redScore = 0;
+                int blueScore = 0;
+
+                int.TryParse(redScoreStr, out redScore);
+                int.TryParse(blueScoreStr, out blueScore);
+
+                gameEndState = new GameEndState(winningTeam, redScore, blueScore);
+
+                Debug.Log("END GAME: " + winningTeam + " " + redScore + " " + blueScore);
+
+                SceneManager.LoadScene("PlayerGameOverScreen");
+                break;
+            case "team":
+                team = messageContent;
+                break;
             default:
                 break;
         }
@@ -297,15 +326,28 @@ public class Client : MonoBehaviour {
         diffIPButton.SetActive(false);
         inputField.SetActive(true);
         changeIPButton.SetActive(true);
+        goBackButton.SetActive(true);
+        defaultIP.SetActive(true);
     }
 
     public void changeIP()
     {
-        serverIP = Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
+        serverIP = "192.168.0." + Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
         inputField.SetActive(false);
         changeIPButton.SetActive(false);
         connectButton.SetActive(true);
         diffIPButton.SetActive(true);
+        goBackButton.SetActive(false);
+        defaultIP.SetActive(false);
+    }
+
+    public void goBack() {
+      inputField.SetActive(false);
+      changeIPButton.SetActive(false);
+      connectButton.SetActive(true);
+      diffIPButton.SetActive(true);
+      goBackButton.SetActive(false);
+      defaultIP.SetActive(false);
     }
 
     private string FirstLetterToUpper(string str)
@@ -317,6 +359,14 @@ public class Client : MonoBehaviour {
             return char.ToUpper(str[0]) + str.Substring(1);
 
         return str.ToUpper();
+    }
+
+    public GameEndState getGameEndState() {
+      return gameEndState;
+    }
+
+    public string getTeam() {
+      return team;
     }
 
 }
