@@ -40,6 +40,8 @@ public class Client : MonoBehaviour {
     public GameObject diffIPButton;
     public GameObject inputField;
     public GameObject changeIPButton;
+    public GameObject goBackButton;
+    public GameObject defaultIP;
 
     //NFC Stuff:
     public Text tag_output_text;
@@ -324,15 +326,28 @@ public class Client : MonoBehaviour {
         diffIPButton.SetActive(false);
         inputField.SetActive(true);
         changeIPButton.SetActive(true);
+        goBackButton.SetActive(true);
+        defaultIP.SetActive(true);
     }
 
     public void changeIP()
     {
-        serverIP = Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
+        serverIP = "192.168.0." + Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
         inputField.SetActive(false);
         changeIPButton.SetActive(false);
         connectButton.SetActive(true);
         diffIPButton.SetActive(true);
+        goBackButton.SetActive(false);
+        defaultIP.SetActive(false);
+    }
+
+    public void goBack() {
+      inputField.SetActive(false);
+      changeIPButton.SetActive(false);
+      connectButton.SetActive(true);
+      diffIPButton.SetActive(true);
+      goBackButton.SetActive(false);
+      defaultIP.SetActive(false);
     }
 
     private string FirstLetterToUpper(string str)
