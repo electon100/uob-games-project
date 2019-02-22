@@ -58,12 +58,18 @@ public class Client : MonoBehaviour {
        -> Can be used externally */
     public static Ingredient currentIngred;
 
+    public GameEndState gameEndState;
+
+    public string team;
+
     public InputField changeIPText;
 
     public void Start()
     {
         //NetworkServer.Reset();
         ingredientsInStation = new List<Ingredient>();
+
+        gameEndState = new GameEndState();
 
         for (int i = 0; i < 4; i++)
         {
@@ -259,17 +265,14 @@ public class Client : MonoBehaviour {
                 int.TryParse(redScoreStr, out redScore);
                 int.TryParse(blueScoreStr, out blueScore);
 
-                GameEndState gameEndState = new GameEndState(winningTeam, redScore, blueScore);
-                Player.setGameEndState(gameEndState);
-                Player.gameEndState = gameEndState;
+                gameEndState = new GameEndState(winningTeam, redScore, blueScore);
 
                 Debug.Log("END GAME: " + winningTeam + " " + redScore + " " + blueScore);
-                Debug.Log("ACTUAL END GAME: " + Player.getGameEndState().getWinningTeam() + " " + Player.getGameEndState().getRedScore() +
-                " " + Player.getGameEndState().getBlueScore());
-                Debug.Log("ACTUAL END GAME 2: " + Player.gameEndState.getWinningTeam() + " " + Player.gameEndState.getRedScore() +
-                " " + Player.gameEndState.getBlueScore());
 
                 SceneManager.LoadScene("PlayerGameOverScreen");
+                break;
+            case "team":
+                team = messageContent;
                 break;
             default:
                 break;
@@ -341,6 +344,14 @@ public class Client : MonoBehaviour {
             return char.ToUpper(str[0]) + str.Substring(1);
 
         return str.ToUpper();
+    }
+
+    public GameEndState getGameEndState() {
+      return gameEndState;
+    }
+
+    public string getTeam() {
+      return team;
     }
 
 }

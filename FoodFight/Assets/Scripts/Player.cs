@@ -35,15 +35,10 @@ public class Player : MonoBehaviour {
     public Text tag_output_text;
     private NFCHandler nfcHandler = new NFCHandler();
 
-    // Game end values
-    public static GameEndState gameEndState;
-
     void Start () {
         Screen.orientation = ScreenOrientation.Portrait;
         networkClient = GameObject.Find("Client");
         network = networkClient.GetComponent<Client>();
-
-        gameEndState = new GameEndState();
     }
 
     void Awake() {
@@ -156,14 +151,6 @@ public class Player : MonoBehaviour {
     public void sendScoreToServer(Ingredient recipe) {
         string message = Ingredient.SerializeObject(recipe);
         network.SendMyMessage("score", message);
-    }
-
-    public static GameEndState getGameEndState() {
-      return gameEndState;
-    }
-
-    public static void setGameEndState(GameEndState newGameEndState) {
-      gameEndState = newGameEndState;
     }
 
     private void checkStation(string text)
