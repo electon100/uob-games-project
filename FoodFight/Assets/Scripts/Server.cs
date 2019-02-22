@@ -547,6 +547,11 @@ public class Server : MonoBehaviour {
         }
     }
 
+    public void EndGame() {
+      Debug.Log("in end game");
+      GameOver((blueScore.getScore() > redScore.getScore()) ? "blue" : "red");
+    }
+
     private void updateScores()
     {
         redScoreText.text = "Red Score " + redScore.getScore().ToString();
