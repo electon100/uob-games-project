@@ -22,8 +22,9 @@ public class ViewItem : MonoBehaviour {
 			/* TODO: Sort out the scaling in unity I hate it I hate it */
 			GameObject model = (GameObject) Resources.Load(Player.currentIngred.Model, typeof(GameObject));
 			Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
+			Vector3 modelPosition = modelTransform.position;
 			Quaternion modelRotation = modelTransform.rotation;
-			currentItem = (GameObject) Instantiate(model, new Vector3(0, 0, 0), modelRotation);
+			currentItem = (GameObject) Instantiate(model, modelPosition, modelRotation);
 			ingredText.text = Player.currentIngred.ToString();
 		}
 		else {

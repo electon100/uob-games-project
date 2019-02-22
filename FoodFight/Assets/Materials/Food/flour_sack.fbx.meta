@@ -1,16 +1,37 @@
 fileFormatVersion: 2
-guid: 83e71bf80b814bb47984e3cb5a6e434d
+guid: 9e9d8a52a9b0d6e4eb5dd1d11bf3c66d
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: chicken_leg_geo
-    400000: //RootNode
-    400002: chicken_leg_geo
-    2100000: chicken_leg_geoMat
-    2300000: chicken_leg_geo
-    3300000: chicken_leg_geo
-    4300000: chicken_leg_geo
+    100000: backnurbsCube1
+    100002: bottomnurbsCube1
+    100004: flour_pile
+    100006: //RootNode
+    100008: frontnurbsCube1
+    100010: leftnurbsCube1
+    100012: nurbsCube1
+    100014: rice_sack:bag
+    100016: rightnurbsCube1
+    100018: topnurbsCube1
+    400000: backnurbsCube1
+    400002: bottomnurbsCube1
+    400004: flour_pile
+    400006: //RootNode
+    400008: frontnurbsCube1
+    400010: leftnurbsCube1
+    400012: nurbsCube1
+    400014: rice_sack:bag
+    400016: rightnurbsCube1
+    400018: topnurbsCube1
+    2100000: rice_sack_lambert3
+    2100002: flour_col
+    2300000: flour_pile
+    2300002: rice_sack:bag
+    3300000: flour_pile
+    3300002: rice_sack:bag
+    4300000: rice_sack:bag
+    4300002: flour_pile
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1
