@@ -10,7 +10,7 @@ public class PlayerGameOver : MonoBehaviour {
 	public Text BlueScoreText;
 	private GameObject Background;
 
-	private Player player;
+	private Client client;
 
 	private GameEndState gameEndState;
 
@@ -18,19 +18,35 @@ public class PlayerGameOver : MonoBehaviour {
 	void Start () {
 		Background = GameObject.Find("Background").GetComponent<GameObject>();
 
-		DontDestroyOnLoad(GameObject.Find("Player"));
-		player = GameObject.Find("Player").GetComponent<Player>();
+		DontDestroyOnLoad(GameObject.Find("Client"));
+		client = GameObject.Find("Client").GetComponent<Client>();
 
-		gameEndState = Player.getGameEndState();
+		gameEndState = client.getGameEndState();
+		string team = client.getTeam();
 
 		MainText.text = gameEndState.getWinningTeam() + " Team Wins!";
 
 		RedScoreText.text = "Red Score: " + gameEndState.getRedScore().ToString();
 		BlueScoreText.text = "Blue Score: " + gameEndState.getBlueScore().ToString();
+
+		if (team.Equals(gameEndState.getWinningTeam())) {
+			Winner();
+		} else {
+			Loser();
+		}
+
 	}
 
 	// Update is called once per frame
 	void Update () {
 
+	}
+
+	void Winner() {
+		MainText.text = "You win!";
+	}
+
+	void Loser() {
+		MainText.text = "You lose!";
 	}
 }

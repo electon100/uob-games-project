@@ -386,10 +386,10 @@ GameObject:
   - component: {fileID: 580630329}
   - component: {fileID: 580630328}
   - component: {fileID: 580630327}
-  - component: {fileID: 580630326}
   - component: {fileID: 580630325}
+  - component: {fileID: 580630326}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Client
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -417,12 +417,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 580630324}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2ffe48b4e37b9642a41cd892cd96752, type: 3}
+  m_Script: {fileID: 11500000, guid: 13c5bf6041b07594aa6ac0fc7267c962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainText: {fileID: 1035238257}
-  mainPanel: {fileID: 87812800}
+  port: 8000
+  hostId: 0
+  connectionId: 0
+  isConnected: 0
+  buttonPrefab: {fileID: 0}
+  startPanel: {fileID: 0}
+  warningText: {fileID: 0}
+  connectButton: {fileID: 0}
+  diffIPButton: {fileID: 0}
+  inputField: {fileID: 0}
+  changeIPButton: {fileID: 0}
   tag_output_text: {fileID: 0}
+  ingredientsInStation: []
+  changeIPText: {fileID: 0}
 --- !u!65 &580630327
 BoxCollider:
   m_ObjectHideFlags: 0

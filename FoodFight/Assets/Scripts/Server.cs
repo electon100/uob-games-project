@@ -176,6 +176,7 @@ public class Server : MonoBehaviour {
                 // Allocate the player to the team if they are not already on a team
                 if (!redTeam.ContainsKey(connectionId) && !blueTeam.ContainsKey(connectionId)) {
                     allocateToTeam(connectionId, messageContent);
+                    SendMyMessage("team", getPlayersTeam(connectionId), connectionId);
                 }
                 break;
             // Player connects to a work station
@@ -452,6 +453,16 @@ public class Server : MonoBehaviour {
             return blueTeam;
 
         return null;
+    }
+
+    private string getPlayersTeam(int connectionId) {
+        if(redTeam.ContainsKey(connectionId)) {
+          return "red";
+        } else if(blueTeam.ContainsKey(connectionId)) {
+          return "blue";
+        } else {
+          return "none";
+        }
     }
 
     private void checkCurrentIngredient(string messageType, string kitchen, string station, int hostId)
