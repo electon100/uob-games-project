@@ -271,6 +271,8 @@ public class Client : MonoBehaviour {
 
                 Debug.Log("END GAME: " + winningTeam + " " + redScore + " " + blueScore);
 
+                Player.removeCurrentIngredient();
+
                 SceneManager.LoadScene("PlayerGameOverScreen");
                 break;
             case "team":

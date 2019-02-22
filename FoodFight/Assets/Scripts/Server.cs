@@ -54,6 +54,8 @@ public class Server : MonoBehaviour {
     IDictionary<string, GameObject> redOccupied = new Dictionary<string, GameObject>();
     IDictionary<string, GameObject> blueOccupied = new Dictionary<string, GameObject>();
 
+    private string[] stations = {"0","1","2","3"};
+
     int redIdleCount = 0;
     int blueIdleCount = 0;
 
@@ -509,6 +511,13 @@ public class Server : MonoBehaviour {
         else if (blueTeam.ContainsKey(connectionID)) {
             blueKitchen[stationID].Clear();
         }
+    }
+
+    private void clearAllStations() {
+      foreach(string station in stations) {
+        redKitchen[station].Clear();
+        blueKitchen[station].Clear();
+      }
     }
 
     private void GameOver(string winningTeam)
