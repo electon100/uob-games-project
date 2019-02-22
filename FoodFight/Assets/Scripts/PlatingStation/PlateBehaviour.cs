@@ -84,7 +84,7 @@ public class PlateBehaviour : MonoBehaviour {
       if (Player.currentIngred != null) {
         addIngredientToPlate(Player.currentIngred);
         player.notifyServerAboutIngredientPlaced(Player.currentIngred);
-        player.removeCurrentIngredient();
+        Player.removeCurrentIngredient();
         ingredientList = Player.ingredientsFromStation;
         displayFood();
       }
