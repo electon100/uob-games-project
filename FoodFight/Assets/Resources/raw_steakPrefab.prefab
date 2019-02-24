@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 23718541130025872}
   - component: {fileID: 136349528437030632}
   m_Layer: 0
-  m_Name: raw_steakPrefab 1
+  m_Name: raw_steakPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
