@@ -21,12 +21,15 @@ public class Manager : MonoBehaviour {
 
 	// Use this for initialization
 	public Manager() {
-        redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
-        blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
         blueScore = new Score();
         redScore = new Score();
         timer = new GameTimer();
 	}
+
+  public void Start() {
+    redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
+    blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
+  }
 
 	// Update is called once per frame
 	public void update() {
@@ -41,7 +44,7 @@ public class Manager : MonoBehaviour {
         if (rScore == 0) GameOver();
         else if (bScore == 0) GameOver();
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) GameOver("");
+        if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) GameOver();
     }
 
     private void updateScores()
@@ -76,7 +79,7 @@ public class Manager : MonoBehaviour {
           winningTeam = GameEndState.EndState.DRAW;
         }
 
-        gameEndState = new GameEndState(winningTeam, finalRedScore, finalBlueScore);
+        gameEndState = new GameEndState(winningTeam, (int) finalRedScore, (int) finalBlueScore);
 
         gameOver = true;
 
