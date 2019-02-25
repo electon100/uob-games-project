@@ -33,7 +33,6 @@ public class Manager : MonoBehaviour {
 
   	// Update is called once per frame
   	public void Update() {
-        timer.updateTimer();
         updateScores();
 
         float rScore = redScore.getScore();

@@ -18,21 +18,18 @@ public class GameTimer : MonoBehaviour {
     }
 
   	// Update is called once per frame from the server's update method
-  	public void updateTimer() {
-          if (!isStarted) return;
-          timer -= Time.deltaTime;
-          displayTime();
+  	void Update() {
+      timer -= Time.deltaTime;
+      displayTime();
   	}
 
-    private void displayTime()
-    {
-        TimeSpan t = TimeSpan.FromSeconds(timer);
-        string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
-        timerText.text = "Time left " + timerFormatted;
+    private void displayTime() {
+      TimeSpan t = TimeSpan.FromSeconds(timer);
+      string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
+      timerText.text = "Time left " + timerFormatted;
     }
 
-    public float getTime()
-    {
-        return timer;
+    public float getTime() {
+      return timer;
     }
 }

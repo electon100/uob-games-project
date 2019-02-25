@@ -55,8 +55,7 @@ public class Server : MonoBehaviour {
     }
 
 	  private void Update () {
-        return;
-	}
+	  }
 
     // This is where all the work happens.
     public void manageMessageEvents(string message, int connectionId)
