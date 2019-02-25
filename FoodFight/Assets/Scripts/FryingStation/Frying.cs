@@ -11,6 +11,8 @@ public class Frying : MonoBehaviour {
 
 	public Button goBackBtn, putBtn, pickBtn, clearBtn, combineBtn;
 	public Text test_text;
+	public Material success;
+	public Renderer background;
 	public Player player;
 	public AudioClip fryingSound;
 
@@ -50,7 +52,7 @@ public class Frying : MonoBehaviour {
 		source = GetComponent<AudioSource>();
 
 		List<Ingredient> ingredientsFromStation = Player.ingredientsFromStation;
-		
+
 		clearPan();
 
 		foreach (Ingredient ingredient in ingredientsFromStation) {
@@ -108,6 +110,7 @@ public class Frying : MonoBehaviour {
 				ingredient.numberOfPanFlips++;
 				if (FoodData.Instance.isCooked(ingredient)) {
 					test_text.text = "Ingredient cooked!";
+					background.material = success;
 				} else {
 					/* Update shake text */
 					test_text.text = "Pan shakes: " + ingredient.numberOfPanFlips;
@@ -147,7 +150,7 @@ public class Frying : MonoBehaviour {
 			player = GameObject.Find("Player").GetComponent<Player>();
 			player.notifyServerAboutIngredientPlaced(Player.currentIngred);
 
-			player.removeCurrentIngredient();
+			Player.removeCurrentIngredient();
 		} else {
 			/* TODO: What happens when player is not holding an ingredient */
 			test_text.text = "No held ingredient";

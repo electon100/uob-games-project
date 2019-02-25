@@ -15,6 +15,8 @@ public class Manager : MonoBehaviour {
     public float finalBlueScore = 0;
     public float finalRedScore = 0;
 
+    public bool gameOver = false;
+
 	// Use this for initialization
 	public Manager() {
         redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
@@ -74,5 +76,6 @@ public class Manager : MonoBehaviour {
         {
             SceneManager.LoadScene("GameOverScreen");
         }
+        gameOver = true;
     }
 }

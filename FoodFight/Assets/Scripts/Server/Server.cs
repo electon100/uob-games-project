@@ -39,6 +39,8 @@ public class Server : MonoBehaviour {
     IDictionary<string, GameObject> redOccupied = new Dictionary<string, GameObject>();
     IDictionary<string, GameObject> blueOccupied = new Dictionary<string, GameObject>();
 
+    private string[] stations = {"0","1","2","3"};
+
     int redIdleCount = 0;
     int blueIdleCount = 0;
 
@@ -53,8 +55,11 @@ public class Server : MonoBehaviour {
         if (!isStarted) return;
 
         gameManager.update();
+
+        // Not the actual final scores or end game, but quick fix for now
         finalBlueScore = gameManager.finalBlueScore;
         finalRedScore = gameManager.finalRedScore;
+        EndGame();
 
         int connectionId = netManager.update();
 
@@ -103,6 +108,7 @@ public class Server : MonoBehaviour {
                 // Allocate the player to the team if they are not already on a team
                 if (!redTeam.ContainsKey(connectionId) && !blueTeam.ContainsKey(connectionId)) {
                     allocateToTeam(connectionId, messageContent);
+                    netManager.SendMyMessage("team", getPlayersTeam(connectionId), connectionId);
                 }
                 break;
             // Player connects to a work station
@@ -173,7 +179,7 @@ public class Server : MonoBehaviour {
         string stationId = words[0];
 
         moveServerPlayer(connectionId, stationId);
-      
+
         string ingredientWithFlags = words[1];
 
         // Be aware of null value here. Shouldn't cause issues, but might
@@ -217,7 +223,7 @@ public class Server : MonoBehaviour {
                 redOccupied[stationId] = redTeam[connectionId];
                 Debug.Log("Red Station now occupied");
                 return true;
-            }  
+            }
             else return false;
         }
         else if (blueTeam.ContainsKey(connectionId) && blueKitchen.ContainsKey(stationId))
@@ -228,7 +234,7 @@ public class Server : MonoBehaviour {
                 blueOccupied[stationId] = blueTeam[connectionId];
                 Debug.Log("Blue Station now occupied");
                 return true;
-            }      
+            }
             else return false;
         }
         return false;
@@ -334,6 +340,16 @@ public class Server : MonoBehaviour {
         return null;
     }
 
+    private string getPlayersTeam(int connectionId) {
+        if(redTeam.ContainsKey(connectionId)) {
+          return "red";
+        } else if(blueTeam.ContainsKey(connectionId)) {
+          return "blue";
+        } else {
+          return "none";
+        }
+    }
+
     private void checkCurrentIngredient(string messageType, string kitchen, string station, int hostId)
     {
         if (kitchen == "red")
@@ -377,6 +393,34 @@ public class Server : MonoBehaviour {
         }
         else if (blueTeam.ContainsKey(connectionID)) {
             blueKitchen[stationID].Clear();
+        }
+    }
+
+    private void clearAllStations() {
+      foreach(string station in stations) {
+        redKitchen[station].Clear();
+        blueKitchen[station].Clear();
+      }
+    }
+
+    private void sendEndGame()
+    {
+        string winningTeam = (finalBlueScore > finalRedScore) ? "red" : "blue";
+        foreach(KeyValuePair<int, GameObject> player in redTeam) {
+            netManager.SendMyMessage("endgame", winningTeam + "$" + finalRedScore + "$" + finalBlueScore, player.Key);
+        }
+
+        foreach(KeyValuePair<int, GameObject> player in blueTeam) {
+            netManager.SendMyMessage("endgame", winningTeam + "$" + finalRedScore + "$" + finalBlueScore, player.Key);
+        }
+    }
+
+
+    public void EndGame() {
+      if (gameManager.gameOver)
+        {
+            clearAllStations();
+            sendEndGame();
         }
     }
 
