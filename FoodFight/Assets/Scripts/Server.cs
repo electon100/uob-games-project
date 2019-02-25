@@ -117,6 +117,14 @@ public class Server : MonoBehaviour {
         }
         displayTime();
 
+        if((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && Input.GetKeyDown("r")) {
+          // Restart Game
+        }
+        if((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && Input.GetKeyDown("e")) {
+          // End Game
+          GameOver((redScore.getScore() >= blueScore.getScore()) ? "red" : "blue");
+        }
+
         // Check if either team has reached a score of 0 and if they have, end the game
         if (redScore.getScore() == 0) GameOver("blue");
         else if (blueScore.getScore() == 0) GameOver("red");
