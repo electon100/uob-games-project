@@ -43,6 +43,8 @@ public class Server : MonoBehaviour {
     public static float finalRedScore;
     public static float finalBlueScore;
 
+    public GameEndState gameEndState;
+
     // Dictionaries of players on each team
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
@@ -534,6 +536,8 @@ public class Server : MonoBehaviour {
         finalBlueScore = blueScore.getScore();
         finalRedScore = redScore.getScore();
 
+        gameEndState = new GameEndState(winningTeam, (int) redScore.getScore(), (int) blueScore.getScore());
+
         foreach(KeyValuePair<int, GameObject> player in redTeam) {
             SendMyMessage("endgame", winningTeam + "$" + redScore.getScore() + "$" + blueScore.getScore(), player.Key);
         }
@@ -553,6 +557,10 @@ public class Server : MonoBehaviour {
       } else {
         GameOver(GameEndState.EndState.DRAW);
       }
+    }
+
+    public GameEndState getGameEndState() {
+      return gameEndState;
     }
 
     private void updateScores()

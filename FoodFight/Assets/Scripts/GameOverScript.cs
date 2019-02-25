@@ -8,16 +8,19 @@ public class GameOverScript : MonoBehaviour {
     Text redScoreText, blueScoreText, winnerText;
 
     private Client client;
+    private Server server;
 
 	// Use this for initialization
 	void Start () {
 
         DontDestroyOnLoad(GameObject.Find("Client"));
         DontDestroyOnLoad(GameObject.Find("Player"));
+        DontDestroyOnLoad(GameObject.Find("Server"));
 
         client = GameObject.Find("Client").GetComponent<Client>();
+        server = GameObject.Find("Server").GetComponent<Server>();
 
-        GameEndState gameEndState = client.getGameEndState();
+        GameEndState gameEndState = server.getGameEndState();
 
         Image img = GameObject.Find("Panel").GetComponent<Image>();
 
