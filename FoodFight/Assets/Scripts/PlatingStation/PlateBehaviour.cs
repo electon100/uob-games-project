@@ -22,20 +22,33 @@ public class PlateBehaviour : MonoBehaviour {
 
       Screen.orientation = ScreenOrientation.Portrait;
 
+      Ingredient noodles = new Ingredient("noodles", "noodlesPrefab");
+      Ingredient potatos = new Ingredient("diced_potato", "diced_potatoPrefab");
+      potatos.numberOfPanFlips = 20;
+
+      clearPlate();
+      addIngredientToPlate(potatos);
 
       player = GameObject.Find("Player").GetComponent<Player>();
 
-      clearPlate();
-
       foreach (Ingredient ingredient in Player.ingredientsFromStation) {
-        addIngredientToPan(ingredient);
+        addIngredientToPlate(ingredient);
       }
 
-      // displayFood();
 	  }
 
     void Update() {
-      // ingredientList = Player.ingredientsFromStation;
+      /* Try and combine the ingredients */
+      Ingredient combinationAttempt = getWorkingRecipe();
+
+      /* If the combined result is a valid recipe (not mush) */
+      if (isValidRecipe(combinationAttempt)) {
+        /* Set the pan contents to the new combined recipe */
+				clearStation();
+				addIngredientToPlate(combinationAttempt);
+				player.notifyServerAboutIngredientPlaced(combinationAttempt);
+      }
+
       updateTextList();
     }
 
@@ -71,8 +84,6 @@ public class PlateBehaviour : MonoBehaviour {
         player.notifyServerAboutIngredientPlaced(Player.currentIngred);
 
         player.removeCurrentIngredient();
-
-        /* Try combine! */
       } else {
         /* TODO: What happens when player is not holding an ingredient */
       }
@@ -86,13 +97,16 @@ public class PlateBehaviour : MonoBehaviour {
       }
     }
 
-    void checkRecipe() {
-      recipe = FoodData.Instance.TryCombineIngredients(ingredientList);
-      Debug.Log(recipe.Name);
+    private Ingredient getWorkingRecipe() {
+      return FoodData.Instance.TryCombineIngredients(plateContents);
+    }
+
+    private bool isValidRecipe(Ingredient recipe) {
+      return !string.Equals(recipe.Name, "mush");
     }
 
     public void serveFood() {
-      if (!string.Equals(recipe.Name, "mush")) {
+      if (isValidRecipe(getWorkingRecipe())) {
         player.sendScoreToServer(recipe);
         clearPlate();
       }
