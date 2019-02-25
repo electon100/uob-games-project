@@ -660,7 +660,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1894842583}
-        m_MethodName: addIngredient
+        m_MethodName: placeHeldIngredientInPlate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1244,8 +1244,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  ingredientList: []
-  ingredientObjects: []
   ingredientListText: {fileID: 1546993966}
 --- !u!4 &1894842584
 Transform:
