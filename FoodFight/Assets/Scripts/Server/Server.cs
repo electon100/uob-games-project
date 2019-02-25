@@ -398,8 +398,8 @@ public class Server : MonoBehaviour {
 
     private void clearAllStations() {
       foreach(string station in stations) {
-        redKitchen[station].Clear();
-        blueKitchen[station].Clear();
+        if (redKitchen.ContainsKey(station)) redKitchen[station].Clear();
+        if (blueKitchen.ContainsKey(station)) blueKitchen[station].Clear();
       }
     }
 
@@ -415,10 +415,10 @@ public class Server : MonoBehaviour {
         }
     }
 
-
-    public void EndGame() {
-      if (gameManager.gameOver)
+    public void EndGame() {   
+        if (gameManager.gameOver)
         {
+            Debug.Log("EndGame");
             clearAllStations();
             sendEndGame();
         }

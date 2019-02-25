@@ -44,6 +44,8 @@ public class Manager : MonoBehaviour {
         // Check if either team has reached a score of 0 and if they have, end the game
         if (rScore == 0) GameOver("blue");
         else if (bScore == 0) GameOver("red");
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) GameOver("");
     }
 
     private void updateScores()
@@ -73,6 +75,10 @@ public class Manager : MonoBehaviour {
             SceneManager.LoadScene("GameOverScreen");
         }
         else if (winningTeam.Equals("red"))
+        {
+            SceneManager.LoadScene("GameOverScreen");
+        }
+        else
         {
             SceneManager.LoadScene("GameOverScreen");
         }
