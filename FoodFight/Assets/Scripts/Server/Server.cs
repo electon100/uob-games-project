@@ -39,6 +39,9 @@ public class Server : MonoBehaviour {
     IDictionary<string, GameObject> redOccupied = new Dictionary<string, GameObject>();
     IDictionary<string, GameObject> blueOccupied = new Dictionary<string, GameObject>();
 
+    int redIdleCount = 0;
+    int blueIdleCount = 0;
+
     private void Start () {
         isStarted = true;
 
@@ -145,10 +148,16 @@ public class Server : MonoBehaviour {
         if (redTeam.ContainsKey(connectionId) && redOccupied.ContainsKey(stationId))
         {
             redOccupied[stationId] = null;
+            redIdleCount += 1;
+            Vector3 newPosition = new Vector3(-40, 2, 5 * (redIdleCount + 1));
+            PlayerMovement.movePlayer(newPosition, redTeam[connectionId]);
         }
         if (blueTeam.ContainsKey(connectionId) && blueOccupied.ContainsKey(stationId))
         {
             blueOccupied[stationId] = null;
+            blueIdleCount += 1;
+            Vector3 newPosition = new Vector3(-40, 2, 5 * (blueIdleCount + 1));
+            PlayerMovement.movePlayer(newPosition, blueTeam[connectionId]);
         }
     }
 
@@ -186,6 +195,8 @@ public class Server : MonoBehaviour {
 
         if (playerOnValidStation)
         {
+            if (redTeam.ContainsKey(connectionId)) redIdleCount -= 1;
+            if (blueTeam.ContainsKey(connectionId)) blueIdleCount -= 1;
             // Case where we want to send back ingredients stored at the station to player
             if (ingredient.Equals(""))
                 sendIngredientsToPlayer(stationId, connectionId);
@@ -294,18 +305,22 @@ public class Server : MonoBehaviour {
     {
         GameObject newRedPlayer = (GameObject) Instantiate(redPlayer, new Vector3(-40, 2, 5 * (redTeam.Count + 1)), Quaternion.identity);
         redTeam.Add(connectionId, newRedPlayer);
+        redIdleCount += 1;
     }
 
     private void createBluePlayer(int connectiondId)
     {
         GameObject newBluePlayer = (GameObject) Instantiate(bluePlayer, new Vector3(40, 2, 5 * (blueTeam.Count + 1)), Quaternion.identity);
         blueTeam.Add(connectiondId, newBluePlayer);
+        blueIdleCount += 1;
     }
 
     private void destroyPlayer(IDictionary<int, GameObject> team, int connectionID)
     {
         Destroy(team[connectionID]);
         team.Remove(connectionID);
+        if (redTeam.ContainsKey(connectionID)) redIdleCount -= 1;
+        if (blueTeam.ContainsKey(connectionID)) blueIdleCount -= 1;
     }
 
     private IDictionary<int, GameObject> getTeam(int connectionID)

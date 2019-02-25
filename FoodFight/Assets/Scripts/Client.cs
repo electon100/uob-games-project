@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    public static string serverIP = "192.168.0.101";
+    public static string serverIP = "192.168.0.100";
 
     public int port = 8000;
 
@@ -64,7 +64,7 @@ public class Client : MonoBehaviour {
     {
         //NetworkServer.Reset();
         ingredientsInStation = new List<Ingredient>();
-        
+
         for (int i = 0; i < 4; i++)
         {
             string stationId = i.ToString();
@@ -81,7 +81,7 @@ public class Client : MonoBehaviour {
     {
         if (!isConnected) {
             return;
-        }          
+        }
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
         int channelID; // ID of channel connected to recHostId.
@@ -122,8 +122,7 @@ public class Client : MonoBehaviour {
     {
         NetworkTransport.Init();
         connectConfig = new ConnectionConfig();
-        
-        Debug.Log(serverIP);
+
         /* Network configuration */
         connectConfig.AckDelay = 33;
         connectConfig.AllCostTimeout = 20;
@@ -162,7 +161,7 @@ public class Client : MonoBehaviour {
         else {
             isConnected = true;
         }
-        
+
     }
 
     public string serialiseIngredient(Ingredient ingredient)
@@ -188,7 +187,7 @@ public class Client : MonoBehaviour {
         //Serialize the message
         string messageToSend = messageType + "&" + textInput;
         formatter.Serialize(message, messageToSend);
-
+        Debug.Log("Sending station " + messageToSend);
         //Send the message from the "client" with the serialized message and the connection information
         NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
 

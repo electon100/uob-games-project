@@ -24,7 +24,7 @@ public class ViewItem : MonoBehaviour {
 			Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
 			Quaternion modelRotation = modelTransform.rotation;
 			currentItem = (GameObject) Instantiate(model, new Vector3(0, 0, 0), modelRotation);
-			ingredText.text = Player.currentIngred.Name;
+			ingredText.text = Player.currentIngred.ToString();
 		}
 		else {
 			ingredText.text = "Nothing";

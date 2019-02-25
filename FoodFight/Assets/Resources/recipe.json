@@ -404,6 +404,26 @@
           "chopped": false
         }
       ]
+    },
+    {
+      "name": "fried_egg",
+      "ingredients": [
+        {
+          "name": "eggs",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "chopped_onion",
+      "ingredients": [
+        {
+          "name": "onion",
+          "cooked": false,
+          "chopped": true
+        }
+      ]
     }
   ]
 }
