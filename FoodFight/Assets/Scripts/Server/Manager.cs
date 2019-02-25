@@ -29,6 +29,9 @@ public class Manager : MonoBehaviour {
       server = GameObject.Find("Server").GetComponent<Server>();
       netManager = GameObject.Find("NetManager").GetComponent<NetManager>();
       timer = GameObject.Find("GameTimer").GetComponent<GameTimer>();
+
+      redScoreText.text = "Red Score " + redScore.getScore().ToString();
+      blueScoreText.text = "Blue Score " + blueScore.getScore().ToString();
     }
 
   	// Update is called once per frame
@@ -48,20 +51,16 @@ public class Manager : MonoBehaviour {
         }
     }
 
-    private void updateScores()
-    {
-        redScoreText.text = "Red Score " + redScore.getScore().ToString();
-        blueScoreText.text = "Blue Score " + blueScore.getScore().ToString();
-    }
-
     public void increaseRed(int recipeScore)
     {
         redScore.increaseScore(recipeScore);
+        redScoreText.text = "Red Score " + redScore.getScore().ToString();
     }
 
     public void increaseBlue(int recipeScore)
     {
         blueScore.increaseScore(recipeScore);
+        blueScoreText.text = "Blue Score " + blueScore.getScore().ToString();
     }
 
     // Ends the game by loading the Game Over screen
