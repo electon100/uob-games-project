@@ -12,19 +12,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Server : MonoBehaviour {
-    private const int MAX_CONNECTION = 10;
-
-    private int port = 8000;
-
-    private int hostId;
-    private int webHostId;
-
-    private int reliableChannel;
-    private int unreliableChannel;
-
     private bool isStarted = false;
-
-    private byte error;
 
     // Spawning and movement
     public GameObject redPlayer;
@@ -33,15 +21,12 @@ public class Server : MonoBehaviour {
     public GameObject blueStation;
     public GameObject redStation;
 
-    // Scoring
-    public Text redScoreText;
-    public Text blueScoreText;
+    // Scoring and Timing
+    public Manager gameManager;
+    public static float finalRedScore, finalBlueScore;
 
-    private Score redScore;
-    private Score blueScore;
-
-    public static float finalRedScore;
-    public static float finalBlueScore;
+    // Networking
+    public NetManager netManager;
 
     // Dictionaries of players on each team
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
@@ -59,101 +44,41 @@ public class Server : MonoBehaviour {
     int redIdleCount = 0;
     int blueIdleCount = 0;
 
-    // Timer variable
-    private float timer;
-    public Text timerText;
-
     private void Start () {
-        NetworkTransport.Init();
-        ConnectionConfig connectConfig = new ConnectionConfig();
-
-        /* Network configuration */
-        connectConfig.AckDelay = 33;
-        connectConfig.AllCostTimeout = 20;
-        connectConfig.ConnectTimeout = 1000;
-        connectConfig.DisconnectTimeout = 5000;
-        connectConfig.FragmentSize = 500;
-        connectConfig.MaxCombinedReliableMessageCount = 10;
-        connectConfig.MaxCombinedReliableMessageSize = 100;
-        connectConfig.MaxConnectionAttempt = 32;
-        connectConfig.MaxSentMessageQueueSize = 2048;
-        connectConfig.MinUpdateTimeout = 20;
-        connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
-        connectConfig.OverflowDropThreshold = 40; //
-        connectConfig.PacketSize = 1500;
-        connectConfig.PingTimeout = 500;
-        connectConfig.ReducedPingTimeout = 100;
-        connectConfig.ResendTimeout = 500;
-
-        reliableChannel = connectConfig.AddChannel(QosType.ReliableSequenced);
-        HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
-
-        //NetworkServer.Reset();
-        hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
-        webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
         isStarted = true;
 
-        redScore = new Score();
-        blueScore = new Score();
-
-        timerText = GameObject.Find("TimerText").GetComponent<Text>();
-        redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
-        blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
-        updateScores();
-        timer = 300.0f;
-        displayTime();
+        gameManager = new Manager();
+        netManager = new NetManager();
     }
 
 	private void Update () {
         if (!isStarted) return;
 
-        timer -= Time.deltaTime;
-        if (timer <= 0)
-        {
-            EndGame();
-        }
-        displayTime();
+        gameManager.update();
 
-        if((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && Input.GetKeyDown("r")) {
-          // Restart Game
-        }
-        if((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && Input.GetKeyDown("e")) {
-          // End Game
-          EndGame();
-        }
+        // Not the actual final scores or end game, but quick fix for now
+        finalBlueScore = gameManager.finalBlueScore;
+        finalRedScore = gameManager.finalRedScore;
+        EndGame();
 
-        // Check if either team has reached a score of 0 and if they have, end the game
-        if (redScore.getScore() == 0) GameOver("blue");
-        else if (blueScore.getScore() == 0) GameOver("red");
-
-        int recHostId; // Player ID
-        int connectionId; // ID of connection to recHostId.
-        int channelID; // ID of channel connected to recHostId;
-        byte[] recBuffer = new byte[4096];
-        int bufferSize = 4096;
-        int dataSize;
-        byte error;
-
-        NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
-                                                            recBuffer, bufferSize, out dataSize, out error);
+        int connectionId = netManager.update();
 
         //Networking events
-        switch (recData)
+        switch (netManager.eventType)
         {
             // Do nothing if nothing was sent to server
-            case NetworkEventType.Nothing:
+            case "nothing":
                 break;
             // Have a phone connect to the server
-            case NetworkEventType.ConnectEvent:
+            case "connect":
                 Debug.Log("Player " + connectionId + " has connected");
                 break;
             // Have the phone send data to the server
-            case NetworkEventType.DataEvent:
-                string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
-                manageMessageEvents(message, connectionId);
+            case "data":
+                manageMessageEvents(netManager.message, connectionId);
                 break;
             // Remove the player from the game
-            case NetworkEventType.DisconnectEvent:
+            case "disconnect":
                 Debug.Log("Player " + connectionId + " has disconnected");
                 IDictionary<int, GameObject> teamToDestroyFrom = getTeam(connectionId);
                 // Player with id connectionId has left the game, so destroy its object instance.
@@ -162,7 +87,7 @@ public class Server : MonoBehaviour {
                     destroyPlayer(teamToDestroyFrom, connectionId);
                 }
                 break;
-            case NetworkEventType.BroadcastEvent:
+            case "broadcast":
                 Debug.Log("Broadcast event.");
                 break;
         }
@@ -183,7 +108,7 @@ public class Server : MonoBehaviour {
                 // Allocate the player to the team if they are not already on a team
                 if (!redTeam.ContainsKey(connectionId) && !blueTeam.ContainsKey(connectionId)) {
                     allocateToTeam(connectionId, messageContent);
-                    SendMyMessage("team", getPlayersTeam(connectionId), connectionId);
+                    netManager.SendMyMessage("team", getPlayersTeam(connectionId), connectionId);
                 }
                 break;
             // Player connects to a work station
@@ -208,36 +133,17 @@ public class Server : MonoBehaviour {
         }
     }
 
-    //This function is called when data is sent
-    private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error)
-    {
-        //Here the message being received is deserialized and output to the console
-        Stream serializedMessage = new MemoryStream(data);
-        BinaryFormatter formatter = new BinaryFormatter();
-        string message = formatter.Deserialize(serializedMessage).ToString();
-
-        //Output the deserialized message as well as the connection information to the console
-        Debug.Log("OnData(hostId = " + hostId + ", connectionId = "
-            + connectionId + ", channelId = " + channelId + ", data = "
-            + message + ", size = " + size + ", error = " + error.ToString() + ")");
-
-        return message;
-    }
-
     private void OnScore(string messageContent, int connectionId) {
         Ingredient recipe = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, (new Ingredient()).GetType());
 
-        int recipeScore = scoreRecipe(recipe);
+        int recipeScore = FoodData.Instance.getScoreForIngredient(recipe);
 
-        if (redTeam.ContainsKey(connectionId)) {
-          // Add score to red team
-          redScore.increaseScore(recipeScore);
-        } else if (blueTeam.ContainsKey(connectionId)) {
-          // Add score to blue team
-          blueScore.increaseScore(recipeScore);
-        }
+        // Add score to red team
+        if (redTeam.ContainsKey(connectionId)) gameManager.increaseRed(recipeScore);
+        // Add score to blue team
+        else if (blueTeam.ContainsKey(connectionId)) gameManager.increaseBlue(recipeScore);
 
-        updateScores();
+        gameManager.update();
 
         Debug.Log(messageContent);
     }
@@ -259,12 +165,6 @@ public class Server : MonoBehaviour {
             Vector3 newPosition = new Vector3(-40, 2, 5 * (blueIdleCount + 1));
             PlayerMovement.movePlayer(newPosition, blueTeam[connectionId]);
         }
-    }
-
-    private int scoreRecipe(Ingredient recipe) {
-      int score = FoodData.Instance.getScoreForIngredient(recipe);
-
-      return score;
     }
 
     private void OnClearStation(string stationId, int connectionId) {
@@ -390,28 +290,6 @@ public class Server : MonoBehaviour {
         }
     }
 
-    // Used for sending data to the players
-    public void SendMyMessage(string messageType, string textInput, int connectionId)
-    {
-        byte error;
-        byte[] buffer = new byte[4096];
-        int bufferSize = 4096;
-        Stream message = new MemoryStream(buffer);
-        BinaryFormatter formatter = new BinaryFormatter();
-        //Serialize the message
-        string messageToSend = messageType + "&" + textInput;
-        formatter.Serialize(message, messageToSend);
-
-        //Send the message from the "client" with the serialized message and the connection information
-        NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
-
-        //If there is an error, output message error to the console
-        if ((NetworkError)error != NetworkError.Ok)
-        {
-            Debug.Log("Message send error: " + (NetworkError)error);
-        }
-    }
-
     //Allocates a player to a team based on their choice.
     private void allocateToTeam(int connectionId, string message)
     {
@@ -484,7 +362,7 @@ public class Server : MonoBehaviour {
             }
 
             Debug.Log("Sending back to red: " + messageContent);
-            SendMyMessage(messageType, messageContent, hostId);
+            netManager.SendMyMessage(messageType, messageContent, hostId);
         }
         else if (kitchen == "blue")
         {
@@ -496,7 +374,7 @@ public class Server : MonoBehaviour {
             }
 
             Debug.Log("Sending back to blue: " + messageContent);
-            SendMyMessage(messageType, messageContent, hostId);
+            netManager.SendMyMessage(messageType, messageContent, hostId);
         }
     }
 
@@ -520,55 +398,30 @@ public class Server : MonoBehaviour {
 
     private void clearAllStations() {
       foreach(string station in stations) {
-        redKitchen[station].Clear();
-        blueKitchen[station].Clear();
+        if (redKitchen.ContainsKey(station)) redKitchen[station].Clear();
+        if (blueKitchen.ContainsKey(station)) blueKitchen[station].Clear();
       }
     }
 
-    private void GameOver(string winningTeam)
+    private void sendEndGame()
     {
-        // Should call the game over screen, showing the final scores on the main screen
-        // Should tell players on the winning team they have won on their phones
-        // Should tell players on the losing team they have lost on their phones
-
-        finalBlueScore = blueScore.getScore();
-        finalRedScore = redScore.getScore();
-
-        if (winningTeam.Equals("blue"))
-        {
-            SceneManager.LoadScene("GameOverScreen");
-        }
-        else if (winningTeam.Equals("red"))
-        {
-            SceneManager.LoadScene("GameOverScreen");
-        }
-
+        string winningTeam = (finalBlueScore > finalRedScore) ? "red" : "blue";
         foreach(KeyValuePair<int, GameObject> player in redTeam) {
-            SendMyMessage("endgame", winningTeam + "$" + redScore.getScore() + "$" + blueScore.getScore(), player.Key);
+            netManager.SendMyMessage("endgame", winningTeam + "$" + finalRedScore + "$" + finalBlueScore, player.Key);
         }
 
         foreach(KeyValuePair<int, GameObject> player in blueTeam) {
-            SendMyMessage("endgame", winningTeam + "$" + redScore.getScore() + "$" + blueScore.getScore(), player.Key);
+            netManager.SendMyMessage("endgame", winningTeam + "$" + finalRedScore + "$" + finalBlueScore, player.Key);
         }
     }
 
-    public void EndGame() {
-      GameOver((blueScore.getScore() > redScore.getScore()) ? "blue" : "red");
-    }
-
-    private void updateScores()
-    {
-        redScoreText.text = "Red Score " + redScore.getScore().ToString();
-        blueScoreText.text = "Blue Score " + blueScore.getScore().ToString();
-    }
-
-    private void displayTime()
-    {
-        TimeSpan t = TimeSpan.FromSeconds(timer);
-        string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
-        timerText.text = "Time left " + timerFormatted;
-        // Debug.Log(timerText.text);
-
+    public void EndGame() {   
+        if (gameManager.gameOver)
+        {
+            Debug.Log("EndGame");
+            clearAllStations();
+            sendEndGame();
+        }
     }
 
     private void moveServerPlayer(int connectionId, string stationId)
