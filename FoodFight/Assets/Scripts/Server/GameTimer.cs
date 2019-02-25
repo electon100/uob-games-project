@@ -12,19 +12,17 @@ public class GameTimer : MonoBehaviour {
 
     bool isStarted = false;
 
-    // Use this for initialization
-    public GameTimer() {
-        timerText = GameObject.Find("TimerText").GetComponent<Text>();
-        timer = 1200.0f;
-        isStarted = true;
+    public void Start() {
+      timer = 1200.0f;
+      isStarted = true;
     }
-	
-	// Update is called once per frame from the server's update method
-	public void updateTimer() {
-        if (!isStarted) return;
-        timer -= Time.deltaTime;
-        displayTime();
-	}
+
+  	// Update is called once per frame from the server's update method
+  	public void updateTimer() {
+          if (!isStarted) return;
+          timer -= Time.deltaTime;
+          displayTime();
+  	}
 
     private void displayTime()
     {

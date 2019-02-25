@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 public class Manager : MonoBehaviour {
 
-    GameTimer timer;
+    public GameTimer timer;
 
     // Scoring
-    public Text redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
-    public Text blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
+    public Text redScoreText;
+    public Text blueScoreText;
     Score blueScore, redScore;
     public float finalBlueScore = 0;
     public float finalRedScore = 0;
@@ -19,19 +19,20 @@ public class Manager : MonoBehaviour {
 
     public bool gameOver = false;
 
-	// Use this for initialization
-	public Manager() {
-        blueScore = new Score();
-        redScore = new Score();
-        timer = new GameTimer();
+    public Server server;
+    public NetManager netManager;
+
+    public void Start() {
+      blueScore = new Score();
+      redScore = new Score();
+
+      server = GameObject.Find("Server").GetComponent<Server>();
+      netManager = GameObject.Find("NetManager").GetComponent<NetManager>();
+      timer = GameObject.Find("GameTimer").GetComponent<GameTimer>();
     }
 
-  public void Start() {
-        
-    }
-
-	// Update is called once per frame
-	public void update() {
+  	// Update is called once per frame
+  	public void Update() {
         timer.updateTimer();
         updateScores();
 
@@ -40,8 +41,8 @@ public class Manager : MonoBehaviour {
         if (timer.getTime() <= 0) GameOver();
 
         // Check if either team has reached a score of 0 and if they have, end the game
-        if (rScore == 0) GameOver();
-        else if (bScore == 0) GameOver();
+        if (rScore <= 0) GameOver();
+        else if (bScore <= 0) GameOver();
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) GameOver();
     }
@@ -83,5 +84,9 @@ public class Manager : MonoBehaviour {
         gameOver = true;
 
         SceneManager.LoadScene("GameOverScreen");
+    }
+
+    public string getEndGameString() {
+      return gameEndState.winningTeamStr() + "$" + gameEndState.getRedScore() + "$" + gameEndState.getBlueScore();
     }
 }

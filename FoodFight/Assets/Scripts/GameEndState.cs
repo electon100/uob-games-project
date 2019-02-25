@@ -45,4 +45,10 @@ public class GameEndState {
 	public int getBlueScore() {
 		return this.blueScore;
 	}
+
+	public string winningTeamStr() {
+		if (winningTeam == EndState.RED_WIN) return "red";
+		if (winningTeam == EndState.BLUE_WIN) return "blue";
+		return "draw";
+	}
 }
