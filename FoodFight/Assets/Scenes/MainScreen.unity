@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2091,9 +2091,9 @@ MonoBehaviour:
   bluePlayer: {fileID: 1163954923977550, guid: ee6afe0cb40bfb642a361e77f679699b, type: 2}
   blueStation: {fileID: 0}
   redStation: {fileID: 0}
-  redScoreText: {fileID: 0}
-  blueScoreText: {fileID: 0}
-  timerText: {fileID: 0}
+  redScoreText: {fileID: 291818171}
+  blueScoreText: {fileID: 1324381293}
+  timerText: {fileID: 854566844}
 --- !u!4 &1588600714
 Transform:
   m_ObjectHideFlags: 0

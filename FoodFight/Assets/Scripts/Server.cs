@@ -54,6 +54,8 @@ public class Server : MonoBehaviour {
     IDictionary<string, GameObject> redOccupied = new Dictionary<string, GameObject>();
     IDictionary<string, GameObject> blueOccupied = new Dictionary<string, GameObject>();
 
+    private string[] stations = {"0","1","2","3"};
+
     int redIdleCount = 0;
     int blueIdleCount = 0;
 
@@ -98,7 +100,7 @@ public class Server : MonoBehaviour {
         redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
         blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
         updateScores();
-        timer = 30.0f;
+        timer = 300.0f;
         displayTime();
     }
 
@@ -108,12 +110,17 @@ public class Server : MonoBehaviour {
         timer -= Time.deltaTime;
         if (timer <= 0)
         {
-            if (redScore.getScore() > blueScore.getScore()) GameOver("red");
-            else if (blueScore.getScore() > redScore.getScore()) GameOver("blue");
-            // Defaults to red winning if it is a tie
-            else GameOver("red");
+            EndGame();
         }
         displayTime();
+
+        if((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && Input.GetKeyDown("r")) {
+          // Restart Game
+        }
+        if((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && Input.GetKeyDown("e")) {
+          // End Game
+          EndGame();
+        }
 
         // Check if either team has reached a score of 0 and if they have, end the game
         if (redScore.getScore() == 0) GameOver("blue");
@@ -511,6 +518,13 @@ public class Server : MonoBehaviour {
         }
     }
 
+    private void clearAllStations() {
+      foreach(string station in stations) {
+        redKitchen[station].Clear();
+        blueKitchen[station].Clear();
+      }
+    }
+
     private void GameOver(string winningTeam)
     {
         // Should call the game over screen, showing the final scores on the main screen
@@ -536,6 +550,10 @@ public class Server : MonoBehaviour {
         foreach(KeyValuePair<int, GameObject> player in blueTeam) {
             SendMyMessage("endgame", winningTeam + "$" + redScore.getScore() + "$" + blueScore.getScore(), player.Key);
         }
+    }
+
+    public void EndGame() {
+      GameOver((blueScore.getScore() > redScore.getScore()) ? "blue" : "red");
     }
 
     private void updateScores()
