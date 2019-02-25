@@ -12,19 +12,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Server : MonoBehaviour {
-    private const int MAX_CONNECTION = 10;
-
-    private int port = 8000;
-
-    private int hostId;
-    private int webHostId;
-
-    private int reliableChannel;
-    private int unreliableChannel;
-
     private bool isStarted = false;
-
-    private byte error;
 
     // Spawning and movement
     public GameObject redPlayer;
@@ -36,6 +24,9 @@ public class Server : MonoBehaviour {
     // Scoring and Timing
     public Manager gameManager;
     public static float finalRedScore, finalBlueScore;
+
+    // Networking
+    public NetManager netManager;
 
     // Dictionaries of players on each team
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
@@ -49,36 +40,10 @@ public class Server : MonoBehaviour {
     IDictionary<string, GameObject> blueOccupied = new Dictionary<string, GameObject>();
 
     private void Start () {
-        NetworkTransport.Init();
-        ConnectionConfig connectConfig = new ConnectionConfig();
-
-        /* Network configuration */
-        connectConfig.AckDelay = 33;
-        connectConfig.AllCostTimeout = 20;
-        connectConfig.ConnectTimeout = 1000;
-        connectConfig.DisconnectTimeout = 5000;
-        connectConfig.FragmentSize = 500;
-        connectConfig.MaxCombinedReliableMessageCount = 10;
-        connectConfig.MaxCombinedReliableMessageSize = 100;
-        connectConfig.MaxConnectionAttempt = 32;
-        connectConfig.MaxSentMessageQueueSize = 2048;
-        connectConfig.MinUpdateTimeout = 20;
-        connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
-        connectConfig.OverflowDropThreshold = 40; //
-        connectConfig.PacketSize = 1500;
-        connectConfig.PingTimeout = 500;
-        connectConfig.ReducedPingTimeout = 100;
-        connectConfig.ResendTimeout = 500;
-
-        reliableChannel = connectConfig.AddChannel(QosType.ReliableSequenced);
-        HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
-
-        //NetworkServer.Reset();
-        hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
-        webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
         isStarted = true;
 
         gameManager = new Manager();
+        netManager = new NetManager();
     }
 
 	private void Update () {
@@ -88,34 +53,24 @@ public class Server : MonoBehaviour {
         finalBlueScore = gameManager.finalBlueScore;
         finalRedScore = gameManager.finalRedScore;
 
-        int recHostId; // Player ID
-        int connectionId; // ID of connection to recHostId.
-        int channelID; // ID of channel connected to recHostId;
-        byte[] recBuffer = new byte[4096];
-        int bufferSize = 4096;
-        int dataSize;
-        byte error;
-
-        NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelID,
-                                                            recBuffer, bufferSize, out dataSize, out error);
+        int connectionId = netManager.update();
 
         //Networking events
-        switch (recData)
+        switch (netManager.eventType)
         {
             // Do nothing if nothing was sent to server
-            case NetworkEventType.Nothing:
+            case "nothing":
                 break;
             // Have a phone connect to the server
-            case NetworkEventType.ConnectEvent:
+            case "connect":
                 Debug.Log("Player " + connectionId + " has connected");
                 break;
             // Have the phone send data to the server
-            case NetworkEventType.DataEvent:
-                string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
-                manageMessageEvents(message, connectionId);
+            case "data":
+                manageMessageEvents(netManager.message, connectionId);
                 break;
             // Remove the player from the game
-            case NetworkEventType.DisconnectEvent:
+            case "disconnect":
                 Debug.Log("Player " + connectionId + " has disconnected");
                 IDictionary<int, GameObject> teamToDestroyFrom = getTeam(connectionId);
                 // Player with id connectionId has left the game, so destroy its object instance.
@@ -124,7 +79,7 @@ public class Server : MonoBehaviour {
                     destroyPlayer(teamToDestroyFrom, connectionId);
                 }
                 break;
-            case NetworkEventType.BroadcastEvent:
+            case "broadcast":
                 Debug.Log("Broadcast event.");
                 break;
         }
@@ -167,22 +122,6 @@ public class Server : MonoBehaviour {
                 OnLeave(messageContent, connectionId);
                 break;
         }
-    }
-
-    //This function is called when data is sent
-    private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error)
-    {
-        //Here the message being received is deserialized and output to the console
-        Stream serializedMessage = new MemoryStream(data);
-        BinaryFormatter formatter = new BinaryFormatter();
-        string message = formatter.Deserialize(serializedMessage).ToString();
-
-        //Output the deserialized message as well as the connection information to the console
-        Debug.Log("OnData(hostId = " + hostId + ", connectionId = "
-            + connectionId + ", channelId = " + channelId + ", data = "
-            + message + ", size = " + size + ", error = " + error.ToString() + ")");
-
-        return message;
     }
 
     private void OnScore(string messageContent, int connectionId) {
@@ -334,28 +273,6 @@ public class Server : MonoBehaviour {
         }
     }
 
-    // Used for sending data to the players
-    public void SendMyMessage(string messageType, string textInput, int connectionId)
-    {
-        byte error;
-        byte[] buffer = new byte[4096];
-        int bufferSize = 4096;
-        Stream message = new MemoryStream(buffer);
-        BinaryFormatter formatter = new BinaryFormatter();
-        //Serialize the message
-        string messageToSend = messageType + "&" + textInput;
-        formatter.Serialize(message, messageToSend);
-
-        //Send the message from the "client" with the serialized message and the connection information
-        NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
-
-        //If there is an error, output message error to the console
-        if ((NetworkError)error != NetworkError.Ok)
-        {
-            Debug.Log("Message send error: " + (NetworkError)error);
-        }
-    }
-
     //Allocates a player to a team based on their choice.
     private void allocateToTeam(int connectionId, string message)
     {
@@ -414,7 +331,7 @@ public class Server : MonoBehaviour {
             }
 
             Debug.Log("Sending back to red: " + messageContent);
-            SendMyMessage(messageType, messageContent, hostId);
+            netManager.SendMyMessage(messageType, messageContent, hostId);
         }
         else if (kitchen == "blue")
         {
@@ -426,7 +343,7 @@ public class Server : MonoBehaviour {
             }
 
             Debug.Log("Sending back to blue: " + messageContent);
-            SendMyMessage(messageType, messageContent, hostId);
+            netManager.SendMyMessage(messageType, messageContent, hostId);
         }
     }
 
