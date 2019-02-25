@@ -410,10 +410,10 @@ public class Server : MonoBehaviour {
       GameEndState.EndState winningTeam;
       string winningTeamStr;
 
-      if (redScore.getScore() > blueScore.getScore()) {
+      if (finalRedScore > finalBlueScore) {
         winningTeam = GameEndState.EndState.RED_WIN;
         winningTeamStr = "red";
-      } else if (blueScore.getScore() > redScore.getScore()) {
+      } else if (finalBlueScore > finalRedScore) {
         winningTeam = GameEndState.EndState.BLUE_WIN;
         winningTeamStr = "blue";
       } else {
@@ -421,7 +421,7 @@ public class Server : MonoBehaviour {
         winningTeamStr = "draw";
       }
 
-      gameEndState = new GameEndState(winningTeam, (int) redScore.getScore(), (int) blueScore.getScore());
+      gameEndState = new GameEndState(winningTeam, (int) finalRedScore, (int) finalBlueScore);
 
       foreach(KeyValuePair<int, GameObject> player in redTeam) {
           netManager.SendMyMessage("endgame", winningTeamStr + "$" + finalRedScore + "$" + finalBlueScore, player.Key);
@@ -440,7 +440,6 @@ public class Server : MonoBehaviour {
             clearAllStations();
             sendEndGame();
         }
->>>>>>> develop:FoodFight/Assets/Scripts/Server/Server.cs
     }
 
     private void moveServerPlayer(int connectionId, string stationId)
