@@ -33,17 +33,19 @@ public class Manager : MonoBehaviour {
 
   	// Update is called once per frame
   	public void Update() {
-        updateScores();
+        if (!gameOver) {
+          updateScores();
 
-        float rScore = redScore.getScore();
-        float bScore = blueScore.getScore();
-        if (timer.getTime() <= 0) GameOver();
+          float rScore = redScore.getScore();
+          float bScore = blueScore.getScore();
+          if (timer.getTime() <= 0) GameOver();
 
-        // Check if either team has reached a score of 0 and if they have, end the game
-        if (rScore <= 0) GameOver();
-        else if (bScore <= 0) GameOver();
+          // Check if either team has reached a score of 0 and if they have, end the game
+          if (rScore <= 0) GameOver();
+          else if (bScore <= 0) GameOver();
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) GameOver();
+          if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) GameOver();
+        }
     }
 
     private void updateScores()
@@ -63,8 +65,7 @@ public class Manager : MonoBehaviour {
     }
 
     // Ends the game by loading the Game Over screen
-    private void GameOver()
-    {
+    private void GameOver() {
         finalBlueScore = blueScore.getScore();
         finalRedScore = redScore.getScore();
 
