@@ -16,11 +16,12 @@ public class GameOverScript : MonoBehaviour {
         DontDestroyOnLoad(GameObject.Find("Client"));
         DontDestroyOnLoad(GameObject.Find("Player"));
         DontDestroyOnLoad(GameObject.Find("Server"));
+        DontDestroyOnLoad(GameObject.Find("Manager"));
 
         client = GameObject.Find("Client").GetComponent<Client>();
         server = GameObject.Find("Server").GetComponent<Server>();
 
-        GameEndState gameEndState = Server.gameEndState;
+        GameEndState gameEndState = Manager.gameEndState;
 
         Image img = GameObject.Find("Panel").GetComponent<Image>();
 
