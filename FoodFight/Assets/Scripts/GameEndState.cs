@@ -18,19 +18,18 @@ public class GameEndState {
 
 	public GameEndState(string winningTeam, int redScore, int blueScore) {
 		if (winningTeam.Equals("red")) {
-			this.winningTeam = RED_WIN;
+			this.winningTeam = EndState.RED_WIN;
 		} else if (winningTeam.Equals("blue")) {
-			this.winningTeam = BLUE_WIN;
+			this.winningTeam = EndState.BLUE_WIN;
 		} else {
-
+			this.winningTeam = EndState.DRAW;
 		}
-		this.winningTeam = winningTeam;
 		this.redScore = redScore;
 		this.blueScore = blueScore;
 	}
 
 	public GameEndState() {
-		this.winningTeam = DRAW;
+		this.winningTeam = EndState.DRAW;
 		this.redScore = 0;
 		this.blueScore = 0;
 	}

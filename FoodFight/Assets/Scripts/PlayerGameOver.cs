@@ -32,7 +32,7 @@ public class PlayerGameOver : MonoBehaviour {
 		if (team.Equals(gameEndState.getWinningTeam())) {
 			Winner();
 		} else {
-			if (gameEndState.getWinningTeam() != EndState.DRAW) {
+			if (gameEndState.getWinningTeam() != GameEndState.EndState.DRAW) {
 				Loser();
 			} else {
 				Draw();
