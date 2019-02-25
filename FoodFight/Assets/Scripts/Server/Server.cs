@@ -28,6 +28,8 @@ public class Server : MonoBehaviour {
     // Networking
     public NetManager netManager;
 
+    public static GameEndState gameEndState;
+
     // Dictionaries of players on each team
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
     IDictionary<int, GameObject> blueTeam = new Dictionary<int, GameObject>();
@@ -403,21 +405,37 @@ public class Server : MonoBehaviour {
       }
     }
 
-    private void sendEndGame()
-    {
-        string winningTeam = (finalBlueScore > finalRedScore) ? "red" : "blue";
-        foreach(KeyValuePair<int, GameObject> player in redTeam) {
-            netManager.SendMyMessage("endgame", winningTeam + "$" + finalRedScore + "$" + finalBlueScore, player.Key);
-        }
+    private void sendEndGame() {
 
-        foreach(KeyValuePair<int, GameObject> player in blueTeam) {
-            netManager.SendMyMessage("endgame", winningTeam + "$" + finalRedScore + "$" + finalBlueScore, player.Key);
-        }
+      GameEndState.EndState winningTeam;
+      string winningTeamStr;
+
+      if (finalRedScore > finalBlueScore) {
+        winningTeam = GameEndState.EndState.RED_WIN;
+        winningTeamStr = "red";
+      } else if (finalBlueScore > finalRedScore) {
+        winningTeam = GameEndState.EndState.BLUE_WIN;
+        winningTeamStr = "blue";
+      } else {
+        winningTeam = GameEndState.EndState.DRAW;
+        winningTeamStr = "draw";
+      }
+
+      gameEndState = new GameEndState(winningTeam, (int) finalRedScore, (int) finalBlueScore);
+
+      foreach(KeyValuePair<int, GameObject> player in redTeam) {
+          netManager.SendMyMessage("endgame", winningTeamStr + "$" + finalRedScore + "$" + finalBlueScore, player.Key);
+      }
+
+      foreach(KeyValuePair<int, GameObject> player in blueTeam) {
+          netManager.SendMyMessage("endgame", winningTeamStr + "$" + finalRedScore + "$" + finalBlueScore, player.Key);
+      }
+
+      SceneManager.LoadScene("GameOverScreen");
     }
 
-    public void EndGame() {   
-        if (gameManager.gameOver)
-        {
+    public void EndGame() {
+        if (gameManager.gameOver) {
             Debug.Log("EndGame");
             clearAllStations();
             sendEndGame();
