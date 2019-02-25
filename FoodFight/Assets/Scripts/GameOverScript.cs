@@ -20,7 +20,7 @@ public class GameOverScript : MonoBehaviour {
         client = GameObject.Find("Client").GetComponent<Client>();
         server = GameObject.Find("Server").GetComponent<Server>();
 
-        GameEndState gameEndState = server.getGameEndState();
+        GameEndState gameEndState = Server.gameEndState;
 
         Image img = GameObject.Find("Panel").GetComponent<Image>();
 

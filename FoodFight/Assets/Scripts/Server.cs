@@ -43,7 +43,7 @@ public class Server : MonoBehaviour {
     public static float finalRedScore;
     public static float finalBlueScore;
 
-    public GameEndState gameEndState;
+    public static GameEndState gameEndState;
 
     // Dictionaries of players on each team
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
@@ -559,7 +559,7 @@ public class Server : MonoBehaviour {
       }
     }
 
-    public GameEndState getGameEndState() {
+    public static GameEndState getGameEndState() {
       return gameEndState;
     }
 
