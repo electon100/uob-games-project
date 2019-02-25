@@ -32,9 +32,12 @@ public class PlayerGameOver : MonoBehaviour {
 		if (team.Equals(gameEndState.getWinningTeam())) {
 			Winner();
 		} else {
-			Loser();
+			if (gameEndState.getWinningTeam() != EndState.DRAW) {
+				Loser();
+			} else {
+				Draw();
+			}
 		}
-
 	}
 
 	// Update is called once per frame
@@ -48,5 +51,9 @@ public class PlayerGameOver : MonoBehaviour {
 
 	void Loser() {
 		MainText.text = "You lose!";
+	}
+
+	void Draw() {
+		MainText.text = "Draw!";
 	}
 }

@@ -123,8 +123,8 @@ public class Server : MonoBehaviour {
         }
 
         // Check if either team has reached a score of 0 and if they have, end the game
-        if (redScore.getScore() == 0) GameOver("blue");
-        else if (blueScore.getScore() == 0) GameOver("red");
+        if (redScore.getScore() == 0) GameOver(EndState.BLUE_WIN);
+        else if (blueScore.getScore() == 0) GameOver(EndState.RED_WIN);
 
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
@@ -525,7 +525,7 @@ public class Server : MonoBehaviour {
       }
     }
 
-    private void GameOver(string winningTeam)
+    private void GameOver(EndState winningTeam)
     {
         // Should call the game over screen, showing the final scores on the main screen
         // Should tell players on the winning team they have won on their phones
@@ -534,15 +534,6 @@ public class Server : MonoBehaviour {
         finalBlueScore = blueScore.getScore();
         finalRedScore = redScore.getScore();
 
-        if (winningTeam.Equals("blue"))
-        {
-            SceneManager.LoadScene("GameOverScreen");
-        }
-        else if (winningTeam.Equals("red"))
-        {
-            SceneManager.LoadScene("GameOverScreen");
-        }
-
         foreach(KeyValuePair<int, GameObject> player in redTeam) {
             SendMyMessage("endgame", winningTeam + "$" + redScore.getScore() + "$" + blueScore.getScore(), player.Key);
         }
@@ -550,10 +541,18 @@ public class Server : MonoBehaviour {
         foreach(KeyValuePair<int, GameObject> player in blueTeam) {
             SendMyMessage("endgame", winningTeam + "$" + redScore.getScore() + "$" + blueScore.getScore(), player.Key);
         }
+
+        SceneManager.LoadScene("GameOverScreen");
     }
 
     public void EndGame() {
-      GameOver((blueScore.getScore() > redScore.getScore()) ? "blue" : "red");
+      if (redScore.getScore() > blueScore.getScore()) {
+        GameOver(EndState.RED_WIN);
+      } else if (blueScore.getScore() > redScore.getScore()) {
+        GameOver(EndState.BLUE_WIN);
+      } else {
+        GameOver(EndState.DRAW);
+      }
     }
 
     private void updateScores()
