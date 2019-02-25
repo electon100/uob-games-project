@@ -33,15 +33,9 @@ public class Server : MonoBehaviour {
     public GameObject blueStation;
     public GameObject redStation;
 
-    // Scoring
-    public Text redScoreText;
-    public Text blueScoreText;
-
-    private Score redScore;
-    private Score blueScore;
-
-    public static float finalRedScore;
-    public static float finalBlueScore;
+    // Scoring and Timing
+    public Manager gameManager;
+    public static float finalRedScore, finalBlueScore;
 
     // Dictionaries of players on each team
     IDictionary<int, GameObject> redTeam = new Dictionary<int, GameObject>();
@@ -53,10 +47,6 @@ public class Server : MonoBehaviour {
 
     IDictionary<string, GameObject> redOccupied = new Dictionary<string, GameObject>();
     IDictionary<string, GameObject> blueOccupied = new Dictionary<string, GameObject>();
-
-    // Timer variable
-    private float timer;
-    public Text timerText;
 
     private void Start () {
         NetworkTransport.Init();
@@ -88,33 +78,15 @@ public class Server : MonoBehaviour {
         webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
         isStarted = true;
 
-        redScore = new Score();
-        blueScore = new Score();
-
-        timerText = GameObject.Find("TimerText").GetComponent<Text>();
-        redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
-        blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
-        updateScores();
-        timer = 1200.0f;
-        displayTime();
+        gameManager = new Manager();
     }
 
 	private void Update () {
         if (!isStarted) return;
 
-        timer -= Time.deltaTime;
-        if (timer <= 0)
-        {
-            if (redScore.getScore() > blueScore.getScore()) GameOver("red");
-            else if (blueScore.getScore() > redScore.getScore()) GameOver("blue");
-            // Defaults to red winning if it is a tie
-            else GameOver("red");
-        }
-        displayTime();
-
-        // Check if either team has reached a score of 0 and if they have, end the game
-        if (redScore.getScore() == 0) GameOver("blue");
-        else if (blueScore.getScore() == 0) GameOver("red");
+        gameManager.update();
+        finalBlueScore = gameManager.finalBlueScore;
+        finalRedScore = gameManager.finalRedScore;
 
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
@@ -216,17 +188,14 @@ public class Server : MonoBehaviour {
     private void OnScore(string messageContent, int connectionId) {
         Ingredient recipe = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, (new Ingredient()).GetType());
 
-        int recipeScore = scoreRecipe(recipe);
+        int recipeScore = FoodData.Instance.getScoreForIngredient(recipe);
 
-        if (redTeam.ContainsKey(connectionId)) {
-          // Add score to red team
-          redScore.increaseScore(recipeScore);
-        } else if (blueTeam.ContainsKey(connectionId)) {
-          // Add score to blue team
-          blueScore.increaseScore(recipeScore);
-        }
+        // Add score to red team
+        if (redTeam.ContainsKey(connectionId)) gameManager.increaseRed(recipeScore);
+        // Add score to blue team
+        else if (blueTeam.ContainsKey(connectionId)) gameManager.increaseBlue(recipeScore);
 
-        updateScores();
+        gameManager.update();
 
         Debug.Log(messageContent);
     }
@@ -242,12 +211,6 @@ public class Server : MonoBehaviour {
         {
             blueOccupied[stationId] = null;
         }
-    }
-
-    private int scoreRecipe(Ingredient recipe) {
-      int score = FoodData.Instance.getScoreForIngredient(recipe);
-
-      return score;
     }
 
     private void OnClearStation(string stationId, int connectionId) {
@@ -483,40 +446,6 @@ public class Server : MonoBehaviour {
         else if (blueTeam.ContainsKey(connectionID)) {
             blueKitchen[stationID].Clear();
         }
-    }
-
-    private void GameOver(string winningTeam)
-    {
-        // Should call the game over screen, showing the final scores on the main screen
-        // Should tell players on the winning team they have won on their phones
-        // Should tell players on the losing team they have lost on their phones
-
-        finalBlueScore = blueScore.getScore();
-        finalRedScore = redScore.getScore();
-
-        if (winningTeam.Equals("blue"))
-        {
-            SceneManager.LoadScene("GameOverScreen");
-        }
-        else if (winningTeam.Equals("red"))
-        {
-            SceneManager.LoadScene("GameOverScreen");
-        }
-    }
-
-    private void updateScores()
-    {
-        redScoreText.text = "Red Score " + redScore.getScore().ToString();
-        blueScoreText.text = "Blue Score " + blueScore.getScore().ToString();
-    }
-
-    private void displayTime()
-    {
-        TimeSpan t = TimeSpan.FromSeconds(timer);
-        string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
-        timerText.text = "Time left " + timerFormatted;
-        // Debug.Log(timerText.text);
-
     }
 
     private void moveServerPlayer(int connectionId, string stationId)
