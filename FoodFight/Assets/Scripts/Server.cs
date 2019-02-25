@@ -110,10 +110,7 @@ public class Server : MonoBehaviour {
         timer -= Time.deltaTime;
         if (timer <= 0)
         {
-            if (redScore.getScore() > blueScore.getScore()) GameOver("red");
-            else if (blueScore.getScore() > redScore.getScore()) GameOver("blue");
-            // Defaults to red winning if it is a tie
-            else GameOver("red");
+            EndGame();
         }
         displayTime();
 
@@ -122,7 +119,7 @@ public class Server : MonoBehaviour {
         }
         if((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && Input.GetKeyDown("e")) {
           // End Game
-          GameOver((redScore.getScore() >= blueScore.getScore()) ? "red" : "blue");
+          EndGame();
         }
 
         // Check if either team has reached a score of 0 and if they have, end the game
@@ -556,7 +553,6 @@ public class Server : MonoBehaviour {
     }
 
     public void EndGame() {
-      Debug.Log("in end game");
       GameOver((blueScore.getScore() > redScore.getScore()) ? "blue" : "red");
     }
 
