@@ -9,8 +9,8 @@ public class Manager : MonoBehaviour {
     GameTimer timer;
 
     // Scoring
-    public Text redScoreText;
-    public Text blueScoreText;
+    public Text redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
+    public Text blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
     Score blueScore, redScore;
     public float finalBlueScore = 0;
     public float finalRedScore = 0;
@@ -24,12 +24,11 @@ public class Manager : MonoBehaviour {
         blueScore = new Score();
         redScore = new Score();
         timer = new GameTimer();
-	}
+    }
 
   public void Start() {
-    redScoreText = GameObject.Find("RedScore").GetComponent<Text>();
-    blueScoreText = GameObject.Find("BlueScore").GetComponent<Text>();
-  }
+        
+    }
 
 	// Update is called once per frame
 	public void update() {
