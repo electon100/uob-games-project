@@ -22,12 +22,7 @@ public class PlateBehaviour : MonoBehaviour {
 
       Screen.orientation = ScreenOrientation.Portrait;
 
-      Ingredient noodles = new Ingredient("noodles", "noodlesPrefab");
-      Ingredient potatos = new Ingredient("diced_potato", "diced_potatoPrefab");
-      potatos.numberOfPanFlips = 20;
-
       clearPlate();
-      addIngredientToPlate(potatos);
 
       player = GameObject.Find("Player").GetComponent<Player>();
 
@@ -106,8 +101,9 @@ public class PlateBehaviour : MonoBehaviour {
     }
 
     public void serveFood() {
-      if (isValidRecipe(getWorkingRecipe())) {
-        player.sendScoreToServer(recipe);
+      Ingredient workingRecipe = getWorkingRecipe();
+      if (isValidRecipe(workingRecipe)) {
+        player.sendScoreToServer(workingRecipe);
         clearPlate();
       }
     }
