@@ -134,7 +134,7 @@ public class Player : MonoBehaviour {
         resetCurrentStation();
     }
 
-    public void removeCurrentIngredient()
+    public static void removeCurrentIngredient()
     {
         currentIngred = null;
     }

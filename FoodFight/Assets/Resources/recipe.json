@@ -41,6 +41,16 @@
       ]
     },
     {
+      "name": "cooked_stir_fry_mix",
+      "ingredients": [
+        {
+          "name": "stir_fry_mix",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
       "name": "stir_fry",
       "ingredients": [
         {
@@ -49,8 +59,8 @@
           "chopped": false
         },
         {
-          "name": "stir_fry_mix",
-          "cooked": true,
+          "name": "cooked_stir_fry_mix",
+          "cooked": false,
           "chopped": false
         }
       ]
@@ -84,9 +94,9 @@
           "chopped": false
         },
         {
-          "name": "mixed_vegetables",
+          "name": "chopped_mixed_vegetables",
           "cooked": false,
-          "chopped": true
+          "chopped": false
         }
       ]
     },
@@ -114,8 +124,8 @@
       "name": "steak_hache",
       "ingredients": [
         {
-          "name": "raw_steak",
-          "cooked": true,
+          "name": "steak",
+          "cooked": false,
           "chopped": false
         },
         {
@@ -279,14 +289,24 @@
       "name": "salchipapas",
       "ingredients": [
         {
-          "name": "raw_hot_dog",
-          "cooked": true,
+          "name": "hot_dog",
+          "cooked": false,
           "chopped": false
         },
         {
-          "name": "diced_potato",
-          "cooked": true,
+          "name": "chips",
+          "cooked": false,
           "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "chopped_tomato",
+      "ingredients": [
+        {
+          "name": "tomato",
+          "cooked": false,
+          "chopped": true
         }
       ]
     },
@@ -299,14 +319,14 @@
           "chopped": true
         },
         {
-          "name": "tomato",
+          "name": "chopped_tomato",
           "cooked": false,
-          "chopped": true
+          "chopped": false
         },
         {
-          "name": "onion",
+          "name": "chopped_onion",
           "cooked": false,
-          "chopped": true
+          "chopped": false
         }
       ]
     },
@@ -339,9 +359,9 @@
           "chopped": false
         },
         {
-          "name": "onion",
+          "name": "chopped_onion",
           "cooked": false,
-          "chopped": true
+          "chopped": false
         }
       ]
     },
