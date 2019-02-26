@@ -78,7 +78,7 @@ public class PlateBehaviour : MonoBehaviour {
         /* Notify server that player has placed ingredient */
         player.notifyServerAboutIngredientPlaced(Player.currentIngred);
 
-        player.removeCurrentIngredient();
+        Player.removeCurrentIngredient();
       } else {
         /* TODO: What happens when player is not holding an ingredient */
       }
