@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33629309563423610}
   - component: {fileID: 23724955291166450}
   m_Layer: 0
-  m_Name: FlourPrefab
+  m_Name: flourPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
