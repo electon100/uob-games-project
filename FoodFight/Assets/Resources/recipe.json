@@ -129,8 +129,8 @@
           "chopped": false
         },
         {
-          "name": "diced_potato",
-          "cooked": true,
+          "name": "chips",
+          "cooked": false,
           "chopped": false
         }
       ]

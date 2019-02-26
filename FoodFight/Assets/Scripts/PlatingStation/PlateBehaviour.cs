@@ -101,10 +101,17 @@ public class PlateBehaviour : MonoBehaviour {
     }
 
     public void serveFood() {
-      Ingredient workingRecipe = getWorkingRecipe();
-      if (isValidRecipe(workingRecipe)) {
-        player.sendScoreToServer(workingRecipe);
-        clearPlate();
+      if (plateContents.Count == 1) {
+        Ingredient recipe = getWorkingRecipe();
+
+        foreach (Ingredient ingredient in plateContents) {
+          recipe = ingredient;
+        }
+
+        if (isValidRecipe(recipe)) {
+          player.sendScoreToServer(recipe);
+          clearStation();
+        }
       }
     }
 
