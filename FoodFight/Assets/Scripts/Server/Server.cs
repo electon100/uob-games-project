@@ -150,6 +150,10 @@ public class Server : MonoBehaviour {
         Debug.Log(messageContent);
     }
 
+
+    // Fix HERE by not always increasing idle count!!!!!! ////////////////////////////////
+
+
     private void OnLeave(string messageContent, int connectionId)
     {
         string stationId = messageContent;
@@ -204,8 +208,8 @@ public class Server : MonoBehaviour {
 
         if (playerOnValidStation)
         {
-            if (redTeam.ContainsKey(connectionId) && isLogon(connectionId)) redIdleCount -= 1;
-            if (blueTeam.ContainsKey(connectionId) && isLogon(connectionId)) blueIdleCount -= 1;
+            if (redTeam.ContainsKey(connectionId) && isLogon(connectionId, stationId)) redIdleCount -= 1;
+            if (blueTeam.ContainsKey(connectionId) && isLogon(connectionId, stationId)) blueIdleCount -= 1;
             Debug.Log("Blue idle: " + blueIdleCount);
             // Case where we want to send back ingredients stored at the station to player
             if (ingredient.Equals(""))
@@ -217,22 +221,16 @@ public class Server : MonoBehaviour {
         }
     }
 
-    private bool isLogon(int connectionId)
+    private bool isLogon(int connectionId, string stationId)
     {
-        if (redTeam.ContainsKey(connectionId))
+        if (redTeam.ContainsKey(connectionId) && redOccupied.ContainsKey(stationId))
         {
-            foreach (KeyValuePair<string, GameObject> entry in redOccupied)
-            {
-                if (entry.Value == redTeam[connectionId]) return false;
-            }
+            if (redTeam[connectionId] == redOccupied[stationId]) return false;
             return true;
         }
-        else if (blueTeam.ContainsKey(connectionId))
+        else if (blueTeam.ContainsKey(connectionId) && blueOccupied.ContainsKey(stationId))
         {
-            foreach (KeyValuePair<string, GameObject> entry in blueOccupied)
-            {
-                if (entry.Value == blueTeam[connectionId]) return false;
-            }
+            if (blueTeam[connectionId] == blueOccupied[stationId]) return false;
             return true;
         }
         else return false;
