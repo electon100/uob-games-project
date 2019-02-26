@@ -90,6 +90,10 @@ public sealed class FoodData {
 			return null;
 	}
 
+	public Ingredient TryAdvanceIngredient(Ingredient ingredient) {
+		return TryCombineIngredients(new List<Ingredient>{ingredient});
+	}
+
 	public Ingredient TryCombineIngredients(List<Ingredient> ingredients) {
 
 		/* Iterate through all possible recipes */
