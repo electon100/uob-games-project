@@ -37,7 +37,6 @@ public class Manager : MonoBehaviour {
   	// Update is called once per frame
   	public void Update() {
         if (!gameOver) {
-          updateScores();
 
           float rScore = redScore.getScore();
           float bScore = blueScore.getScore();
@@ -80,9 +79,11 @@ public class Manager : MonoBehaviour {
 
         gameEndState = new GameEndState(winningTeam, (int) finalRedScore, (int) finalBlueScore);
 
-        gameOver = true;
+        server.EndGame();
 
         SceneManager.LoadScene("GameOverScreen");
+
+        gameOver = true;
     }
 
     public string getEndGameString() {

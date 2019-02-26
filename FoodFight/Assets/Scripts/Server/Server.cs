@@ -101,11 +101,9 @@ public class Server : MonoBehaviour {
         int recipeScore = FoodData.Instance.getScoreForIngredient(recipe);
 
         // Add score to red team
-        if (redTeam.ContainsKey(connectionId)) gameManager.increaseRed(recipeScore);
+        if (redTeam.ContainsKey(connectionId)) manager.increaseRed(recipeScore);
         // Add score to blue team
-        else if (blueTeam.ContainsKey(connectionId)) gameManager.increaseBlue(recipeScore);
-
-        gameManager.Update();
+        else if (blueTeam.ContainsKey(connectionId)) manager.increaseBlue(recipeScore);
 
         Debug.Log(messageContent);
     }
@@ -375,8 +373,6 @@ public class Server : MonoBehaviour {
       foreach(KeyValuePair<int, GameObject> player in blueTeam) {
           netManager.SendMyMessage("endgame", endGameString, player.Key);
       }
-
-      SceneManager.LoadScene("GameOverScreen");
     }
 
     public void EndGame() {
