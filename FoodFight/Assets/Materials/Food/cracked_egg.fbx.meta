@@ -1,18 +1,22 @@
 fileFormatVersion: 2
-guid: 445f58b616ed6db499637110493e2d5d
+guid: bba52a2d25e36d24493d8a8d8b259f76
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: pasted__pSphere1
-    100004: pasted__white
+    100002: white
+    100004: yolk
     400000: //RootNode
-    400002: pasted__pSphere1
-    400004: pasted__white
-    2100000: pasted__yolk
-    2300000: pasted__pSphere1
-    3300000: pasted__pSphere1
-    4300000: pasted__pSphere1
+    400002: white
+    400004: yolk
+    2100000: lambert1
+    2100002: pasted__yolk
+    2300000: white
+    2300002: yolk
+    3300000: white
+    3300002: yolk
+    4300000: white
+    4300002: yolk
   externalObjects: {}
   materials:
     importMaterials: 1
