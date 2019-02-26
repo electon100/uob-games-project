@@ -36,18 +36,18 @@ public class Manager : MonoBehaviour {
 
   	// Update is called once per frame
   	public void Update() {
-        if (!gameOver) {
+      if (!gameOver) {
+        float rScore = redScore.getScore();
+        float bScore = blueScore.getScore();
 
-          float rScore = redScore.getScore();
-          float bScore = blueScore.getScore();
-          if (timer.getTime() <= 0) GameOver();
+        // Check if either team has reached a score of 0 and if they have, end the game
+        if (rScore <= 0) GameOver();
+        else if (bScore <= 0) GameOver();
 
-          // Check if either team has reached a score of 0 and if they have, end the game
-          if (rScore <= 0) GameOver();
-          else if (bScore <= 0) GameOver();
-
-          if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) GameOver();
-        }
+        if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) GameOver();
+      } else {
+        GameOver();
+      }
     }
 
     public void increaseRed(int recipeScore)
@@ -63,7 +63,7 @@ public class Manager : MonoBehaviour {
     }
 
     // Ends the game by loading the Game Over screen
-    private void GameOver() {
+    public void GameOver() {
         finalBlueScore = blueScore.getScore();
         finalRedScore = redScore.getScore();
 

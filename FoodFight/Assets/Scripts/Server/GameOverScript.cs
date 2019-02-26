@@ -17,6 +17,7 @@ public class GameOverScript : MonoBehaviour {
         DontDestroyOnLoad(GameObject.Find("Player"));
         DontDestroyOnLoad(GameObject.Find("Server"));
         DontDestroyOnLoad(GameObject.Find("Manager"));
+        DontDestroyOnLoad(GameObject.Find("NetManager"));
 
         client = GameObject.Find("Client").GetComponent<Client>();
         server = GameObject.Find("Server").GetComponent<Server>();

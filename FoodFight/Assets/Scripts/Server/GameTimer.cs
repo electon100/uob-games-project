@@ -9,18 +9,24 @@ public class GameTimer : MonoBehaviour {
     // Timer variable
     private float timer;
     public Text timerText;
+    public Manager manager;
 
     bool isStarted = false;
 
     public void Start() {
       timer = 1200.0f;
       isStarted = true;
+      manager = GameObject.Find("Manager").GetComponent<Manager>();
     }
 
   	// Update is called once per frame from the server's update method
   	void Update() {
-      timer -= Time.deltaTime;
-      displayTime();
+      if (timer > 0) {
+        timer -= Time.deltaTime;
+        displayTime();
+      } else {
+        manager.GameOver();
+      }
   	}
 
     private void displayTime() {
