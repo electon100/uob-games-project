@@ -20,7 +20,7 @@ public class ARCupboard : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
+        Screen.orientation = ScreenOrientation.Portrait;
         DontDestroyOnLoad(GameObject.Find("Player"));
     }
 
