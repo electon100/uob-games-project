@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4042686867979234}
   m_Layer: 0
-  m_Name: EggsPrefab
+  m_Name: eggsPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
