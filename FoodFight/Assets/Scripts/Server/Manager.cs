@@ -44,7 +44,7 @@ public class Manager : MonoBehaviour {
         if (rScore <= 0) GameOver();
         else if (bScore <= 0) GameOver();
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.E)) GameOver();
+        if (Input.GetKeyDown(KeyCode.E)) GameOver();
       } else {
         GameOver();
       }
