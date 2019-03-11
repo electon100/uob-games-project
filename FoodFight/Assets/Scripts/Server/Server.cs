@@ -39,8 +39,8 @@ public class Server : MonoBehaviour {
     IDictionary<string, List<Ingredient>> redKitchen = new Dictionary<string, List<Ingredient>>();
     IDictionary<string, List<Ingredient>> blueKitchen = new Dictionary<string, List<Ingredient>>();
 
-    IDictionary<string, GameObject> redOccupied = new Dictionary<string, GameObject>();
-    IDictionary<string, GameObject> blueOccupied = new Dictionary<string, GameObject>();
+    IDictionary<string, int> redOccupied = new Dictionary<string, int>();
+    IDictionary<string, int> blueOccupied = new Dictionary<string, int>();
 
     private string[] stations = {"0","1","2","3"};
 
@@ -108,21 +108,26 @@ public class Server : MonoBehaviour {
         Debug.Log(messageContent);
     }
 
+
+    // Fix HERE by not always increasing idle count!!!!!! ////////////////////////////////
+
+
     private void OnLeave(string messageContent, int connectionId)
     {
         string stationId = messageContent;
         if (redTeam.ContainsKey(connectionId) && redOccupied.ContainsKey(stationId))
         {
-            redOccupied[stationId] = null;
+            redOccupied[stationId] = -1;
             redIdleCount += 1;
             Vector3 newPosition = new Vector3(-40, 2, 5 * (redIdleCount + 1));
             PlayerMovement.movePlayer(newPosition, redTeam[connectionId]);
         }
         if (blueTeam.ContainsKey(connectionId) && blueOccupied.ContainsKey(stationId))
         {
-            blueOccupied[stationId] = null;
+            blueOccupied[stationId] = -1;
             blueIdleCount += 1;
-            Vector3 newPosition = new Vector3(-40, 2, 5 * (blueIdleCount + 1));
+            Debug.Log("Blue idle: " + blueIdleCount);
+            Vector3 newPosition = new Vector3(40, 2, 5 * (blueIdleCount + 1));
             PlayerMovement.movePlayer(newPosition, blueTeam[connectionId]);
         }
     }
@@ -157,12 +162,15 @@ public class Server : MonoBehaviour {
         // Case where we add a station to a kitchen if it has not been seen before
         addStationToKitchen(stationId, connectionId);
 
+        bool isLog = isLogon(connectionId, stationId);
         bool playerOnValidStation = isPlayerOnValidStation(connectionId, stationId);
 
         if (playerOnValidStation)
         {
-            if (redTeam.ContainsKey(connectionId)) redIdleCount -= 1;
-            if (blueTeam.ContainsKey(connectionId)) blueIdleCount -= 1;
+            if (redTeam.ContainsKey(connectionId) && isLog) redIdleCount -= 1;
+            if (blueTeam.ContainsKey(connectionId) && isLog) blueIdleCount -= 1;
+
+            Debug.Log("Blue idle: " + blueIdleCount);
             // Case where we want to send back ingredients stored at the station to player
             if (ingredient.Equals(""))
                 sendIngredientsToPlayer(stationId, connectionId);
@@ -173,14 +181,31 @@ public class Server : MonoBehaviour {
         }
     }
 
+    private bool isLogon(int connectionId, string stationId)
+    {
+        if (redTeam.ContainsKey(connectionId) && redOccupied.ContainsKey(stationId))
+        {
+            Debug.Log("In red");
+            if (connectionId == redOccupied[stationId]) return false;
+            return true;
+        }
+        else if (blueTeam.ContainsKey(connectionId) && blueOccupied.ContainsKey(stationId))
+        {
+            Debug.Log("In blue");
+            if (connectionId == blueOccupied[stationId]) return false;
+            return true;
+        }
+        else return false;
+    }
+
     private bool isPlayerOnValidStation(int connectionId, string stationId)
     {
         if (redTeam.ContainsKey(connectionId) && redKitchen.ContainsKey(stationId))
         {
-            if (redOccupied[stationId] == redTeam[connectionId]) return true;
-            else if (redOccupied[stationId] == null)
+            if (redOccupied[stationId] == connectionId) return true;
+            else if (redOccupied[stationId] == -1)
             {
-                redOccupied[stationId] = redTeam[connectionId];
+                redOccupied[stationId] = connectionId;
                 Debug.Log("Red Station now occupied");
                 return true;
             }
@@ -188,10 +213,10 @@ public class Server : MonoBehaviour {
         }
         else if (blueTeam.ContainsKey(connectionId) && blueKitchen.ContainsKey(stationId))
         {
-            if (blueOccupied[stationId] == blueTeam[connectionId]) return true;
-            else if (blueOccupied[stationId] == null)
+            if (blueOccupied[stationId] == connectionId) return true;
+            else if (blueOccupied[stationId] == -1)
             {
-                blueOccupied[stationId] = blueTeam[connectionId];
+                blueOccupied[stationId] = connectionId;
                 Debug.Log("Blue Station now occupied");
                 return true;
             }
@@ -208,7 +233,7 @@ public class Server : MonoBehaviour {
             if (!redKitchen.ContainsKey(stationId))
             {
                 redKitchen.Add(stationId, new List<Ingredient>());
-                redOccupied.Add(stationId, null);
+                redOccupied.Add(stationId, -1);
                 Debug.Log("Red Station Created");
             }
         }
@@ -217,7 +242,7 @@ public class Server : MonoBehaviour {
             if (!blueKitchen.ContainsKey(stationId))
             {
                 blueKitchen.Add(stationId, new List<Ingredient>());
-                blueOccupied.Add(stationId, null);
+                blueOccupied.Add(stationId, -1);
                 Debug.Log("Blue Station Created");
             }
         }
@@ -280,15 +305,18 @@ public class Server : MonoBehaviour {
         GameObject newBluePlayer = (GameObject) Instantiate(bluePlayer, new Vector3(40, 2, 5 * (blueTeam.Count + 1)), Quaternion.identity);
         blueTeam.Add(connectionId, newBluePlayer);
         blueIdleCount += 1;
+        Debug.Log("Blue idle: " + blueIdleCount);
         netManager.SendMyMessage("team", "blue", connectionId);
     }
 
-    private void destroyPlayer(IDictionary<int, GameObject> team, int connectionID)
+    public void destroyPlayer(int connectionID)
     {
-        Destroy(team[connectionID]);
-        team.Remove(connectionID);
+        IDictionary<int, GameObject> team = getTeam(connectionID);
         if (redTeam.ContainsKey(connectionID)) redIdleCount -= 1;
         if (blueTeam.ContainsKey(connectionID)) blueIdleCount -= 1;
+        Destroy(team[connectionID]);
+        team.Remove(connectionID);
+        Debug.Log("Blue idle: " + blueIdleCount);
     }
 
     private IDictionary<int, GameObject> getTeam(int connectionID)
