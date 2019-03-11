@@ -93,6 +93,7 @@ public class NetManager : MonoBehaviour {
             // Remove the player from the game
             case NetworkEventType.DisconnectEvent:
                 eventType = "disconnect";
+                server.destroyPlayer(connectionId);
                 Debug.Log("Player " + connectionId + " has disconnected");
                 break;
             case NetworkEventType.BroadcastEvent:
