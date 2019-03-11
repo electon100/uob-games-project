@@ -28,6 +28,7 @@ public class Server : MonoBehaviour {
     // Networking
     public NetManager netManager;
     public Manager manager;
+    public OrderManager orderManager;
 
     public static GameEndState gameEndState;
 
@@ -52,6 +53,7 @@ public class Server : MonoBehaviour {
 
         manager = GameObject.Find("Manager").GetComponent<Manager>();
         netManager = GameObject.Find("NetManager").GetComponent<NetManager>();
+        orderManager = GameObject.Find("OrderManager").GetComponent<OrderManager>();
     }
 
 	  private void Update () {
@@ -98,12 +100,10 @@ public class Server : MonoBehaviour {
     private void OnScore(string messageContent, int connectionId) {
         Ingredient recipe = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, (new Ingredient()).GetType());
 
-        int recipeScore = FoodData.Instance.getScoreForIngredient(recipe);
-
         // Add score to red team
-        if (redTeam.ContainsKey(connectionId)) manager.increaseRed(recipeScore);
+        if (redTeam.ContainsKey(connectionId)) orderManager.scoreRecipe(recipe, "red");
         // Add score to blue team
-        else if (blueTeam.ContainsKey(connectionId)) manager.increaseBlue(recipeScore);
+        else if (blueTeam.ContainsKey(connectionId)) orderManager.scoreRecipe(recipe, "blue");
 
         Debug.Log(messageContent);
     }

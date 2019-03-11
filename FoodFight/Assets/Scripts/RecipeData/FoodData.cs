@@ -52,6 +52,14 @@ public sealed class FoodData {
 		return desc != null && desc.cookable;
 	}
 
+	/* Gets a random recipe */
+	public Ingredient getRandomRecipe() {
+		int numRecipes = allRecipes.recipes.Length;
+		string recipe = allRecipes.recipes[0].name;
+
+		return recipe;
+	}
+
 	/* Gets the score corresponding to an ingredient */
 	public int getScoreForIngredient(Ingredient ingredient) {
 		IngredientDescription desc = GetIngredientDescription(ingredient);
