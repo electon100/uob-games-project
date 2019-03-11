@@ -73,6 +73,15 @@
       "score" : 50
     },
     {
+      "name" : "cooked_stir_fry_mix",
+      "choppable" : false,
+      "cookable" : false,
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 50
+    },
+    {
       "name" : "stir_fry",
       "choppable" : false,
       "cookable" : false,
@@ -407,6 +416,15 @@
     },
     {
       "name" : "tomato",
+      "choppable" : false,
+      "cookable" : false,
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 20
+    },
+    {
+      "name" : "chopped_tomato",
       "choppable" : false,
       "cookable" : false,
       "correctFlips" : 0,

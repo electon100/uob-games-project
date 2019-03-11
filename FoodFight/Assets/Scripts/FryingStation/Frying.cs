@@ -55,6 +55,8 @@ public class Frying : MonoBehaviour {
 
 		clearPan();
 
+		player = GameObject.Find("Player").GetComponent<Player>();
+
 		foreach (Ingredient ingredient in ingredientsFromStation) {
 			addIngredientToPan(ingredient);
 		}
@@ -111,6 +113,10 @@ public class Frying : MonoBehaviour {
 				if (FoodData.Instance.isCooked(ingredient)) {
 					test_text.text = "Ingredient cooked!";
 					background.material = success;
+					Ingredient newIngred = FoodData.Instance.TryAdvanceIngredient(ingredient);
+					if (isValidRecipe(newIngred)) {
+						setPanContents(newIngred);
+					}
 				} else {
 					/* Update shake text */
 					test_text.text = "Pan shakes: " + ingredient.numberOfPanFlips;
@@ -119,6 +125,17 @@ public class Frying : MonoBehaviour {
 			}
 
 		}
+	}
+
+	private bool isValidRecipe(Ingredient recipe) {
+		return !string.Equals(recipe.Name, "mush");
+	}
+
+	private void setPanContents(Ingredient ingredient) {
+		clearStation();
+
+		addIngredientToPan(ingredient);
+		player.notifyServerAboutIngredientPlaced(ingredient);
 	}
 
 	/* Manages the sinusoidal movement of the pan */
@@ -140,14 +157,12 @@ public class Frying : MonoBehaviour {
 		}
 	}
 
-	public void placeHeldIngredientInPan()
-	{
+	public void placeHeldIngredientInPan() {
 		/* Add ingredient */
 		if (Player.currentIngred != null) {
 			addIngredientToPan(Player.currentIngred);
 
 			/* Notify server that player has placed ingredient */
-			player = GameObject.Find("Player").GetComponent<Player>();
 			player.notifyServerAboutIngredientPlaced(Player.currentIngred);
 
 			Player.removeCurrentIngredient();
@@ -157,8 +172,7 @@ public class Frying : MonoBehaviour {
 		}
 	}
 
-	public void combineIngredientsInPan()
-	{
+	public void combineIngredientsInPan()	{
 		if (panContents.Count > 1) {
 			/* Try and combine the ingredients */
 			Ingredient combinedFood = FoodData.Instance.TryCombineIngredients(panContents);
@@ -167,10 +181,7 @@ public class Frying : MonoBehaviour {
 				test_text.text = "Ingredients do not combine";
 			} else {
 				/* Set the pan contents to the new combined recipe */
-				clearStation();
-
-				addIngredientToPan(combinedFood);
-				player.notifyServerAboutIngredientPlaced(combinedFood);
+				setPanContents(combinedFood);
 			}
 		} else {
 			test_text.text = "No ingredients to combine";
@@ -179,7 +190,6 @@ public class Frying : MonoBehaviour {
 
 	public void clearStation() {
 		clearPan();
-		player = GameObject.Find("Player").GetComponent<Player>();
 		player.clearIngredientsInStation(stationID);
 	}
 
@@ -193,7 +203,6 @@ public class Frying : MonoBehaviour {
 
 			/* Clear the pan */
 			clearPan();
-			player = GameObject.Find("Player").GetComponent<Player>();
 			player.clearIngredientsInStation(stationID);
 		} else {
 			/* What to do if there are more than (or fewer than) 1 ingredients in the pan*/
@@ -237,8 +246,7 @@ public class Frying : MonoBehaviour {
 	{
 		/* TODO: Need to notify server of local updates to ingredients in pan before leaving */
 		/* Notify server that player has left the station */
-		player = GameObject.Find("Player").GetComponent<Player>();
-		player.notifyAboutStationLeft("1");
+		player.notifyAboutStationLeft(stationID);
 		SceneManager.LoadScene("PlayerMainScreen");
 	}
 }
