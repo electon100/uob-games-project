@@ -11,20 +11,24 @@ public class GameTimer : MonoBehaviour {
     public Text timerText;
     public Manager manager;
 
-    bool isStarted = false;
+    public bool isStarted = false;
 
     public void Start() {
       timer = 1200.0f;
-      isStarted = true;
       manager = GameObject.Find("Manager").GetComponent<Manager>();
+    }
+
+    public void StartTimer() {
+      timer = 1200.0f;
+      isStarted = true;
     }
 
   	// Update is called once per frame from the server's update method
   	void Update() {
-      if (timer > 0) {
+      if (timer > 0 && isStarted) {
         timer -= Time.deltaTime;
         displayTime();
-      } else {
+      } else if (isStarted && timer <= 0) {
         manager.GameOver();
       }
   	}

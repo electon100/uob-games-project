@@ -63,6 +63,7 @@ public class Client : MonoBehaviour {
     public GameEndState gameEndState;
 
     public string team;
+    private bool startGame = false;
 
     public InputField changeIPText;
 
@@ -278,6 +279,8 @@ public class Client : MonoBehaviour {
             case "team":
                 team = messageContent;
                 break;
+            case "start":
+                startGame = true;
             default:
                 break;
         }
@@ -314,13 +317,13 @@ public class Client : MonoBehaviour {
     public void onClickRed()
     {
         SendMyMessage("connect", "red");
-        SceneManager.LoadScene("PlayerMainScreen");
+        SceneManager.LoadScene("LobbyScreen");
     }
 
     public void onClickBlue()
     {
         SendMyMessage("connect", "blue");
-        SceneManager.LoadScene("PlayerMainScreen");
+        SceneManager.LoadScene("LobbyScreen");
     }
 
     public void useDifferentIP() {
@@ -334,7 +337,7 @@ public class Client : MonoBehaviour {
 
     public void changeIP()
     {
-        serverIP = "192.168.2." + Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
+        serverIP = "192.168.0." + Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
         inputField.SetActive(false);
         changeIPButton.SetActive(false);
         connectButton.SetActive(true);
