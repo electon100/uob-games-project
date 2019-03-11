@@ -9,32 +9,33 @@ public class GameTimer : MonoBehaviour {
     // Timer variable
     private float timer;
     public Text timerText;
+    public Manager manager;
 
     bool isStarted = false;
 
-    // Use this for initialization
-    public GameTimer() {
-        timerText = GameObject.Find("TimerText").GetComponent<Text>();
-        timer = 1200.0f;
-        isStarted = true;
+    public void Start() {
+      timer = 1200.0f;
+      isStarted = true;
+      manager = GameObject.Find("Manager").GetComponent<Manager>();
     }
-	
-	// Update is called once per frame from the server's update method
-	public void updateTimer() {
-        if (!isStarted) return;
+
+  	// Update is called once per frame from the server's update method
+  	void Update() {
+      if (timer > 0) {
         timer -= Time.deltaTime;
         displayTime();
-	}
+      } else {
+        manager.GameOver();
+      }
+  	}
 
-    private void displayTime()
-    {
-        TimeSpan t = TimeSpan.FromSeconds(timer);
-        string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
-        timerText.text = "Time left " + timerFormatted;
+    private void displayTime() {
+      TimeSpan t = TimeSpan.FromSeconds(timer);
+      string timerFormatted = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
+      timerText.text = "Time left " + timerFormatted;
     }
 
-    public float getTime()
-    {
-        return timer;
+    public float getTime() {
+      return timer;
     }
 }
