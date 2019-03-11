@@ -52,6 +52,20 @@ public sealed class FoodData {
 		return desc != null && desc.cookable;
 	}
 
+	/* Gets a random recipe name*/
+	public string getRandomRecipeName() {
+		int numIngredients = allIngredients.ingredients.Length;
+		bool orderable = false;
+		IngredientDescription recipe = allIngredients.ingredients[Random.Range(0, numIngredients - 1)];;
+
+		while (!orderable) {
+			recipe = allIngredients.ingredients[Random.Range(0, numIngredients - 1)];
+			if (recipe.orderable) orderable = true;
+		}
+
+		return recipe.name;
+	}
+
 	/* Gets the score corresponding to an ingredient */
 	public int getScoreForIngredient(Ingredient ingredient) {
 		IngredientDescription desc = GetIngredientDescription(ingredient);
