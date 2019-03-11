@@ -272,6 +272,7 @@ public class Server : MonoBehaviour {
         GameObject newRedPlayer = (GameObject) Instantiate(redPlayer, new Vector3(-40, 2, 5 * (redTeam.Count + 1)), Quaternion.identity);
         redTeam.Add(connectionId, newRedPlayer);
         redIdleCount += 1;
+        netManager.SendMyMessage("team", "red", connectionId);
     }
 
     private void createBluePlayer(int connectiondId)
@@ -279,6 +280,7 @@ public class Server : MonoBehaviour {
         GameObject newBluePlayer = (GameObject) Instantiate(bluePlayer, new Vector3(40, 2, 5 * (blueTeam.Count + 1)), Quaternion.identity);
         blueTeam.Add(connectiondId, newBluePlayer);
         blueIdleCount += 1;
+        netManager.SendMyMessage("team", "blue", connectionId);
     }
 
     private void destroyPlayer(IDictionary<int, GameObject> team, int connectionID)
