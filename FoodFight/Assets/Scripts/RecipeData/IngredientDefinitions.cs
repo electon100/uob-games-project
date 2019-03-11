@@ -6,6 +6,6 @@ public class IngredientDefinitions {
 [System.Serializable]
 public class IngredientDescription {
 	public string name;
-	public bool choppable, cookable;
+	public bool choppable, cookable, orderable;
 	public int correctFlips, maxFlips, correctChops, score;
 }
