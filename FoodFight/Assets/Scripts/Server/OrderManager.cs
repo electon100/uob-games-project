@@ -34,23 +34,28 @@ public class OrderManager : MonoBehaviour {
 	public void scoreRecipe(Ingredient finalRecipe, string team) {
 		int score = FoodData.Instance.getScoreForIngredient(finalRecipe);
 
+		bool isOrder = false;
+
 		if (team.Equals("red")) {
 			for (int i = 0; i < redOrders.Count; i++) {
 				if (redOrders[i].Name == finalRecipe.Name) {
 					redOrders.Remove(redOrders[i]);
-					manager.increaseRed(score);
+					isOrder = true;
 					break;
 				}
 			}
+			manager.increaseRed(score * ((isOrder) ? 1 : 1));
 		} else if (team.Equals("blue")) {
 			for (int i = 0; i < blueOrders.Count; i++) {
 				if (blueOrders[i].Name == finalRecipe.Name) {
 					blueOrders.Remove(blueOrders[i]);
-					manager.increaseBlue(score);
+					isOrder = true;
 					break;
 				}
 			}
+			manager.increaseBlue(score * ((isOrder) ? 1 : 1));
 		}
+
 	}
 
 	private List<Ingredient> populateOrders(List<Ingredient> orders) {
