@@ -435,7 +435,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4211263353696368}
   m_Layer: 0
-  m_Name: stir_fryPrefab
+  m_Name: cooked_stir_fry_mixPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

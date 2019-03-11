@@ -1,22 +1,32 @@
 fileFormatVersion: 2
-guid: bba52a2d25e36d24493d8a8d8b259f76
+guid: a5e459a773cb8554786221f10f3a3afc
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: white
-    100004: yolk
+    100002: nurbsToPoly1
+    100004: nurbsToPoly2
+    100006: pCylinder10
+    100008: pCylinder9
     400000: //RootNode
-    400002: white
-    400004: yolk
-    2100000: lambert1
-    2100002: pasted__yolk
-    2300000: white
-    2300002: yolk
-    3300000: white
-    3300002: yolk
-    4300000: white
-    4300002: yolk
+    400002: nurbsToPoly1
+    400004: nurbsToPoly2
+    400006: pCylinder10
+    400008: pCylinder9
+    2100000: pancake_col
+    2100002: choc_sauce
+    2300000: nurbsToPoly1
+    2300002: nurbsToPoly2
+    2300004: pCylinder10
+    2300006: pCylinder9
+    3300000: nurbsToPoly1
+    3300002: nurbsToPoly2
+    3300004: pCylinder10
+    3300006: pCylinder9
+    4300000: pCylinder9
+    4300002: nurbsToPoly1
+    4300004: pCylinder10
+    4300006: nurbsToPoly2
   externalObjects: {}
   materials:
     importMaterials: 1

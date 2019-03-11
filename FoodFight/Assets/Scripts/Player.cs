@@ -57,6 +57,7 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.Y))
         {
+            SceneManager.LoadScene("ChoppingStation");
             checkStation("2");
         }
         if (Input.GetKeyDown(KeyCode.U))
