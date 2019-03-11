@@ -275,10 +275,10 @@ public class Server : MonoBehaviour {
         netManager.SendMyMessage("team", "red", connectionId);
     }
 
-    private void createBluePlayer(int connectiondId)
+    private void createBluePlayer(int connectionId)
     {
         GameObject newBluePlayer = (GameObject) Instantiate(bluePlayer, new Vector3(40, 2, 5 * (blueTeam.Count + 1)), Quaternion.identity);
-        blueTeam.Add(connectiondId, newBluePlayer);
+        blueTeam.Add(connectionId, newBluePlayer);
         blueIdleCount += 1;
         netManager.SendMyMessage("team", "blue", connectionId);
     }
