@@ -27,6 +27,7 @@ public class Server : MonoBehaviour {
 
     // Networking
     public NetManager netManager;
+    public Manager manager;
 
     public static GameEndState gameEndState;
 
@@ -49,56 +50,15 @@ public class Server : MonoBehaviour {
     private void Start () {
         isStarted = true;
 
-        gameManager = new Manager();
-        netManager = new NetManager();
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
+        netManager = GameObject.Find("NetManager").GetComponent<NetManager>();
     }
 
-	private void Update () {
-        if (!isStarted) return;
-
-        gameManager.update();
-
-        // Not the actual final scores or end game, but quick fix for now
-        finalBlueScore = gameManager.finalBlueScore;
-        finalRedScore = gameManager.finalRedScore;
-        EndGame();
-
-        int connectionId = netManager.update();
-
-        //Networking events
-        switch (netManager.eventType)
-        {
-            // Do nothing if nothing was sent to server
-            case "nothing":
-                break;
-            // Have a phone connect to the server
-            case "connect":
-                Debug.Log("Player " + connectionId + " has connected");
-                break;
-            // Have the phone send data to the server
-            case "data":
-                manageMessageEvents(netManager.message, connectionId);
-                break;
-            // Remove the player from the game
-            case "disconnect":
-                Debug.Log("Player " + connectionId + " has disconnected");
-                IDictionary<int, GameObject> teamToDestroyFrom = getTeam(connectionId);
-                // Player with id connectionId has left the game, so destroy its object instance.
-                if (teamToDestroyFrom != null)
-                {
-                    destroyPlayer(teamToDestroyFrom, connectionId);
-                }
-                break;
-            case "broadcast":
-                Debug.Log("Broadcast event.");
-                break;
-        }
-
-        return;
-	}
+	  private void Update () {
+	  }
 
     // This is where all the work happens.
-    private void manageMessageEvents(string message, int connectionId)
+    public void manageMessageEvents(string message, int connectionId)
     {
         string messageType = decodeMessage(message, '&')[0];
         string messageContent = decodeMessage(message, '&')[1];
@@ -141,11 +101,9 @@ public class Server : MonoBehaviour {
         int recipeScore = FoodData.Instance.getScoreForIngredient(recipe);
 
         // Add score to red team
-        if (redTeam.ContainsKey(connectionId)) gameManager.increaseRed(recipeScore);
+        if (redTeam.ContainsKey(connectionId)) manager.increaseRed(recipeScore);
         // Add score to blue team
-        else if (blueTeam.ContainsKey(connectionId)) gameManager.increaseBlue(recipeScore);
-
-        gameManager.update();
+        else if (blueTeam.ContainsKey(connectionId)) manager.increaseBlue(recipeScore);
 
         Debug.Log(messageContent);
     }
@@ -314,13 +272,15 @@ public class Server : MonoBehaviour {
         GameObject newRedPlayer = (GameObject) Instantiate(redPlayer, new Vector3(-40, 2, 5 * (redTeam.Count + 1)), Quaternion.identity);
         redTeam.Add(connectionId, newRedPlayer);
         redIdleCount += 1;
+        netManager.SendMyMessage("team", "red", connectionId);
     }
 
-    private void createBluePlayer(int connectiondId)
+    private void createBluePlayer(int connectionId)
     {
         GameObject newBluePlayer = (GameObject) Instantiate(bluePlayer, new Vector3(40, 2, 5 * (blueTeam.Count + 1)), Quaternion.identity);
-        blueTeam.Add(connectiondId, newBluePlayer);
+        blueTeam.Add(connectionId, newBluePlayer);
         blueIdleCount += 1;
+        netManager.SendMyMessage("team", "blue", connectionId);
     }
 
     private void destroyPlayer(IDictionary<int, GameObject> team, int connectionID)
@@ -406,40 +366,20 @@ public class Server : MonoBehaviour {
     }
 
     private void sendEndGame() {
-
-      GameEndState.EndState winningTeam;
-      string winningTeamStr;
-
-      if (finalRedScore > finalBlueScore) {
-        winningTeam = GameEndState.EndState.RED_WIN;
-        winningTeamStr = "red";
-      } else if (finalBlueScore > finalRedScore) {
-        winningTeam = GameEndState.EndState.BLUE_WIN;
-        winningTeamStr = "blue";
-      } else {
-        winningTeam = GameEndState.EndState.DRAW;
-        winningTeamStr = "draw";
-      }
-
-      gameEndState = new GameEndState(winningTeam, (int) finalRedScore, (int) finalBlueScore);
+      string endGameString = manager.getEndGameString();
 
       foreach(KeyValuePair<int, GameObject> player in redTeam) {
-          netManager.SendMyMessage("endgame", winningTeamStr + "$" + finalRedScore + "$" + finalBlueScore, player.Key);
+          netManager.SendMyMessage("endgame", endGameString, player.Key);
       }
 
       foreach(KeyValuePair<int, GameObject> player in blueTeam) {
-          netManager.SendMyMessage("endgame", winningTeamStr + "$" + finalRedScore + "$" + finalBlueScore, player.Key);
+          netManager.SendMyMessage("endgame", endGameString, player.Key);
       }
-
-      SceneManager.LoadScene("GameOverScreen");
     }
 
     public void EndGame() {
-        if (gameManager.gameOver) {
-            Debug.Log("EndGame");
-            clearAllStations();
-            sendEndGame();
-        }
+      clearAllStations();
+      sendEndGame();
     }
 
     private void moveServerPlayer(int connectionId, string stationId)

@@ -24,8 +24,12 @@ public class NetManager : MonoBehaviour {
     public string eventType;
     public string message;
 
+    public Server server;
+
     // Use this for initialization
-    public NetManager() {
+    void Start() {
+        server = GameObject.Find("Server").GetComponent<Server>();
+
         NetworkTransport.Init();
         ConnectionConfig connectConfig = new ConnectionConfig();
 
@@ -55,11 +59,9 @@ public class NetManager : MonoBehaviour {
         webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
         isStarted = true;
     }
-	
-	// Update is called once per frame
-	public int update() {
-        if (!isStarted) return -1;
 
+  	// Update is called once per frame
+  	void Update() {
         int recHostId; // Player ID
         int connectionId; // ID of connection to recHostId.
         int channelID; // ID of channel connected to recHostId;
@@ -98,8 +100,6 @@ public class NetManager : MonoBehaviour {
                 Debug.Log("Broadcast event.");
                 break;
         }
-
-        return connectionId;
     }
 
     //This function is called when data is sent
@@ -114,6 +114,8 @@ public class NetManager : MonoBehaviour {
         Debug.Log("OnData(hostId = " + hostId + ", connectionId = "
             + connectionId + ", channelId = " + channelId + ", data = "
             + message + ", size = " + size + ", error = " + error.ToString() + ")");
+
+        server.manageMessageEvents(message, connectionId);
 
         return message;
     }

@@ -24,12 +24,12 @@ public class PlayerGameOver : MonoBehaviour {
 		gameEndState = client.getGameEndState();
 		string team = client.getTeam();
 
-		MainText.text = gameEndState.getWinningTeam() + " Team Wins!";
+		MainText.text = gameEndState.winningTeamStr() + " Team Wins!";
 
 		RedScoreText.text = "Red Score: " + gameEndState.getRedScore().ToString();
 		BlueScoreText.text = "Blue Score: " + gameEndState.getBlueScore().ToString();
 
-		if (team.Equals(gameEndState.getWinningTeam())) {
+		if (team.Equals(gameEndState.winningTeamStr())) {
 			Winner();
 		} else {
 			if (gameEndState.getWinningTeam() != GameEndState.EndState.DRAW) {
