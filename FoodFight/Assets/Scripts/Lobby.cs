@@ -13,6 +13,7 @@ public class Lobby : MonoBehaviour {
     public Transform countDownCanvas;
     public Text countDownText;
 
+    private GameObject networkClient;
     private Client network;
 
     void Start() {

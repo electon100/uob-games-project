@@ -63,7 +63,7 @@ public class Client : MonoBehaviour {
     public GameEndState gameEndState;
 
     public string team;
-    private bool startGame = false;
+    public bool startGame = false;
 
     public InputField changeIPText;
 
@@ -281,6 +281,7 @@ public class Client : MonoBehaviour {
                 break;
             case "start":
                 startGame = true;
+                break;
             default:
                 break;
         }
