@@ -334,7 +334,7 @@ public class Client : MonoBehaviour {
 
     public void changeIP()
     {
-        serverIP = "192.168.0." + Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
+        serverIP = "192.168.2." + Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
         inputField.SetActive(false);
         changeIPButton.SetActive(false);
         connectButton.SetActive(true);
