@@ -1689,6 +1689,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timerText: {fileID: 854566844}
   manager: {fileID: 0}
+  isCountDown: 0
   isStarted: 0
 --- !u!4 &1063951046
 Transform:

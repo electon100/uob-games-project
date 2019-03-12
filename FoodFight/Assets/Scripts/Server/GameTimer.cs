@@ -8,9 +8,11 @@ public class GameTimer : MonoBehaviour {
 
     // Timer variable
     private float timer;
+    private float initialTimer = 1200f;
     public Text timerText;
     public Manager manager;
 
+    public bool isCountDown = false;
     public bool isStarted = false;
 
     public void Start() {
@@ -19,8 +21,8 @@ public class GameTimer : MonoBehaviour {
     }
 
     public void StartTimer() {
-      timer = 1200.0f;
-      isStarted = true;
+      timer = 1204.0f;
+      isCountDown = true;
     }
 
   	// Update is called once per frame from the server's update method
@@ -30,6 +32,12 @@ public class GameTimer : MonoBehaviour {
         displayTime();
       } else if (isStarted && timer <= 0) {
         manager.GameOver();
+      } else if (timer > 0 && isCountDown) {
+        timer -= Time.deltaTime;
+        timerText.text = ((int) (timer - initialTimer)).ToString();
+      } else if (timer == initialTimer) {
+        isCountDown = false;
+        isStarted = true;
       }
   	}
 

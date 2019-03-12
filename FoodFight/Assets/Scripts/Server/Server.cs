@@ -305,11 +305,6 @@ public class Server : MonoBehaviour {
         redTeam.Add(connectionId, newRedPlayer);
         redIdleCount += 1;
         netManager.SendMyMessage("team", "red", connectionId);
-
-        if (redTeam.Count >= minimumPlayers) {
-            manager.timer.isStarted = true;
-            notifyPlayersAboutGameStart();
-        }
     }
 
     private void createBluePlayer(int connectionId)
@@ -319,10 +314,6 @@ public class Server : MonoBehaviour {
         blueIdleCount += 1;
         Debug.Log("Blue idle: " + blueIdleCount);
         netManager.SendMyMessage("team", "blue", connectionId);
-
-        if (redTeam.Count >= minimumPlayers && blueTeam.Count >= minimumPlayers) {
-            manager.timer.isStarted = true;
-        }
     }
 
     public void notifyPlayersAboutGameStart() {
@@ -476,5 +467,10 @@ public class Server : MonoBehaviour {
     public void LaunchMainScreen() {
         startCanvas.gameObject.SetActive(false);
         mainCanvas.gameObject.SetActive(true);
+        while (redTeam.Count <= minimumPlayers && blueTeam.Count <= minimumPlayers) {
+            /* Waiting for all the players to join */
+        }
+        manager.timer.StartTimer();
+        notifyPlayersAboutGameStart();
     }
 }
