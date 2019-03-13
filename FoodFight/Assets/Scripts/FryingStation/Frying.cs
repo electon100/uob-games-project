@@ -38,12 +38,13 @@ public class Frying : MonoBehaviour {
 	private List<GameObject> panContentsObjects = new List<GameObject>();
 
 	/* Other */
+	private bool ingredientCookedStationComplete = false;
 
 	void Start () {
 
 		Screen.orientation = ScreenOrientation.Portrait;
 
-		test_text.text = "Pan shakes: 0";
+		test_text.text = "Add ingredient to start";
 		lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
 		shakeDetectionThreshold *= shakeDetectionThreshold;
 		lowPassValue = Input.acceleration;
@@ -66,33 +67,44 @@ public class Frying : MonoBehaviour {
 		/* Ensure correct buttons are interactable */
 		updateButtonStates();
 
-		if (panContents.Count == 1) {
+		shakeIfNeeded();
 
-			/* Read accelerometer data */
-			Vector3 acceleration = Input.acceleration;
-			lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
-			Vector3 deltaAcceleration = acceleration - lowPassValue;
-
-			shakeIfNeeded();
-
-			/* For desktop tests. */
-			if (Input.GetKeyDown(KeyCode.DownArrow)) {
-				tryStartShake();
-			}
-
-			if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold) {
-				/* Shake detected! */
-				tryStartShake();
-			}
-
+		if (ingredientCookedStationComplete) {
+			test_text.text = "Ingredient cooked!";
+			background.material = success;
 		} else {
-			if (panContents.Count == 0) {
-				test_text.text = "Pan is empty";
+			if (panContents.Count == 1) {
+
+				/* Read accelerometer data */
+				Vector3 acceleration = Input.acceleration;
+				lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
+				Vector3 deltaAcceleration = acceleration - lowPassValue;
+
+				/* Input keydown for desktop tests. */
+				if ((Input.GetKeyDown(KeyCode.DownArrow)) || deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold) {
+					/* Shake detected! */
+					tryStartShake();
+				}
+
+				/* Increment the number of pan tosses of all ingredients in pan */
+				Ingredient ingredient = panContents[0];
+
+				if (FoodData.Instance.isCooked(ingredient)) {
+					Ingredient newIngred = FoodData.Instance.TryAdvanceIngredient(ingredient);
+					if (isValidRecipe(newIngred)) {
+						setPanContents(newIngred);
+						ingredientCookedStationComplete = true;
+					}
+				} else {
+					/* Update shake text */
+					test_text.text = "Pan shakes: " + ingredient.numberOfPanFlips;
+				}
+
 			} else {
-				test_text.text = "Combine ingredients to cook";
+				/* TODO: What happens when pan is empty or too full */
 			}
-			/* TODO: What happens when pan is empty or too full */
 		}
+
 		if (Input.GetKeyDown(KeyCode.E)) {
 			foreach (Ingredient ingredient in panContents) {
 				Debug.Log(ingredient.Name);
@@ -100,6 +112,7 @@ public class Frying : MonoBehaviour {
 		}
 	}
 
+	/* Requires only one item in the pan */
 	private void tryStartShake() {
 		/* Make sure shake is not too soon after previous shake */
 		if ((Time.time - lastShake) > minimumShakeInterval) {
@@ -107,23 +120,10 @@ public class Frying : MonoBehaviour {
 
 			source.PlayOneShot(fryingSound);
 
-			/* Increment the number of pan tosses of all ingredients in pan */
-			foreach (Ingredient ingredient in panContents) {
-				ingredient.numberOfPanFlips++;
-				if (FoodData.Instance.isCooked(ingredient)) {
-					test_text.text = "Ingredient cooked!";
-					background.material = success;
-					Ingredient newIngred = FoodData.Instance.TryAdvanceIngredient(ingredient);
-					if (isValidRecipe(newIngred)) {
-						setPanContents(newIngred);
-					}
-				} else {
-					/* Update shake text */
-					test_text.text = "Pan shakes: " + ingredient.numberOfPanFlips;
-				}
-				lastShake = Time.time;
-			}
-
+			/* Increment the number of pan tosses of ingredient in pan */
+			Ingredient ingredient = panContents[0];
+			ingredient.numberOfPanFlips++;
+			lastShake = Time.time;
 		}
 	}
 
@@ -177,7 +177,7 @@ public class Frying : MonoBehaviour {
 			/* Try and combine the ingredients */
 			Ingredient combinedFood = FoodData.Instance.TryCombineIngredients(panContents);
 
-			if (combinedFood.Name == "mush") {
+			if (!isValidRecipe(combinedFood)) {
 				test_text.text = "Ingredients do not combine";
 			} else {
 				/* Set the pan contents to the new combined recipe */
@@ -193,8 +193,7 @@ public class Frying : MonoBehaviour {
 		player.clearIngredientsInStation(stationID);
 	}
 
-	public void pickUpIngredient()
-	{
+	public void pickUpIngredient() {
 		if (panContents.Count == 1) {
 			/* Set the players current ingredient to the pan contents */
 			foreach (Ingredient ingredient in panContents) {
@@ -211,16 +210,16 @@ public class Frying : MonoBehaviour {
 		}
 	}
 
-	private void addIngredientToPan(Ingredient ingredient)
-	{
+	private void addIngredientToPan(Ingredient ingredient) {
 		GameObject model = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
 		Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
 
-    	Quaternion modelRotation = modelTransform.rotation;
+		Quaternion modelRotation = modelTransform.rotation;
 		Vector3 modelPosition = modelTransform.position;
 		GameObject inst = Instantiate(model, modelPosition, modelRotation);
 		panContents.Add(ingredient);
 		panContentsObjects.Add(inst);
+		if (panContents.Count > 1) test_text.text = "Combine ingredients to cook";
 	}
 
 	private void updateButtonStates() {
@@ -234,16 +233,14 @@ public class Frying : MonoBehaviour {
 		btn.interactable = interactable;
 	}
 
-	private void clearPan()
-	{
+	private void clearPan()	{
 		foreach (GameObject go in panContentsObjects) Destroy(go);
 
 		panContents.Clear();
 		panContentsObjects.Clear();
 	}
 
-	public void goBack()
-	{
+	public void goBack() {
 		/* TODO: Need to notify server of local updates to ingredients in pan before leaving */
 		/* Notify server that player has left the station */
 		player.notifyAboutStationLeft(stationID);
