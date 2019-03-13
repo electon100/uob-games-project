@@ -326,12 +326,16 @@ public class Server : MonoBehaviour {
     }
     public void destroyPlayer(int connectionID)
     {
-        IDictionary<int, GameObject> team = getTeam(connectionID);
-        if (redTeam.ContainsKey(connectionID)) redIdleCount -= 1;
-        if (blueTeam.ContainsKey(connectionID)) blueIdleCount -= 1;
-        Destroy(team[connectionID]);
-        team.Remove(connectionID);
-        Debug.Log("Blue idle: " + blueIdleCount);
+        if (redTeam.ContainsKey(connectionID)) {
+          redIdleCount -= 1;
+          Destroy(redTeam[connectionID]);
+          redTeam.Remove(connectionID);
+        }
+        if (blueTeam.ContainsKey(connectionID)) {
+          blueIdleCount -= 1;
+          Destroy(blueTeam[connectionID]);
+          blueTeam.Remove(connectionID);
+        }
     }
 
     private IDictionary<int, GameObject> getTeam(int connectionID)
@@ -451,7 +455,7 @@ public class Server : MonoBehaviour {
         pickPlayersCanvas.gameObject.SetActive(false);
         startCanvas.gameObject.SetActive(true);
     }
-    
+
     public void OnThree() {
         minimumPlayers = 2;
         pickPlayersCanvas.gameObject.SetActive(false);
