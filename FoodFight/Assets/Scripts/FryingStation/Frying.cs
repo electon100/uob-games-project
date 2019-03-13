@@ -195,6 +195,7 @@ public class Frying : MonoBehaviour {
 			} else {
 				/* Set the pan contents to the new combined recipe */
 				setPanContents(combinedFood);
+				test_text.text = "Ingredients combined";
 			}
 		} else {
 			test_text.text = "No ingredients to combine";
@@ -235,6 +236,7 @@ public class Frying : MonoBehaviour {
 			test_text.text = "Combine ingredients to cook";
 			background.material = issueMaterial;
 		} else {
+			test_text.text = "Shake phone to cook";
 			background.material = neutralMaterial;
 		}
 	}
