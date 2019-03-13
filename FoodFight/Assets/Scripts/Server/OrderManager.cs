@@ -68,8 +68,8 @@ public class OrderManager : MonoBehaviour {
 	}
 
 	private void displayOrders() {
-		redOrderText.text = "Red Orders:\n";
-		blueOrderText.text = "Blue Orders:\n";
+		redOrderText.text = "Orders:\n";
+		blueOrderText.text = "Orders:\n";
 
 		for (int i = 0; i < maxOrders; i++) {
 			redOrderText.text += redOrders[i].ToString() + "\n";
