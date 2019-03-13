@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class GameTimer : MonoBehaviour {
 
     // Timer variable
-    private float timer;
-    private float initialTimer = 1200f;
+    private float timer = 1200.0f;
+    private float initialTimer = 1200.0f;
     public Text timerText;
     public Manager manager;
 
@@ -16,13 +16,14 @@ public class GameTimer : MonoBehaviour {
     public bool isStarted = false;
 
     public void Start() {
-      timer = 1200.0f;
       manager = GameObject.Find("Manager").GetComponent<Manager>();
+      isStarted = false;
     }
 
     public void StartTimer() {
-      timer = 1204.0f;
+      timer = 1203.0f;
       isCountDown = true;
+      isStarted = false;
     }
 
   	// Update is called once per frame from the server's update method
@@ -32,13 +33,13 @@ public class GameTimer : MonoBehaviour {
         displayTime();
       } else if (isStarted && timer <= 0) {
         manager.GameOver();
-      } else if (timer > 0 && isCountDown) {
-        timer -= Time.deltaTime;
-        timerText.text = ((int) (timer - initialTimer)).ToString();
-      } else if (timer == initialTimer) {
+      } else if (timer < initialTimer) {
         isCountDown = false;
         isStarted = true;
-      }
+      } else if (timer > 0 && isCountDown) {
+        timer -= Time.deltaTime;
+        timerText.text = ((int) (timer - initialTimer) == 0) ? "GO!" : ((int) (timer - initialTimer)).ToString();
+      } 
   	}
 
     private void displayTime() {

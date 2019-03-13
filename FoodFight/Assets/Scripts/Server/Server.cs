@@ -465,12 +465,12 @@ public class Server : MonoBehaviour {
     }
 
     public void LaunchMainScreen() {
-        startCanvas.gameObject.SetActive(false);
-        mainCanvas.gameObject.SetActive(true);
-        while (redTeam.Count <= minimumPlayers && blueTeam.Count <= minimumPlayers) {
+        if (redTeam.Count >= minimumPlayers || blueTeam.Count >= minimumPlayers) {
             /* Waiting for all the players to join */
+            startCanvas.gameObject.SetActive(false);
+            mainCanvas.gameObject.SetActive(true);
+            manager.timer.StartTimer();
+            notifyPlayersAboutGameStart();
         }
-        manager.timer.StartTimer();
-        notifyPlayersAboutGameStart();
     }
 }
