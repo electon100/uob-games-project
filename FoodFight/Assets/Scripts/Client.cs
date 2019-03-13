@@ -288,27 +288,37 @@ public class Client : MonoBehaviour {
     }
 
     private void logAppropriateStation(string stationId) {
-      if (!stationId.Equals(Player.currentStation)) {
-        switch(stationId) {
-            case "0":
+      string currentScene = SceneManager.GetActiveScene().name;
+
+      Debug.Log(currentScene);
+
+      switch(stationId) {
+          case "0":
+              if (!currentScene.Equals("CupboardStation")) {
                 Player.ingredientsFromStation = getIngredientsFromStation("0");
                 SceneManager.LoadScene("CupboardStation");
-                break;
-            case "1":
+              }
+              break;
+          case "1":
+              if (!currentScene.Equals("FryingStation")) {
                 Player.ingredientsFromStation = getIngredientsFromStation("1");
                 SceneManager.LoadScene("FryingStation");
-                break;
-            case "2":
+              }
+              break;
+          case "2":
+              if (!currentScene.Equals("ChoppingStation")) {
                 Player.ingredientsFromStation = getIngredientsFromStation("2");
                 SceneManager.LoadScene("ChoppingStation");
-                break;
-            case "3":
+              }
+              break;
+          case "3":
+              if (!currentScene.Equals("PlatingStation")) {
                 Player.ingredientsFromStation = getIngredientsFromStation("3");
                 SceneManager.LoadScene("PlatingStation");
-                break;
-            default:
-                break;
-        }
+              }
+              break;
+          default:
+              break;
       }
     }
 
