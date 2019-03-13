@@ -11,7 +11,9 @@ public class Frying : MonoBehaviour {
 
 	public Button goBackBtn, putBtn, pickBtn, clearBtn, combineBtn;
 	public Text test_text;
-	public Material success;
+	public Material successMaterial;
+	public Material neutralMaterial;
+	public Material issueMaterial;
 	public Renderer background;
 	public Player player;
 	public AudioClip fryingSound;
@@ -34,11 +36,13 @@ public class Frying : MonoBehaviour {
 	private AudioSource source;
 
 	/* Ingredient stuff */
+	private readonly int maxPanContents = 3;
 	public List<Ingredient> panContents = new List<Ingredient>();
 	private List<GameObject> panContentsObjects = new List<GameObject>();
 
 	/* Other */
 	private bool ingredientCookedStationComplete = false;
+	private Material backgroundStatus;
 
 	void Start () {
 
@@ -51,6 +55,8 @@ public class Frying : MonoBehaviour {
 		originalPos = gameObject.transform.position;
 		lastShake = Time.time;
 		source = GetComponent<AudioSource>();
+
+		background.material = neutralMaterial;
 
 		List<Ingredient> ingredientsFromStation = Player.ingredientsFromStation;
 
@@ -71,7 +77,7 @@ public class Frying : MonoBehaviour {
 
 		if (ingredientCookedStationComplete) {
 			test_text.text = "Ingredient cooked!";
-			background.material = success;
+			background.material = successMaterial;
 		} else {
 			if (panContents.Count == 1) {
 
@@ -95,9 +101,6 @@ public class Frying : MonoBehaviour {
 						setPanContents(newIngred);
 						ingredientCookedStationComplete = true;
 					}
-				} else {
-					/* Update shake text */
-					test_text.text = "Pan shakes: " + ingredient.numberOfPanFlips;
 				}
 
 			} else {
@@ -116,14 +119,18 @@ public class Frying : MonoBehaviour {
 	private void tryStartShake() {
 		/* Make sure shake is not too soon after previous shake */
 		if ((Time.time - lastShake) > minimumShakeInterval) {
-			shouldShake = true;
-
-			source.PlayOneShot(fryingSound);
-
-			/* Increment the number of pan tosses of ingredient in pan */
 			Ingredient ingredient = panContents[0];
-			ingredient.numberOfPanFlips++;
-			lastShake = Time.time;
+			if (FoodData.Instance.isCookable(ingredient)) {
+				ingredient.numberOfPanFlips++;
+				lastShake = Time.time;
+				shouldShake = true;
+				source.PlayOneShot(fryingSound);
+				test_text.text = "Pan shakes: " + ingredient.numberOfPanFlips;
+			} else {
+				test_text.text = "Ingredient not cookable";
+				background.material = issueMaterial;
+			}
+			/* Increment the number of pan tosses of ingredient in pan */
 		}
 	}
 
@@ -160,12 +167,17 @@ public class Frying : MonoBehaviour {
 	public void placeHeldIngredientInPan() {
 		/* Add ingredient */
 		if (Player.currentIngred != null) {
-			addIngredientToPan(Player.currentIngred);
+			if (panContents.Count < maxPanContents) {
+				addIngredientToPan(Player.currentIngred);
 
-			/* Notify server that player has placed ingredient */
-			player.notifyServerAboutIngredientPlaced(Player.currentIngred);
+				/* Notify server that player has placed ingredient */
+				player.notifyServerAboutIngredientPlaced(Player.currentIngred);
 
-			Player.removeCurrentIngredient();
+				Player.removeCurrentIngredient();
+			} else {
+				test_text.text = "Pan is full";
+				background.material = issueMaterial;
+			}
 		} else {
 			/* TODO: What happens when player is not holding an ingredient */
 			test_text.text = "No held ingredient";
@@ -179,6 +191,7 @@ public class Frying : MonoBehaviour {
 
 			if (!isValidRecipe(combinedFood)) {
 				test_text.text = "Ingredients do not combine";
+				background.material = issueMaterial;
 			} else {
 				/* Set the pan contents to the new combined recipe */
 				setPanContents(combinedFood);
@@ -205,7 +218,6 @@ public class Frying : MonoBehaviour {
 			player.clearIngredientsInStation(stationID);
 		} else {
 			/* What to do if there are more than (or fewer than) 1 ingredients in the pan*/
-			Debug.Log("Unable to pick up");
 			test_text.text = "Unable to pick up";
 		}
 	}
@@ -219,11 +231,16 @@ public class Frying : MonoBehaviour {
 		GameObject inst = Instantiate(model, modelPosition, modelRotation);
 		panContents.Add(ingredient);
 		panContentsObjects.Add(inst);
-		if (panContents.Count > 1) test_text.text = "Combine ingredients to cook";
+		if (panContents.Count > 1) {
+			test_text.text = "Combine ingredients to cook";
+			background.material = issueMaterial;
+		} else {
+			background.material = neutralMaterial;
+		}
 	}
 
 	private void updateButtonStates() {
-		setButtonInteractable(putBtn, Player.isHoldingIngredient());
+		setButtonInteractable(putBtn, Player.isHoldingIngredient() && panContents.Count < maxPanContents);
 		setButtonInteractable(clearBtn, panContents.Count > 0);
 		setButtonInteractable(pickBtn, panContents.Count == 1);
 		setButtonInteractable(combineBtn, panContents.Count > 1);
@@ -238,6 +255,7 @@ public class Frying : MonoBehaviour {
 
 		panContents.Clear();
 		panContentsObjects.Clear();
+		background.material = neutralMaterial;
 	}
 
 	public void goBack() {
