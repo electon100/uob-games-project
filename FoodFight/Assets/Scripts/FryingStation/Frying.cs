@@ -72,7 +72,6 @@ public class Frying : MonoBehaviour {
 	void Update () {
 		/* Ensure correct buttons are interactable */
 		updateButtonStates();
-
 		shakeIfNeeded();
 
 		if (ingredientCookedStationComplete) {
@@ -105,6 +104,7 @@ public class Frying : MonoBehaviour {
 
 			} else {
 				/* TODO: What happens when pan is empty or too full */
+				if (panContents.Count > maxPanContents) Debug.Log("Pan got too full!");
 			}
 		}
 
@@ -166,7 +166,7 @@ public class Frying : MonoBehaviour {
 
 	public void placeHeldIngredientInPan() {
 		/* Add ingredient */
-		if (Player.currentIngred != null) {
+		if (Player.isHoldingIngredient()) {
 			if (panContents.Count < maxPanContents) {
 				addIngredientToPan(Player.currentIngred);
 
