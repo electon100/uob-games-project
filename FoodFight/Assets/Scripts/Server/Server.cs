@@ -21,6 +21,11 @@ public class Server : MonoBehaviour {
     public GameObject blueStation;
     public GameObject redStation;
 
+    // Canvas
+    public Transform pickPlayersCanvas;
+    public Transform startCanvas;
+    public Transform mainCanvas;
+
     // Scoring and Timing
     public Manager gameManager;
     public static float finalRedScore, finalBlueScore;
@@ -48,16 +53,17 @@ public class Server : MonoBehaviour {
     int redIdleCount = 0;
     int blueIdleCount = 0;
 
-    private void Start () {
-        isStarted = true;
+    int minimumPlayers = 0;
 
+    private void Start () {
         manager = GameObject.Find("Manager").GetComponent<Manager>();
         netManager = GameObject.Find("NetManager").GetComponent<NetManager>();
         orderManager = GameObject.Find("OrderManager").GetComponent<OrderManager>();
     }
 
-	  private void Update () {
-	  }
+	private void Update () {
+
+    }
 
     // This is where all the work happens.
     public void manageMessageEvents(string message, int connectionId)
@@ -91,6 +97,7 @@ public class Server : MonoBehaviour {
             case "score":
                 OnScore(messageContent, connectionId);
                 break;
+            // Player leaves a station
             case "leave":
                 OnLeave(messageContent, connectionId);
                 break;
@@ -309,6 +316,14 @@ public class Server : MonoBehaviour {
         netManager.SendMyMessage("team", "blue", connectionId);
     }
 
+    public void notifyPlayersAboutGameStart() {
+        foreach (KeyValuePair<int, GameObject> player in redTeam) {
+            netManager.SendMyMessage("start", "", player.Key);
+        }
+        foreach (KeyValuePair<int, GameObject> player in blueTeam) {
+            netManager.SendMyMessage("start", "", player.Key);
+        }
+    }
     public void destroyPlayer(int connectionID)
     {
         IDictionary<int, GameObject> team = getTeam(connectionID);
@@ -428,6 +443,34 @@ public class Server : MonoBehaviour {
             Vector3 newPosition = blueStation.transform.position;
             newPosition.x += 10.0f;
             PlayerMovement.movePlayer(newPosition, blueTeam[connectionId]);
+        }
+    }
+
+    public void OnTwo() {
+        minimumPlayers = 1;
+        pickPlayersCanvas.gameObject.SetActive(false);
+        startCanvas.gameObject.SetActive(true);
+    }
+    
+    public void OnThree() {
+        minimumPlayers = 2;
+        pickPlayersCanvas.gameObject.SetActive(false);
+        startCanvas.gameObject.SetActive(true);
+    }
+
+    public void OnFour() {
+        minimumPlayers = 3;
+        pickPlayersCanvas.gameObject.SetActive(false);
+        startCanvas.gameObject.SetActive(true);
+    }
+
+    public void LaunchMainScreen() {
+        if (redTeam.Count >= minimumPlayers || blueTeam.Count >= minimumPlayers) {
+            /* Waiting for all the players to join */
+            startCanvas.gameObject.SetActive(false);
+            mainCanvas.gameObject.SetActive(true);
+            manager.timer.StartTimer();
+            notifyPlayersAboutGameStart();
         }
     }
 }
