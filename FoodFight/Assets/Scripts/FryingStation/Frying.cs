@@ -236,6 +236,7 @@ public class Frying : MonoBehaviour {
 			test_text.text = "Combine ingredients to cook";
 			background.material = issueMaterial;
 		} else {
+			test_text.text = "Shake phone to cook";
 			background.material = neutralMaterial;
 		}
 	}
