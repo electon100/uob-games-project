@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 10;
-    public static string serverIP = "192.168.0.100";
+    public static string serverIP = "192.168.0.101";
 
     public int port = 8000;
 
@@ -288,6 +288,7 @@ public class Client : MonoBehaviour {
     }
 
     private void logAppropriateStation(string stationId) {
+      if (!stationId.Equals(Player.currentStation)) {
         switch(stationId) {
             case "0":
                 Player.ingredientsFromStation = getIngredientsFromStation("0");
@@ -308,6 +309,7 @@ public class Client : MonoBehaviour {
             default:
                 break;
         }
+      }
     }
 
     public List<Ingredient> getIngredientsFromStation(string stationID)
