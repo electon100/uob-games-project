@@ -16,7 +16,7 @@ public class Frying : MonoBehaviour {
 	public Material issueMaterial;
 	public Renderer background;
 	public Player player;
-	public AudioClip fryingSound;
+	public AudioClip fryingSound, successSound;
 
 	/* Phone motion stuff */
 	private float accelerometerUpdateInterval = 1.0f / 60.0f;
@@ -98,6 +98,7 @@ public class Frying : MonoBehaviour {
 					Ingredient newIngred = FoodData.Instance.TryAdvanceIngredient(ingredient);
 					if (isValidRecipe(newIngred)) {
 						setPanContents(newIngred);
+						source.PlayOneShot(successSound);
 						ingredientCookedStationComplete = true;
 					}
 				}
@@ -204,6 +205,8 @@ public class Frying : MonoBehaviour {
 
 	public void clearStation() {
 		clearPan();
+		test_text.text = "Add ingredient to start";
+		background.material = neutralMaterial;
 		player.clearIngredientsInStation(stationID);
 	}
 
@@ -214,9 +217,8 @@ public class Frying : MonoBehaviour {
 				Player.currentIngred = ingredient;
 			}
 
-			/* Clear the pan */
-			clearPan();
-			player.clearIngredientsInStation(stationID);
+			/* Clear the station */
+			clearStation();
 		} else {
 			/* What to do if there are more than (or fewer than) 1 ingredients in the pan*/
 			test_text.text = "Unable to pick up";
@@ -257,7 +259,6 @@ public class Frying : MonoBehaviour {
 
 		panContents.Clear();
 		panContentsObjects.Clear();
-		background.material = neutralMaterial;
 	}
 
 	public void goBack() {

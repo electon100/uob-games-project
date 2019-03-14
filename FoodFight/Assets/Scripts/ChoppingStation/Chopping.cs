@@ -28,7 +28,7 @@ public class Chopping : MonoBehaviour
     private AudioSource source;
 
     /* Highest acceleration recorded so far */
-    private float maxAcc = 0.5f; 
+    private float maxAcc = 0.5f;
 
     /* Movement stuff */
 	private float shakeSpeed = 10.0f; // Speed of pan shake
@@ -40,17 +40,15 @@ public class Chopping : MonoBehaviour
     private float yTransform;
 
     /* Private fields necessary for chopping status and sound effects */
-    bool startChopping;
-    bool isChopped;
+    private bool startChopping;
+    private bool isChopped;
     private int previousChopsCount;
     private Player player;
     private Ingredient currentChoppingIngred;
 
-    private List<GameObject> ingredientModels;
-
     private void Start()
     {
-        /* Instantiates the player to access functions and sets the 
+        /* Instantiates the player to access functions and sets the
         current chopping ingredient to whatever the Player's currently holding. */
         player = GameObject.Find("Player").GetComponent<Player>();
 
@@ -96,7 +94,7 @@ public class Chopping : MonoBehaviour
             {
                 transform.Rotate(0, 10, 0);
             }
-        
+
             /* Updates the chops count on the screen. */
             chops.text = Player.currentIngred.numberOfChops.ToString();
             /* Simulates the movement of the knife. */
@@ -111,7 +109,7 @@ public class Chopping : MonoBehaviour
             if ((Player.currentIngred.numberOfChops % 3) == 0) {
                 transform.position = originalPos;
             }
-        } 
+        }
     }
 
     public void StartGame()
@@ -134,7 +132,7 @@ public class Chopping : MonoBehaviour
         }
     }
 
-    void PlayChopSound() 
+    void PlayChopSound()
     {
         if ((Player.currentIngred.numberOfChops > previousChopsCount) && !isChopped) {
             source.PlayOneShot(chopSound);
@@ -150,7 +148,6 @@ public class Chopping : MonoBehaviour
             Player.currentIngred.numberOfChops++;
             lastChop = Time.time;
         }
-        
     }
 
     /* Checks the chopping speed and displays a red sign if it's too fast */
@@ -199,10 +196,8 @@ public class Chopping : MonoBehaviour
             source.PlayOneShot(successSound);
             defaultCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(true);
-            /* Create a new list containing only this ingredient, so that we get the chopped version. */
-            List<Ingredient> choppedIngredients = new List<Ingredient>();
-            choppedIngredients.Add(Player.currentIngred);
-            Player.currentIngred = FoodData.Instance.TryCombineIngredients(choppedIngredients);
+
+            Player.currentIngred = FoodData.Instance.TryAdvanceIngredient(Player.currentIngred);
         }
         /* Checks if player has start chopping and istructs them to do so if not */
         if (previousChopsCount != 0) {
@@ -212,8 +207,7 @@ public class Chopping : MonoBehaviour
 
     private bool CheckIngredientValid()
     {
-        /* TODO: rewrite FoodData to check for a choppable ingredient */
-        if (Player.currentIngred != null)
+        if (Player.isHoldingIngredient())
         {
             /* Stops the minigame if ingredient cannot be chopped */
             if (FoodData.Instance.isChoppable(Player.currentIngred))
@@ -238,9 +232,7 @@ public class Chopping : MonoBehaviour
     /* Sends the chopped ingredient to server and returns to the main screen */
     public void goBack()
     {
-        // player.notifyServerAboutIngredientPlaced(currentChoppingIngred);
         /* Notify server that player has left the station */
-		player = GameObject.Find("Player").GetComponent<Player>();
 		player.notifyAboutStationLeft("2");
         SceneManager.LoadScene("PlayerMainScreen");
     }
@@ -251,5 +243,5 @@ public class Chopping : MonoBehaviour
         warningCanvas.gameObject.SetActive(false);
         defaultCanvas.gameObject.SetActive(true);
     }
-    
+
 }
