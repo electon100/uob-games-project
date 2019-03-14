@@ -410,7 +410,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 44}
+  m_AnchoredPosition: {x: 0, y: -101}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &264720809
@@ -1843,60 +1843,40 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 380397506}
     m_Modifications:
-    - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
+    - target: {fileID: 4346774854120088, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0.139
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
+    - target: {fileID: 4346774854120088, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}
       propertyPath: m_LocalPosition.y
       value: 0.003
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
+    - target: {fileID: 4346774854120088, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}
       propertyPath: m_LocalPosition.z
       value: 0.139
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
+    - target: {fileID: 4346774854120088, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}
       propertyPath: m_LocalRotation.x
       value: 0.6047869
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
+    - target: {fileID: 4346774854120088, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
+    - target: {fileID: 4346774854120088, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
+    - target: {fileID: 4346774854120088, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}
       propertyPath: m_LocalRotation.w
       value: 0.7963874
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
+    - target: {fileID: 4346774854120088, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.016209397
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.01628235
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.016209407
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
-      propertyPath: m_Name
-      value: SoySauce
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 74.427
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 92cb353bd50aec543afc9b83d80cbe26, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &1456177427
 GameObject:
@@ -2462,24 +2442,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1663582852}
   m_Mesh: {fileID: 4300002, guid: 9d8eb5e768ffa0543a706f4de393536f, type: 3}
---- !u!1 &1737293014 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: 92cb353bd50aec543afc9b83d80cbe26,
-    type: 3}
-  m_PrefabInternal: {fileID: 1361194371}
---- !u!136 &1737293016
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1737293014}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 1.3582684
-  m_Height: 6.9715266
-  m_Direction: 1
-  m_Center: {x: -0.0000023702185, y: 2.788104, z: -0.00000033860246}
 --- !u!1 &1739543750
 GameObject:
   m_ObjectHideFlags: 0
