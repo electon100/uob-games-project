@@ -20,7 +20,7 @@ public class NewServer : MonoBehaviour {
 
   private void Start () {
     initialiseNetwork();
-    redTeam.Kitchen.getStationForId("0").addIngredientToStation(new Ingredient("Eggs", "eggsPrefab"));
+    test();
   }
 
   void Update() {
@@ -158,8 +158,32 @@ public class NewServer : MonoBehaviour {
     if (addPlayerToTeam(messageContent, connectionId)) {
       SendMyMessage(messageType, messageContent, connectionId);
     } else {
-      SendMyMessage(messageType, "Invalid team name", connectionId);
+      SendMyMessage(messageType, "Unable to join team", connectionId);
     }
+  }
+
+  private bool addPlayerToTeam(string teamName, int connectionId) {
+    Team relevantTeam = null;
+    GameObject relevantPrefab;
+
+    if (teamName.Equals(redTeam.Name)) {
+      relevantTeam = redTeam;
+      relevantPrefab = (GameObject) Instantiate(redPlayerPrefab, new Vector3(-40, 2, 5 * (redTeam.Players.Count + 1)), Quaternion.identity);
+    } else if (teamName.Equals(blueTeam.Name)) {
+      relevantTeam = blueTeam;
+      relevantPrefab = (GameObject) Instantiate(bluePlayerPrefab, new Vector3(-40, 2, 5 * (blueTeam.Players.Count + 1)), Quaternion.identity);
+    } else {
+      Debug.Log("Invalid team name [" + teamName + "], could not allocate player to team.");
+      return false;
+    }
+
+    if (relevantTeam.isPlayerOnTeam(connectionId)) {
+      Destroy(relevantPrefab);
+      Debug.Log("Player [" + connectionId + "] already on team [" + teamName + "].");
+      return false;
+    }
+
+    return relevantTeam.addPlayerToTeam(new ConnectedPlayer(connectionId, relevantPrefab));
   }
 
   private void OnMessageStation(int connectionId, string messageType, string messageContent) {
@@ -170,18 +194,25 @@ public class NewServer : MonoBehaviour {
       /* Move the appropriate player to the destination station */
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
       Station destinationStation = relevantTeam.Kitchen.getStationForId(messageContent);
-      player.CurrentStation = destinationStation;
-
-      /* Send back all ingredients currently at this station */
-      string messageToSend = messageContent + "$";
-      foreach (Ingredient ingredient in destinationStation.Ingredients) {
-        messageToSend += Ingredient.SerializeObject(ingredient) + "$";
+      if (!relevantTeam.isStationOccupied(destinationStation)) {
+        player.CurrentStation = destinationStation;
+        /* Send back all ingredients currently at this station */
+        string messageToSend = messageContent + "$";
+        foreach (Ingredient ingredient in destinationStation.Ingredients) {
+          messageToSend += Ingredient.SerializeObject(ingredient) + "$";
+        }
+        Debug.Log("Sending back to team [" + relevantTeam.Name + "]: " + messageToSend);
+        SendMyMessage(messageType, messageToSend, connectionId);
+      } else if (player.CurrentStation == destinationStation) {
+        Debug.Log("Player already at station (" + destinationStation + ")");
+        SendMyMessage(messageType, "Already at station", connectionId);
+      } else {
+        Debug.Log("Station already occupied (" + destinationStation + ")");
+        SendMyMessage(messageType, "Station occupied", connectionId);
       }
-      Debug.Log("Sending back to team [" + relevantTeam.Name + "]: " + messageToSend);
-      SendMyMessage(messageType, messageToSend, connectionId);
     } else {
-      SendMyMessage(messageType, "Fail", connectionId);
       Debug.Log("Could not determine team for given connectionId");
+      SendMyMessage(messageType, "Fail", connectionId);
     }
   }
 
@@ -197,8 +228,8 @@ public class NewServer : MonoBehaviour {
       /* Send back success */
       SendMyMessage(messageType, "Success", connectionId);
     } else {
-      SendMyMessage(messageType, "Fail", connectionId);
       Debug.Log("Could not determine team for given connectionId");
+      SendMyMessage(messageType, "Fail", connectionId);
     }
   }
 
@@ -214,8 +245,8 @@ public class NewServer : MonoBehaviour {
       /* Send back success */
       SendMyMessage(messageType, "Success", connectionId);
     } else {
-      SendMyMessage(messageType, "Fail", connectionId);
       Debug.Log("Could not determine team for given connectionId");
+      SendMyMessage(messageType, "Fail", connectionId);
     }
   }
 
@@ -236,6 +267,7 @@ public class NewServer : MonoBehaviour {
       SendMyMessage(messageType, "Success", connectionId);
     } else {
       Debug.Log("Could not determine team for given connectionId");
+      SendMyMessage(messageType, "Fail", connectionId);
     }
   }
 
@@ -252,23 +284,83 @@ public class NewServer : MonoBehaviour {
     return message.Split(delimiter);
   }
 
-  private bool addPlayerToTeam(string teamName, int connectionId) {
-    Team relevantTeam = null;
-    GameObject relevantPrefab;
+  /* Simple assertion tests for teams */
+  private void test() {
+    /* Reset teams */
+    redTeam = new Team("red"); blueTeam = new Team("blue");
 
-    if (teamName.Equals(redTeam.Name)) {
-      relevantTeam = redTeam;
-      relevantPrefab = (GameObject) Instantiate(redPlayerPrefab, new Vector3(-40, 2, 5 * (redTeam.Players.Count + 1)), Quaternion.identity);
-    } else if (teamName.Equals(blueTeam.Name)) {
-      relevantTeam = blueTeam;
-      relevantPrefab = (GameObject) Instantiate(bluePlayerPrefab, new Vector3(-40, 2, 5 * (blueTeam.Players.Count + 1)), Quaternion.identity);
-    } else {
-      Debug.Log("Invalid team name [" + teamName + "], could not allocate player to team.");
-      return false;
-    }
+    /* Simulate connections */
+    OnMessageConnect(100, "connect", "red");
+    OnMessageConnect(101, "connect", "red");
+    OnMessageConnect(102, "connect", "red");
+    Debug.Assert(redTeam.Players.Count == 3);
 
-    relevantTeam.addPlayerToTeam(new ConnectedPlayer(connectionId, relevantPrefab));
-    return true;
+    /* Simulate connection with duplicate id */
+    OnMessageConnect(555, "connect", "blue");
+    OnMessageConnect(556, "connect", "blue");
+    OnMessageConnect(557, "connect", "blue");
+    OnMessageConnect(555, "connect", "blue");
+    Debug.Assert(blueTeam.Players.Count == 3);
+    Debug.Assert(blueTeam.getPlayerForId(555) != null);
+    Debug.Assert(blueTeam.getPlayerForId(556) != null);
+    Debug.Assert(blueTeam.getPlayerForId(557) != null);
+    Debug.Assert(blueTeam.getPlayerForId(558) == null);
+
+    /* Simulate connection with mis-spelled content */
+    OnMessageConnect(558, "connect", "bule");
+    Debug.Assert(blueTeam.Players.Count == 3);
+    Debug.Assert(blueTeam.getPlayerForId(558) == null);
+
+    /* Simulate station joining */
+    OnMessageStation(101, "station", "1");
+    Debug.Assert(redTeam.getPlayerForId(101).CurrentStation.Id.Equals("1"));
+
+    /* Simulate station ingredient storage */
+    blueTeam.Kitchen.getStationForId("2").addIngredientToStation(new Ingredient("Eggs", "eggsPrefab"));
+    blueTeam.Kitchen.getStationForId("3").addIngredientToStation(new Ingredient("Eggs", "eggsPrefab"));
+    OnMessageStation(555, "station", "2");
+    OnMessageStation(556, "station", "1");
+    Debug.Assert(blueTeam.getPlayerForId(557).CurrentStation == null);
+    Debug.Assert(blueTeam.getPlayerForId(555).CurrentStation.Ingredients.Count == 1);
+    Debug.Assert(blueTeam.getPlayerForId(556).CurrentStation.Ingredients.Count == 0);
+
+    /* Simulate station clearing */
+    OnMessageClear(555, "clear", "2");
+    OnMessageClear(555, "clear", "3"); /* Player is not at this station, so it should not be cleared */
+    Debug.Assert(blueTeam.getPlayerForId(555).CurrentStation.Ingredients.Count == 0);
+    Debug.Assert(blueTeam.Kitchen.getStationForId("3").Ingredients.Count == 1);
+
+    /* Station occupied tests */
+    OnMessageStation(100, "station", "0");
+    OnMessageStation(101, "station", "4");
+    Debug.Assert(redTeam.isStationOccupied("0"));
+    Debug.Assert(redTeam.isStationOccupied("4"));
+    Debug.Assert(!redTeam.isStationOccupied("3"));
+
+    /* Checking if station is occupied before moving */
+    OnMessageStation(101, "station", "4");
+    OnMessageStation(100, "station", "0");
+    OnMessageStation(101, "station", "0");
+    Debug.Assert(redTeam.isStationOccupied("0"));
+    Debug.Assert(redTeam.getPlayerForId(100).CurrentStation.Id.Equals("0"));
+    Debug.Assert(redTeam.getPlayerForId(101).CurrentStation.Id.Equals("4"));
+
+    /* Tests for leaving stations */
+    OnMessageStation(555, "station", "0");
+    OnMessageStation(556, "station", "1");
+    OnMessageStation(557, "station", "2");
+    Debug.Assert(blueTeam.isStationOccupied("1"));
+    Debug.Assert(blueTeam.isStationOccupied("2"));
+    OnMessageLeave(556, "leave", "");
+    Debug.Assert(!blueTeam.isStationOccupied("1"));
+    Debug.Assert(blueTeam.isStationOccupied("2"));
+    OnMessageLeave(557, "leave", "2");
+    Debug.Assert(!blueTeam.isStationOccupied("2"));
+    OnMessageStation(557, "station", "2");
+    Debug.Assert(blueTeam.isStationOccupied("2"));
+
+    /* Reset teams */
+    redTeam = new Team("red"); blueTeam = new Team("blue");
   }
 
   public void OnTwoPlayers() {

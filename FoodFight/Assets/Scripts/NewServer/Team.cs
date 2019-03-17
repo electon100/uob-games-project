@@ -20,14 +20,18 @@ public class Team {
     Kitchen = new Kitchen();
 	}
 
-  public void addPlayerToTeam(ConnectedPlayer player) {
-    if (!Players.Contains(player)) Players.Add(player);
+  public bool addPlayerToTeam(ConnectedPlayer player) {
+    if (!isPlayerOnTeam(player.ConnectionId))  {
+      Players.Add(player);
+      return true;
+    }
+    return false;
   }
 
   public void removePlayerFromTeam(ConnectedPlayer player) {
     if (Players.Contains(player)) Players.Remove(player);
   }
-  
+
   public bool isPlayerOnTeam(int playerId) {
     return getPlayerForId(playerId) != null;
   }
@@ -38,11 +42,16 @@ public class Team {
     }
     return null;
   }
-  public bool isStationOccupied(Station station) {
+
+  public bool isStationOccupied(string stationId) {
 		foreach(ConnectedPlayer player in Players) {
-			if (player.CurrentStation.Id.Equals(station.Id)) return true;
+			if (player.CurrentStation != null && player.CurrentStation.Id.Equals(stationId)) return true;
 		}
     return false;
+  }
+
+  public bool isStationOccupied(Station station) {
+    return isStationOccupied(station.Id);
   }
 
   public override string ToString() {
