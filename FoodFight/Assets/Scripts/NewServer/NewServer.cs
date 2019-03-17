@@ -90,7 +90,7 @@ public class NewServer : MonoBehaviour {
     }
   }
 
-  // This function is called when custom data is sent
+  /* Deserialises an incoming custom message ready for handling */
   private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error) {
     /* Deserialise the message */
     Stream serializedMessage = new MemoryStream(data);
@@ -104,20 +104,18 @@ public class NewServer : MonoBehaviour {
     return message;
   }
 
-  // Used for sending data to the players
+  /* Sends a message across the network */
   public void SendMyMessage(string messageType, string textInput, int connectionId) {
     byte error;
     byte[] buffer = new byte[4096];
     Stream message = new MemoryStream(buffer);
     BinaryFormatter formatter = new BinaryFormatter();
-    //Serialize the message
+    /* Serialise the message */
     string messageToSend = messageType + "&" + textInput;
     formatter.Serialize(message, messageToSend);
 
-    //Send the message from the "client" with the serialized message and the connection information
     NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
 
-    //If there is an error, output message error to the console
     if ((NetworkError) error != NetworkError.Ok) {
       Debug.Log("Message send error: " + (NetworkError) error);
     }
