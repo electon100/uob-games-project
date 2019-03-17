@@ -52,7 +52,7 @@ public class Ingredient {
 		return result;
 	}
 
-  public string ToString() {
+  public override string ToString() {
     return Name.First().ToString().ToUpper() + Name.Replace('_', ' ').Substring(1);
   }
 
