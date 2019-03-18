@@ -650,7 +650,7 @@ Prefab:
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 1588600713}
+      objectReference: {fileID: 0}
     - target: {fileID: 114076852929120864, guid: 5f1ce651aa958e84db74687760fa28a0,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -899,49 +899,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 291818169}
   m_CullTransparentMesh: 0
---- !u!1 &316059036
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 316059038}
-  - component: {fileID: 316059037}
-  m_Layer: 0
-  m_Name: OrderManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &316059037
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 316059036}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f421da806c60f463b8b3f112f7d310f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  manager: {fileID: 1066537588}
-  redOrderText: {fileID: 1042206002}
-  blueOrderText: {fileID: 934963361}
---- !u!4 &316059038
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 316059036}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1105.4247, y: 739.9221, z: -11.307933}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 16
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &339425417
 GameObject:
   m_ObjectHideFlags: 0
@@ -1017,49 +974,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 339425417}
   m_CullTransparentMesh: 0
---- !u!1 &398526252
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 398526254}
-  - component: {fileID: 398526253}
-  m_Layer: 0
-  m_Name: NetManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &398526253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 398526252}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3a4fef9e32557a448232f65831903f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eventType: 
-  message: 
-  server: {fileID: 0}
---- !u!4 &398526254
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 398526252}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1052.1449, y: 733.76874, z: -9.346371}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 14
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &443328155
 GameObject:
   m_ObjectHideFlags: 0
@@ -2179,7 +2093,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1063951046}
-  - component: {fileID: 1063951045}
   - component: {fileID: 1063951047}
   m_Layer: 0
   m_Name: GameTimer
@@ -2188,21 +2101,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1063951045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1063951044}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 764cf2fc080b1834d83ca33b5aa723b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timerText: {fileID: 854566844}
-  manager: {fileID: 0}
-  isCountDown: 0
-  isStarted: 0
 --- !u!4 &1063951046
 Transform:
   m_ObjectHideFlags: 0
@@ -2214,7 +2112,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1063951047
 MonoBehaviour:
@@ -2229,54 +2127,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timerText: {fileID: 854566844}
   isStarted: 0
---- !u!1 &1066537587
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1066537589}
-  - component: {fileID: 1066537588}
-  m_Layer: 0
-  m_Name: Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1066537588
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1066537587}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a19488ed8fb3b6747b13986a3f218b49, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timer: {fileID: 0}
-  redScoreText: {fileID: 291818171}
-  blueScoreText: {fileID: 1324381293}
-  finalBlueScore: 0
-  finalRedScore: 0
-  gameOver: 0
-  server: {fileID: 0}
-  netManager: {fileID: 0}
---- !u!4 &1066537589
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1066537587}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1052.1449, y: 733.76874, z: -9.346371}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 13
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1069742015
 GameObject:
   m_ObjectHideFlags: 0
@@ -2596,7 +2446,7 @@ RectTransform:
   - {fileID: 1088064037}
   - {fileID: 1940065221}
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3645,7 +3495,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1588600714}
-  - component: {fileID: 1588600713}
   - component: {fileID: 1588600715}
   m_Layer: 0
   m_Name: Server
@@ -3654,28 +3503,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1588600713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1588600712}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07a339f45a8a4dc4f96720b7782aa6d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  redPlayer: {fileID: 1982460696520624, guid: bdd3911e8b1f5024f813df22783a91ba, type: 2}
-  bluePlayer: {fileID: 1163954923977550, guid: ee6afe0cb40bfb642a361e77f679699b, type: 2}
-  blueStation: {fileID: 0}
-  redStation: {fileID: 0}
-  pickPlayersCanvas: {fileID: 1129433609}
-  startCanvas: {fileID: 1884525432}
-  mainCanvas: {fileID: 957039279}
-  gameManager: {fileID: 0}
-  netManager: {fileID: 0}
-  manager: {fileID: 0}
-  orderManager: {fileID: 0}
 --- !u!4 &1588600714
 Transform:
   m_ObjectHideFlags: 0
@@ -3711,6 +3538,8 @@ MonoBehaviour:
   startScreenText: {fileID: 339425419}
   redEndGameText: {fileID: 975759774}
   blueEndGameText: {fileID: 1476752475}
+  redScoreText: {fileID: 291818171}
+  blueScoreText: {fileID: 1324381293}
   gameOverBackground: {fileID: 451633188}
 --- !u!1 &1594446931
 GameObject:
@@ -4387,7 +4216,7 @@ RectTransform:
   - {fileID: 339425418}
   - {fileID: 863587361}
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4846,7 +4675,7 @@ RectTransform:
   - {fileID: 975759773}
   - {fileID: 1476752474}
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

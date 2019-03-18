@@ -17,15 +17,17 @@ public class NewServer : MonoBehaviour {
 
   public GameObject bluePlayerPrefab, redPlayerPrefab;
   public Transform pickPlayersCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
-  public Text startScreenText, redEndGameText, blueEndGameText;
+  public Text startScreenText, redEndGameText, blueEndGameText, redScoreText, blueScoreText;
   public Image gameOverBackground;
 
   private NewGameTimer timer;
 
-  private Team redTeam = new Team("red"), blueTeam = new Team("blue");
+  private readonly Color redTeamColour = new Color(1.0f, 0.3f, 0.3f, 1.0f), blueTeamColour = new Color(0.3f, 0.5f, 1.0f, 1.0f);
+  private Team redTeam, blueTeam;
   private GameState gameState = GameState.ConfigureGame;
 
   private void Start () {
+    initialiseTeams();
     initialiseNetwork();
 
     timer = GameObject.Find("GameTimer").GetComponent<NewGameTimer>();
@@ -45,13 +47,16 @@ public class NewServer : MonoBehaviour {
       case GameState.Countdown:
         break;
       case GameState.GameRunning:
+        redScoreText.text = "Red score: " + redTeam.Score;
+        blueScoreText.text = "Blue score: " + blueTeam.Score;
         break;
       case GameState.EndGame:
-        redEndGameText.text = "Red score: " + redTeam.Score;
-        blueEndGameText.text = "Blue score: " + blueTeam.Score;
-        gameOverBackground.color = UnityEngine.Color.blue;
         break;
     }
+  }
+
+  private void initialiseTeams() {
+    redTeam = new Team("red", redTeamColour); blueTeam = new Team("blue", blueTeamColour);
   }
 
   private void initialiseNetwork() {
@@ -363,7 +368,7 @@ public class NewServer : MonoBehaviour {
   /* Simple assertion tests for teams */
   private void test() {
     /* Reset teams */
-    redTeam = new Team("red"); blueTeam = new Team("blue");
+    initialiseTeams();
     gameState = GameState.AwaitingPlayers;
     Ingredient egg = new Ingredient("Eggs", "eggsPrefab");
 
@@ -451,7 +456,7 @@ public class NewServer : MonoBehaviour {
     Debug.Assert(redTeam.getPlayerForId(102).CurrentStation.Ingredients.Count == 0);
 
     /* Reset teams */
-    redTeam = new Team("red"); blueTeam = new Team("blue");
+    initialiseTeams();
     gameState = GameState.ConfigureGame;
   }
 
@@ -493,6 +498,22 @@ public class NewServer : MonoBehaviour {
   /* Called by GameTimer.cs */
   public void OnGameOver() {
     SetGameState(GameState.EndGame);
+    redEndGameText.text = "Red score: " + redTeam.Score;
+    blueEndGameText.text = "Blue score: " + blueTeam.Score;
+    Team winningTeam = getWinningTeam();
+    if (winningTeam != null) {
+      gameOverBackground.color = winningTeam.Colour;
+    } else {
+      /* Draw! */
+      gameOverBackground.color = Color.white;
+    }
+  }
+
+  /* Returns the winning team, or null if draw */
+  private Team getWinningTeam() {
+    if (redTeam.Score > blueTeam.Score) return redTeam;
+    if (blueTeam.Score > redTeam.Score) return blueTeam;
+    return null;
   }
 
   private void SetGameState(GameState state) {
