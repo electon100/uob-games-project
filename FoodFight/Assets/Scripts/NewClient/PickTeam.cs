@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PickTeam : MonoBehaviour {
 	public GameObject networkClient;
@@ -19,7 +20,7 @@ public class PickTeam : MonoBehaviour {
 	public void onClickBlue() {
 		network.onClickBlue();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		

@@ -17,19 +17,8 @@ public class Disconnect : MonoBehaviour {
 	}
 
 	public void ConnectAgain() {
-		int hostId = network.hostId;
-		string serverIP = Client.serverIP;
-		int port = network.port;
-		byte error;
-		int connectionId = NetworkTransport.Connect(hostId, serverIP, port, 0, out error);
-
-		NetworkError err = (NetworkError) error;
-
-		Debug.Log(err);
-
-		network.connectionId = connectionId;
-		network.isConnected = true;
-		connected = true;
+		network.Connect();
+		connected = network.isConnected;
 	}
 
 	public void ExitGame() {
@@ -38,7 +27,8 @@ public class Disconnect : MonoBehaviour {
 
 	void Update () {
 		if (connected) {
-			SceneManager.LoadScene("PickTeamScreen");
+			network.SendMyMessage("connect", network.team);
+			SceneManager.LoadScene("LobbyScreen");
 		}
 	}
 }

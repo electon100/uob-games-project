@@ -1146,9 +1146,9 @@ MonoBehaviour:
   connectionId: 0
   reliableChannel: 0
   isConnected: 0
-  ingredientsInStation: []
-  team: 
   startGame: 0
+  team: 
+  ingredientsInStation: []
   buttonPrefab: {fileID: 1411581202713964, guid: 5f1ce651aa958e84db74687760fa28a0,
     type: 2}
   startPanel: {fileID: 56282966}

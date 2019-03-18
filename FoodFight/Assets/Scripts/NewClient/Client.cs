@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -15,7 +17,8 @@ public class Client : MonoBehaviour {
   private const int MAX_CONNECTION = 10;
   public int port = 8000;
 	public static string serverIP = "192.168.0.100";
-  public int hostId, connectionId, reliableChannel;
+  public int hostId = 0;
+	public int connectionId, reliableChannel;
 
 	public bool isConnected = false;
 	public bool startGame = false;
@@ -35,6 +38,7 @@ public class Client : MonoBehaviour {
 	public GameObject goBackButton;
 	public GameObject defaultIP;
 	public InputField changeIPText;
+	public Text gameNotRunningText;
 
 	public void Start() {
     DontDestroyOnLoad(GameObject.Find("Client"));
@@ -62,8 +66,8 @@ public class Client : MonoBehaviour {
 		connectConfig.MaxConnectionAttempt = 32;
 		connectConfig.MaxSentMessageQueueSize = 4096;
 		connectConfig.MinUpdateTimeout = 20;
-		connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
-		connectConfig.OverflowDropThreshold = 40; //
+		connectConfig.NetworkDropThreshold = 20; // we had to set these high to avoid UNet disconnects during lag spikes
+		connectConfig.OverflowDropThreshold = 20; //
 		connectConfig.PacketSize = 1500;
 		connectConfig.PingTimeout = 500;
 		connectConfig.ReducedPingTimeout = 100;
@@ -72,6 +76,9 @@ public class Client : MonoBehaviour {
 		reliableChannel = connectConfig.AddChannel(QosType.ReliableSequenced);
 		HostTopology topo = new HostTopology(connectConfig, MAX_CONNECTION);
 
+		if (hostId >= 0) {
+			NetworkTransport.RemoveHost(hostId);
+		}
 		hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
 		connectionId = NetworkTransport.Connect(hostId, serverIP, port, 0, out error);
 
@@ -80,12 +87,12 @@ public class Client : MonoBehaviour {
 		{
 			//Output this message in the console with the Network Error
 			Debug.Log("There was this error : " + (NetworkError)error);
-      NetworkTransport.Disconnect(hostId, connectionId, out error);
+			NetworkTransport.Disconnect(hostId, connectionId, out error);
 			isConnected = false;
+			NetworkTransport.RemoveHost(hostId);
 			warningText.SetActive(true);
 		}
 		else {
-      SceneManager.LoadScene("PickTeamScreen");
 			isConnected = true;
 		}
 	}
@@ -112,6 +119,7 @@ public class Client : MonoBehaviour {
 					break;
 			case NetworkEventType.ConnectEvent:
 					Debug.Log("Player " + connectionId + " has been connected to server.");
+					SceneManager.LoadScene("PickTeamScreen");
 					break;
 			case NetworkEventType.DataEvent:
 					string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
@@ -120,12 +128,28 @@ public class Client : MonoBehaviour {
 			case NetworkEventType.DisconnectEvent:
 					Debug.Log("Player " + connectionId + " has been disconnected to server");
 					NetworkTransport.Disconnect(hostId, connectionId, out error);
+					NetworkTransport.RemoveHost(hostId);
+					startGame = false;
 					isConnected = false;
+					SceneManager.LoadScene("DisconnectScreen");
 					break;
 			case NetworkEventType.BroadcastEvent:
 					Debug.Log("Broadcast event.");
 					break;
 		}
+	}
+
+	public string LocalIPAddress() {
+		IPHostEntry host;
+		string localIP = "";
+		host = Dns.GetHostEntry(Dns.GetHostName());
+		foreach (IPAddress ip in host.AddressList) {
+			if (ip.AddressFamily == AddressFamily.InterNetwork) {
+				localIP = ip.ToString();
+				break;
+			}
+		}
+		return localIP;
 	}
 
 	//This function is called when data is sent
@@ -191,7 +215,6 @@ public class Client : MonoBehaviour {
 		string messageType = decodedMessage[0];
 		string messageContent = decodedMessage[1];
 
-    Debug.Log("Message type " + messageType);
 		switch (messageType) {
 			case "station": // Player wants to find out what ingredients are in a station after they log in
 				OnStationEnter(messageType, messageContent);
@@ -199,8 +222,8 @@ public class Client : MonoBehaviour {
 			case "endgame": // Called when the game is ended with the name of the winning team and the relevant scores
 				OnGameEnd(messageType, messageContent);
 			break;
-      case "connect": // Called after a join team event, for the player to find out which team they are on
-        team = messageContent;
+      case "connect": // Called after a join team event, for the player to find out which team they are on and load the lobby
+				OnConnect(messageContent); 
         break;
       case "start": // Broadcasted from the server when the required number of players is reached 
         Debug.Log("Starting game...");
@@ -275,6 +298,19 @@ public class Client : MonoBehaviour {
 		}
 	}
 
+	private void OnConnect(string messageContent) {
+		if (messageContent == "red" || messageContent == "blue") {
+			team = messageContent;
+			SceneManager.LoadScene("LobbyScreen");
+		} else {
+			/* Error: could not proceed to lobby */
+			// gameNotRunningText = GameObject.Find("GameNotRunningText").GetComponent<Text>();
+			// // gameNotRunningText.gameObject.SetActive(true);
+			// gameNotRunningText.text = "Game is not running. Please try again.";
+			Debug.Log("Error: [" + messageContent + "]");
+		}
+	}
+
 	private void logAppropriateStation(string stationId) {
 		string currentScene = SceneManager.GetActiveScene().name;
 
@@ -313,12 +349,10 @@ public class Client : MonoBehaviour {
 	// All of the functions below are used for buttons
 	public void onClickRed() {
 		SendMyMessage("connect", "red");
-		SceneManager.LoadScene("LobbyScreen");
 	}
 
 	public void onClickBlue() {
 		SendMyMessage("connect", "blue");
-		SceneManager.LoadScene("LobbyScreen");
 	}
 
 	public void useDifferentIP() {
