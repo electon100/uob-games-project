@@ -166,20 +166,21 @@ public class NewServer : MonoBehaviour {
 
     if (teamName.Equals(redTeam.Name)) {
       relevantTeam = redTeam;
-      relevantPrefab = (GameObject) Instantiate(redPlayerPrefab, new Vector3(-40, 2, 5 * (redTeam.Players.Count + 1)), Quaternion.identity);
+      relevantPrefab = redPlayerPrefab;
     } else if (teamName.Equals(blueTeam.Name)) {
       relevantTeam = blueTeam;
-      relevantPrefab = (GameObject) Instantiate(bluePlayerPrefab, new Vector3(-40, 2, 5 * (blueTeam.Players.Count + 1)), Quaternion.identity);
+      relevantPrefab = bluePlayerPrefab;
     } else {
       Debug.Log("Invalid team name [" + teamName + "], could not allocate player to team.");
       return false;
     }
 
     if (relevantTeam.isPlayerOnTeam(connectionId)) {
-      Destroy(relevantPrefab);
       Debug.Log("Player [" + connectionId + "] already on team [" + teamName + "].");
       return false;
     }
+
+    relevantPrefab = (GameObject) Instantiate(relevantPrefab, new Vector3(-40, 2, 5 * (relevantTeam.Players.Count + 1)), Quaternion.identity);
 
     return relevantTeam.addPlayerToTeam(new ConnectedPlayer(connectionId, relevantPrefab));
   }
