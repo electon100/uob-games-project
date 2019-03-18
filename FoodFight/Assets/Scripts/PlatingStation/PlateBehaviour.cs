@@ -7,8 +7,6 @@ using System.Text;
 
 public class PlateBehaviour : MonoBehaviour {
 
-  private readonly string stationID = "3";
-
   public Button serveBtn, putBtn, clearBtn, goBackBtn;
   public Player player;
 
@@ -63,7 +61,7 @@ public class PlateBehaviour : MonoBehaviour {
 
   public void clearStation() {
     clearPlate();
-    player.clearIngredientsInStation(stationID);
+    player.clearIngredientsInStation();
   }
 
   private void clearPlate() {
@@ -124,7 +122,7 @@ public class PlateBehaviour : MonoBehaviour {
 
   public void goBack() {
     /* Notify server that player has left the station */
-    player.notifyAboutStationLeft(stationID);
+    player.notifyAboutStationLeft();
     SceneManager.LoadScene("PlayerMainScreen");
   }
 

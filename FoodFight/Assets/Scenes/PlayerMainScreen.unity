@@ -400,7 +400,6 @@ GameObject:
   - component: {fileID: 580630329}
   - component: {fileID: 580630328}
   - component: {fileID: 580630327}
-  - component: {fileID: 580630326}
   - component: {fileID: 580630325}
   m_Layer: 0
   m_Name: Player
@@ -417,25 +416,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 580630324}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1b05dc8104de094b847b56cdd7b724e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainPanel: {fileID: 87812800}
-  mainText: {fileID: 1035238257}
-  ingredText: {fileID: 2021337592}
---- !u!114 &580630326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 580630324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2ffe48b4e37b9642a41cd892cd96752, type: 3}
+  m_Script: {fileID: 11500000, guid: 9c52ebabdf0b192408737d5491bf8c0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mainText: {fileID: 1035238257}
-  mainPanel: {fileID: 87812800}
+  mainPanel: {fileID: 0}
   tag_output_text: {fileID: 0}
 --- !u!65 &580630327
 BoxCollider:

@@ -190,7 +190,7 @@ public class ARCupboard : MonoBehaviour
     public void goBack()
     {
 		player = GameObject.Find("Player").GetComponent<Player>();
-		player.notifyAboutStationLeft("0");
+		player.notifyAboutStationLeft();
         SceneManager.LoadScene("PlayerMainScreen");
     }
 

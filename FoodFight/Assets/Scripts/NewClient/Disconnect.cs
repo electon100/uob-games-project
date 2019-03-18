@@ -12,7 +12,7 @@ public class Disconnect : MonoBehaviour {
 
 	void Start () {
 		networkClient = GameObject.Find("Client");
-    network = networkClient.GetComponent<Client>();
+    	network = networkClient.GetComponent<Client>();
 		Screen.orientation = ScreenOrientation.Portrait;
 	}
 
