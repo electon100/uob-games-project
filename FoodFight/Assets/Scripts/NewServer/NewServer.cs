@@ -512,6 +512,7 @@ public class NewServer : MonoBehaviour {
 
   public void RestartGame() {
     initialiseTeams();
+    timer.ResetTimer();
     SetGameState(GameState.ConfigureGame);
   }
 
