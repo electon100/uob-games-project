@@ -239,10 +239,18 @@ public class NewServer : MonoBehaviour {
     if (relevantTeam != null) {
       /* Add the ingredient to the relevant station */
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
-      // player.CurrentStation.addIngredientToStation(...); TODO
 
-      /* Send back success */
-      SendMyMessage(messageType, "Success", connectionId);
+      /*  */
+      if (!messageContent.Equals("")) {
+        Ingredient ingredientToAdd = new Ingredient();
+        ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToAdd.GetType());
+        Debug.Log("Ingredient to add: " + ingredientToAdd.Name);
+        player.CurrentStation.addIngredientToStation(ingredientToAdd);
+        SendMyMessage(messageType, "Success", connectionId);
+      } else {
+        Debug.Log("Invalid messageContent");
+        SendMyMessage(messageType, "Fail", connectionId);
+      }
     } else {
       Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
@@ -287,6 +295,7 @@ public class NewServer : MonoBehaviour {
   private void test() {
     /* Reset teams */
     redTeam = new Team("red"); blueTeam = new Team("blue");
+    Ingredient egg = new Ingredient("Eggs", "eggsPrefab");
 
     /* Simulate connections */
     OnMessageConnect(100, "connect", "red");
@@ -315,8 +324,8 @@ public class NewServer : MonoBehaviour {
     Debug.Assert(redTeam.getPlayerForId(101).CurrentStation.Id.Equals("1"));
 
     /* Simulate station ingredient storage */
-    blueTeam.Kitchen.getStationForId("2").addIngredientToStation(new Ingredient("Eggs", "eggsPrefab"));
-    blueTeam.Kitchen.getStationForId("3").addIngredientToStation(new Ingredient("Eggs", "eggsPrefab"));
+    blueTeam.Kitchen.getStationForId("2").addIngredientToStation(egg);
+    blueTeam.Kitchen.getStationForId("3").addIngredientToStation(egg);
     OnMessageStation(555, "station", "2");
     OnMessageStation(556, "station", "1");
     Debug.Assert(blueTeam.getPlayerForId(557).CurrentStation == null);
@@ -357,6 +366,15 @@ public class NewServer : MonoBehaviour {
     Debug.Assert(!blueTeam.isStationOccupied("2"));
     OnMessageStation(557, "station", "2");
     Debug.Assert(blueTeam.isStationOccupied("2"));
+
+    /* Simulate adding to station */
+    OnMessageStation(101, "station", "0");
+    OnMessageStation(102, "station", "1");
+    OnMessageAdd(101, "add", Ingredient.SerializeObject(egg));
+    Debug.Assert(redTeam.getPlayerForId(101).CurrentStation.Ingredients.Count == 1);
+    OnMessageAdd(101, "add", Ingredient.SerializeObject(egg));
+    Debug.Assert(redTeam.getPlayerForId(101).CurrentStation.Ingredients.Count == 2);
+    Debug.Assert(redTeam.getPlayerForId(102).CurrentStation.Ingredients.Count == 0);
 
     /* Reset teams */
     redTeam = new Team("red"); blueTeam = new Team("blue");
