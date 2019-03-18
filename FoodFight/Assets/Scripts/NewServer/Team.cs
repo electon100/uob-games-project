@@ -9,13 +9,16 @@ public class Team {
 
 	public string Name { get; set; }
 
+  public Color Colour { get; set; }
+
 	public int Score { get; set; }
 
   public Kitchen Kitchen { get; }
 
-	public Team(string name) {
+	public Team(string name, Color colour) {
 		Players = new List<ConnectedPlayer>();
     Name = name;
+    Colour = colour;
     Score = 0;
     Kitchen = new Kitchen();
 	}
@@ -26,10 +29,6 @@ public class Team {
       return true;
     }
     return false;
-  }
-
-  public void removePlayerForId(int playerId) {
-    if (isPlayerOnTeam(playerId)) removePlayer(getPlayerForId(playerId));
   }
 
   public void removePlayer(ConnectedPlayer player) {
