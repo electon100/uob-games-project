@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
@@ -16,19 +17,32 @@ public class NewServer : MonoBehaviour {
 
   public GameObject bluePlayerPrefab, redPlayerPrefab;
   public Transform pickPlayersCanvas, startGameCanvas, mainGameCanvas;
+  public Text startScreenText;
+
   private Team redTeam = new Team("red"), blueTeam = new Team("blue");
+  private GameState gameState = GameState.ConfigureGame;
 
   private void Start () {
     initialiseNetwork();
-    test();
+    // test();
   }
 
   void Update() {
-    Debug.Log("Update!");
     listenForData();
-    if (redTeam.Players.Count == minimumPlayers || blueTeam.Players.Count == minimumPlayers) {
-      pickPlayersCanvas.gameObject.SetActive(false);
-      startGameCanvas.gameObject.SetActive(true);
+    SetCanvasForGameState();
+
+    switch(gameState) {
+      case GameState.ConfigureGame:
+        break;
+      case GameState.AwaitingPlayers:
+        startScreenText.text = "Red: " + redTeam.Players.Count + " | Blue: " + blueTeam.Players.Count;
+        break;
+      case GameState.Countdown:
+        break;
+      case GameState.GameRunning:
+        break;
+      case GameState.EndGame:
+        break;
     }
   }
 
@@ -61,6 +75,7 @@ public class NewServer : MonoBehaviour {
     webHostId = NetworkTransport.AddWebsocketHost(topo, port, null /*ipAddress*/);
   }
 
+  /* Listens for data on the network, processing messages if required */
   private void listenForData() {
     int recHostId, // Player ID
         connectionId, // ID of connection to recHostId.
@@ -78,11 +93,12 @@ public class NewServer : MonoBehaviour {
         Debug.Log("Player " + connectionId + " has connected");
         break;
       case NetworkEventType.DataEvent: // Have the phone send data to the server
-        string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError) error);
+        string message = OnNetworkData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError) error);
         manageMessageEvents(message, connectionId);
         break;
       case NetworkEventType.DisconnectEvent: // Remove the player from the game
         Debug.Log("Player " + connectionId + " has disconnected");
+        OnNetworkDisconnect(connectionId);
         break;
       case NetworkEventType.BroadcastEvent:
         Debug.Log("Broadcast event.");
@@ -91,7 +107,7 @@ public class NewServer : MonoBehaviour {
   }
 
   /* Deserialises an incoming custom message ready for handling */
-  private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error) {
+  private string OnNetworkData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error) {
     /* Deserialise the message */
     Stream serializedMessage = new MemoryStream(data);
     BinaryFormatter formatter = new BinaryFormatter();
@@ -102,6 +118,19 @@ public class NewServer : MonoBehaviour {
       + message + ", size = " + size + ", error = " + error.ToString() + ")");
 
     return message;
+  }
+
+  /* Manages the disconnection of a player */
+  private void OnNetworkDisconnect(int connectionId) {
+    /* Determine the team from which the message originated */
+    Team relevantTeam = getTeamForConnectionId(connectionId);
+
+    if (relevantTeam != null) {
+      relevantTeam.removePlayerForId(connectionId);
+      Debug.Log("Player " + connectionId + " removed from team " + relevantTeam.Name);
+    } else {
+      Debug.Log("Disconnected player not part of a team");
+    }
   }
 
   /* Sends a message across the network */
@@ -121,7 +150,7 @@ public class NewServer : MonoBehaviour {
     }
   }
 
-  // This is where all the work happens.
+  /* Handle incoming custom data messages */
   public void manageMessageEvents(string message, int connectionId) {
     string[] decodedMessage = decodeMessage(message, '&');
     string messageType = decodedMessage[0], messageContent = decodedMessage[1];
@@ -152,11 +181,15 @@ public class NewServer : MonoBehaviour {
   }
 
   private void OnMessageConnect(int connectionId, string messageType, string messageContent) {
-    /* Allocate the player to the team if they are not already on a team and send team to player */
-    if (addPlayerToTeam(messageContent, connectionId)) {
-      SendMyMessage(messageType, messageContent, connectionId);
+    if (gameState.Equals(GameState.AwaitingPlayers)) {
+      /* Allocate the player to the team if they are not already on a team and send team to player */
+      if (addPlayerToTeam(messageContent, connectionId)) {
+        SendMyMessage(messageType, messageContent, connectionId);
+      } else {
+        SendMyMessage(messageType, "Unable to join team", connectionId);
+      }
     } else {
-      SendMyMessage(messageType, "Unable to join team", connectionId);
+      SendMyMessage(messageType, "Server not awaiting players", connectionId);
     }
   }
 
@@ -295,7 +328,13 @@ public class NewServer : MonoBehaviour {
   private void test() {
     /* Reset teams */
     redTeam = new Team("red"); blueTeam = new Team("blue");
+    gameState = GameState.AwaitingPlayers;
     Ingredient egg = new Ingredient("Eggs", "eggsPrefab");
+
+    Debug.Assert(Kitchen.isValidStation("0"));
+    Debug.Assert(Kitchen.isValidStation("3"));
+    Debug.Assert(!Kitchen.isValidStation("hello"));
+
 
     /* Simulate connections */
     OnMessageConnect(100, "connect", "red");
@@ -378,27 +417,52 @@ public class NewServer : MonoBehaviour {
 
     /* Reset teams */
     redTeam = new Team("red"); blueTeam = new Team("blue");
+    gameState = GameState.ConfigureGame;
+  }
+
+  /* Sets the active canvas based on the game state */
+  public void SetCanvasForGameState() {
+    pickPlayersCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigureGame));
+    startGameCanvas.gameObject.SetActive(gameState.Equals(GameState.AwaitingPlayers));
+    mainGameCanvas.gameObject.SetActive(gameState.Equals(GameState.GameRunning) || gameState.Equals(GameState.Countdown));
   }
 
   public void OnTwoPlayers() {
     minimumPlayers = 1;
+    SetGameState(GameState.AwaitingPlayers);
   }
 
   public void OnThreePlayers() {
     minimumPlayers = 2;
+    SetGameState(GameState.AwaitingPlayers);
   }
 
   public void OnFourPlayers() {
     minimumPlayers = 3;
+    SetGameState(GameState.AwaitingPlayers);
   }
 
+  /* Broadcasts start */
   public void StartGame() {
+    // if (minimumPlayers > 0 &&
+    //     redTeam.Players.Count >= minimumPlayers &&
+    //     blueTeam.Players.Count >= minimumPlayers) {
+      BroadcastMessage("start", "");
+      SetGameState(GameState.GameRunning);
+    // }
+  }
+
+  private void SetGameState(GameState state) {
+    gameState = state;
+  }
+
+  /* Sends a message to all connected players */
+  public void BroadcastMessage(string messageType, string textInput) {
     Team[] allTeams = new Team[] {redTeam, blueTeam};
     foreach(Team team in allTeams) {
       foreach(ConnectedPlayer player in team.Players) {
-        SendMyMessage("start", "", player.ConnectionId);
-        startGameCanvas.gameObject.SetActive(false);
-        mainGameCanvas.gameObject.SetActive(true);
+        Debug.Log("Broadcasting [" + messageType + ", " + textInput + "]");
+        SendMyMessage(messageType, textInput, player.ConnectionId);
       }
     }
   }

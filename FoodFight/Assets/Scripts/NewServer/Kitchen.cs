@@ -1,10 +1,11 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Kitchen {
 
-  private readonly string[] stations = {"0","1","2","3","4"};
+  private static readonly string[] stations = {"0","1","2","3","4"};
 
   public List<Station> Stations { get; }
 
@@ -13,7 +14,7 @@ public class Kitchen {
     initialiseKitchen();
 	}
 
-	public void initialiseKitchen() {
+	private void initialiseKitchen() {
 		foreach(string stationId in stations) {
       Station newStation = new Station(stationId);
       Stations.Add(newStation);
@@ -31,6 +32,10 @@ public class Kitchen {
       if (stationId.Equals(id)) return station;
     }
     return null;
+  }
+
+  public static bool isValidStation(string station) {
+    return stations.Contains(station);
   }
 
   public override string ToString() {

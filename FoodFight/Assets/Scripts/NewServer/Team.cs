@@ -28,7 +28,11 @@ public class Team {
     return false;
   }
 
-  public void removePlayerFromTeam(ConnectedPlayer player) {
+  public void removePlayerForId(int playerId) {
+    if (isPlayerOnTeam(playerId)) removePlayer(getPlayerForId(playerId));
+  }
+
+  public void removePlayer(ConnectedPlayer player) {
     if (Players.Contains(player)) Players.Remove(player);
   }
 
