@@ -16,14 +16,19 @@ public class NewServer : MonoBehaviour {
   private int minimumPlayers = -1;
 
   public GameObject bluePlayerPrefab, redPlayerPrefab;
-  public Transform pickPlayersCanvas, startGameCanvas, mainGameCanvas;
-  public Text startScreenText;
+  public Transform pickPlayersCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
+  public Text startScreenText, redEndGameText, blueEndGameText;
+  public Image gameOverBackground;
+
+  private NewGameTimer timer;
 
   private Team redTeam = new Team("red"), blueTeam = new Team("blue");
   private GameState gameState = GameState.ConfigureGame;
 
   private void Start () {
     initialiseNetwork();
+
+    timer = GameObject.Find("GameTimer").GetComponent<NewGameTimer>();
     // test();
   }
 
@@ -42,6 +47,9 @@ public class NewServer : MonoBehaviour {
       case GameState.GameRunning:
         break;
       case GameState.EndGame:
+        redEndGameText.text = "Red score: " + redTeam.Score;
+        blueEndGameText.text = "Blue score: " + blueTeam.Score;
+        gameOverBackground.color = UnityEngine.Color.blue;
         break;
     }
   }
@@ -126,8 +134,12 @@ public class NewServer : MonoBehaviour {
     Team relevantTeam = getTeamForConnectionId(connectionId);
 
     if (relevantTeam != null) {
-      relevantTeam.removePlayerForId(connectionId);
-      Debug.Log("Player " + connectionId + " removed from team " + relevantTeam.Name);
+      ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
+      if (player != null) {
+        Destroy(player.PlayerPrefab);
+        relevantTeam.removePlayer(player);
+        Debug.Log("Player " + connectionId + " removed from team " + relevantTeam.Name);
+      }
     } else {
       Debug.Log("Disconnected player not part of a team");
     }
@@ -273,7 +285,7 @@ public class NewServer : MonoBehaviour {
       /* Add the ingredient to the relevant station */
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
 
-      /*  */
+      /* Deserialize and add ingredient */
       if (!messageContent.Equals("")) {
         Ingredient ingredientToAdd = new Ingredient();
         ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToAdd.GetType());
@@ -291,7 +303,27 @@ public class NewServer : MonoBehaviour {
   }
 
   private void OnMessageScore(int connectionId, string messageType, string messageContent)  {
-    /* TODO */
+    /* Determine the team from which the message originated */
+    Team relevantTeam = getTeamForConnectionId(connectionId);
+
+    if (relevantTeam != null) {
+      /* Add the ingredient to the relevant station */
+      ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
+
+      if (!messageContent.Equals("")) {
+        Ingredient ingredientToScore = new Ingredient();
+        ingredientToScore = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToScore.GetType());
+        Debug.Log("Ingredient to score: " + ingredientToScore.Name);
+        relevantTeam.Score = ScoreIngredient(ingredientToScore);
+        SendMyMessage(messageType, "Success", connectionId);
+      } else {
+        Debug.Log("Invalid messageContent");
+        SendMyMessage(messageType, "Fail", connectionId);
+      }
+    } else {
+      Debug.Log("Could not determine team for given connectionId");
+      SendMyMessage(messageType, "Fail", connectionId);
+    }
   }
 
   private void OnMessageLeave(int connectionId, string messageType, string messageContent)  {
@@ -309,6 +341,10 @@ public class NewServer : MonoBehaviour {
       Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
     }
+  }
+
+  private int ScoreIngredient(Ingredient ingredient) {
+    return FoodData.Instance.getScoreForIngredient(ingredient);
   }
 
   /* Gets the team that a connected player is on, returning null if not found */
@@ -334,7 +370,6 @@ public class NewServer : MonoBehaviour {
     Debug.Assert(Kitchen.isValidStation("0"));
     Debug.Assert(Kitchen.isValidStation("3"));
     Debug.Assert(!Kitchen.isValidStation("hello"));
-
 
     /* Simulate connections */
     OnMessageConnect(100, "connect", "red");
@@ -424,6 +459,7 @@ public class NewServer : MonoBehaviour {
   public void SetCanvasForGameState() {
     pickPlayersCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigureGame));
     startGameCanvas.gameObject.SetActive(gameState.Equals(GameState.AwaitingPlayers));
+    gameOverCanvas.gameObject.SetActive(gameState.Equals(GameState.EndGame));
     mainGameCanvas.gameObject.SetActive(gameState.Equals(GameState.GameRunning) || gameState.Equals(GameState.Countdown));
   }
 
@@ -444,12 +480,19 @@ public class NewServer : MonoBehaviour {
 
   /* Broadcasts start */
   public void StartGame() {
+    // Commented out for testing:
     // if (minimumPlayers > 0 &&
     //     redTeam.Players.Count >= minimumPlayers &&
     //     blueTeam.Players.Count >= minimumPlayers) {
       BroadcastMessage("start", "");
       SetGameState(GameState.GameRunning);
+      timer.StartTimer();
     // }
+  }
+
+  /* Called by GameTimer.cs */
+  public void OnGameOver() {
+    SetGameState(GameState.EndGame);
   }
 
   private void SetGameState(GameState state) {
