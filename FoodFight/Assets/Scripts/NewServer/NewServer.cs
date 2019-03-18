@@ -507,6 +507,12 @@ public class NewServer : MonoBehaviour {
       /* Draw! */
       gameOverBackground.color = Color.white;
     }
+    /* TODO: Broadcast end game to players */
+  }
+
+  public void RestartGame() {
+    initialiseTeams();
+    SetGameState(GameState.ConfigureGame);
   }
 
   /* Returns the winning team, or null if draw */
