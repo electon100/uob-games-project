@@ -233,7 +233,7 @@ public class Chopping : MonoBehaviour
     public void goBack()
     {
         /* Notify server that player has left the station */
-		player.notifyAboutStationLeft("2");
+		player.notifyAboutStationLeft();
         SceneManager.LoadScene("PlayerMainScreen");
     }
 

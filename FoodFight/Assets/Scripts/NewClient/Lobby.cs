@@ -26,6 +26,7 @@ public class Lobby : MonoBehaviour {
     }
 
     void Update() {
+        Debug.Log(network.startGame);
         if (network.startGame) {
             startCanvas.gameObject.SetActive(false);
             countDownCanvas.gameObject.SetActive(true);
