@@ -1849,7 +1849,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4346774854120088, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.003
+      value: 0.025
       objectReference: {fileID: 0}
     - target: {fileID: 4346774854120088, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1874,6 +1874,10 @@ Prefab:
     - target: {fileID: 4346774854120088, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}
       propertyPath: m_RootOrder
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1876874645858740, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}
+      propertyPath: m_Name
+      value: SoySauce
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7eccb64ab592fe34b9b14a4829c2ddc1, type: 2}

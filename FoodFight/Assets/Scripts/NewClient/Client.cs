@@ -254,11 +254,13 @@ public class Client : MonoBehaviour {
 			logAppropriateStation(stationId);
 			/* Clear out the list of ingredients in that station, since the player already has a referance to them */
 			ingredientsInStation = new List<Ingredient>();
+			} else if(stationId == "Station already occupied (" + stationId + ")") {
+				Debug.Log("Station " + stationId + " is already occupied.");
 			} else {
-				SendMyMessage(messageType, "Error: invalid station");
+				Debug.Log("Error: invalid station");
 			}
     } else {
-			SendMyMessage(messageType, "Error: no station sent");
+			Debug.Log("Error: no station sent");
 		}
 
 	}
