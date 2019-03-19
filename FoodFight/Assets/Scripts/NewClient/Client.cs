@@ -66,8 +66,8 @@ public class Client : MonoBehaviour {
 		connectConfig.MaxConnectionAttempt = 32;
 		connectConfig.MaxSentMessageQueueSize = 4096;
 		connectConfig.MinUpdateTimeout = 20;
-		connectConfig.NetworkDropThreshold = 20; // we had to set these high to avoid UNet disconnects during lag spikes
-		connectConfig.OverflowDropThreshold = 20; //
+		connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
+		connectConfig.OverflowDropThreshold = 40; //
 		connectConfig.PacketSize = 1500;
 		connectConfig.PingTimeout = 500;
 		connectConfig.ReducedPingTimeout = 100;
@@ -229,6 +229,15 @@ public class Client : MonoBehaviour {
         Debug.Log("Starting game...");
         startGame = true;
         break;
+			case "add":
+				Debug.Log("Adding ingredient failed.");
+				break;
+			case "leave":
+				Debug.Log("Leaving station failed.");
+				break;
+			case "clear":
+				Debug.Log("Clearing ingredients failed.");
+				break;
       default:
         Debug.Log("Invalid message type.");
         break;

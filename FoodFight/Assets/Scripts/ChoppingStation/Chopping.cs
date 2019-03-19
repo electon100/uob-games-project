@@ -196,7 +196,7 @@ public class Chopping : MonoBehaviour
             source.PlayOneShot(successSound);
             defaultCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(true);
-
+            
             Player.currentIngred = FoodData.Instance.TryAdvanceIngredient(Player.currentIngred);
         }
         /* Checks if player has start chopping and istructs them to do so if not */

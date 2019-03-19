@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class ViewItem : MonoBehaviour {
 
-	public GameObject mainPanel;
 	public Text mainText;
 	public Text ingredText;
 
@@ -19,7 +18,6 @@ public class ViewItem : MonoBehaviour {
 	public void viewItems() {
 		/* If the current item is null, instantiate it when viewing */
 		if (Player.isHoldingIngredient()) {
-			/* TODO: Sort out the scaling in unity I hate it I hate it */
 			GameObject model = (GameObject) Resources.Load(Player.currentIngred.Model, typeof(GameObject));
 			Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
 			Vector3 modelPosition = modelTransform.position;

@@ -1160,6 +1160,7 @@ MonoBehaviour:
   goBackButton: {fileID: 190765412}
   defaultIP: {fileID: 659997826}
   changeIPText: {fileID: 2064015141}
+  gameNotRunningText: {fileID: 0}
 --- !u!1 &1100489092
 GameObject:
   m_ObjectHideFlags: 0
