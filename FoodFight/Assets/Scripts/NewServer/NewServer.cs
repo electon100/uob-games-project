@@ -72,7 +72,7 @@ public class NewServer : MonoBehaviour {
     connectConfig.MaxCombinedReliableMessageCount = 10;
     connectConfig.MaxCombinedReliableMessageSize = 100;
     connectConfig.MaxConnectionAttempt = 32;
-    connectConfig.MaxSentMessageQueueSize = 2048;
+    connectConfig.MaxSentMessageQueueSize = 4096;
     connectConfig.MinUpdateTimeout = 20;
     connectConfig.NetworkDropThreshold = 40; // we had to set these high to avoid UNet disconnects during lag spikes
     connectConfig.OverflowDropThreshold = 40;
@@ -275,7 +275,7 @@ public class NewServer : MonoBehaviour {
       if (player.CurrentStation != null) player.CurrentStation.clearIngredientsInStation();
 
       /* Send back success */
-      SendMyMessage(messageType, "Success", connectionId);
+      // SendMyMessage(messageType, "Success", connectionId);
     } else {
       Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
@@ -296,7 +296,7 @@ public class NewServer : MonoBehaviour {
         ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToAdd.GetType());
         Debug.Log("Ingredient to add: " + ingredientToAdd.Name);
         player.CurrentStation.addIngredientToStation(ingredientToAdd);
-        SendMyMessage(messageType, "Success", connectionId);
+        // SendMyMessage(messageType, "Success", connectionId);
       } else {
         Debug.Log("Invalid messageContent");
         SendMyMessage(messageType, "Fail", connectionId);
@@ -320,7 +320,7 @@ public class NewServer : MonoBehaviour {
         ingredientToScore = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToScore.GetType());
         Debug.Log("Ingredient to score: " + ingredientToScore.Name);
         relevantTeam.Score = ScoreIngredient(ingredientToScore);
-        SendMyMessage(messageType, "Success", connectionId);
+        // SendMyMessage(messageType, "Success", connectionId);
       } else {
         Debug.Log("Invalid messageContent");
         SendMyMessage(messageType, "Fail", connectionId);
@@ -341,7 +341,7 @@ public class NewServer : MonoBehaviour {
       player.CurrentStation = null;
 
       /* Send back success */
-      SendMyMessage(messageType, "Success", connectionId);
+      // SendMyMessage(messageType, "Success", connectionId);
     } else {
       Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
