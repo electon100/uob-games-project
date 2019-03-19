@@ -51,8 +51,8 @@ public class Player : MonoBehaviour {
 
     /* Check for any NFC scans, forwarding to checkStation if present */
     string lastTag = nfcHandler.getScannedTag();
-    if (lastTag != "-1") {
-        checkStation(lastTag);
+    if (lastTag != "-1" && currentStation == "-1") {
+      checkStation(lastTag);
     }
   }
 
@@ -89,7 +89,7 @@ public class Player : MonoBehaviour {
   }
 
   /* Resets the current station of the player locally */
-  private void resetCurrentStation() {
+  public static void resetCurrentStation() {
     currentStation = "-1";
   }
 

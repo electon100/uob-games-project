@@ -210,9 +210,9 @@ public class Client : MonoBehaviour {
 				OnGameEnd(messageType, messageContent);
 			break;
       case "connect": // Called after a join team event, for the player to find out which team they are on and load the lobby
-				OnConnect(messageContent); 
+				OnConnect(messageContent);
         break;
-      case "start": // Broadcasted from the server when the required number of players is reached 
+      case "start": // Broadcasted from the server when the required number of players is reached
         Debug.Log("Starting game...");
         startGame = true;
         break;
@@ -233,29 +233,32 @@ public class Client : MonoBehaviour {
 
 	private void OnStationEnter(string messageType, string messageContent) {
 		string[] data = decodeMessage(messageContent, '$');
-		string stationId = data[0];
+		string stationId = data.Length > 0 ? data[0] : "";
 
     if (stationId != "") {
       if (Kitchen.isValidStation(stationId)) {
 
-			/* Ingredients are separated by $, so iterate over them and deserialise, adding them to the list of ingredients */
-			for (int i = 1; i < data.Length; i++) {
-				if (data[i] != ""){
-					string receivedIngredient = data[i];
-					Ingredient received = new Ingredient();
-					received = Ingredient.XmlDeserializeFromString<Ingredient>(receivedIngredient, received.GetType());
-					ingredientsInStation.Add(received);
-				} else {
-					Debug.Log("No ingredients currently exist in that station");
+				/* Ingredients are separated by $, so iterate over them and deserialise, adding them to the list of ingredients */
+				for (int i = 1; i < data.Length; i++) {
+					if (data[i] != ""){
+						string receivedIngredient = data[i];
+						Ingredient received = new Ingredient();
+						received = Ingredient.XmlDeserializeFromString<Ingredient>(receivedIngredient, received.GetType());
+						ingredientsInStation.Add(received);
+					} else {
+						Debug.Log("No ingredients currently exist in that station");
+					}
 				}
-			}
 
-			/* Log the player into the station with that list of ingredients */
-			logAppropriateStation(stationId);
-			/* Clear out the list of ingredients in that station, since the player already has a referance to them */
-			ingredientsInStation = new List<Ingredient>();
-			} else if(stationId == "Station already occupied (" + stationId + ")") {
-				Debug.Log("Station " + stationId + " is already occupied.");
+				/* Log the player into the station with that list of ingredients */
+				logAppropriateStation(stationId);
+				/* Clear out the list of ingredients in that station, since the player already has a referance to them */
+				ingredientsInStation = new List<Ingredient>();
+			} else if (stationId.Equals("Station occupied")) {
+				Debug.Log("Station is already occupied.");
+				Player.resetCurrentStation();
+			} else if (stationId.Equals("Already at station")) {
+				Debug.Log("Already at station.");
 			} else {
 				Debug.Log("Error: invalid station");
 			}

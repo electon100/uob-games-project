@@ -35,18 +35,20 @@ public class NewServer : MonoBehaviour {
   }
 
   void Update() {
-    listenForData();
     SetCanvasForGameState();
 
     switch(gameState) {
       case GameState.ConfigureGame:
+        listenForData();
         break;
       case GameState.AwaitingPlayers:
+        listenForData();
         startScreenText.text = "Red: " + redTeam.Players.Count + " | Blue: " + blueTeam.Players.Count;
         break;
       case GameState.Countdown:
         break;
       case GameState.GameRunning:
+        listenForData();
         redScoreText.text = "Red score: " + redTeam.Score;
         blueScoreText.text = "Blue score: " + blueTeam.Score;
         break;
@@ -245,8 +247,8 @@ public class NewServer : MonoBehaviour {
       Station destinationStation = relevantTeam.Kitchen.getStationForId(messageContent);
       if (!relevantTeam.isStationOccupied(destinationStation)) {
         player.CurrentStation = destinationStation;
-        /* Send back all ingredients currently at this station */
         string messageToSend = messageContent + "$";
+        /* Send back all ingredients currently at this station */
         foreach (Ingredient ingredient in destinationStation.Ingredients) {
           messageToSend += Ingredient.SerializeObject(ingredient) + "$";
         }

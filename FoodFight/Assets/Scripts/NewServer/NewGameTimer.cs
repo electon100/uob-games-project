@@ -10,7 +10,7 @@ public class NewGameTimer : MonoBehaviour {
 
     private NewServer server;
 
-    private readonly float initialTimer = 60.0f;
+    private readonly float initialTimer = 180.0f;
     private readonly float countdownDuration = 3.0f;
     private float timer = 0.0f;
 
