@@ -139,19 +139,6 @@ public class Client : MonoBehaviour {
 		}
 	}
 
-	public string LocalIPAddress() {
-		IPHostEntry host;
-		string localIP = "";
-		host = Dns.GetHostEntry(Dns.GetHostName());
-		foreach (IPAddress ip in host.AddressList) {
-			if (ip.AddressFamily == AddressFamily.InterNetwork) {
-				localIP = ip.ToString();
-				break;
-			}
-		}
-		return localIP;
-	}
-
 	//This function is called when data is sent
 	private string OnData(int hostId, int connectionId, int channelId, byte[] data, int size, NetworkError error)
 	{
