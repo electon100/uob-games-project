@@ -192,6 +192,9 @@ public class NewServer : MonoBehaviour {
       case "score": // Player updates score
         OnMessageScore(connectionId, messageType, messageContent);
         break;
+      case "throw": // Player updates score
+        OnMessageThrow(connectionId, messageType, messageContent);
+        break;
       case "leave": // Player leaves a station
         OnMessageLeave(connectionId, messageType, messageContent);
         break;
@@ -316,7 +319,6 @@ public class NewServer : MonoBehaviour {
     Team relevantTeam = getTeamForConnectionId(connectionId);
 
     if (relevantTeam != null) {
-      /* Add the ingredient to the relevant station */
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
 
       if (!messageContent.Equals("")) {
@@ -325,6 +327,28 @@ public class NewServer : MonoBehaviour {
         Debug.Log("Ingredient to score: " + ingredientToScore.Name);
         relevantTeam.Score = ScoreIngredient(ingredientToScore);
         // SendMyMessage(messageType, "Success", connectionId);
+      } else {
+        Debug.Log("Invalid messageContent");
+        SendMyMessage(messageType, "Fail", connectionId);
+      }
+    } else {
+      Debug.Log("Could not determine team for given connectionId");
+      SendMyMessage(messageType, "Fail", connectionId);
+    }
+  }
+
+  private void OnMessageThrow(int connectionId, string messageType, string messageContent)  {
+    /* Determine the team from which the message originated */
+    Team relevantTeam = getTeamForConnectionId(connectionId);
+
+    if (relevantTeam != null) {
+      ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
+
+      if (!messageContent.Equals("")) {
+        Ingredient ingredientToThrow = new Ingredient();
+        ingredientToThrow = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToThrow.GetType());
+        Debug.Log("Ingredient to throw: " + ingredientToThrow.Name);
+        /* Call fighting reset here!!! */
       } else {
         Debug.Log("Invalid messageContent");
         SendMyMessage(messageType, "Fail", connectionId);

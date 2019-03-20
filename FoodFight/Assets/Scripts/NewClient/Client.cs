@@ -27,7 +27,7 @@ public class Client : MonoBehaviour {
 	public List<Ingredient> ingredientsInStation = new List<Ingredient>();
 
 	public GameEndState gameEndState;
-	
+
 	public GameObject buttonPrefab;
 	public GameObject startPanel;
 	public GameObject warningText;
@@ -208,7 +208,7 @@ public class Client : MonoBehaviour {
 				break;
 			case "endgame": // Called when the game is ended with the name of the winning team and the relevant scores
 				OnGameEnd(messageType, messageContent);
-			break;
+				break;
       case "connect": // Called after a join team event, for the player to find out which team they are on and load the lobby
 				OnConnect(messageContent);
         break;
@@ -342,6 +342,12 @@ public class Client : MonoBehaviour {
 					SceneManager.LoadScene("PlatingStation");
 				}
 				break;
+			case "4": // Fighting Minigame
+				if (!currentScene.Equals("FightingStation")) {
+					Player.ingredientsFromStation = ingredientsInStation;
+					SceneManager.LoadScene("FightingStation");
+				}
+				break;
 			default:
 					break;
 		}
@@ -369,19 +375,19 @@ public class Client : MonoBehaviour {
 		serverIP = "192.168.0." + Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
 		inputField.SetActive(false);
 		changeIPButton.SetActive(false);
-		connectButton.SetActive(true);
-		diffIPButton.SetActive(true);
 		goBackButton.SetActive(false);
 		defaultIP.SetActive(false);
+		connectButton.SetActive(true);
+		diffIPButton.SetActive(true);
 	}
 
 	public void goBack() {
 		inputField.SetActive(false);
 		changeIPButton.SetActive(false);
-		connectButton.SetActive(true);
-		diffIPButton.SetActive(true);
 		goBackButton.SetActive(false);
 		defaultIP.SetActive(false);
+		connectButton.SetActive(true);
+		diffIPButton.SetActive(true);
 	}
 
 }
