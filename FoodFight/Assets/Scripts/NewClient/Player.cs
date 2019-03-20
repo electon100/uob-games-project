@@ -16,12 +16,13 @@ public class Player : MonoBehaviour {
   private GameObject networkClient;
   private Client network;
 
-  /*Current station:
+  /* Current station:
   -1 - Main Screen
   0  - Cupboard
   1  - Frying
   2  - Chopping
-  3  - Plating*/
+  3  - Plating
+  4  - Fighting */
   public static string currentStation = "-1";
 
   public static Ingredient currentIngred;
@@ -47,6 +48,7 @@ public class Player : MonoBehaviour {
     if (Input.GetKeyDown(KeyCode.T)) checkStation("1");
     if (Input.GetKeyDown(KeyCode.Y)) checkStation("2");
     if (Input.GetKeyDown(KeyCode.U)) checkStation("3");
+    if (Input.GetKeyDown(KeyCode.I)) checkStation("4");
     if (Input.GetKeyDown(KeyCode.E)) Debug.Log(Player.currentIngred.Model);
 
     /* Check for any NFC scans, forwarding to checkStation if present */
@@ -99,6 +101,12 @@ public class Player : MonoBehaviour {
     network.SendMyMessage("score", message);
   }
 
+    /* Sends throw to the server after a player throws a dish */
+  public void sendThrowToServer(Ingredient recipe) {
+    string message = Ingredient.SerializeObject(recipe);
+    network.SendMyMessage("throw", message);
+  }
+
   /* Notifies the server when the player logs into a station */
   private void checkStation(string text) {
     if (currentStation != text) {
@@ -118,6 +126,10 @@ public class Player : MonoBehaviour {
           network.SendMyMessage("station", text);
           break;
         case "3":
+          currentStation = text;
+          network.SendMyMessage("station", text);
+          break;
+        case "4":
           currentStation = text;
           network.SendMyMessage("station", text);
           break;
