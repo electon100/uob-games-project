@@ -254,6 +254,9 @@ public class Client : MonoBehaviour {
 				logAppropriateStation(stationId);
 				/* Clear out the list of ingredients in that station, since the player already has a referance to them */
 				ingredientsInStation = new List<Ingredient>();
+			} else if (stationId.Equals("Station disabled")) {
+				Debug.Log("Station is disabled.");
+				Player.resetCurrentStation();
 			} else if (stationId.Equals("Station occupied")) {
 				Debug.Log("Station is already occupied.");
 				Player.resetCurrentStation();

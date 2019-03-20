@@ -25,6 +25,7 @@ public class NewServer : MonoBehaviour {
   private WiimoteBehaviourRed wiiRed;
 
   private readonly Color redTeamColour = new Color(1.0f, 0.3f, 0.3f, 1.0f), blueTeamColour = new Color(0.3f, 0.5f, 1.0f, 1.0f);
+  private readonly float disableStationDuration = 60.0f; /* 60 seconds */
   private Team redTeam, blueTeam;
   private GameState gameState = GameState.ConfigureGame;
 
@@ -38,7 +39,8 @@ public class NewServer : MonoBehaviour {
   }
 
   void Update() {
-    SetCanvasForGameState();
+    SetCanvasForGameState(); /* Sets the main screen visible canvas based on game state */
+    TickStations(); /* Ticks down the disabled timers on all stations */
 
     switch(gameState) {
       case GameState.ConfigureGame:
@@ -251,7 +253,10 @@ public class NewServer : MonoBehaviour {
       /* Move the appropriate player to the destination station */
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
       Station destinationStation = relevantTeam.Kitchen.getStationForId(messageContent);
-      if (!relevantTeam.isStationOccupied(destinationStation)) {
+      if (destinationStation.isDisabled()) {
+        Debug.Log("Station disabled (" + destinationStation + ")");
+        SendMyMessage(messageType, "Station disabled", connectionId);
+      } else if (!relevantTeam.isStationOccupied(destinationStation)) {
         player.CurrentStation = destinationStation;
         string messageToSend = messageContent + "$";
         /* Send back all ingredients currently at this station */
@@ -281,9 +286,6 @@ public class NewServer : MonoBehaviour {
       /* Clear the appropriate station */
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
       if (player.CurrentStation != null) player.CurrentStation.clearIngredientsInStation();
-
-      /* Send back success */
-      // SendMyMessage(messageType, "Success", connectionId);
     } else {
       Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
@@ -304,7 +306,6 @@ public class NewServer : MonoBehaviour {
         ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToAdd.GetType());
         Debug.Log("Ingredient to add: " + ingredientToAdd.Name);
         player.CurrentStation.addIngredientToStation(ingredientToAdd);
-        // SendMyMessage(messageType, "Success", connectionId);
       } else {
         Debug.Log("Invalid messageContent");
         SendMyMessage(messageType, "Fail", connectionId);
@@ -327,7 +328,6 @@ public class NewServer : MonoBehaviour {
         ingredientToScore = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToScore.GetType());
         Debug.Log("Ingredient to score: " + ingredientToScore.Name);
         relevantTeam.Score += ScoreIngredient(ingredientToScore);
-        // SendMyMessage(messageType, "Success", connectionId);
       } else {
         Debug.Log("Invalid messageContent");
         SendMyMessage(messageType, "Fail", connectionId);
@@ -373,9 +373,6 @@ public class NewServer : MonoBehaviour {
       /* Set players current station to null */
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
       player.CurrentStation = null;
-
-      /* Send back success */
-      // SendMyMessage(messageType, "Success", connectionId);
     } else {
       Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
@@ -386,9 +383,36 @@ public class NewServer : MonoBehaviour {
     return FoodData.Instance.getScoreForIngredient(ingredient);
   }
 
-  public void OnStationHit(string team, string station){
-    Debug.Log(team);
-    Debug.Log(station);
+  /* TODO! */
+  public void OnStationHit(string team, string station) {
+    if (Kitchen.isValidStation(station)) {
+      Team relevantTeam = null;
+
+      if (team.Equals(redTeam.Name)) relevantTeam = redTeam;
+      else if (team.Equals(blueTeam.Name)) relevantTeam = blueTeam;
+
+      if (relevantTeam != null) {
+        Station stationToDisable = relevantTeam.Kitchen.getStationForId(station);
+        stationToDisable.DisabledTimer = disableStationDuration;
+        Debug.Log("Station has been disabled: " + stationToDisable);
+      } else {
+        Debug.Log("Invalid team name [" + team + "], could not process station hit.");
+      }
+    } else {
+      Debug.Log("Invalid station id [" + station + "], could not process station hit.");
+    }
+  }
+
+  private void TickStations() {
+    Team[] allTeams = new Team[] {redTeam, blueTeam};
+    foreach (Team team in allTeams) {
+      foreach (Station station in team.Kitchen.Stations) {
+        if (station.isDisabled()) {
+          station.DisabledTimer -= Time.deltaTime;
+          if (station.DisabledTimer < 0) station.resetTimer();
+        }
+      }
+    }
   }
 
   /* Gets the team that a connected player is on, returning null if not found */
@@ -569,8 +593,8 @@ public class NewServer : MonoBehaviour {
   /* Sends a message to all connected players */
   public void BroadcastMessage(string messageType, string textInput) {
     Team[] allTeams = new Team[] {redTeam, blueTeam};
-    foreach(Team team in allTeams) {
-      foreach(ConnectedPlayer player in team.Players) {
+    foreach (Team team in allTeams) {
+      foreach (ConnectedPlayer player in team.Players) {
         Debug.Log("Broadcasting [" + messageType + ", " + textInput + "]");
         SendMyMessage(messageType, textInput, player.ConnectionId);
       }
