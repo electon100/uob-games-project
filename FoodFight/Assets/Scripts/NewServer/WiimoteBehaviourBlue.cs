@@ -170,7 +170,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
         blueTimeOverPanel.gameObject.SetActive(true);
     }
 
-    public void reset()
+    public void reset(Ingredient ingredientToThrow)
     {
         firstTime = true;
         blueTime = 5.0f;

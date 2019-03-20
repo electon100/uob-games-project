@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -12,12 +11,21 @@ public class ProjectileBehaviour : MonoBehaviour {
     char id;
     private WiimoteBehaviourBlue wiiBlue;
     private WiimoteBehaviourRed wiiRed;
-
+    private NewServer server;
+    private string team;
 
     private void OnCollisionEnter(Collision collision)
     {
         wiiBlue = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourBlue>();
         wiiRed = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourRed>();
+        server = GameObject.Find("Server").GetComponent<NewServer>();
+
+        if(this.gameObject.name.Equals("BlueProjectile(Clone)")){
+            team = "blue";
+        }
+        else if (this.gameObject.name.Equals("RedProjectile(Clone)")){
+            team = "red";
+        }
 
         Debug.Log("GameObject Hit: " + collision.gameObject.name);
         stationHit = collision.gameObject.name;
@@ -26,19 +34,23 @@ public class ProjectileBehaviour : MonoBehaviour {
         {
             case '0':
                 // send 0
-                SetResultText("You hit the enemy cupboard");      
+                SetResultText("You hit the enemy cupboard");
+                server.OnStationHit(team, id+"");      
                 break;
             case '1':
                 // send 1
                 SetResultText("You hit the enemy chopping board");
+                server.OnStationHit(team, id+"");   
                 break;
             case '2':
                 // send 2
                 SetResultText("You hit the enemy frying station");
+                server.OnStationHit(team, id+"");   
                 break;
             case '3':
                  // send 3
                  SetResultText("You hit the enemy plating station");
+                 server.OnStationHit(team, id+"");   
                  break;
             default:
                 // send miss
@@ -48,11 +60,11 @@ public class ProjectileBehaviour : MonoBehaviour {
         Destroy(this.gameObject);
     }
 
-    private void SetResultText(String objectHit){
-        if(this.gameObject.name.Equals("BlueProjectile(Clone)")){
+    private void SetResultText(string objectHit){
+        if(team.Equals("blue")){
             wiiBlue.roundOver(objectHit);
         }
-        else if (this.gameObject.name.Equals("RedProjectile(Clone)")){
+        else if (team.Equals("red")){
             wiiRed.roundOver(objectHit);
         }
     }

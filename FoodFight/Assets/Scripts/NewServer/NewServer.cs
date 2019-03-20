@@ -349,11 +349,10 @@ public class NewServer : MonoBehaviour {
         Ingredient ingredientToThrow = new Ingredient();
         ingredientToThrow = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToThrow.GetType());
         Debug.Log("Ingredient to throw: " + ingredientToThrow.Name);
-        if (relevantTeam.Name.Equals("red")){
-          wiiRed.reset();
-        }
-        else if (relevantTeam.Name.Equals("blue")){
-          wiiBlue.reset();
+        if (relevantTeam.Name.Equals("red")) {
+          wiiRed.reset(ingredientToThrow);
+        } else if (relevantTeam.Name.Equals("blue")) {
+          wiiBlue.reset(ingredientToThrow);
         }
         /* Call fighting reset here!!! */
       } else {
@@ -385,6 +384,11 @@ public class NewServer : MonoBehaviour {
 
   private int ScoreIngredient(Ingredient ingredient) {
     return FoodData.Instance.getScoreForIngredient(ingredient);
+  }
+
+  public void OnStationHit(string team, string station){
+    Debug.Log(team);
+    Debug.Log(station);
   }
 
   /* Gets the team that a connected player is on, returning null if not found */
