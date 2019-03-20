@@ -22,6 +22,7 @@ public class NewServer : MonoBehaviour {
 
   private NewGameTimer timer;
   private WiimoteBehaviourBlue wiiBlue;
+  private WiimoteBehaviourRed wiiRed;
 
   private readonly Color redTeamColour = new Color(1.0f, 0.3f, 0.3f, 1.0f), blueTeamColour = new Color(0.3f, 0.5f, 1.0f, 1.0f);
   private Team redTeam, blueTeam;
@@ -33,7 +34,7 @@ public class NewServer : MonoBehaviour {
 
     timer = GameObject.Find("GameTimer").GetComponent<NewGameTimer>();
     wiiBlue = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourBlue>();
-    wiiBlue.reset();
+    wiiRed = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourRed>();
   }
 
   void Update() {
@@ -192,7 +193,7 @@ public class NewServer : MonoBehaviour {
       case "score": // Player updates score
         OnMessageScore(connectionId, messageType, messageContent);
         break;
-      case "throw": // Player updates score
+      case "throw": // Player throws ingredient
         OnMessageThrow(connectionId, messageType, messageContent);
         break;
       case "leave": // Player leaves a station
@@ -348,6 +349,12 @@ public class NewServer : MonoBehaviour {
         Ingredient ingredientToThrow = new Ingredient();
         ingredientToThrow = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToThrow.GetType());
         Debug.Log("Ingredient to throw: " + ingredientToThrow.Name);
+        if (relevantTeam.Name.Equals("red")){
+          wiiRed.reset();
+        }
+        else if (relevantTeam.Name.Equals("blue")){
+          wiiBlue.reset();
+        }
         /* Call fighting reset here!!! */
       } else {
         Debug.Log("Invalid messageContent");
