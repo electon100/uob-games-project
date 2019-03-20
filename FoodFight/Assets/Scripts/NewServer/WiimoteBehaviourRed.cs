@@ -21,6 +21,7 @@ public class WiimoteBehaviourRed : MonoBehaviour {
     public Transform redTimeOverPanel;
     public Transform RedStartPanel;
     public Text redStartText;
+    public Text redResultText;
 
     public GameObject redProjectile;
     private Vector3 targetVector;
@@ -53,30 +54,28 @@ public class WiimoteBehaviourRed : MonoBehaviour {
 
         if(!gamestarted){
             StartScreen();
-            Debug.Log("game not started");
         }
         else{
             if (redIsSet)
             {
                 CollectWiimoteData(wiimoteRed);
 
-                if (!wiimoteRed.Button.b)
+                if (!wiimoteRed.Button.b && redTime > 0)
                 {
                     redTime -= Time.deltaTime;
                     UpdateCrosshairPosition(wiimoteRed, redCrosshair);
                     if (redTime <= 0)
                     {
-                        roundOver();
-                        reset();
+                        roundOver("Too late! Times up");
                     }
                 }
 
                 /*check if b button pressed and check accel data*/
                 else if(ammoCount > 0)
                 {
-                    Debug.Log("Red B button pressed");
+                    // Debug.Log("Red B button pressed");
                     Vector3 accelData = GetAccelVector(wiimoteRed);
-                    Debug.Log(accelData.ToString());
+                    // Debug.Log(accelData.ToString());
                     if ((accelData.x < -3.0f || accelData.y < -3.0f) && !redfired)
                     {
                         targetVector.y = redCrosshair.anchorMin.y - 0.5f;
@@ -110,7 +109,7 @@ public class WiimoteBehaviourRed : MonoBehaviour {
             TimeSpan tcountdown = TimeSpan.FromSeconds(countdown);
             string countdownFormated = string.Format("{0:D2}", tcountdown.Seconds);
             redStartText.text = countdownFormated;
-            Debug.Log("countdown reducing");
+            // Debug.Log("countdown reducing");
             countdown -= Time.deltaTime;
         }          
 
@@ -164,8 +163,10 @@ public class WiimoteBehaviourRed : MonoBehaviour {
         return new Vector3(accel_x, accel_y, accel_z);
     }
 
-    private void roundOver()
+    public void roundOver(String text)
     {
+        redResultText.text = text;
+        redTime = 0;
         redTimeOverPanel.gameObject.SetActive(true);
     }
 

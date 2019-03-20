@@ -21,6 +21,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
     public Transform blueTimeOverPanel;
     public Transform BlueStartPanel;
     public Text blueStartText;
+    public Text blueResultText;
 
     public GameObject blueProjectile;
     private Vector3 targetVector;
@@ -53,30 +54,28 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
 
         if(!gamestarted){
             StartScreen();
-            Debug.Log("game not started");
         }
         else{
             if (blueIsSet)
             {
                 CollectWiimoteData(wiimoteBlue);
 
-                if (!wiimoteBlue.Button.b)
+                if (!wiimoteBlue.Button.b && blueTime > 0)
                 {
                     blueTime -= Time.deltaTime;
                     UpdateCrosshairPosition(wiimoteBlue, blueCrosshair);
                     if (blueTime <= 0)
                     {
-                        roundOver();
-                        reset();
+                        roundOver("Too late! Times up");
                     }
                 }
 
                 /*check if b button pressed and check accel data*/
                 else if(ammoCount > 0)
                 {
-                    Debug.Log("Blue B button pressed");
+                    // Debug.Log("Blue B button pressed");
                     Vector3 accelData = GetAccelVector(wiimoteBlue);
-                    Debug.Log(accelData.ToString());
+                    // Debug.Log(accelData.ToString());
                     if ((accelData.x < -3.0f || accelData.y < -3.0f) && !bluefired)
                     {
                         targetVector.y = blueCrosshair.anchorMin.y - 0.5f;
@@ -110,7 +109,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
             TimeSpan tcountdown = TimeSpan.FromSeconds(countdown);
             string countdownFormated = string.Format("{0:D2}", tcountdown.Seconds);
             blueStartText.text = countdownFormated;
-            Debug.Log("countdown reducing");
+            // Debug.Log("countdown reducing");
             countdown -= Time.deltaTime;
         }          
 
@@ -164,8 +163,10 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
         return new Vector3(accel_x, accel_y, accel_z);
     }
 
-    private void roundOver()
+    public void roundOver(String text)
     {
+        blueResultText.text = text;
+        blueTime = 0;
         blueTimeOverPanel.gameObject.SetActive(true);
     }
 

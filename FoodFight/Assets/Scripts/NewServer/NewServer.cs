@@ -21,6 +21,7 @@ public class NewServer : MonoBehaviour {
   public Image gameOverBackground;
 
   private NewGameTimer timer;
+  private WiimoteBehaviourBlue wiiBlue;
 
   private readonly Color redTeamColour = new Color(1.0f, 0.3f, 0.3f, 1.0f), blueTeamColour = new Color(0.3f, 0.5f, 1.0f, 1.0f);
   private Team redTeam, blueTeam;
@@ -31,7 +32,8 @@ public class NewServer : MonoBehaviour {
     initialiseNetwork();
 
     timer = GameObject.Find("GameTimer").GetComponent<NewGameTimer>();
-    // test();
+    wiiBlue = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourBlue>();
+    wiiBlue.reset();
   }
 
   void Update() {
