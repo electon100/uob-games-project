@@ -326,7 +326,7 @@ public class NewServer : MonoBehaviour {
         Ingredient ingredientToScore = new Ingredient();
         ingredientToScore = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToScore.GetType());
         Debug.Log("Ingredient to score: " + ingredientToScore.Name);
-        relevantTeam.Score = ScoreIngredient(ingredientToScore);
+        relevantTeam.Score += ScoreIngredient(ingredientToScore);
         // SendMyMessage(messageType, "Success", connectionId);
       } else {
         Debug.Log("Invalid messageContent");
