@@ -575,7 +575,7 @@
       "choppable" : false,
       "cookable" : true,
       "orderable" : false,
-      "correctFlips" : 0,
+      "correctFlips" : 7,
       "maxFlips" : 0,
       "correctChops" : 0,
       "score" : 60

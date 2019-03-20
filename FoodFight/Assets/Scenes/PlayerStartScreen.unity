@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1873204604}
+      - m_Target: {fileID: 1079577082}
         m_MethodName: goBack
         m_Mode: 1
         m_Arguments:
@@ -761,7 +761,7 @@ GameObject:
   - component: {fileID: 726056367}
   - component: {fileID: 726056366}
   m_Layer: 5
-  m_Name: DifferentIPButton
+  m_Name: UseDifferentIPButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -827,7 +827,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1873204604}
+      - m_Target: {fileID: 1079577082}
         m_MethodName: useDifferentIP
         m_Mode: 1
         m_Arguments:
@@ -1116,7 +1116,13 @@ Prefab:
       propertyPath: defaultIP
       value: 
       objectReference: {fileID: 659997826}
-    m_RemovedComponents: []
+    - target: {fileID: 114053177565313616, guid: 714a7fc035a2b9941bc52e4abf34c4b5,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 114053177565313616, guid: 714a7fc035a2b9941bc52e4abf34c4b5, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 714a7fc035a2b9941bc52e4abf34c4b5, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &1079577081 stripped
@@ -1132,12 +1138,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 1079577081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2ffe48b4e37b9642a41cd892cd96752, type: 3}
+  m_Script: {fileID: 11500000, guid: cde075426bb66a54d81bb0c249ddbc3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainText: {fileID: 0}
-  mainPanel: {fileID: 56282966}
-  tag_output_text: {fileID: 0}
+  port: 8000
+  hostId: 0
+  connectionId: 0
+  reliableChannel: 0
+  isConnected: 0
+  startGame: 0
+  team: 
+  ingredientsInStation: []
+  buttonPrefab: {fileID: 1411581202713964, guid: 5f1ce651aa958e84db74687760fa28a0,
+    type: 2}
+  startPanel: {fileID: 56282966}
+  warningText: {fileID: 599238282}
+  connectButton: {fileID: 1847535569}
+  diffIPButton: {fileID: 726056364}
+  inputField: {fileID: 2064015140}
+  changeIPButton: {fileID: 2075162575}
+  goBackButton: {fileID: 190765412}
+  defaultIP: {fileID: 659997826}
+  changeIPText: {fileID: 2064015141}
+  gameNotRunningText: {fileID: 0}
 --- !u!1 &1100489092
 GameObject:
   m_ObjectHideFlags: 0
@@ -1551,7 +1574,7 @@ Prefab:
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1873204604}
+      objectReference: {fileID: 1079577082}
     - target: {fileID: 224841404960797538, guid: 5f1ce651aa958e84db74687760fa28a0,
         type: 2}
       propertyPath: m_LocalScale.x
@@ -1590,6 +1613,11 @@ Prefab:
       propertyPath: m_Color.b
       value: 0.5058824
       objectReference: {fileID: 0}
+    - target: {fileID: 114076852929120864, guid: 5f1ce651aa958e84db74687760fa28a0,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Connect
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f1ce651aa958e84db74687760fa28a0, type: 2}
   m_IsPrefabAsset: 0
@@ -1598,12 +1626,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1411581202713964, guid: 5f1ce651aa958e84db74687760fa28a0,
     type: 2}
   m_PrefabInternal: {fileID: 1448481833}
---- !u!114 &1873204604 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114053177565313616, guid: 714a7fc035a2b9941bc52e4abf34c4b5,
-    type: 2}
-  m_PrefabInternal: {fileID: 1079577080}
-  m_Script: {fileID: 11500000, guid: 13c5bf6041b07594aa6ac0fc7267c962, type: 3}
 --- !u!1 &1966126250
 GameObject:
   m_ObjectHideFlags: 0
@@ -1790,9 +1812,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2ffe48b4e37b9642a41cd892cd96752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainText: {fileID: 0}
-  mainPanel: {fileID: 0}
-  tag_output_text: {fileID: 0}
 --- !u!222 &2064015144
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1899,7 +1918,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1873204604}
+      - m_Target: {fileID: 1079577082}
         m_MethodName: changeIP
         m_Mode: 1
         m_Arguments:

@@ -196,7 +196,7 @@ public class Chopping : MonoBehaviour
             source.PlayOneShot(successSound);
             defaultCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(true);
-
+            
             Player.currentIngred = FoodData.Instance.TryAdvanceIngredient(Player.currentIngred);
         }
         /* Checks if player has start chopping and istructs them to do so if not */
@@ -233,7 +233,7 @@ public class Chopping : MonoBehaviour
     public void goBack()
     {
         /* Notify server that player has left the station */
-		player.notifyAboutStationLeft("2");
+		player.notifyAboutStationLeft();
         SceneManager.LoadScene("PlayerMainScreen");
     }
 

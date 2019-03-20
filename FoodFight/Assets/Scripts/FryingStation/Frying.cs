@@ -7,8 +7,6 @@ using System.Text;
 
 public class Frying : MonoBehaviour {
 
-	private readonly string stationID = "1";
-
 	public Button goBackBtn, putBtn, pickBtn, clearBtn, combineBtn;
 	public Text test_text;
 	public Material successMaterial;
@@ -207,7 +205,7 @@ public class Frying : MonoBehaviour {
 		clearPan();
 		test_text.text = "Add ingredient to start";
 		background.material = neutralMaterial;
-		player.clearIngredientsInStation(stationID);
+		player.clearIngredientsInStation();
 	}
 
 	public void pickUpIngredient() {
@@ -264,7 +262,7 @@ public class Frying : MonoBehaviour {
 	public void goBack() {
 		/* TODO: Need to notify server of local updates to ingredients in pan before leaving */
 		/* Notify server that player has left the station */
-		player.notifyAboutStationLeft(stationID);
+		player.notifyAboutStationLeft();
 		SceneManager.LoadScene("PlayerMainScreen");
 	}
 }
