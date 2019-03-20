@@ -25,6 +25,7 @@ public class NewServer : MonoBehaviour {
   private WiimoteBehaviourRed wiiRed;
 
   private readonly Color redTeamColour = new Color(1.0f, 0.3f, 0.3f, 1.0f), blueTeamColour = new Color(0.3f, 0.5f, 1.0f, 1.0f);
+  private readonly float disableStationDuration = 60.0f; /* 60 seconds */
   private Team redTeam, blueTeam;
   private GameState gameState = GameState.ConfigureGame;
 
@@ -392,7 +393,7 @@ public class NewServer : MonoBehaviour {
 
       if (relevantTeam != null) {
         Station stationToDisable = relevantTeam.Kitchen.getStationForId(station);
-        stationToDisable.DisabledTimer = 60.0f; /* Disable for 60 seconds */
+        stationToDisable.DisabledTimer = disableStationDuration;
         Debug.Log("Station has been disabled: " + stationToDisable);
       } else {
         Debug.Log("Invalid team name [" + team + "], could not process station hit.");
