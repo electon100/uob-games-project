@@ -6,11 +6,22 @@ public class Station {
 
   public string Id { get; set; }
 
+	public float DisabledTimer { get; set; }
+
   public List<Ingredient> Ingredients { get; }
 
 	public Station(string id) {
 		Id = id;
 		Ingredients = new List<Ingredient>();
+		resetTimer();
+	}
+
+	public void resetTimer() {
+		DisabledTimer = 0.0f;
+	}
+
+	public bool isDisabled() {
+		return DisabledTimer > 0;
 	}
 
 	public void addIngredientToStation(Ingredient ingredient) {
