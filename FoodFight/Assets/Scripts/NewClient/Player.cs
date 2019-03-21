@@ -19,8 +19,8 @@ public class Player : MonoBehaviour {
   /* Current station:
   -1 - Main Screen
   0  - Cupboard
-  1  - Frying
-  2  - Chopping
+  1  - Chopping
+  2  - Frying
   3  - Plating
   4  - Fighting */
   public static string currentStation = "-1";

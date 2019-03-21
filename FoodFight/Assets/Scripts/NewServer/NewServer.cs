@@ -388,13 +388,13 @@ public class NewServer : MonoBehaviour {
     return FoodData.Instance.getScoreForIngredient(ingredient);
   }
 
-  /* TODO! */
   public void OnStationHit(string team, string station) {
     if (Kitchen.isValidStation(station)) {
       Team relevantTeam = null;
 
-      if (team.Equals(redTeam.Name)) relevantTeam = redTeam;
-      else if (team.Equals(blueTeam.Name)) relevantTeam = blueTeam;
+      /* Values switched around as you want to disable the opposing kitchen, not your own */
+      if (team.Equals(redTeam.Name)) relevantTeam = blueTeam;
+      else if (team.Equals(blueTeam.Name)) relevantTeam = redTeam;
 
       if (relevantTeam != null) {
         Station stationToDisable = relevantTeam.Kitchen.getStationForId(station);
@@ -444,6 +444,92 @@ public class NewServer : MonoBehaviour {
   /* Splits a message with the provided delimiter */
   private string[] decodeMessage(string message, char delimiter) {
     return message.Split(delimiter);
+  }
+
+  /* Sets the active canvas based on the game state */
+  public void SetCanvasForGameState() {
+    pickPlayersCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigureGame));
+    startGameCanvas.gameObject.SetActive(gameState.Equals(GameState.AwaitingPlayers));
+    gameOverCanvas.gameObject.SetActive(gameState.Equals(GameState.EndGame));
+    mainGameCanvas.gameObject.SetActive(gameState.Equals(GameState.GameRunning) || gameState.Equals(GameState.Countdown));
+  }
+
+  public void OnTwoPlayers() {
+    minimumPlayers = 1;
+    SetGameState(GameState.AwaitingPlayers);
+  }
+
+  public void OnThreePlayers() {
+    minimumPlayers = 2;
+    SetGameState(GameState.AwaitingPlayers);
+  }
+
+  public void OnFourPlayers() {
+    minimumPlayers = 3;
+    SetGameState(GameState.AwaitingPlayers);
+  }
+
+  /* Broadcasts start */
+  public void StartGame() {
+    if (testing || (minimumPlayers > 0 &&
+        redTeam.Players.Count >= minimumPlayers &&
+        blueTeam.Players.Count >= minimumPlayers)) {
+      BroadcastMessage("start", "");
+      SetGameState(GameState.Countdown);
+      timer.StartTimer();
+    }
+  }
+
+  /* Called by GameTimer.cs */
+  public void OnGameOver() {
+    SetGameState(GameState.EndGame);
+    redEndGameText.text = "Red score: " + redTeam.Score;
+    blueEndGameText.text = "Blue score: " + blueTeam.Score;
+    Team winningTeam = getWinningTeam();
+    string broadcastMessage = "";
+    if (winningTeam != null) {
+      gameOverBackground.color = winningTeam.Colour;
+      broadcastMessage += winningTeam.Name + "$";
+    } else {
+      /* Draw! */
+      gameOverBackground.color = Color.white;
+      broadcastMessage += "draw$";
+    }
+    broadcastMessage += redTeam.Score + "$" + blueTeam.Score;
+    BroadcastMessage("endgame", broadcastMessage);
+  }
+
+  /* Called by GameTimer.cs */
+  public void OnGameStart() {
+    SetGameState(GameState.GameRunning);
+  }
+
+  public void RestartGame() {
+    initialiseTeams();
+    timer.ResetTimer();
+    SetGameState(GameState.ConfigureGame);
+  }
+
+  /* Returns the winning team, or null if draw */
+  private Team getWinningTeam() {
+    if (redTeam.Score > blueTeam.Score) return redTeam;
+    if (blueTeam.Score > redTeam.Score) return blueTeam;
+    return null;
+  }
+
+  private void SetGameState(GameState state) {
+    gameState = state;
+  }
+
+  /* Sends a message to all connected players */
+  public void BroadcastMessage(string messageType, string textInput) {
+    Team[] allTeams = new Team[] {redTeam, blueTeam};
+    foreach (Team team in allTeams) {
+      foreach (ConnectedPlayer player in team.Players) {
+        Debug.Log("Broadcasting [" + messageType + ", " + textInput + "]");
+        SendMyMessage(messageType, textInput, player.ConnectionId);
+      }
+    }
   }
 
   /* Simple assertion tests for teams */
@@ -539,91 +625,5 @@ public class NewServer : MonoBehaviour {
     /* Reset teams */
     initialiseTeams();
     gameState = GameState.ConfigureGame;
-  }
-
-  /* Sets the active canvas based on the game state */
-  public void SetCanvasForGameState() {
-    pickPlayersCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigureGame));
-    startGameCanvas.gameObject.SetActive(gameState.Equals(GameState.AwaitingPlayers));
-    gameOverCanvas.gameObject.SetActive(gameState.Equals(GameState.EndGame));
-    mainGameCanvas.gameObject.SetActive(gameState.Equals(GameState.GameRunning) || gameState.Equals(GameState.Countdown));
-  }
-
-  public void OnTwoPlayers() {
-    minimumPlayers = 1;
-    SetGameState(GameState.AwaitingPlayers);
-  }
-
-  public void OnThreePlayers() {
-    minimumPlayers = 2;
-    SetGameState(GameState.AwaitingPlayers);
-  }
-
-  public void OnFourPlayers() {
-    minimumPlayers = 3;
-    SetGameState(GameState.AwaitingPlayers);
-  }
-
-  /* Broadcasts start */
-  public void StartGame() {
-    if (testing || (minimumPlayers > 0 &&
-        redTeam.Players.Count >= minimumPlayers &&
-        blueTeam.Players.Count >= minimumPlayers)) {
-      BroadcastMessage("start", "");
-      SetGameState(GameState.Countdown);
-      timer.StartTimer();
-    }
-  }
-
-  /* Called by GameTimer.cs */
-  public void OnGameOver() {
-    SetGameState(GameState.EndGame);
-    redEndGameText.text = "Red score: " + redTeam.Score;
-    blueEndGameText.text = "Blue score: " + blueTeam.Score;
-    Team winningTeam = getWinningTeam();
-    string broadcastMessage = "";
-    if (winningTeam != null) {
-      gameOverBackground.color = winningTeam.Colour;
-      broadcastMessage += winningTeam.Name + "$";
-    } else {
-      /* Draw! */
-      gameOverBackground.color = Color.white;
-      broadcastMessage += "draw$";
-    }
-    broadcastMessage += redTeam.Score + "$" + blueTeam.Score;
-    BroadcastMessage("endgame", broadcastMessage);
-  }
-
-  /* Called by GameTimer.cs */
-  public void OnGameStart() {
-    SetGameState(GameState.GameRunning);
-  }
-
-  public void RestartGame() {
-    initialiseTeams();
-    timer.ResetTimer();
-    SetGameState(GameState.ConfigureGame);
-  }
-
-  /* Returns the winning team, or null if draw */
-  private Team getWinningTeam() {
-    if (redTeam.Score > blueTeam.Score) return redTeam;
-    if (blueTeam.Score > redTeam.Score) return blueTeam;
-    return null;
-  }
-
-  private void SetGameState(GameState state) {
-    gameState = state;
-  }
-
-  /* Sends a message to all connected players */
-  public void BroadcastMessage(string messageType, string textInput) {
-    Team[] allTeams = new Team[] {redTeam, blueTeam};
-    foreach (Team team in allTeams) {
-      foreach (ConnectedPlayer player in team.Players) {
-        Debug.Log("Broadcasting [" + messageType + ", " + textInput + "]");
-        SendMyMessage(messageType, textInput, player.ConnectionId);
-      }
-    }
   }
 }

@@ -327,16 +327,16 @@ public class Client : MonoBehaviour {
 					SceneManager.LoadScene("CupboardStation");
 				}
 				break;
-			case "1": // Frying Minigame
-				if (!currentScene.Equals("FryingStation")) {
-					Player.ingredientsFromStation = ingredientsInStation;
-					SceneManager.LoadScene("FryingStation");
-				}
-				break;
-			case "2": // Chopping Minigame
+			case "1": // Chopping Minigame
 				if (!currentScene.Equals("ChoppingStation")) {
 					Player.ingredientsFromStation = ingredientsInStation;
 					SceneManager.LoadScene("ChoppingStation");
+				}
+				break;
+			case "2": // Frying Minigame
+				if (!currentScene.Equals("FryingStation")) {
+					Player.ingredientsFromStation = ingredientsInStation;
+					SceneManager.LoadScene("FryingStation");
 				}
 				break;
 			case "3": // Plating Minigame
