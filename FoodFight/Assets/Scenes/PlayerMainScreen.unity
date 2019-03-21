@@ -417,7 +417,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainText: {fileID: 1035238257}
   mainPanel: {fileID: 0}
-  errorText: {fileID: 631165566}
   tag_output_text: {fileID: 0}
 --- !u!114 &580630326
 MonoBehaviour:
