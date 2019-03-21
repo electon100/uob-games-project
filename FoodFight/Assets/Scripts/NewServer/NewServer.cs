@@ -549,9 +549,9 @@ public class NewServer : MonoBehaviour {
 
   /* Broadcasts start */
   public void StartGame() {
-    if (!testing && minimumPlayers > 0 &&
+    if (testing || (minimumPlayers > 0 &&
         redTeam.Players.Count >= minimumPlayers &&
-        blueTeam.Players.Count >= minimumPlayers) {
+        blueTeam.Players.Count >= minimumPlayers)) {
       BroadcastMessage("start", "");
       SetGameState(GameState.Countdown);
       timer.StartTimer();
