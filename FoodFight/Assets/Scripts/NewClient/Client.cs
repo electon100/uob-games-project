@@ -255,11 +255,11 @@ public class Client : MonoBehaviour {
 				ingredientsInStation = new List<Ingredient>();
 			} else if (stationId.Equals("Station disabled")) {
 				Debug.Log("Station is disabled.");
-				GameObject.Find("Player").GetComponent<Player>().displayDisabledStation();
+				Player.displayDisabledStation();
 				Player.resetCurrentStation();
 			} else if (stationId.Equals("Station occupied")) {
 				Debug.Log("Station is already occupied.");
-				GameObject.Find("Player").GetComponent<Player>().displayOccupiedStation();
+				Player.displayOccupiedStation();
 				Player.resetCurrentStation();
 			} else if (stationId.Equals("Already at station")) {
 				Debug.Log("Already at station.");
