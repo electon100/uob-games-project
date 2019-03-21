@@ -55,6 +55,7 @@ public class Player : MonoBehaviour {
     /* Check for any NFC scans, forwarding to checkStation if present */
     string lastTag = nfcHandler.getScannedTag();
     if (lastTag != "-1" && currentStation == "-1") {
+      Handheld.Vibrate();
       checkStation(lastTag);
     }
   }

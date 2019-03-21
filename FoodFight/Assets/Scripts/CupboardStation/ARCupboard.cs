@@ -189,6 +189,7 @@ public class ARCupboard : MonoBehaviour
     /* Notify server that player has left the station */
     public void goBack()
     {
+        Handheld.Vibrate();
 		player = GameObject.Find("Player").GetComponent<Player>();
 		player.notifyAboutStationLeft();
         SceneManager.LoadScene("PlayerMainScreen");

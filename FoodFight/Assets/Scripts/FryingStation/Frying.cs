@@ -262,6 +262,7 @@ public class Frying : MonoBehaviour {
 	public void goBack() {
 		/* TODO: Need to notify server of local updates to ingredients in pan before leaving */
 		/* Notify server that player has left the station */
+		Handheld.Vibrate();
 		player.notifyAboutStationLeft();
 		SceneManager.LoadScene("PlayerMainScreen");
 	}
