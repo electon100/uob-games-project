@@ -44,4 +44,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PlayerGameOverScreen.unity
     guid: 99d682c6c2bf749748100a5d770227f8
+  - enabled: 1
+    path: Assets/Scenes/FightingStation/FightingStation.unity
+    guid: 9789cbdf6e9500f499ac68eb4970b22d
   m_configObjects: {}
