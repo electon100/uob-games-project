@@ -11,6 +11,7 @@ public class Disconnect : MonoBehaviour {
 	private bool connected;
 
 	void Start () {
+		Screen.orientation = ScreenOrientation.Portrait;
 		networkClient = GameObject.Find("Client");
     	network = networkClient.GetComponent<Client>();
 		Screen.orientation = ScreenOrientation.Portrait;
