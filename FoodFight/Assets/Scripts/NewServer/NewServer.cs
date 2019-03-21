@@ -25,8 +25,11 @@ public class NewServer : MonoBehaviour {
   private WiimoteBehaviourRed wiiRed;
 
   private readonly Color redTeamColour = new Color(1.0f, 0.3f, 0.3f, 1.0f), blueTeamColour = new Color(0.3f, 0.5f, 1.0f, 1.0f);
+
   private readonly float disableStationDuration = 60.0f; /* 60 seconds */
+  private readonly float negativeScoreMultiplier = 0.2f;
   private readonly bool testing = true; /* Whether we are in test mode */
+
   private Team redTeam, blueTeam;
   private GameState gameState = GameState.ConfigureGame;
 
@@ -55,6 +58,7 @@ public class NewServer : MonoBehaviour {
         break;
       case GameState.GameRunning:
         listenForData();
+        manageOrders();
         redScoreText.text = "Red score: " + redTeam.Score;
         blueScoreText.text = "Blue score: " + blueTeam.Score;
         break;
@@ -328,7 +332,7 @@ public class NewServer : MonoBehaviour {
         Ingredient ingredientToScore = new Ingredient();
         ingredientToScore = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToScore.GetType());
         Debug.Log("Ingredient to score: " + ingredientToScore.Name);
-        relevantTeam.Score += ScoreIngredient(ingredientToScore);
+        relevantTeam.scoreRecipe(ingredientToScore);
       } else {
         Debug.Log("Invalid messageContent");
         SendMyMessage(messageType, "Fail", connectionId);
@@ -402,6 +406,19 @@ public class NewServer : MonoBehaviour {
     } else {
       Debug.Log("Invalid station id [" + station + "], could not process station hit.");
     }
+  }
+
+  public void manageOrders() {
+    // Check if any orders have expired and remove some points
+    redTeam.Score -= (int) (redTeam.checkExpiredOrders() * negativeScoreMultiplier);
+    blueTeam.Score -= (int) (blueTeam.checkExpiredOrders() * negativeScoreMultiplier);
+
+    while (redTeam.Orders.Count < 3) redTeam.addOrder(mainGameCanvas);
+    while (blueTeam.Orders.Count < 3) blueTeam.addOrder(mainGameCanvas);
+
+    // Update the position of the orders
+    redTeam.updateOrders();
+    blueTeam.updateOrders();
   }
 
   private void TickStations() {
