@@ -7,7 +7,7 @@ using UnityEngine;
 public sealed class NFCHandler {
 
 	/* If you want a tag to be recognised (and not default to "-1", add the value to this array) */
-	private readonly string[] validValues = {"0", "1", "2", "3", "8", "9"};
+	private readonly string[] validValues = {"0", "1", "2", "3", "4", "8", "9"};
 
 	private AndroidJavaObject mActivity;
 	private AndroidJavaObject mIntent;

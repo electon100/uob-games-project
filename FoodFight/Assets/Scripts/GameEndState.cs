@@ -4,23 +4,37 @@ using UnityEngine;
 
 public class GameEndState {
 
-	private string winningTeam;
+	public enum EndState {RED_WIN, BLUE_WIN, DRAW};
+
+	private EndState winningTeam;
 	private int redScore;
 	private int blueScore;
 
-	public GameEndState(string winningTeam, int redScore, int blueScore) {
+	public GameEndState(EndState winningTeam, int redScore, int blueScore) {
 		this.winningTeam = winningTeam;
 		this.redScore = redScore;
 		this.blueScore = blueScore;
 	}
 
+	public GameEndState(string winningTeam, int redScore, int blueScore) {
+		if (winningTeam.Equals("red")) {
+			this.winningTeam = EndState.RED_WIN;
+		} else if (winningTeam.Equals("blue")) {
+			this.winningTeam = EndState.BLUE_WIN;
+		} else {
+			this.winningTeam = EndState.DRAW;
+		}
+		this.redScore = redScore;
+		this.blueScore = blueScore;
+	}
+
 	public GameEndState() {
-		this.winningTeam = "uh oh";
+		this.winningTeam = EndState.DRAW;
 		this.redScore = 0;
 		this.blueScore = 0;
 	}
 
-	public string getWinningTeam() {
+	public EndState getWinningTeam() {
 		return this.winningTeam;
 	}
 
@@ -30,5 +44,11 @@ public class GameEndState {
 
 	public int getBlueScore() {
 		return this.blueScore;
+	}
+
+	public string winningTeamStr() {
+		if (winningTeam == EndState.RED_WIN) return "red";
+		if (winningTeam == EndState.BLUE_WIN) return "blue";
+		return "draw";
 	}
 }

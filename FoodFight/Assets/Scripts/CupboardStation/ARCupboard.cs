@@ -9,7 +9,8 @@ public class ARCupboard : MonoBehaviour
 {
     public static Ingredient ingredient;
     public Text foodName;
-    public GameObject imageTarget;
+    public GameObject imageTargetCupboard;
+    public GameObject imageTargetFridge;
     public GameObject goBackButton;
     public GameObject goBackButtonBig;
     public GameObject backArrow;
@@ -17,14 +18,12 @@ public class ARCupboard : MonoBehaviour
     private RaycastHit hit;
     private Ray ray;
 
-    // Use this for initialization
     void Start()
     {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
+        Screen.orientation = ScreenOrientation.Portrait;
         DontDestroyOnLoad(GameObject.Find("Player"));
     }
 
-    // Update is called once per frame
     void Update()
     {
         bool isDesktop = Input.GetMouseButtonDown(0);
@@ -41,6 +40,7 @@ public class ARCupboard : MonoBehaviour
     }
 
     public void checkItemPressed(string itemName) {
+        /* Assigns the variable of the item picked */
         switch(itemName) {
             case "Potatoes":
                 onPotato();
@@ -84,13 +84,15 @@ public class ARCupboard : MonoBehaviour
             default:
                 break;
         }
-
+        /* Sets the player's current ingredient to that item */
+        Player.currentIngred = ingredient;
     }
 
     public void toggleButtons() {
         goBackButtonBig.SetActive(true);
         backArrow.SetActive(true);
-        imageTarget.SetActive(false);
+        imageTargetCupboard.SetActive(false);
+        imageTargetFridge.SetActive(false);
     }
 
     public void onPotato()
@@ -184,27 +186,21 @@ public class ARCupboard : MonoBehaviour
         foodName.text = "You picked some rice!";
     }
 
+    /* Notify server that player has left the station */
     public void goBack()
     {
-        Player.currentIngred = ingredient;
-        /* Notify server that player has left the station */
 		player = GameObject.Find("Player").GetComponent<Player>();
-		player.notifyAboutStationLeft("0");
+		player.notifyAboutStationLeft();
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
+    /* Reset canvas if player has picked something by mistake. */
     public void pickAgain() {
         goBackButtonBig.SetActive(false);
         backArrow.SetActive(false);
         foodName.text = "";
-        imageTarget.SetActive(true);
-    }
-
-    IEnumerator ShowMessage (string message, float delay) {
-        foodName.text = message;
-        foodName.enabled = true;
-        yield return new WaitForSeconds(delay);
-        foodName.enabled = false;
+        imageTargetCupboard.SetActive(true);
+        imageTargetFridge.SetActive(true);
     }
 
 }
