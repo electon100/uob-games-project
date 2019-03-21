@@ -7,7 +7,7 @@ using System.Text;
 
 public class PlateBehaviour : MonoBehaviour {
 
-  public Button serveBtn, putBtn, clearBtn, goBackBtn;
+  public Button serveBtn, putBtn, pickBtn, clearBtn, goBackBtn;
   public Player player;
 
   /* Text representation of ingredients on Screen */
@@ -120,6 +120,20 @@ public class PlateBehaviour : MonoBehaviour {
     }
   }
 
+	public void pickUpIngredient() {
+		if (plateContents.Count == 1) {
+			/* Set the players current ingredient to the pan contents */
+			foreach (Ingredient ingredient in plateContents) {
+				Player.currentIngred = ingredient;
+			}
+
+			/* Clear the station */
+			clearStation();
+		} else {
+			/* What to do if there are more than (or fewer than) 1 ingredients in the plate*/
+		}
+	}
+
   public void goBack() {
     /* Notify server that player has left the station */
     player.notifyAboutStationLeft();
@@ -128,6 +142,7 @@ public class PlateBehaviour : MonoBehaviour {
 
   private void updateButtonStates() {
 		setButtonInteractable(putBtn, Player.isHoldingIngredient() && plateContents.Count < maxPlateContents);
+    setButtonInteractable(pickBtn, plateContents.Count == 1);
 		setButtonInteractable(clearBtn, plateContents.Count > 0);
 		setButtonInteractable(serveBtn, plateContents.Count == 1);
 	}

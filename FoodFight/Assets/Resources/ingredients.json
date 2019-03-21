@@ -103,7 +103,7 @@
     {
       "name" : "potato",
       "choppable" : true,
-      "cookable" : true,
+      "cookable" : false,
       "orderable" : false,
       "correctFlips" : 30,
       "maxFlips" : 40,
