@@ -16,6 +16,7 @@ public class PlayerGameOver : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Screen.orientation = ScreenOrientation.Portrait;
 		Background = GameObject.Find("Background").GetComponent<GameObject>();
 
 		DontDestroyOnLoad(GameObject.Find("Client"));
