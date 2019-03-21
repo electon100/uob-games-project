@@ -60,10 +60,41 @@ public class Team {
     return isStationOccupied(station.Id);
   }
 
-  public bool addOrder() {
+  public bool addOrder(Transform mainGameCanvas) {
     string recipeName = FoodData.Instance.getRandomRecipeName();
     Ingredient recipe = new Ingredient(recipeName, recipeName + "Prefab");
-    Orders.add(recipe, new GameObject(recipeName + Orders.Count() + "Object"), 180, )
+    string id = recipeName + Orders.Count + Colour + "Object";
+
+    Orders.Add(new Order(id, recipe, new GameObject(id), 240, mainGameCanvas));
+
+    return true;
+  }
+
+  public void updateOrders() {
+    for (int i = 0; i < Orders.Count; i++) Orders[i].updateCanvas(new Vector3(((Name.Equals("red")) ? -1 : 1 )*175, -(i*120), 0));
+  }
+
+  public int checkExpiredOrders() {
+    int negativeScore = 0;
+    for (int i = 0; i < Orders.Count; i++) {
+      if (Orders[i].timerExpired()) {
+        negativeScore += FoodData.Instance.getScoreForIngredient(Orders[i].Recipe);
+        UnityEngine.Object.Destroy(Orders[i].ParentGameObject);
+        Orders.Remove(Orders[i]);
+      }
+    }
+    return negativeScore;
+  }
+
+  public void scoreRecipe(Ingredient ingredient) {
+    for (int i = 0; i < Orders.Count; i++) {
+      if (ingredient.Name.Equals(Orders[i].Recipe.Name)) {
+        Score += FoodData.Instance.getScoreForIngredient(ingredient);
+        UnityEngine.Object.Destroy(Orders[i].ParentGameObject);
+        Orders.Remove(Orders[i]);
+        break;
+      }
+    }
   }
 
   public override string ToString() {

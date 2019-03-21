@@ -6,12 +6,13 @@ using UnityEngine.UI;
 
 public class Order {
 
+	public string ID { get; }
 	public Ingredient Recipe { get; set; }
 	public GameObject ParentGameObject { get; set; }
 	public float Timer { get; set; }
 
 	private Canvas canvas;
-	private GameObject orderPanel;
+	private Transform orderPanel;
 
 	private GameObject recipeNameTextObject;
 	private Text recipeNameText;
@@ -24,7 +25,8 @@ public class Order {
 	private GameObject recipePrefabObject;
 	private RectTransform recipePrefabTransform;
 
-	public Order(Ingredient Recipe, GameObject ParentGameObject, float Timer, GameObject orderPanel) {
+	public Order(string ID, Ingredient Recipe, GameObject ParentGameObject, float Timer, Transform orderPanel) {
+		this.ID = ID;
 		this.Recipe = Recipe;
 		this.ParentGameObject = ParentGameObject;
 		this.Timer = Timer;
@@ -90,14 +92,20 @@ public class Order {
 		recipeNameTransform.localPosition = pos + new Vector3(0,-50,0);
 		recipePrefabTransform.localPosition = pos + new Vector3(-100,-25,-200);
 
-		if (Timer >= 0) {
+		if (!timerExpired()) {
 			Timer -= Time.deltaTime;
 			displayTime();
+		} else {
+			recipeNameText.color = Color.yellow;
 		}
 	}
 
 	private void displayTime() {
 		TimeSpan t = TimeSpan.FromSeconds(Timer);
 		timerText.text = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
+	}
+
+	public bool timerExpired() {
+		return Timer < 0;
 	}
 }

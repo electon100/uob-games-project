@@ -20,8 +20,8 @@ public class OrderManager : MonoBehaviour {
 	void Start () {
 		//manager = GameObject.Find("Manager").GetComponent<Manager>();
 
-		redOrders.Add(new Order(new Ingredient("chips", "chipsPrefab"), new GameObject(), 120, orderPanel));
-		blueOrders.Add(new Order(new Ingredient("chips", "chipsPrefab"), new GameObject(), 120, orderPanel));
+		//redOrders.Add(new Order(new Ingredient("chips", "chipsPrefab"), new GameObject(), 120, orderPanel));
+		//blueOrders.Add(new Order(new Ingredient("chips", "chipsPrefab"), new GameObject(), 120, orderPanel));
 	}
 
 	// Update is called once per frame
@@ -61,7 +61,7 @@ public class OrderManager : MonoBehaviour {
 
 	private void addOrder(ref List<Order> orders) {
 		string recipeName = FoodData.Instance.getRandomRecipeName();
-		orders.Add(new Order(new Ingredient(recipeName, recipeName + "Prefab"), new GameObject(recipeName + "ParentObject"), 120, orderPanel));
+		//orders.Add(new Order(new Ingredient(recipeName, recipeName + "Prefab"), new GameObject(recipeName + "ParentObject"), 120, orderPanel));
 	}
 
 	private void displayOrders() {
