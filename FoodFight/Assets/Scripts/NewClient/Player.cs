@@ -30,6 +30,7 @@ public class Player : MonoBehaviour {
 
   public Text mainText;
   public GameObject mainPanel;
+  public Text errorText;
 
   //NFC Stuff:
   public Text tag_output_text;
@@ -153,4 +154,12 @@ public class Player : MonoBehaviour {
       }
     }
   }
+
+  public void displayDisabledStation() {
+    errorText.text = "Oh no! This station has been disabled.";
+	}
+
+	public void displayOccupiedStation() {
+    errorText.text = "Oh no! This station is occupied.";
+	}
 }

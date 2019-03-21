@@ -6,11 +6,12 @@ using UnityEngine.UI;
 public class PickTeam : MonoBehaviour {
 	public GameObject networkClient;
 	private Client network;
+	public Text gameNotRunningText;
 
-	// Use this for initialization
 	void Start () {
+		Screen.orientation = ScreenOrientation.Portrait;
 		networkClient = GameObject.Find("Client");
-        network = networkClient.GetComponent<Client>();
+    network = networkClient.GetComponent<Client>();
 	}
 	
 	public void onClickRed() {
@@ -21,7 +22,11 @@ public class PickTeam : MonoBehaviour {
 		network.onClickBlue();
 	}
 
-	// Update is called once per frame
+	public void displayNotRunningText() {
+		gameNotRunningText.gameObject.SetActive(true);
+		gameNotRunningText.text = "Game is not running. Please try again.";
+	}
+	
 	void Update () {
 		
 	}
