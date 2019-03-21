@@ -26,6 +26,7 @@ public class NewServer : MonoBehaviour {
 
   private readonly Color redTeamColour = new Color(1.0f, 0.3f, 0.3f, 1.0f), blueTeamColour = new Color(0.3f, 0.5f, 1.0f, 1.0f);
   private readonly float disableStationDuration = 60.0f; /* 60 seconds */
+  private readonly bool testing = true; /* Whether we are in test mode */
   private Team redTeam, blueTeam;
   private GameState gameState = GameState.ConfigureGame;
 
@@ -548,14 +549,13 @@ public class NewServer : MonoBehaviour {
 
   /* Broadcasts start */
   public void StartGame() {
-    // Commented out for testing:
-    // if (minimumPlayers > 0 &&
-    //     redTeam.Players.Count >= minimumPlayers &&
-    //     blueTeam.Players.Count >= minimumPlayers) {
+    if (!testing && minimumPlayers > 0 &&
+        redTeam.Players.Count >= minimumPlayers &&
+        blueTeam.Players.Count >= minimumPlayers) {
       BroadcastMessage("start", "");
-      SetGameState(GameState.GameRunning);
+      SetGameState(GameState.Countdown);
       timer.StartTimer();
-    // }
+    }
   }
 
   /* Called by GameTimer.cs */
@@ -564,13 +564,22 @@ public class NewServer : MonoBehaviour {
     redEndGameText.text = "Red score: " + redTeam.Score;
     blueEndGameText.text = "Blue score: " + blueTeam.Score;
     Team winningTeam = getWinningTeam();
+    string broadcastMessage = "";
     if (winningTeam != null) {
       gameOverBackground.color = winningTeam.Colour;
+      broadcastMessage += winningTeam.Name + "$";
     } else {
       /* Draw! */
       gameOverBackground.color = Color.white;
+      broadcastMessage += "draw$";
     }
-    /* TODO: Broadcast end game to players */
+    broadcastMessage += redTeam.Score + "$" + blueTeam.Score;
+    BroadcastMessage("endgame", broadcastMessage);
+  }
+
+  /* Called by GameTimer.cs */
+  public void OnGameStart() {
+    SetGameState(GameState.GameRunning);
   }
 
   public void RestartGame() {
