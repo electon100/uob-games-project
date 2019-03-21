@@ -15,12 +15,15 @@ public class Team {
 
   public Kitchen Kitchen { get; }
 
+  public List<Order> Orders { get; set; }
+
 	public Team(string name, Color colour) {
 		Players = new List<ConnectedPlayer>();
     Name = name;
     Colour = colour;
     Score = 0;
     Kitchen = new Kitchen();
+    Orders = new List<Order>();
 	}
 
   public bool addPlayerToTeam(ConnectedPlayer player) {
@@ -55,6 +58,12 @@ public class Team {
 
   public bool isStationOccupied(Station station) {
     return isStationOccupied(station.Id);
+  }
+
+  public bool addOrder() {
+    string recipeName = FoodData.Instance.getRandomRecipeName();
+    Ingredient recipe = new Ingredient(recipeName, recipeName + "Prefab");
+    Orders.add(recipe, new GameObject(recipeName + Orders.Count() + "Object"), 180, )
   }
 
   public override string ToString() {
