@@ -70,6 +70,7 @@ public class Fighting : MonoBehaviour {
 
   public void goBack() {
     /* Notify server that player has left the station */
+    Handheld.Vibrate();
     player.notifyAboutStationLeft();
     SceneManager.LoadScene("PlayerMainScreen");
   }
