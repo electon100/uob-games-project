@@ -17,6 +17,7 @@ public class Lobby : MonoBehaviour {
     private Client network;
 
     void Start() {
+        Screen.orientation = ScreenOrientation.Portrait;
         numberOfPlayers = 0;
         startTime = Time.time;
         countDown = 0;

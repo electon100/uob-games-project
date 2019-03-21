@@ -38,7 +38,6 @@ public class Client : MonoBehaviour {
 	public GameObject goBackButton;
 	public GameObject defaultIP;
 	public InputField changeIPText;
-	public Text gameNotRunningText;
 
 	public void Start() {
     DontDestroyOnLoad(GameObject.Find("Client"));
@@ -256,9 +255,11 @@ public class Client : MonoBehaviour {
 				ingredientsInStation = new List<Ingredient>();
 			} else if (stationId.Equals("Station disabled")) {
 				Debug.Log("Station is disabled.");
+				GameObject.Find("Player").GetComponent<Player>().displayDisabledStation();
 				Player.resetCurrentStation();
 			} else if (stationId.Equals("Station occupied")) {
 				Debug.Log("Station is already occupied.");
+				GameObject.Find("Player").GetComponent<Player>().displayOccupiedStation();
 				Player.resetCurrentStation();
 			} else if (stationId.Equals("Already at station")) {
 				Debug.Log("Already at station.");
@@ -308,9 +309,8 @@ public class Client : MonoBehaviour {
 			SceneManager.LoadScene("LobbyScreen");
 		} else {
 			/* Error: could not proceed to lobby */
-			// gameNotRunningText = GameObject.Find("GameNotRunningText").GetComponent<Text>();
-			// // gameNotRunningText.gameObject.SetActive(true);
-			// gameNotRunningText.text = "Game is not running. Please try again.";
+			PickTeam panel = GameObject.Find("buttonsPanel").GetComponent<PickTeam>();
+			panel.displayNotRunningText();
 			Debug.Log("Error: [" + messageContent + "]");
 		}
 	}
