@@ -1,0 +1,43 @@
+using UnityEngine;
+using System.Collections;
+
+public class Animation : MonoBehaviour {
+    private NewServer server;
+    private GameObject logo;
+    private int next = 1;
+    private float lastMovement;
+
+    public void Start() {
+        server = GameObject.Find("Server").GetComponent<NewServer>();
+        logo = GameObject.Find("Logo");
+        lastMovement = Time.time;
+    }
+    
+    public void CheckClicked() {
+        bool isDesktop = Input.GetMouseButtonDown(0);
+        bool isMobile = (Input.touchCount > 0) && (Input.GetTouch(0).phase == TouchPhase.Began);
+        if (isDesktop || isMobile) {
+            Ray raycast = (isDesktop) ? Camera.main.ScreenPointToRay(Input.mousePosition) :
+                                        Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            RaycastHit raycastHit;
+            if (Physics.Raycast(raycast, out raycastHit)) {
+                server.ExitMainScreen();
+            }
+        }
+    }
+
+    public void MoveLogo() {
+        RectTransform tranform = logo.GetComponent<RectTransform>();
+        tranform.transform.Translate(0, next*0.5f, 0);
+        if ((Time.time - lastMovement) > 1.0f) {
+            next *= -1;
+            lastMovement = Time.time;
+        }
+    }
+
+    public void Update() {
+        CheckClicked();
+        MoveLogo();
+    }
+
+}
