@@ -16,7 +16,7 @@ public class NewServer : MonoBehaviour {
   private int minimumPlayers = -1;
 
   public GameObject bluePlayerPrefab, redPlayerPrefab;
-  public Transform pickPlayersCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
+  public Transform mainMenuCanvas, pickPlayersCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
   public Text startScreenText, redEndGameText, blueEndGameText, redScoreText, blueScoreText;
   public Image gameOverBackground;
 
@@ -31,7 +31,7 @@ public class NewServer : MonoBehaviour {
   private readonly bool testing = true; /* Whether we are in test mode */
 
   private Team redTeam, blueTeam;
-  private GameState gameState = GameState.ConfigureGame;
+  private GameState gameState = GameState.MainMenu;
 
   private void Start () {
     initialiseTeams();
@@ -448,6 +448,7 @@ public class NewServer : MonoBehaviour {
 
   /* Sets the active canvas based on the game state */
   public void SetCanvasForGameState() {
+    mainMenuCanvas.gameObject.SetActive(gameState.Equals(GameState.MainMenu));
     pickPlayersCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigureGame));
     startGameCanvas.gameObject.SetActive(gameState.Equals(GameState.AwaitingPlayers));
     gameOverCanvas.gameObject.SetActive(gameState.Equals(GameState.EndGame));
@@ -507,7 +508,13 @@ public class NewServer : MonoBehaviour {
   public void RestartGame() {
     initialiseTeams();
     timer.ResetTimer();
-    SetGameState(GameState.ConfigureGame);
+    
+  }
+
+  public void ExitMainScreen() {
+    if (gameState == GameState.MainMenu) {
+      SetGameState(GameState.ConfigureGame);
+    }
   }
 
   /* Returns the winning team, or null if draw */
