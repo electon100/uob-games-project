@@ -8,7 +8,9 @@ public class PlayerGameOver : MonoBehaviour {
 	public Text MainText;
 	public Text RedScoreText;
 	public Text BlueScoreText;
-	private GameObject Background;
+	public Material redBackground;
+	public Material blueBackground;
+	public Renderer background;
 
 	private Client client;
 
@@ -17,7 +19,6 @@ public class PlayerGameOver : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Screen.orientation = ScreenOrientation.Portrait;
-		Background = GameObject.Find("Background").GetComponent<GameObject>();
 
 		DontDestroyOnLoad(GameObject.Find("Client"));
 		client = GameObject.Find("Client").GetComponent<Client>();
@@ -32,6 +33,7 @@ public class PlayerGameOver : MonoBehaviour {
 
 		if (team.Equals(gameEndState.winningTeamStr())) {
 			Winner();
+			UpdateBackground();
 		} else {
 			if (gameEndState.getWinningTeam() != GameEndState.EndState.DRAW) {
 				Loser();
@@ -56,5 +58,16 @@ public class PlayerGameOver : MonoBehaviour {
 
 	void Draw() {
 		MainText.text = "Draw!";
+	}
+
+	void UpdateBackground() {
+		switch (client.team) {
+			case "red":
+				background.material = redBackground;
+				break;
+			case "blue":
+				background.material = blueBackground;
+				break;
+		}
 	}
 }
