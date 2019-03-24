@@ -130,6 +130,8 @@ public class Client : MonoBehaviour {
 					NetworkTransport.RemoveHost(hostId);
 					startGame = false;
 					isConnected = false;
+					Player.removeCurrentIngredient();
+					Player.currentStation = "-1";
 					SceneManager.LoadScene("DisconnectScreen");
 					break;
 			case NetworkEventType.BroadcastEvent:
@@ -294,6 +296,7 @@ public class Client : MonoBehaviour {
 				gameEndState = new GameEndState(winningTeam, redScore, blueScore);
 				Debug.Log("END GAME: " + winningTeam + " " + redScore + " " + blueScore);
 				Player.removeCurrentIngredient();
+				Player.currentStation = "-1";
 				SceneManager.LoadScene("PlayerGameOverScreen");
 			} else {
 				SendMyMessage(messageType, "Error: one of the details is missing");
