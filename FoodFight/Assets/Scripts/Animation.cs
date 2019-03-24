@@ -2,13 +2,18 @@ using UnityEngine;
 using System.Collections;
 
 public class Animation : MonoBehaviour {
+    private GameObject serverObject;
     private NewServer server;
     private GameObject logo;
+    public Transform startPanel;
     private int next = 1;
     private float lastMovement;
 
     public void Start() {
-        server = GameObject.Find("Server").GetComponent<NewServer>();
+        serverObject = GameObject.Find("Server");
+        if (serverObject != null) {
+            server = serverObject.GetComponent<NewServer>();
+        }
         logo = GameObject.Find("Logo");
         lastMovement = Time.time;
     }
@@ -21,7 +26,11 @@ public class Animation : MonoBehaviour {
                                         Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
             RaycastHit raycastHit;
             if (Physics.Raycast(raycast, out raycastHit)) {
-                server.ExitMainScreen();
+                if (server != null) { /* Server main screen */
+                    server.ExitMainScreen();
+                } else { /* Client main screen */
+                    GoToConnect();
+                }
             }
         }
     }
@@ -40,4 +49,8 @@ public class Animation : MonoBehaviour {
         MoveLogo();
     }
 
+    public void GoToConnect() {
+        GameObject.Find("MainMenuCanvas").SetActive(false);
+        startPanel.gameObject.SetActive(true);
+    }
 }
