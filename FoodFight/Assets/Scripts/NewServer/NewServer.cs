@@ -31,7 +31,7 @@ public class NewServer : MonoBehaviour {
   private readonly bool testing = true; /* Whether we are in test mode */
 
   private Team redTeam, blueTeam;
-  private GameState gameState = GameState.MainMenu;
+  public GameState gameState = GameState.MainMenu;
 
   private void Start () {
     initialiseTeams();

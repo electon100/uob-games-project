@@ -1,4 +1,4 @@
-enum GameState {
+public enum GameState {
   MainMenu,
   ConfigureGame,
   AwaitingPlayers, /* At the start of the game and during the lobby */
