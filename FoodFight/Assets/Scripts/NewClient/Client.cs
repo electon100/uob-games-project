@@ -96,6 +96,10 @@ public class Client : MonoBehaviour {
 		}
 	}
 
+	public string getTeam() {
+		return team;
+	}
+
 	// Client always listen for incoming data
 	public void listenForData() {
 		if (!isConnected) {
