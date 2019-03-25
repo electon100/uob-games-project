@@ -30,6 +30,8 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
     public bool bluefired = false;
     private int ammoCount = 0;
 
+    Ingredient chicken = new Ingredient("chicken", "chickenPrefab");
+
     // Use this for initialization
     void Start () {
         gamestarted = false;
@@ -50,6 +52,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
         {
             wiimoteBlue = WiimoteManager.Wiimotes[1];
             blueIsSet = wiimoteBlue.SetupIRCamera(IRDataType.BASIC);
+            reset(chicken);
         }
 
         if(!gamestarted){
@@ -80,7 +83,26 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
                     {
                         targetVector.y = blueCrosshair.anchorMin.y - 0.5f;
                         targetVector.x = blueCrosshair.anchorMin.x - 0.5f;
-                        GameObject foodBullet = Instantiate(blueProjectile, blueProjectile.transform.position, Quaternion.identity) as GameObject;
+
+                        Transform ingredTransform = blueProjectile.GetComponentsInChildren<Transform>(true)[0];
+                        Quaternion ingredRotation = ingredTransform.rotation;
+                        Vector3 ingredPosition = new Vector3(11, 10, 0);
+
+                        GameObject foodBullet = Instantiate(blueProjectile, ingredPosition, ingredRotation) as GameObject;
+                        if (foodBullet.GetComponent<Rigidbody>() == null){
+                            foodBullet.AddComponent<Rigidbody>();
+                        }
+                        if(foodBullet.GetComponent<SphereCollider>() == null){
+                            foodBullet.AddComponent<SphereCollider>();
+                        }
+                        if(foodBullet.GetComponent<ProjectileBehaviour>() == null){
+                            foodBullet.AddComponent<ProjectileBehaviour>();
+                        }
+                        // GameObject foodBullet = Instantiate(blueProjectile, blueProjectile.transform.position, Quaternion.identity) as GameObject;
+                        foodBullet.name = "BlueProjectile";
+                        foodBullet.GetComponent<Rigidbody>().useGravity = true;
+                        foodBullet.GetComponent<SphereCollider>().radius = 0.01f;
+                        ScaleProjectile(foodBullet);
                         foodBullet.GetComponent<Rigidbody>().AddForce(-force, targetVector.y * force, targetVector.x * forcez);
                         bluefired = true;
                         ammoCount -= 1;
@@ -170,7 +192,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
         blueTimeOverPanel.gameObject.SetActive(true);
     }
 
-    public void reset(Ingredient ingredientToThrow)
+    public void reset(Ingredient ingredient)
     {
         firstTime = true;
         blueTime = 5.0f;
@@ -180,6 +202,19 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
         mainPanel.gameObject.SetActive(false);
         BlueStartPanel.gameObject.SetActive(true);
         blueStartText.text = "Press -a- to start game";
+        blueProjectile = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
+    }
+
+    float scaleX;
+    float scaleY;
+    float scaleZ;
+
+    private void ScaleProjectile(GameObject projectile){
+        scaleX = projectile.transform.localScale.x; 
+        scaleY = projectile.transform.localScale.y; 
+        scaleZ = projectile.transform.localScale.z;
+        
+        projectile.transform.localScale = new Vector3(scaleX*0.3f, scaleY*0.3f, scaleZ*0.3f);
     }
 
     private void OnApplicationQuit()
