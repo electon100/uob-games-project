@@ -8,11 +8,18 @@ using System.Text;
 public class Fighting : MonoBehaviour {
 
   public Button fireBtn, putBtn, clearBtn, goBackBtn;
+  public GameObject grabText;
   public Player player;
 
   /* Ingredient stuff */
   private Ingredient throwIngredient;
   private GameObject throwIngredientGameObject;
+
+  private Vector3 startPosition;
+  private Vector3 startCatapultPosition;
+  public GameObject catapult;
+
+  private bool startedThrowing = false;
 
   void Start () {
     Screen.orientation = ScreenOrientation.Portrait;
@@ -21,17 +28,24 @@ public class Fighting : MonoBehaviour {
     foreach (Ingredient ingredient in Player.ingredientsFromStation) {
       addIngredientToThrow(ingredient);
     }
+    Ingredient chips = new Ingredient("chips", "chipsPrefab");
+    addIngredientToThrow(chips);
+    startPosition = throwIngredientGameObject.GetComponent<Transform>().position;
+    startCatapultPosition = catapult.GetComponent<Transform>().position;
   }
 
   void Update() {
     updateButtonStates();
+    if (startedThrowing) {
+      throwingAnimation();
+    }
   }
 
   private void addIngredientToThrow(Ingredient ingredient) {
     GameObject ingred = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
     Transform ingredTransform = ingred.GetComponentsInChildren<Transform>(true)[0];
-    Quaternion ingredRotation = ingredTransform.rotation;
-    Vector3 ingredPosition = ingredTransform.position + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0);
+    Quaternion ingredRotation = Quaternion.Euler(-25, ingredTransform.rotation.y, ingredTransform.rotation.z);
+    Vector3 ingredPosition = new Vector3(0, -19, -60);
     GameObject inst = Instantiate(ingred, ingredPosition, ingredRotation);
 
     throwIngredient = ingredient;
@@ -61,10 +75,19 @@ public class Fighting : MonoBehaviour {
 
   public void throwFood() {
     if (throwIngredient != null) {
+      startedThrowing = true;
+      grabText.gameObject.SetActive(true);
       player.sendThrowToServer(throwIngredient);
-      clearStation();
     } else {
       /* TODO: What happens when plate is empty */
+    }
+  }
+
+  public void throwingAnimation() {
+    throwIngredientGameObject.GetComponent<Transform>().position = startPosition + new Vector3(0.0f, (Time.time)*5.0f, Mathf.Sin(Time.time)*5.0f);
+    startPosition = throwIngredientGameObject.GetComponent<Transform>().position;
+    if (catapult.GetComponent<Transform>().rotation.x < 0.5f) {
+      catapult.GetComponent<Transform>().Rotate(new Vector3((Time.time)*5.0f, 0.0f, 0.0f));
     }
   }
 

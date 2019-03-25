@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4283,9 +4283,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01edb9f0299eb2647b4fbbe9f74c0076, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bluePlayerPrefab: {fileID: 1163954923977550, guid: ee6afe0cb40bfb642a361e77f679699b,
+  bluePlayerPrefab: {fileID: 1149843372488582, guid: ee6afe0cb40bfb642a361e77f679699b,
     type: 2}
-  redPlayerPrefab: {fileID: 1982460696520624, guid: bdd3911e8b1f5024f813df22783a91ba,
+  redPlayerPrefab: {fileID: 1858147596097608, guid: bdd3911e8b1f5024f813df22783a91ba,
     type: 2}
   mainMenuCanvas: {fileID: 2130436716}
   pickPlayersCanvas: {fileID: 1129433609}
