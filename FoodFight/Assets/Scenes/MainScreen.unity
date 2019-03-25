@@ -5597,7 +5597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f57a9c52cc13dd94ca9304807298e9e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameTheme: {fileID: 0}
+  gameTheme: {fileID: 8300000, guid: f5e9be08519009a4f895b86f85da79a1, type: 3}
 --- !u!4 &2015738762
 Transform:
   m_ObjectHideFlags: 0
