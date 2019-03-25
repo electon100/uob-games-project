@@ -17,6 +17,8 @@ public class Team {
 
   public List<Order> Orders { get; set; }
 
+  public float NextOrderTimer { get; set; }
+
 	public Team(string name, Color colour) {
 		Players = new List<ConnectedPlayer>();
     Name = name;
@@ -24,6 +26,7 @@ public class Team {
     Score = 0;
     Kitchen = new Kitchen();
     Orders = new List<Order>();
+    NextOrderTimer = 0;
 	}
 
   public bool addPlayerToTeam(ConnectedPlayer player) {
@@ -63,15 +66,18 @@ public class Team {
   public bool addOrder(Transform mainGameCanvas) {
     string recipeName = FoodData.Instance.getRandomRecipeName();
     Ingredient recipe = new Ingredient(recipeName, recipeName + "Prefab");
-    string id = recipeName + Orders.Count + Colour + "Object";
+    string id = recipeName + Orders.Count + Name + "Object";
 
-    Orders.Add(new Order(id, recipe, new GameObject(id), 240, mainGameCanvas));
+    Orders.Add(new Order(id, recipe, new GameObject(id), 120, mainGameCanvas));
 
     return true;
   }
 
   public void updateOrders() {
-    for (int i = 0; i < Orders.Count; i++) Orders[i].updateCanvas(new Vector3(((Name.Equals("red")) ? -1 : 1 )*175, -(i*120), 0));
+    for (int i = 0; i < Orders.Count; i++) {
+      Orders[i].updateCanvas(new Vector3(((Name.Equals("red")) ? -1 : 1 )*175, -(i*120), 0));
+      if (Orders[i].Timer <= 30) Orders[i].setTextRed();
+    }
   }
 
   public int checkExpiredOrders() {
@@ -79,11 +85,22 @@ public class Team {
     for (int i = 0; i < Orders.Count; i++) {
       if (Orders[i].timerExpired()) {
         negativeScore += FoodData.Instance.getScoreForIngredient(Orders[i].Recipe);
-        UnityEngine.Object.Destroy(Orders[i].ParentGameObject);
-        Orders.Remove(Orders[i]);
+        removeOrder(Orders[i]);
+        NextOrderTimer *= 0.6f;
       }
     }
     return negativeScore;
+  }
+
+  private void removeOrder(Order order) {
+    UnityEngine.Object.Destroy(order.ParentGameObject);
+    Orders.Remove(order);
+  }
+
+  public void removeAllOrders() {
+    for (int i = 0; i < Orders.Count; i++) {
+      removeOrder(Orders[i]);
+    }
   }
 
   public void scoreRecipe(Ingredient ingredient) {

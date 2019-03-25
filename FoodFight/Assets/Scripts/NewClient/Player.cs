@@ -28,12 +28,11 @@ public class Player : MonoBehaviour {
   public static Ingredient currentIngred;
   public static List<Ingredient> ingredientsFromStation;
 
-  public Text mainText;
-  public GameObject mainPanel;
+  public Material redBackground, blueBackground;
+	public Renderer background;
   public static Text errorText;
 
-  //NFC Stuff:
-  public Text tag_output_text;
+  // NFC Stuff:
   private NFCHandler nfcHandler = new NFCHandler();
 
   void Start () {
@@ -41,6 +40,12 @@ public class Player : MonoBehaviour {
     networkClient = GameObject.Find("Client");
     network = networkClient.GetComponent<Client>();
     DontDestroyOnLoad(GameObject.Find("Player"));
+
+    if (network.getTeam().Equals("blue")) {
+      background.material = blueBackground;
+    } else if (network.getTeam().Equals("red")) {
+      background.material = redBackground;
+    }
   }
 
   void Update () {
