@@ -30,9 +30,6 @@ public class WiimoteBehaviourRed : MonoBehaviour {
     public bool redfired = false;
     private int ammoCount = 0;
 
-    Ingredient chicken = new Ingredient("chicken", "chickenPrefab");
-
-
     // Use this for initialization
     void Start () {
         gamestarted = false;
@@ -53,7 +50,6 @@ public class WiimoteBehaviourRed : MonoBehaviour {
         {
             wiimoteRed = WiimoteManager.Wiimotes[0];
             redIsSet = wiimoteRed.SetupIRCamera(IRDataType.BASIC);
-            reset(chicken);
         }
 
         if(!gamestarted){
