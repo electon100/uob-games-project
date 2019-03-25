@@ -28,8 +28,6 @@ public class Fighting : MonoBehaviour {
     foreach (Ingredient ingredient in Player.ingredientsFromStation) {
       addIngredientToThrow(ingredient);
     }
-    Ingredient chips = new Ingredient("chips", "chipsPrefab");
-    addIngredientToThrow(chips);
     startPosition = throwIngredientGameObject.GetComponent<Transform>().position;
     startCatapultPosition = catapult.GetComponent<Transform>().position;
   }
