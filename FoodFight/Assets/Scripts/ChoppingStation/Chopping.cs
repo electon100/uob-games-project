@@ -31,7 +31,7 @@ public class Chopping : MonoBehaviour {
   private float minimumChopInterval = 0.3f; // (seconds)
 
   /* Movement stuff */
-  private float shakeSpeed = 10.0f; // Speed of pan shake
+  private float shakeSpeed = 15.0f; // Speed of pan shake
   private float shakeAmount = 2f; // Amplitude of pan shake
   private bool shouldShake = false;
   private int negSinCount = 0, posSinCount = 0;

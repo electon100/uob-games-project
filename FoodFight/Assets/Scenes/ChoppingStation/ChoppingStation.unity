@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -849,7 +849,7 @@ MonoBehaviour:
   status: {fileID: 207147542}
   notChoppable: {fileID: 1473113672}
   instructions: {fileID: 1009693418}
-  chopSound: {fileID: 8300000, guid: 0de611605595b8f43bf68a90123b5a72, type: 3}
+  chopSound: {fileID: 8300000, guid: be402bde3e5f0a84eb5fd510003e1a55, type: 3}
   slashSound: {fileID: 8300000, guid: e6b67ce25c81bc344b84ccdede38818e, type: 3}
   successSound: {fileID: 8300000, guid: e664e5d9004e08e4db285c1dd7e77c98, type: 3}
 --- !u!82 &704577777
