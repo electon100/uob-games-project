@@ -24,12 +24,10 @@ public class Fighting : MonoBehaviour {
   void Start () {
     Screen.orientation = ScreenOrientation.Portrait;
     clearPlate();
-    // player = GameObject.Find("Player").GetComponent<Player>();
-    // foreach (Ingredient ingredient in Player.ingredientsFromStation) {
-    //   addIngredientToThrow(ingredient);
-    // }
-    Ingredient ingredient = new Ingredient("chicken", "soy_saucePrefab");
-    addIngredientToThrow(ingredient);
+    player = GameObject.Find("Player").GetComponent<Player>();
+    foreach (Ingredient ingredient in Player.ingredientsFromStation) {
+      addIngredientToThrow(ingredient);
+    }
     startCatapultPosition = new Vector3(48.98819f, 11.10445f, -8.887868f);
   }
 
