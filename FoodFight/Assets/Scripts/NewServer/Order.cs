@@ -39,7 +39,7 @@ public class Order {
 
 		canvas = ParentGameObject.GetComponent<Canvas>();
     canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-		canvas.name = Recipe.Name + "Canvas";
+		canvas.name = ID;
 
     ParentGameObject.AddComponent<CanvasScaler>();
     ParentGameObject.AddComponent<GraphicRaycaster>();
@@ -77,20 +77,20 @@ public class Order {
 		recipeNameText.text = Recipe.ToString();
 		recipeNameText.horizontalOverflow = HorizontalWrapMode.Overflow;
 
-		GameObject recipeModel = (GameObject) ((Resources.Load(Recipe.Model) == null) ? Resources.Load("chipsPrefab") : Resources.Load(Recipe.Model));
+		/*GameObject recipeModel = (GameObject) ((Resources.Load(Recipe.Model) == null) ? Resources.Load("chipsPrefab") : Resources.Load(Recipe.Model));
 		recipePrefabObject = GameObject.Instantiate(recipeModel) as GameObject;
 		recipePrefabObject.transform.SetParent(canvas.transform);
 
 		// recipePrefab position
 		recipePrefabTransform = recipePrefabObject.AddComponent<RectTransform>();
 		recipePrefabTransform.sizeDelta = new Vector2(200, 200);
-		recipePrefabTransform.localScale = new Vector3(200.0F, 200.0F, 200.0F);
+		recipePrefabTransform.localScale = new Vector3(200.0F, 200.0F, 200.0F);*/
 	}
 
 	public void updateCanvas(Vector3 pos) {
 		timerTransform.localPosition = pos;
 		recipeNameTransform.localPosition = pos + new Vector3(0,-50,0);
-		recipePrefabTransform.localPosition = pos + new Vector3(-100,-25,-200);
+		//recipePrefabTransform.localPosition = pos + new Vector3(-100,-25,-200);
 
 		if (!timerExpired()) {
 			Timer -= Time.deltaTime;
@@ -107,5 +107,10 @@ public class Order {
 
 	public bool timerExpired() {
 		return Timer < 0;
+	}
+
+	public void setTextRed() {
+		timerText.color = Color.red;
+		recipeNameText.color = Color.red;
 	}
 }
