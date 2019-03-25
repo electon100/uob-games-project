@@ -417,13 +417,13 @@ public class NewServer : MonoBehaviour {
     redTeam.Score -= (int) (redTeam.checkExpiredOrders() * negativeScoreMultiplier);
     blueTeam.Score -= (int) (blueTeam.checkExpiredOrders() * negativeScoreMultiplier);
 
-    if (redTeam.NextOrderTimer <= 0 || redTeam.Orders.Count < 1) {
+    if ((redTeam.NextOrderTimer <= 0 && redTeam.Orders.Count < 3) || redTeam.Orders.Count < 1) {
       redTeam.addOrder(mainGameCanvas);
       redTeam.NextOrderTimer = redTeam.Orders.Count * Random.Range(minNextOrderTime, maxNextOrderTime);
     } else {
       redTeam.NextOrderTimer -= Time.deltaTime;
     }
-    if (blueTeam.NextOrderTimer <= 0 || blueTeam.Orders.Count < 1) {
+    if ((blueTeam.NextOrderTimer <= 0 && blueTeam.Orders.Count < 3) || blueTeam.Orders.Count < 1) {
       blueTeam.addOrder(mainGameCanvas);
       blueTeam.NextOrderTimer = blueTeam.Orders.Count * Random.Range(minNextOrderTime, maxNextOrderTime);
     } else {
