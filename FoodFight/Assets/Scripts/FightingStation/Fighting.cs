@@ -28,8 +28,7 @@ public class Fighting : MonoBehaviour {
     foreach (Ingredient ingredient in Player.ingredientsFromStation) {
       addIngredientToThrow(ingredient);
     }
-    startPosition = throwIngredientGameObject.GetComponent<Transform>().position;
-    startCatapultPosition = catapult.GetComponent<Transform>().position;
+    startCatapultPosition = new Vector3(48.98819f, 11.10445f, -8.887868f);
   }
 
   void Update() {
@@ -48,6 +47,8 @@ public class Fighting : MonoBehaviour {
 
     throwIngredient = ingredient;
     throwIngredientGameObject = inst;
+
+    startPosition = throwIngredientGameObject.GetComponent<Transform>().position;
   }
 
   public void clearStation() {
@@ -86,6 +87,9 @@ public class Fighting : MonoBehaviour {
     startPosition = throwIngredientGameObject.GetComponent<Transform>().position;
     if (catapult.GetComponent<Transform>().rotation.x < 0.5f) {
       catapult.GetComponent<Transform>().Rotate(new Vector3((Time.time)*5.0f, 0.0f, 0.0f));
+    } else {
+      clearStation();
+      startedThrowing = false;
     }
   }
 

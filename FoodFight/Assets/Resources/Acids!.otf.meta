@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c4e4866878333744c8c64dd12ad53c5d
+guid: 21e9e53e8f4b0d0418721d2b819cef81
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -11,7 +11,8 @@ TrueTypeFontImporter:
   fontName: Acids
   fontNames:
   - Acids
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: c4e4866878333744c8c64dd12ad53c5d, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
