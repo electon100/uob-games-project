@@ -16,7 +16,7 @@ public class NewServer : MonoBehaviour {
   private int minimumPlayers = -1;
 
   public GameObject bluePlayerPrefab, redPlayerPrefab;
-  public Transform pickPlayersCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
+  public Transform mainMenuCanvas, pickPlayersCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
   public Text startScreenText, redEndGameText, blueEndGameText, redScoreText, blueScoreText;
   public Image gameOverBackground;
 
@@ -29,9 +29,11 @@ public class NewServer : MonoBehaviour {
   private readonly float disableStationDuration = 60.0f; /* 60 seconds */
   private readonly float negativeScoreMultiplier = 0.2f;
   private readonly bool testing = true; /* Whether we are in test mode */
+  private readonly float minNextOrderTime = 15.0f; /* Minimum time before a new order is added */
+  private readonly float maxNextOrderTime = 25.0f; /* Maximum time before a new order is added */
 
   private Team redTeam, blueTeam;
-  private GameState gameState = GameState.ConfigureGame;
+  public GameState gameState = GameState.MainMenu;
 
   private void Start () {
     initialiseTeams();
@@ -68,6 +70,8 @@ public class NewServer : MonoBehaviour {
   }
 
   private void initialiseTeams() {
+    if (redTeam != null) redTeam.removeAllOrders();
+    if (blueTeam != null) blueTeam.removeAllOrders();
     redTeam = new Team("red", redTeamColour); blueTeam = new Team("blue", blueTeamColour);
   }
 
@@ -413,8 +417,18 @@ public class NewServer : MonoBehaviour {
     redTeam.Score -= (int) (redTeam.checkExpiredOrders() * negativeScoreMultiplier);
     blueTeam.Score -= (int) (blueTeam.checkExpiredOrders() * negativeScoreMultiplier);
 
-    while (redTeam.Orders.Count < 3) redTeam.addOrder(mainGameCanvas);
-    while (blueTeam.Orders.Count < 3) blueTeam.addOrder(mainGameCanvas);
+    if (redTeam.NextOrderTimer <= 0 || redTeam.Orders.Count < 1) {
+      redTeam.addOrder(mainGameCanvas);
+      redTeam.NextOrderTimer = redTeam.Orders.Count * Random.Range(minNextOrderTime, maxNextOrderTime);
+    } else {
+      redTeam.NextOrderTimer -= Time.deltaTime;
+    }
+    if (blueTeam.NextOrderTimer <= 0 || blueTeam.Orders.Count < 1) {
+      blueTeam.addOrder(mainGameCanvas);
+      blueTeam.NextOrderTimer = blueTeam.Orders.Count * Random.Range(minNextOrderTime, maxNextOrderTime);
+    } else {
+      blueTeam.NextOrderTimer -= Time.deltaTime;
+    }
 
     // Update the position of the orders
     redTeam.updateOrders();
@@ -448,6 +462,7 @@ public class NewServer : MonoBehaviour {
 
   /* Sets the active canvas based on the game state */
   public void SetCanvasForGameState() {
+    mainMenuCanvas.gameObject.SetActive(gameState.Equals(GameState.MainMenu));
     pickPlayersCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigureGame));
     startGameCanvas.gameObject.SetActive(gameState.Equals(GameState.AwaitingPlayers));
     gameOverCanvas.gameObject.SetActive(gameState.Equals(GameState.EndGame));
@@ -507,7 +522,12 @@ public class NewServer : MonoBehaviour {
   public void RestartGame() {
     initialiseTeams();
     timer.ResetTimer();
-    SetGameState(GameState.ConfigureGame);
+  }
+
+  public void ExitMainScreen() {
+    if (gameState == GameState.MainMenu) {
+      SetGameState(GameState.ConfigureGame);
+    }
   }
 
   /* Returns the winning team, or null if draw */
