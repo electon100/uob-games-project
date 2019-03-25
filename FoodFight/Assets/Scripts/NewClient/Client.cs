@@ -41,6 +41,7 @@ public class Client : MonoBehaviour {
 
 	public void Start() {
     DontDestroyOnLoad(GameObject.Find("Client"));
+		Screen.orientation = ScreenOrientation.Portrait;
 	}
 
 	public void Update() {
