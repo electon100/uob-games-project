@@ -11,7 +11,9 @@ public class Lobby : MonoBehaviour {
     private float startTime;
     public Transform startCanvas;
     public Transform countDownCanvas;
-    public Text countDownText;
+    public Text countDownText, lobbyText;
+    public Material redBackground, blueBackground;
+	public Renderer background;
 
     private GameObject networkClient;
     private Client network;
@@ -24,6 +26,14 @@ public class Lobby : MonoBehaviour {
 
         networkClient = GameObject.Find("Client");
         network = networkClient.GetComponent<Client>();
+
+        lobbyText.text = network.getTeam() + " team lobby";
+
+        if (network.getTeam().Equals("blue")) {
+            background.material = blueBackground;
+        } else if (network.getTeam().Equals("red")) {
+            background.material = redBackground;
+        }
     }
 
     void Update() {

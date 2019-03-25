@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -220,8 +220,6 @@ GameObject:
   - component: {fileID: 143819314}
   - component: {fileID: 143819313}
   - component: {fileID: 143819312}
-  - component: {fileID: 143819311}
-  - component: {fileID: 143819310}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -229,28 +227,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &143819310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 143819309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1b05dc8104de094b847b56cdd7b724e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &143819311
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 143819309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2ffe48b4e37b9642a41cd892cd96752, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &143819312
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -415,9 +391,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c52ebabdf0b192408737d5491bf8c0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainText: {fileID: 1035238257}
-  mainPanel: {fileID: 0}
-  tag_output_text: {fileID: 0}
+  redBackground: {fileID: 2100000, guid: ac2c769253deace41a2d3ec5e23dab90, type: 2}
+  blueBackground: {fileID: 2100000, guid: 51604750731d27443bdd7f10680a6875, type: 2}
+  background: {fileID: 143819313}
 --- !u!114 &580630326
 MonoBehaviour:
   m_ObjectHideFlags: 0

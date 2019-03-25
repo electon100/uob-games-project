@@ -41,6 +41,7 @@ public class Client : MonoBehaviour {
 
 	public void Start() {
     DontDestroyOnLoad(GameObject.Find("Client"));
+		Screen.orientation = ScreenOrientation.Portrait;
 	}
 
 	public void Update() {
@@ -94,6 +95,10 @@ public class Client : MonoBehaviour {
 		else {
 			isConnected = true;
 		}
+	}
+
+	public string getTeam() {
+		return team;
 	}
 
 	// Client always listen for incoming data
@@ -372,6 +377,9 @@ public class Client : MonoBehaviour {
 		connectButton.SetActive(false);
 		diffIPButton.SetActive(false);
 		inputField.SetActive(true);
+    changeIPText.Select();
+    changeIPText.ActivateInputField();
+    changeIPText.shouldHideMobileInput = true;
 		changeIPButton.SetActive(true);
 		goBackButton.SetActive(true);
 		defaultIP.SetActive(true);
