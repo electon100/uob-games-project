@@ -29,9 +29,10 @@ public class PlayerGameOver : MonoBehaviour {
 		RedScoreText.text = "Red Score: " + gameEndState.getRedScore().ToString();
 		BlueScoreText.text = "Blue Score: " + gameEndState.getBlueScore().ToString();
 
+		UpdateBackground();
+
 		if (client.getTeam().Equals(gameEndState.winningTeamStr())) {
 			Winner();
-			UpdateBackground();
 		} else {
 			if (gameEndState.getWinningTeam() != GameEndState.EndState.DRAW) {
 				Loser();
