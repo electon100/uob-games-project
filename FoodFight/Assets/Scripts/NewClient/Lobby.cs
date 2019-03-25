@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class Lobby : MonoBehaviour {
 
-    private int numberOfPlayers;
     private int countDown;
     private float startTime;
     public Transform startCanvas;
@@ -20,7 +19,6 @@ public class Lobby : MonoBehaviour {
 
     void Start() {
         Screen.orientation = ScreenOrientation.Portrait;
-        numberOfPlayers = 0;
         startTime = Time.time;
         countDown = 0;
 
@@ -58,21 +56,8 @@ public class Lobby : MonoBehaviour {
         SceneManager.LoadScene("MainScreen");
     }
 
-    void StartGame()
-    {
-        countDownText.text = "Go, go, go!";
+    void StartGame() {
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
-    public void OnTwo() {
-        numberOfPlayers = 2;
-    }
-
-    public void OnThree() {
-        numberOfPlayers = 3;
-    }
-
-    public void OnFour() {
-        numberOfPlayers = 4;
-    }
 }
