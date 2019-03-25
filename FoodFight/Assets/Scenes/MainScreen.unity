@@ -1302,7 +1302,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 9490121931d4d473cb7d2545d03db2ff, type: 3}
       propertyPath: m_Name
-      value: choppingstation2
+      value: choppingstation1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9490121931d4d473cb7d2545d03db2ff, type: 3}
@@ -2933,7 +2933,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 9490121931d4d473cb7d2545d03db2ff, type: 3}
       propertyPath: m_Name
-      value: choppingstation2
+      value: choppingstation1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9490121931d4d473cb7d2545d03db2ff, type: 3}
@@ -4153,7 +4153,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: 7a1ca0572ccf6b74b9bd3b3751811d25, type: 3}
       propertyPath: m_Name
-      value: fryingstation1
+      value: fryingstation2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a1ca0572ccf6b74b9bd3b3751811d25, type: 3}
@@ -7067,7 +7067,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: 7a1ca0572ccf6b74b9bd3b3751811d25, type: 3}
       propertyPath: m_Name
-      value: fryingstation1
+      value: fryingstation2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a1ca0572ccf6b74b9bd3b3751811d25, type: 3}
