@@ -83,13 +83,24 @@ public class WiimoteBehaviourRed : MonoBehaviour {
 
                         Transform ingredTransform = redProjectile.GetComponentsInChildren<Transform>(true)[0];
                         Quaternion ingredRotation = ingredTransform.rotation;
-                        Vector3 ingredPosition = ingredTransform.position + new Vector3(-11, 10, 0);
+                        Vector3 ingredPosition = new Vector3(-11, 10, 0);
                         
-                        // GameObject foodBullet = Instantiate(redProjectile, ingredPosition, ingredRotation) as GameObject;
-                        // if (foodBullet.GetComponent<Rigidbody>() == null){
-                        //     foodBullet.AddComponent<Rigidbody>();
-                        // }
-                        GameObject foodBullet = Instantiate(redProjectile, redProjectile.transform.position, Quaternion.identity) as GameObject;
+                        GameObject foodBullet = Instantiate(redProjectile, ingredPosition, ingredRotation) as GameObject;
+                        if (foodBullet.GetComponent<Rigidbody>() == null){
+                            foodBullet.AddComponent<Rigidbody>();
+                        }
+                        if(foodBullet.GetComponent<SphereCollider>() == null){
+                            foodBullet.AddComponent<SphereCollider>();
+                        }
+                        if(foodBullet.GetComponent<ProjectileBehaviour>() == null){
+                            foodBullet.AddComponent<ProjectileBehaviour>();
+                        }
+                        // GameObject foodBullet = Instantiate(redProjectile, redProjectile.transform.position, Quaternion.identity) as GameObject;
+                        foodBullet.name = "RedProjectile";
+                        foodBullet.GetComponent<Rigidbody>().useGravity = true;
+                        foodBullet.GetComponent<SphereCollider>().radius = 0.01f;
+                        ScaleProjectile(foodBullet);
+                        Debug.Log(foodBullet.transform.localScale);
                         foodBullet.GetComponent<Rigidbody>().AddForce(force, targetVector.y * force, -targetVector.x * forcez);
                         redfired = true;
                         ammoCount -= 1;
@@ -189,8 +200,22 @@ public class WiimoteBehaviourRed : MonoBehaviour {
         mainPanel.gameObject.SetActive(false);
         RedStartPanel.gameObject.SetActive(true);
         redStartText.text = "Press -a- to start game";
-        // redProjectile = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
+        redProjectile = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
     }
+
+    float scaleX;
+    float scaleY;
+    float scaleZ;
+
+    private void ScaleProjectile(GameObject projectile){
+        scaleX = projectile.transform.localScale.x; 
+        scaleY = projectile.transform.localScale.y; 
+        scaleZ = projectile.transform.localScale.z;
+        
+        projectile.transform.localScale = new Vector3(scaleX*0.3f, scaleY*0.3f, scaleZ*0.3f);
+    }
+
+
 
     private void OnApplicationQuit()
     {

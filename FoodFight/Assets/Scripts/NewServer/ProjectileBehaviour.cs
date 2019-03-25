@@ -20,10 +20,10 @@ public class ProjectileBehaviour : MonoBehaviour {
         wiiRed = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourRed>();
         server = GameObject.Find("Server").GetComponent<NewServer>();
 
-        if(this.gameObject.name.Equals("BlueProjectile(Clone)")){
+        if(this.gameObject.name.Equals("BlueProjectile")){
             team = "blue";
         }
-        else if (this.gameObject.name.Equals("RedProjectile(Clone)")){
+        else if (this.gameObject.name.Equals("RedProjectile")){
             team = "red";
         }
 
@@ -61,6 +61,7 @@ public class ProjectileBehaviour : MonoBehaviour {
     }
 
     private void SetResultText(string objectHit){
+        Debug.Log(team);
         if(team.Equals("blue")){
             wiiBlue.roundOver(objectHit);
         }
