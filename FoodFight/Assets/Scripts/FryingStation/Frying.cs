@@ -16,6 +16,9 @@ public class Frying : MonoBehaviour {
 	public Player player;
 	public AudioClip fryingSound, successSound;
 
+	/* Text representation of ingredients on Screen */
+  public Text ingredientListText;
+
 	/* Phone motion stuff */
 	private float accelerometerUpdateInterval = 1.0f / 60.0f;
 	private float lowPassKernelWidthInSeconds = 1.0f;
@@ -30,7 +33,7 @@ public class Frying : MonoBehaviour {
 	private int negSinCount = 0, posSinCount = 0;
 	private Vector3 originalPos;
 	private float lastShake;
-	private int minimumShakeInterval = 1; // (seconds)
+	private float minimumShakeInterval = 0.7f; // (seconds)
 	private AudioSource source;
 
 	/* Ingredient stuff */
@@ -240,6 +243,14 @@ public class Frying : MonoBehaviour {
 			background.material = neutralMaterial;
 		}
 	}
+
+	void updateTextList() {
+    ingredientListText.text = "Current Ingredients:\n";
+
+    foreach(Ingredient ingredient in panContents) {
+      ingredientListText.text += ingredient.ToString() + "\n";
+    }
+  }
 
 	private void updateButtonStates() {
 		setButtonInteractable(putBtn, Player.isHoldingIngredient() && panContents.Count < maxPanContents);
