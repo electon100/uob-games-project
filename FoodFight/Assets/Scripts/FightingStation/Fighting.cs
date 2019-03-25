@@ -24,18 +24,17 @@ public class Fighting : MonoBehaviour {
   void Start () {
     Screen.orientation = ScreenOrientation.Portrait;
     clearPlate();
-    player = GameObject.Find("Player").GetComponent<Player>();
-    foreach (Ingredient ingredient in Player.ingredientsFromStation) {
-      addIngredientToThrow(ingredient);
-    }
+    // player = GameObject.Find("Player").GetComponent<Player>();
+    // foreach (Ingredient ingredient in Player.ingredientsFromStation) {
+    //   addIngredientToThrow(ingredient);
+    // }
+    Ingredient ingredient = new Ingredient("chicken", "soy_saucePrefab");
+    addIngredientToThrow(ingredient);
     startCatapultPosition = new Vector3(48.98819f, 11.10445f, -8.887868f);
   }
 
   void Update() {
     updateButtonStates();
-    if (startedThrowing) {
-      throwingAnimation();
-    }
   }
 
   private void addIngredientToThrow(Ingredient ingredient) {
@@ -77,19 +76,9 @@ public class Fighting : MonoBehaviour {
       startedThrowing = true;
       grabText.gameObject.SetActive(true);
       player.sendThrowToServer(throwIngredient);
+      clearStation();
     } else {
       /* TODO: What happens when plate is empty */
-    }
-  }
-
-  public void throwingAnimation() {
-    throwIngredientGameObject.GetComponent<Transform>().position = startPosition + new Vector3(0.0f, (Time.time)*5.0f, Mathf.Sin(Time.time)*5.0f);
-    startPosition = throwIngredientGameObject.GetComponent<Transform>().position;
-    if (catapult.GetComponent<Transform>().rotation.x < 0.5f) {
-      catapult.GetComponent<Transform>().Rotate(new Vector3((Time.time)*5.0f, 0.0f, 0.0f));
-    } else {
-      clearStation();
-      startedThrowing = false;
     }
   }
 
