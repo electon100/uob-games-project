@@ -8,11 +8,18 @@ using System.Text;
 public class Fighting : MonoBehaviour {
 
   public Button fireBtn, putBtn, clearBtn, goBackBtn;
+  public GameObject grabText;
   public Player player;
 
   /* Ingredient stuff */
   private Ingredient throwIngredient;
   private GameObject throwIngredientGameObject;
+
+  private Vector3 startPosition;
+  private Vector3 startCatapultPosition;
+  public GameObject catapult;
+
+  private bool startedThrowing = false;
 
   void Start () {
     Screen.orientation = ScreenOrientation.Portrait;
@@ -21,6 +28,7 @@ public class Fighting : MonoBehaviour {
     foreach (Ingredient ingredient in Player.ingredientsFromStation) {
       addIngredientToThrow(ingredient);
     }
+    startCatapultPosition = new Vector3(48.98819f, 11.10445f, -8.887868f);
   }
 
   void Update() {
@@ -30,12 +38,14 @@ public class Fighting : MonoBehaviour {
   private void addIngredientToThrow(Ingredient ingredient) {
     GameObject ingred = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
     Transform ingredTransform = ingred.GetComponentsInChildren<Transform>(true)[0];
-    Quaternion ingredRotation = ingredTransform.rotation;
-    Vector3 ingredPosition = ingredTransform.position + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0);
+    Quaternion ingredRotation = Quaternion.Euler(-25, ingredTransform.rotation.y, ingredTransform.rotation.z);
+    Vector3 ingredPosition = new Vector3(0, -19, -60);
     GameObject inst = Instantiate(ingred, ingredPosition, ingredRotation);
 
     throwIngredient = ingredient;
     throwIngredientGameObject = inst;
+
+    startPosition = throwIngredientGameObject.GetComponent<Transform>().position;
   }
 
   public void clearStation() {
@@ -61,6 +71,8 @@ public class Fighting : MonoBehaviour {
 
   public void throwFood() {
     if (throwIngredient != null) {
+      startedThrowing = true;
+      grabText.gameObject.SetActive(true);
       player.sendThrowToServer(throwIngredient);
       clearStation();
     } else {
@@ -70,6 +82,7 @@ public class Fighting : MonoBehaviour {
 
   public void goBack() {
     /* Notify server that player has left the station */
+    Handheld.Vibrate();
     player.notifyAboutStationLeft();
     SceneManager.LoadScene("PlayerMainScreen");
   }

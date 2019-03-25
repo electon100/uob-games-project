@@ -41,6 +41,7 @@ public class Client : MonoBehaviour {
 
 	public void Start() {
     DontDestroyOnLoad(GameObject.Find("Client"));
+		Screen.orientation = ScreenOrientation.Portrait;
 	}
 
 	public void Update() {
@@ -96,6 +97,10 @@ public class Client : MonoBehaviour {
 		}
 	}
 
+	public string getTeam() {
+		return team;
+	}
+
 	// Client always listen for incoming data
 	public void listenForData() {
 		if (!isConnected) {
@@ -130,6 +135,8 @@ public class Client : MonoBehaviour {
 					NetworkTransport.RemoveHost(hostId);
 					startGame = false;
 					isConnected = false;
+					Player.removeCurrentIngredient();
+					Player.currentStation = "-1";
 					SceneManager.LoadScene("DisconnectScreen");
 					break;
 			case NetworkEventType.BroadcastEvent:
@@ -294,6 +301,7 @@ public class Client : MonoBehaviour {
 				gameEndState = new GameEndState(winningTeam, redScore, blueScore);
 				Debug.Log("END GAME: " + winningTeam + " " + redScore + " " + blueScore);
 				Player.removeCurrentIngredient();
+				Player.currentStation = "-1";
 				SceneManager.LoadScene("PlayerGameOverScreen");
 			} else {
 				SendMyMessage(messageType, "Error: one of the details is missing");
@@ -369,6 +377,9 @@ public class Client : MonoBehaviour {
 		connectButton.SetActive(false);
 		diffIPButton.SetActive(false);
 		inputField.SetActive(true);
+    changeIPText.Select();
+    changeIPText.ActivateInputField();
+    changeIPText.shouldHideMobileInput = true;
 		changeIPButton.SetActive(true);
 		goBackButton.SetActive(true);
 		defaultIP.SetActive(true);

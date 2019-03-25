@@ -33,9 +33,6 @@ EditorBuildSettings:
     path: Assets/Scenes/ChoppingStation/ChoppingStation.unity
     guid: 244a029c188607d4a8c0be584b4ec9b8
   - enabled: 1
-    path: Assets/Scenes/GameOverScreen.unity
-    guid: 4e92bf559359cee499509bfa3ae241f5
-  - enabled: 1
     path: Assets/Scenes/PlayerChangeIPScreen.unity
     guid: 007ffb1a0a1ff4f0e87dcb95a62ff0bd
   - enabled: 1

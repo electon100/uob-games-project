@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -220,7 +220,6 @@ GameObject:
   - component: {fileID: 143819314}
   - component: {fileID: 143819313}
   - component: {fileID: 143819312}
-  - component: {fileID: 143819311}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -228,20 +227,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &143819311
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 143819309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2ffe48b4e37b9642a41cd892cd96752, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainText: {fileID: 1035238257}
-  mainPanel: {fileID: 87812800}
-  tag_output_text: {fileID: 0}
 --- !u!65 &143819312
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -387,7 +372,6 @@ GameObject:
   - component: {fileID: 580630328}
   - component: {fileID: 580630327}
   - component: {fileID: 580630325}
-  - component: {fileID: 580630326}
   m_Layer: 0
   m_Name: Client
   m_TagString: Untagged
@@ -403,37 +387,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 580630324}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09a7057e8783a47368dd422cade7c6cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 53ff54751af9e334c96eb0935a5a4310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MainText: {fileID: 1035238257}
   RedScoreText: {fileID: 2021337592}
   BlueScoreText: {fileID: 1880813586}
---- !u!114 &580630326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 580630324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13c5bf6041b07594aa6ac0fc7267c962, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: 8000
-  hostId: 0
-  connectionId: 0
-  isConnected: 0
-  buttonPrefab: {fileID: 0}
-  startPanel: {fileID: 0}
-  warningText: {fileID: 0}
-  connectButton: {fileID: 0}
-  diffIPButton: {fileID: 0}
-  inputField: {fileID: 0}
-  changeIPButton: {fileID: 0}
-  tag_output_text: {fileID: 0}
-  ingredientsInStation: []
-  changeIPText: {fileID: 0}
+  redBackground: {fileID: 2100000, guid: ac2c769253deace41a2d3ec5e23dab90, type: 2}
+  blueBackground: {fileID: 2100000, guid: 51604750731d27443bdd7f10680a6875, type: 2}
+  background: {fileID: 143819313}
 --- !u!65 &580630327
 BoxCollider:
   m_ObjectHideFlags: 0

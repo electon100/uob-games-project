@@ -7,8 +7,7 @@ public class GameEndState {
 	public enum EndState {RED_WIN, BLUE_WIN, DRAW};
 
 	private EndState winningTeam;
-	private int redScore;
-	private int blueScore;
+	private int redScore, blueScore;
 
 	public GameEndState(EndState winningTeam, int redScore, int blueScore) {
 		this.winningTeam = winningTeam;

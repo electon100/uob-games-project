@@ -6,24 +6,32 @@ using UnityEngine.SceneManagement;
 
 public class Lobby : MonoBehaviour {
 
-    private int numberOfPlayers;
     private int countDown;
     private float startTime;
     public Transform startCanvas;
     public Transform countDownCanvas;
-    public Text countDownText;
+    public Text countDownText, lobbyText;
+    public Material redBackground, blueBackground;
+	public Renderer background;
 
     private GameObject networkClient;
     private Client network;
 
     void Start() {
         Screen.orientation = ScreenOrientation.Portrait;
-        numberOfPlayers = 0;
         startTime = Time.time;
         countDown = 0;
 
         networkClient = GameObject.Find("Client");
         network = networkClient.GetComponent<Client>();
+
+        lobbyText.text = network.getTeam() + " team lobby";
+
+        if (network.getTeam().Equals("blue")) {
+            background.material = blueBackground;
+        } else if (network.getTeam().Equals("red")) {
+            background.material = redBackground;
+        }
     }
 
     void Update() {
@@ -48,21 +56,8 @@ public class Lobby : MonoBehaviour {
         SceneManager.LoadScene("MainScreen");
     }
 
-    void StartGame()
-    {
-        countDownText.text = "Go, go, go!";
+    void StartGame() {
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
-    public void OnTwo() {
-        numberOfPlayers = 2;
-    }
-
-    public void OnThree() {
-        numberOfPlayers = 3;
-    }
-
-    public void OnFour() {
-        numberOfPlayers = 4;
-    }
 }

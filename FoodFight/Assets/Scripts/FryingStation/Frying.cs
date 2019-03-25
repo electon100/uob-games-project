@@ -16,6 +16,9 @@ public class Frying : MonoBehaviour {
 	public Player player;
 	public AudioClip fryingSound, successSound;
 
+	/* Text representation of ingredients on Screen */
+  public Text ingredientListText;
+
 	/* Phone motion stuff */
 	private float accelerometerUpdateInterval = 1.0f / 60.0f;
 	private float lowPassKernelWidthInSeconds = 1.0f;
@@ -30,7 +33,7 @@ public class Frying : MonoBehaviour {
 	private int negSinCount = 0, posSinCount = 0;
 	private Vector3 originalPos;
 	private float lastShake;
-	private int minimumShakeInterval = 1; // (seconds)
+	private float minimumShakeInterval = 0.7f; // (seconds)
 	private AudioSource source;
 
 	/* Ingredient stuff */
@@ -228,7 +231,7 @@ public class Frying : MonoBehaviour {
 		Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
 
 		Quaternion modelRotation = modelTransform.rotation;
-		Vector3 modelPosition = modelTransform.position;
+		Vector3 modelPosition = modelTransform.position + new Vector3(Random.Range(-2, 2), Random.Range(-2, 2), 0);
 		GameObject inst = Instantiate(model, modelPosition, modelRotation);
 		panContents.Add(ingredient);
 		panContentsObjects.Add(inst);
@@ -240,6 +243,14 @@ public class Frying : MonoBehaviour {
 			background.material = neutralMaterial;
 		}
 	}
+
+	void updateTextList() {
+    ingredientListText.text = "Current Ingredients:\n";
+
+    foreach(Ingredient ingredient in panContents) {
+      ingredientListText.text += ingredient.ToString() + "\n";
+    }
+  }
 
 	private void updateButtonStates() {
 		setButtonInteractable(putBtn, Player.isHoldingIngredient() && panContents.Count < maxPanContents);
@@ -262,6 +273,7 @@ public class Frying : MonoBehaviour {
 	public void goBack() {
 		/* TODO: Need to notify server of local updates to ingredients in pan before leaving */
 		/* Notify server that player has left the station */
+		Handheld.Vibrate();
 		player.notifyAboutStationLeft();
 		SceneManager.LoadScene("PlayerMainScreen");
 	}

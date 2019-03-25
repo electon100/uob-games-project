@@ -1,4 +1,5 @@
-enum GameState {
+public enum GameState {
+  MainMenu,
   ConfigureGame,
   AwaitingPlayers, /* At the start of the game and during the lobby */
   Countdown, /* Called at the synchronisation point before start of the game */

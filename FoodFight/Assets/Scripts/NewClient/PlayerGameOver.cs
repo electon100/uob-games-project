@@ -8,29 +8,30 @@ public class PlayerGameOver : MonoBehaviour {
 	public Text MainText;
 	public Text RedScoreText;
 	public Text BlueScoreText;
-	private GameObject Background;
+	public Material redBackground;
+	public Material blueBackground;
+	public Renderer background;
 
 	private Client client;
 
 	private GameEndState gameEndState;
 
-	// Use this for initialization
 	void Start () {
 		Screen.orientation = ScreenOrientation.Portrait;
-		Background = GameObject.Find("Background").GetComponent<GameObject>();
 
 		DontDestroyOnLoad(GameObject.Find("Client"));
 		client = GameObject.Find("Client").GetComponent<Client>();
 
 		gameEndState = client.gameEndState;
-		string team = client.team;
 
 		MainText.text = gameEndState.winningTeamStr() + " Team Wins!";
 
 		RedScoreText.text = "Red Score: " + gameEndState.getRedScore().ToString();
 		BlueScoreText.text = "Blue Score: " + gameEndState.getBlueScore().ToString();
 
-		if (team.Equals(gameEndState.winningTeamStr())) {
+		UpdateBackground();
+
+		if (client.getTeam().Equals(gameEndState.winningTeamStr())) {
 			Winner();
 		} else {
 			if (gameEndState.getWinningTeam() != GameEndState.EndState.DRAW) {
@@ -41,10 +42,7 @@ public class PlayerGameOver : MonoBehaviour {
 		}
 	}
 
-	// Update is called once per frame
-	void Update () {
-
-	}
+	void Update () {}
 
 	void Winner() {
 		MainText.text = "You win!";
@@ -56,5 +54,13 @@ public class PlayerGameOver : MonoBehaviour {
 
 	void Draw() {
 		MainText.text = "Draw!";
+	}
+
+	void UpdateBackground() {
+		if (client.getTeam().Equals("blue")) {
+			background.material = blueBackground;
+		} else if (client.getTeam().Equals("red")) {
+			background.material = redBackground;
+		}
 	}
 }
