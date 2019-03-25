@@ -16,7 +16,6 @@ public class PlayerGameOver : MonoBehaviour {
 
 	private GameEndState gameEndState;
 
-	// Use this for initialization
 	void Start () {
 		Screen.orientation = ScreenOrientation.Portrait;
 
@@ -24,14 +23,13 @@ public class PlayerGameOver : MonoBehaviour {
 		client = GameObject.Find("Client").GetComponent<Client>();
 
 		gameEndState = client.gameEndState;
-		string team = client.team;
 
 		MainText.text = gameEndState.winningTeamStr() + " Team Wins!";
 
 		RedScoreText.text = "Red Score: " + gameEndState.getRedScore().ToString();
 		BlueScoreText.text = "Blue Score: " + gameEndState.getBlueScore().ToString();
 
-		if (team.Equals(gameEndState.winningTeamStr())) {
+		if (client.getTeam().Equals(gameEndState.winningTeamStr())) {
 			Winner();
 			UpdateBackground();
 		} else {
@@ -43,10 +41,7 @@ public class PlayerGameOver : MonoBehaviour {
 		}
 	}
 
-	// Update is called once per frame
-	void Update () {
-
-	}
+	void Update () {}
 
 	void Winner() {
 		MainText.text = "You win!";
@@ -61,13 +56,10 @@ public class PlayerGameOver : MonoBehaviour {
 	}
 
 	void UpdateBackground() {
-		switch (client.team) {
-			case "red":
-				background.material = redBackground;
-				break;
-			case "blue":
-				background.material = blueBackground;
-				break;
+		if (client.getTeam().Equals("blue")) {
+			background.material = blueBackground;
+		} else if (client.getTeam().Equals("red")) {
+			background.material = redBackground;
 		}
 	}
 }
