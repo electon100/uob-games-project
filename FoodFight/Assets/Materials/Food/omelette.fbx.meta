@@ -1,0 +1,197 @@
+fileFormatVersion: 2
+guid: 7d2f92fe55d159c4ca3c12437ba47bdf
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: omlette 1
+    100004: pepper
+    100006: pepper10
+    100008: pepper11
+    100010: pepper2
+    100012: pepper3
+    100014: pepper4
+    100016: pepper5
+    100018: pepper6
+    100020: pepper7
+    100022: pepper8
+    100024: pepper9
+    100026: peppers
+    100028: salt
+    100030: salt2
+    100032: salt3
+    100034: salt4
+    100036: salt5
+    100038: salt6
+    100040: salt7
+    100042: salt8
+    100044: salts
+    400000: //RootNode
+    400002: omlette 1
+    400004: pepper
+    400006: pepper10
+    400008: pepper11
+    400010: pepper2
+    400012: pepper3
+    400014: pepper4
+    400016: pepper5
+    400018: pepper6
+    400020: pepper7
+    400022: pepper8
+    400024: pepper9
+    400026: peppers
+    400028: salt
+    400030: salt2
+    400032: salt3
+    400034: salt4
+    400036: salt5
+    400038: salt6
+    400040: salt7
+    400042: salt8
+    400044: salts
+    2100000: lambert3
+    2100002: pepper1
+    2100004: salt1
+    2100006: uncooked_egg
+    2300000: omlette 1
+    2300002: pepper
+    2300004: pepper10
+    2300006: pepper11
+    2300008: pepper2
+    2300010: pepper3
+    2300012: pepper4
+    2300014: pepper5
+    2300016: pepper6
+    2300018: pepper7
+    2300020: pepper8
+    2300022: pepper9
+    2300024: salt
+    2300026: salt2
+    2300028: salt3
+    2300030: salt4
+    2300032: salt5
+    2300034: salt6
+    2300036: salt7
+    2300038: salt8
+    3300000: omlette 1
+    3300002: pepper
+    3300004: pepper10
+    3300006: pepper11
+    3300008: pepper2
+    3300010: pepper3
+    3300012: pepper4
+    3300014: pepper5
+    3300016: pepper6
+    3300018: pepper7
+    3300020: pepper8
+    3300022: pepper9
+    3300024: salt
+    3300026: salt2
+    3300028: salt3
+    3300030: salt4
+    3300032: salt5
+    3300034: salt6
+    3300036: salt7
+    3300038: salt8
+    4300000: omlette
+    4300002: pepper
+    4300004: pepper2
+    4300006: pepper3
+    4300008: pepper4
+    4300010: pepper5
+    4300012: pepper6
+    4300014: pepper7
+    4300016: pepper8
+    4300018: pepper9
+    4300020: pepper10
+    4300022: pepper11
+    4300024: salt2
+    4300026: salt3
+    4300028: salt4
+    4300030: salt5
+    4300032: salt6
+    4300034: salt7
+    4300036: salt8
+    4300038: salt
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

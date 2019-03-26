@@ -136,7 +136,7 @@
       ]
     },
     {
-      "name": "raw_omlette",
+      "name": "raw_omelette",
       "ingredients": [
         {
           "name": "eggs",
@@ -144,17 +144,17 @@
           "chopped": false
         },
         {
-          "name": "cheese",
+          "name": "eggs",
           "cooked": false,
           "chopped": false
         }
       ]
     },
     {
-      "name": "omlette",
+      "name": "omelette",
       "ingredients": [
         {
-          "name": "raw_omlette",
+          "name": "raw_omelette",
           "cooked": true,
           "chopped": false
         }
