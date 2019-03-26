@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour{
     float speed = 10.0f;
-	Vector3 targetPosition;
+	private Vector3 targetPosition;
+	public Vector3 startPosition;
 	bool needsMoving;
 
 	private void Start(){
@@ -26,7 +27,12 @@ public class PlayerMovement : MonoBehaviour{
 
     public void movePlayer(Vector3 newPosition)
     {
-		targetPosition = newPosition;
+		if (newPosition == new Vector3(0, 0, 0)){
+			targetPosition = startPosition;
+		}
+		else{
+			targetPosition = newPosition;
+		}
 		needsMoving = true;
     }
 }

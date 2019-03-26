@@ -249,7 +249,9 @@ public class NewServer : MonoBehaviour {
       return false;
     }
 
-    relevantPrefab = (GameObject) Instantiate(relevantPrefab, new Vector3(-40, 2, 5 * (relevantTeam.Players.Count + 1)), Quaternion.identity);
+    Vector3 startPosition = new Vector3(-40, 2, 5 * (relevantTeam.Players.Count + 1));
+    relevantPrefab = (GameObject) Instantiate(relevantPrefab, startPosition, Quaternion.identity);
+    relevantPrefab.GetComponent<PlayerMovement>().startPosition = startPosition;
 
     return relevantTeam.addPlayerToTeam(new ConnectedPlayer(connectionId, relevantPrefab));
   }
@@ -383,6 +385,7 @@ public class NewServer : MonoBehaviour {
       /* Set players current station to null */
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
       player.CurrentStation = null;
+      player.PlayerPrefab.GetComponent<PlayerMovement>().movePlayer(new Vector3(0, 0, 0));
     } else {
       Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
