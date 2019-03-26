@@ -249,7 +249,17 @@ public class NewServer : MonoBehaviour {
       return false;
     }
 
-    Vector3 startPosition = new Vector3(-40, 2, 5 * (relevantTeam.Players.Count + 1));
+    Vector3 startPosition;
+    if (relevantTeam.Colour == redTeamColour){
+      startPosition = new Vector3(-40, 2, 5 * (relevantTeam.Players.Count + 1));
+    }
+    else if (relevantTeam.Colour == blueTeamColour){
+      startPosition = new Vector3(40, 2, 5 * (relevantTeam.Players.Count + 1));
+    }
+    else{
+      startPosition = new Vector3(0, 0, 0);
+    }
+    
     relevantPrefab = (GameObject) Instantiate(relevantPrefab, startPosition, Quaternion.identity);
     relevantPrefab.GetComponent<PlayerMovement>().startPosition = startPosition;
 
