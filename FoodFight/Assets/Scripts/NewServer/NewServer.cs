@@ -267,6 +267,7 @@ public class NewServer : MonoBehaviour {
         SendMyMessage(messageType, "Station disabled", connectionId);
       } else if (!relevantTeam.isStationOccupied(destinationStation)) {
         player.CurrentStation = destinationStation;
+        MovePlayer(player.PlayerPrefab, relevantTeam, destinationStation);
         string messageToSend = messageContent + "$";
         /* Send back all ingredients currently at this station */
         foreach (Ingredient ingredient in destinationStation.Ingredients) {
@@ -409,6 +410,37 @@ public class NewServer : MonoBehaviour {
       }
     } else {
       Debug.Log("Invalid station id [" + station + "], could not process station hit.");
+    }
+  }
+
+  private void MovePlayer(GameObject player, Team team, Station station){
+    Vector3 newPosition = new Vector3(0f, 0f, 0f);
+    newPosition.y = 1.7f;
+    switch(station.Id){
+      case "0":
+        newPosition.z = -23f;
+        break;
+      case "1":
+        newPosition.z = -9f;
+        break;
+      case "2":
+        newPosition.z = 13f;
+        break;
+      case "3":
+        newPosition.z = 24f;
+        break;
+      default:
+        newPosition.z = 0f;
+        break;
+    }
+
+    if (team.Colour == redTeamColour){
+      newPosition.x = -30f;
+      player.GetComponent<PlayerMovement>().movePlayer(newPosition);
+    }
+    else if (team.Colour == blueTeamColour){
+      newPosition.x = 30f;
+      player.GetComponent<PlayerMovement>().movePlayer(newPosition);
     }
   }
 

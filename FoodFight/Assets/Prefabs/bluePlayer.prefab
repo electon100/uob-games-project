@@ -85,6 +85,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4671181377039470}
+  - component: {fileID: 114213831009603978}
+  - component: {fileID: 54001110157105784}
   m_Layer: 0
   m_Name: bluePlayer
   m_TagString: Untagged
@@ -958,3 +960,29 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1628133866241092}
   m_Mesh: {fileID: 4300010, guid: 277287920202d8b4db7e91b23969df4f, type: 3}
+--- !u!54 &54001110157105784
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1149843372488582}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &114213831009603978
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1149843372488582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 791a53680ee42fc44b949873a00ff995, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
