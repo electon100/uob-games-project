@@ -211,7 +211,7 @@
       "score" : 20
     },
     {
-      "name" : "raw_omlette",
+      "name" : "raw_omelette",
       "choppable" : false,
       "cookable" : true,
       "orderable" : false,
@@ -221,10 +221,10 @@
       "score" : 50
     },
     {
-      "name" : "omlette",
+      "name" : "omelette",
       "choppable" : false,
       "cookable" : false,
-      "orderable" : false,
+      "orderable" : true,
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
