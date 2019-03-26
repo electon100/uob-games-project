@@ -249,7 +249,9 @@ public class NewServer : MonoBehaviour {
       return false;
     }
 
-    relevantPrefab = (GameObject) Instantiate(relevantPrefab, new Vector3(-40, 2, 5 * (relevantTeam.Players.Count + 1)), Quaternion.identity);
+    Vector3 startPosition = new Vector3(-40, 2, 5 * (relevantTeam.Players.Count + 1));
+    relevantPrefab = (GameObject) Instantiate(relevantPrefab, startPosition, Quaternion.identity);
+    relevantPrefab.GetComponent<PlayerMovement>().startPosition = startPosition;
 
     return relevantTeam.addPlayerToTeam(new ConnectedPlayer(connectionId, relevantPrefab));
   }
@@ -267,6 +269,7 @@ public class NewServer : MonoBehaviour {
         SendMyMessage(messageType, "Station disabled", connectionId);
       } else if (!relevantTeam.isStationOccupied(destinationStation)) {
         player.CurrentStation = destinationStation;
+        MovePlayer(player.PlayerPrefab, relevantTeam, destinationStation);
         string messageToSend = messageContent + "$";
         /* Send back all ingredients currently at this station */
         foreach (Ingredient ingredient in destinationStation.Ingredients) {
@@ -382,6 +385,7 @@ public class NewServer : MonoBehaviour {
       /* Set players current station to null */
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
       player.CurrentStation = null;
+      player.PlayerPrefab.GetComponent<PlayerMovement>().movePlayer(new Vector3(0, 0, 0));
     } else {
       Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
@@ -409,6 +413,37 @@ public class NewServer : MonoBehaviour {
       }
     } else {
       Debug.Log("Invalid station id [" + station + "], could not process station hit.");
+    }
+  }
+
+  private void MovePlayer(GameObject player, Team team, Station station){
+    Vector3 newPosition = new Vector3(0f, 0f, 0f);
+    newPosition.y = 1.7f;
+    switch(station.Id){
+      case "0":
+        newPosition.z = -23f;
+        break;
+      case "1":
+        newPosition.z = -9f;
+        break;
+      case "2":
+        newPosition.z = 13f;
+        break;
+      case "3":
+        newPosition.z = 24f;
+        break;
+      default:
+        newPosition.z = 0f;
+        break;
+    }
+
+    if (team.Colour == redTeamColour){
+      newPosition.x = -30f;
+      player.GetComponent<PlayerMovement>().movePlayer(newPosition);
+    }
+    else if (team.Colour == blueTeamColour){
+      newPosition.x = 30f;
+      player.GetComponent<PlayerMovement>().movePlayer(newPosition);
     }
   }
 
