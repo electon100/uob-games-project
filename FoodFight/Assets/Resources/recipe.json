@@ -144,7 +144,7 @@
           "chopped": false
         },
         {
-          "name": "eggs",
+          "name": "diced_potato",
           "cooked": false,
           "chopped": false
         }
@@ -398,6 +398,11 @@
     {
       "name": "fajita_mix",
       "ingredients": [
+        {
+          "name": "chopped_onion",
+          "cooked": false,
+          "chopped": false
+        },
         {
           "name": "diced_chicken",
           "cooked": false,

@@ -21,8 +21,7 @@ public class Player : MonoBehaviour {
   0  - Cupboard
   1  - Chopping
   2  - Frying
-  3  - Plating
-  4  - Fighting */
+  3  - Plating */
   public static string currentStation = "-1";
 
   public static Ingredient currentIngred;
@@ -54,7 +53,6 @@ public class Player : MonoBehaviour {
     if (Input.GetKeyDown(KeyCode.T)) checkStation("1");
     if (Input.GetKeyDown(KeyCode.Y)) checkStation("2");
     if (Input.GetKeyDown(KeyCode.U)) checkStation("3");
-    if (Input.GetKeyDown(KeyCode.I)) checkStation("4");
     if (Input.GetKeyDown(KeyCode.E)) Debug.Log(Player.currentIngred.Model);
 
     /* Check for any NFC scans, forwarding to checkStation if present */
@@ -133,10 +131,6 @@ public class Player : MonoBehaviour {
           network.SendMyMessage("station", text);
           break;
         case "3":
-          currentStation = text;
-          network.SendMyMessage("station", text);
-          break;
-        case "4":
           currentStation = text;
           network.SendMyMessage("station", text);
           break;

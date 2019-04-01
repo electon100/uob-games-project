@@ -7,11 +7,11 @@ using System.Text;
 
 public class PlateBehaviour : MonoBehaviour {
 
-  public Button serveBtn, putBtn, pickBtn, clearBtn, goBackBtn;
+  public Button serveBtn, throwBtn, clearBtn, goBackBtn;
   public Player player;
 
   /* Text representation of ingredients on Screen */
-  public Text ingredientListText;
+  public Text ingredientListText, statusText;
 
   /* Ingredient stuff */
 	private readonly int maxPlateContents = 3;
@@ -21,6 +21,7 @@ public class PlateBehaviour : MonoBehaviour {
   void Start () {
 
     Screen.orientation = ScreenOrientation.Portrait;
+    statusText.enabled = false;
 
     clearPlate();
 
@@ -33,6 +34,10 @@ public class PlateBehaviour : MonoBehaviour {
   }
 
   void Update() {
+    updateTextList();
+    updateButtonStates();
+    checkForPlateTap();
+
     /* Try and combine the ingredients */
     Ingredient combinationAttempt = getWorkingRecipe();
 
@@ -43,9 +48,6 @@ public class PlateBehaviour : MonoBehaviour {
       addIngredientToPlate(combinationAttempt);
       player.notifyServerAboutIngredientPlaced(combinationAttempt);
     }
-
-    updateTextList();
-    updateButtonStates();
   }
 
   private void addIngredientToPlate(Ingredient ingredient) {
@@ -120,6 +122,22 @@ public class PlateBehaviour : MonoBehaviour {
     }
   }
 
+  public void throwFood() {
+    if (plateContents.Count == 1) {
+      Ingredient recipe = getWorkingRecipe();
+
+      foreach (Ingredient ingredient in plateContents) {
+        recipe = ingredient;
+      }
+
+      if (isValidRecipe(recipe)) {
+        player.sendThrowToServer(recipe);
+        clearStation();
+        statusText.enabled = true;
+      }
+    }
+  }
+
 	public void pickUpIngredient() {
 		if (plateContents.Count == 1) {
 			/* Set the players current ingredient to the pan contents */
@@ -134,6 +152,32 @@ public class PlateBehaviour : MonoBehaviour {
 		}
 	}
 
+  private void checkForPlateTap() {
+		/* https://stackoverflow.com/a/38566276 */
+		bool isDesktop = Input.GetMouseButtonDown(0);
+		bool isMobile = (Input.touchCount > 0) && (Input.GetTouch(0).phase == TouchPhase.Began);
+		if (isDesktop || isMobile) {
+			Ray raycast = (isDesktop) ? Camera.main.ScreenPointToRay(Input.mousePosition) :
+																	Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+			RaycastHit raycastHit;
+			if (Physics.Raycast(raycast, out raycastHit)) {
+				if (!raycastHit.collider.name.Equals("Background")) { // <-- Requires ingredient prefabs to have colliders (approx) within plate bounds
+				// if (raycastHit.collider.name.Equals("Plate")) { // <-- Requires ingredient prefabs not to have colliders!
+					/* Plate was tapped! */
+					if (canPlaceHeldIngredient()) {
+						placeHeldIngredientInPlate();
+					} else if (plateContents.Count == 1) {
+						pickUpIngredient();
+					}
+				}
+			}
+		}
+	}
+
+  private bool canPlaceHeldIngredient() {
+		return Player.isHoldingIngredient() && plateContents.Count < maxPlateContents;
+	}
+
   public void goBack() {
     /* Notify server that player has left the station */
     Handheld.Vibrate();
@@ -142,10 +186,9 @@ public class PlateBehaviour : MonoBehaviour {
   }
 
   private void updateButtonStates() {
-		setButtonInteractable(putBtn, Player.isHoldingIngredient() && plateContents.Count < maxPlateContents);
-    setButtonInteractable(pickBtn, plateContents.Count == 1);
 		setButtonInteractable(clearBtn, plateContents.Count > 0);
 		setButtonInteractable(serveBtn, plateContents.Count == 1);
+    setButtonInteractable(throwBtn, plateContents.Count == 1);
 	}
 
 	private void setButtonInteractable(Button btn, bool interactable) {

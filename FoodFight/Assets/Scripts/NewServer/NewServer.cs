@@ -77,12 +77,10 @@ public class NewServer : MonoBehaviour {
     Team[] allTeams = new Team[] {redTeam, blueTeam};
     foreach (Team team in allTeams) {
       foreach (Station station in team.Kitchen.Stations) {
-        if (!station.Id.Equals("4")) {
-          GameObject StationDisablePrefab = GameObject.Find(team.Name + "station" + station.Id + "prefabdisable");
-          station.DisablePrefab = StationDisablePrefab;
-          GameObject StationPrefab = GameObject.Find(team.Name + "station" + station.Id + "prefab");
-          station.Prefab = StationPrefab;
-        }
+        GameObject StationDisablePrefab = GameObject.Find(team.Name + "station" + station.Id + "prefabdisable");
+        station.DisablePrefab = StationDisablePrefab;
+        GameObject StationPrefab = GameObject.Find(team.Name + "station" + station.Id + "prefab");
+        station.Prefab = StationPrefab;
       }
     }
   }
@@ -362,6 +360,9 @@ public class NewServer : MonoBehaviour {
         ingredientToScore = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToScore.GetType());
         Debug.Log("Ingredient to score: " + ingredientToScore.Name);
         relevantTeam.scoreRecipe(ingredientToScore);
+
+        /* Broadcast new scores to devices */
+        BroadcastScores();
       } else {
         Debug.Log("Invalid messageContent");
         SendMyMessage(messageType, "Fail", connectionId);
@@ -471,8 +472,13 @@ public class NewServer : MonoBehaviour {
 
   public void manageOrders() {
     // Check if any orders have expired and remove some points
-    redTeam.Score -= (int) (redTeam.checkExpiredOrders() * negativeScoreMultiplier);
-    blueTeam.Score -= (int) (blueTeam.checkExpiredOrders() * negativeScoreMultiplier);
+    if (redTeam.checkExpiredOrders() > 0 || blueTeam.checkExpiredOrders() > 0) {
+      redTeam.Score -= (int) (redTeam.checkExpiredOrders() * negativeScoreMultiplier);
+      blueTeam.Score -= (int) (blueTeam.checkExpiredOrders() * negativeScoreMultiplier);
+
+      /* Broadcast new scores to devices */
+      BroadcastScores();
+    }
 
     if ((redTeam.NextOrderTimer <= 0 && redTeam.Orders.Count < 3) || redTeam.Orders.Count < 1) {
       redTeam.addOrder(mainGameCanvas);
@@ -503,12 +509,15 @@ public class NewServer : MonoBehaviour {
             station.resetTimer();
           }
         }
-        if (!station.Id.Equals("4")) {
-          station.DisablePrefab.SetActive(station.isDisabled());
-          station.Prefab.SetActive(!station.isDisabled());
-        }
+        station.DisablePrefab.SetActive(station.isDisabled());
+        station.Prefab.SetActive(!station.isDisabled());
       }
     }
+  }
+
+  private void BroadcastScores() {
+    Debug.Log("Broadcasting scores...");
+    BroadcastMessage("score", redTeam.Score + "$" + blueTeam.Score);
   }
 
   /* Gets the team that a connected player is on, returning null if not found */
