@@ -621,16 +621,6 @@
       "score" : 100
     },
     {
-      "name" : "fried_egg",
-      "choppable" : false,
-      "cookable" : false,
-      "orderable" : false,
-      "correctFlips" : 0,
-      "maxFlips" : 0,
-      "correctChops" : 0,
-      "score" : 30
-    },
-    {
       "name" : "chopped_onion",
       "choppable" : false,
       "cookable" : false,
