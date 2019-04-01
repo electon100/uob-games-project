@@ -39,7 +39,6 @@ GameObject:
   - component: {fileID: 4275001808238482}
   - component: {fileID: 33523731162844736}
   - component: {fileID: 23471066459161950}
-  - component: {fileID: 135109326732396140}
   m_Layer: 0
   m_Name: diced_potatoPrefab
   m_TagString: Untagged
@@ -232,18 +231,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1539375944079592}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!135 &135109326732396140
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1539375944079592}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &135189358784126712
 SphereCollider:
   m_ObjectHideFlags: 1

@@ -3960,7 +3960,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4985821634171650}
   - component: {fileID: 95397627416526104}
-  - component: {fileID: 135107281306007722}
   m_Layer: 0
   m_Name: mixed_vegetablesPrefab
   m_TagString: Untagged
@@ -16274,15 +16273,3 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!135 &135107281306007722
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1801686242084046}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.026620833
-  m_Center: {x: -0.013090903, y: 0.018571904, z: -0.0072537176}

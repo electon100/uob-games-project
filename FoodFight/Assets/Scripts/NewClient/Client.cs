@@ -356,12 +356,6 @@ public class Client : MonoBehaviour {
 					SceneManager.LoadScene("PlatingStation");
 				}
 				break;
-			case "4": // Fighting Minigame
-				if (!currentScene.Equals("FightingStation")) {
-					Player.ingredientsFromStation = ingredientsInStation;
-					SceneManager.LoadScene("FightingStation");
-				}
-				break;
 			default:
 					break;
 		}
