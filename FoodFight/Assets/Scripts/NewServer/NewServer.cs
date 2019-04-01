@@ -507,7 +507,7 @@ public class NewServer : MonoBehaviour {
             station.resetTimer();
           }
         }
-        // station.visualDisable.SetActive(station.isDisabled());
+        station.VisualDisable.SetActive(station.isDisabled());
       }
     }
   }

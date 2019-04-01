@@ -2039,7 +2039,7 @@ GameObject:
   - component: {fileID: 551892563}
   - component: {fileID: 551892562}
   m_Layer: 5
-  m_Name: red0disable
+  m_Name: blue0disable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2794,7 +2794,7 @@ GameObject:
   - component: {fileID: 812595254}
   - component: {fileID: 812595253}
   m_Layer: 5
-  m_Name: red1disable
+  m_Name: blue1disable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7637,7 +7637,7 @@ GameObject:
   - component: {fileID: 2114029670}
   - component: {fileID: 2114029669}
   m_Layer: 5
-  m_Name: red2disable
+  m_Name: blue2disable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
