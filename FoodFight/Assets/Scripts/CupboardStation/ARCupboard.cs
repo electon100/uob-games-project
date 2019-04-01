@@ -89,10 +89,7 @@ public class ARCupboard : MonoBehaviour
     }
 
     public void toggleButtons() {
-        goBackButtonBig.SetActive(true);
         backArrow.SetActive(true);
-        imageTargetCupboard.SetActive(false);
-        imageTargetFridge.SetActive(false);
     }
 
     public void onPotato()
