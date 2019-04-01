@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -207,7 +207,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400002, guid: e1e7c7f9e39c34df7bb3b09eb7de6d30, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.006
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e1e7c7f9e39c34df7bb3b09eb7de6d30, type: 3}
       propertyPath: m_LocalPosition.y
@@ -255,7 +255,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: e1e7c7f9e39c34df7bb3b09eb7de6d30, type: 3}
       propertyPath: m_Name
-      value: bluestation2prefab
+      value: bluestationprefab2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1e7c7f9e39c34df7bb3b09eb7de6d30, type: 3}
@@ -1235,7 +1235,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 33fd9d7434ebf4018bf1122bbfb3a08d, type: 3}
       propertyPath: m_Name
-      value: redstation3prefab
+      value: redstationprefab3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33fd9d7434ebf4018bf1122bbfb3a08d, type: 3}
@@ -1319,7 +1319,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100012, guid: bd3b030bd35104694ba3b92c2fc15f01, type: 3}
       propertyPath: m_Name
-      value: redstation0prefab
+      value: redstationprefab0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd3b030bd35104694ba3b92c2fc15f01, type: 3}
@@ -1399,7 +1399,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 9490121931d4d473cb7d2545d03db2ff, type: 3}
       propertyPath: m_Name
-      value: bluestation1prefab
+      value: bluestationprefab1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9490121931d4d473cb7d2545d03db2ff, type: 3}
@@ -2549,7 +2549,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 33fd9d7434ebf4018bf1122bbfb3a08d, type: 3}
       propertyPath: m_Name
-      value: bluestation3prefab
+      value: bluestationprefab3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33fd9d7434ebf4018bf1122bbfb3a08d, type: 3}
@@ -2846,8 +2846,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.3315266, y: 0.321599, z: 0.25819612}
-  m_Center: {x: 0.2782735, y: 0.14158727, z: -0.32390237}
+  m_Size: {x: 0.35, y: 0.4, z: 0.35}
+  m_Center: {x: 0.05, y: 0.1, z: 0}
 --- !u!1 &928768384
 GameObject:
   m_ObjectHideFlags: 0
@@ -3262,7 +3262,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 9490121931d4d473cb7d2545d03db2ff, type: 3}
       propertyPath: m_Name
-      value: redstation1prefab
+      value: redstationprefab1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9490121931d4d473cb7d2545d03db2ff, type: 3}
@@ -3593,7 +3593,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100012, guid: bd3b030bd35104694ba3b92c2fc15f01, type: 3}
       propertyPath: m_Name
-      value: bluestation0prefab
+      value: bluestationprefab0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd3b030bd35104694ba3b92c2fc15f01, type: 3}
@@ -5440,7 +5440,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: e1e7c7f9e39c34df7bb3b09eb7de6d30, type: 3}
       propertyPath: m_Name
-      value: redstation2prefab
+      value: redstationprefab2
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: e1e7c7f9e39c34df7bb3b09eb7de6d30, type: 3}
       propertyPath: m_IsActive

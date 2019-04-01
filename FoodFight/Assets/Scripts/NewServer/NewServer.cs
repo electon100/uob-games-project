@@ -79,7 +79,7 @@ public class NewServer : MonoBehaviour {
       foreach (Station station in team.Kitchen.Stations) {
         GameObject StationDisablePrefab = GameObject.Find(team.Name + "station" + station.Id + "prefabdisable");
         station.DisablePrefab = StationDisablePrefab;
-        GameObject StationPrefab = GameObject.Find(team.Name + "station" + station.Id + "prefab");
+        GameObject StationPrefab = GameObject.Find(team.Name + "stationprefab" + station.Id);
         station.Prefab = StationPrefab;
       }
     }
