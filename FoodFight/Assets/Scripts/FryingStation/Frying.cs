@@ -7,7 +7,7 @@ using System.Text;
 
 public class Frying : MonoBehaviour {
 
-	public Button goBackBtn, putBtn, pickBtn, clearBtn, combineBtn;
+	public Button goBackBtn, clearBtn;
 	public Text test_text;
 	public Material successMaterial;
 	public Material neutralMaterial;
@@ -71,12 +71,13 @@ public class Frying : MonoBehaviour {
 	}
 
 	void Update () {
-		/* Ensure correct buttons are interactable */
+
 		updateButtonStates();
+		updateTextList();
 		shakeIfNeeded();
+		checkForPanTap();
 
 		if (ingredientCookedStationComplete) {
-			test_text.text = "Ingredient cooked!";
 			background.material = successMaterial;
 		} else {
 			if (panContents.Count == 1) {
@@ -100,19 +101,24 @@ public class Frying : MonoBehaviour {
 					if (isValidRecipe(newIngred)) {
 						setPanContents(newIngred);
 						source.PlayOneShot(successSound);
+						test_text.text = "Ingredient cooked!";
+						background.material = successMaterial;
 						ingredientCookedStationComplete = true;
 					}
 				}
 
 			} else {
+				/* Try and combine the ingredients */
+				Ingredient combinationAttempt = getWorkingRecipe();
+
+				/* If the combined result is a valid recipe (not mush) */
+				if (isValidRecipe(combinationAttempt)) {
+					/* Set the pan contents to the new combined recipe */
+					setPanContents(combinationAttempt);
+				}
+
 				/* TODO: What happens when pan is empty or too full */
 				if (panContents.Count > maxPanContents) Debug.Log("Pan got too full!");
-			}
-		}
-
-		if (Input.GetKeyDown(KeyCode.E)) {
-			foreach (Ingredient ingredient in panContents) {
-				Debug.Log(ingredient.Name);
 			}
 		}
 	}
@@ -135,6 +141,10 @@ public class Frying : MonoBehaviour {
 			/* Increment the number of pan tosses of ingredient in pan */
 		}
 	}
+
+	private Ingredient getWorkingRecipe() {
+    return FoodData.Instance.TryCombineIngredients(panContents);
+  }
 
 	private bool isValidRecipe(Ingredient recipe) {
 		return !string.Equals(recipe.Name, "mush");
@@ -235,8 +245,8 @@ public class Frying : MonoBehaviour {
 		GameObject inst = Instantiate(model, modelPosition, modelRotation);
 		panContents.Add(ingredient);
 		panContentsObjects.Add(inst);
-		if (panContents.Count > 1) {
-			test_text.text = "Combine ingredients to cook";
+		if (!FoodData.Instance.isCookable(ingredient) || (panContents.Count > 1)) {
+			test_text.text = "Awaiting valid ingredients";
 			background.material = issueMaterial;
 		} else {
 			test_text.text = "Shake phone to cook";
@@ -244,19 +254,45 @@ public class Frying : MonoBehaviour {
 		}
 	}
 
-	void updateTextList() {
-    ingredientListText.text = "Current Ingredients:\n";
+	private void checkForPanTap() {
+		/* https://stackoverflow.com/a/38566276 */
+		bool isDesktop = Input.GetMouseButtonDown(0);
+		bool isMobile = (Input.touchCount > 0) && (Input.GetTouch(0).phase == TouchPhase.Began);
+		if (isDesktop || isMobile) {
+			Ray raycast = (isDesktop) ? Camera.main.ScreenPointToRay(Input.mousePosition) :
+																	Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+			RaycastHit raycastHit;
+			if (Physics.Raycast(raycast, out raycastHit)) {
+				if (!raycastHit.collider.name.Equals("Background")) { // <-- Requires ingredient prefabs to have colliders (approx) within pan bounds
+				// if (raycastHit.collider.name.Equals("Pan")) { // <-- Requires ingredient prefabs not to have colliders!
+					/* Pan was tapped! */
+					if (canPlaceHeldIngredient()) {
+						placeHeldIngredientInPan();
+					} else if (panContents.Count == 1) {
+						pickUpIngredient();
+						test_text.text = "Picked up ingredient!";
+					}
+				}
+			}
+		}
+	}
 
-    foreach(Ingredient ingredient in panContents) {
-      ingredientListText.text += ingredient.ToString() + "\n";
-    }
+	void updateTextList() {
+		if (panContents.Count > 0) {
+			ingredientListText.text = "Current Ingredients:\n";
+
+			foreach(Ingredient ingredient in panContents) {
+				ingredientListText.text += ingredient.ToString() + "\n";
+			}
+		} else ingredientListText.text = "";
   }
 
+	private bool canPlaceHeldIngredient() {
+		return !ingredientCookedStationComplete && Player.isHoldingIngredient() && panContents.Count < maxPanContents;
+	}
+
 	private void updateButtonStates() {
-		setButtonInteractable(putBtn, Player.isHoldingIngredient() && panContents.Count < maxPanContents);
 		setButtonInteractable(clearBtn, panContents.Count > 0);
-		setButtonInteractable(pickBtn, panContents.Count == 1);
-		setButtonInteractable(combineBtn, panContents.Count > 1);
 	}
 
 	private void setButtonInteractable(Button btn, bool interactable) {
