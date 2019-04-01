@@ -68,14 +68,14 @@ public class Team {
     Ingredient recipe = new Ingredient(recipeName, recipeName + "Prefab");
     string id = recipeName + Orders.Count + Name + "Object";
 
-    Orders.Add(new Order(id, recipe, new GameObject(id), 120, mainGameCanvas));
+    Orders.Add(new Order(id, recipe, new GameObject(id), 150, mainGameCanvas));
 
     return true;
   }
 
   public void updateOrders() {
     for (int i = 0; i < Orders.Count; i++) {
-      Orders[i].updateCanvas(new Vector3(((Name.Equals("red")) ? -1 : 1 )*175, -(i*120), 0));
+      Orders[i].updateCanvas(new Vector3(((Name.Equals("red")) ? -1 : 1 )*175, 120-(i*120), 0));
       if (Orders[i].Timer <= 30) Orders[i].setTextRed();
     }
   }

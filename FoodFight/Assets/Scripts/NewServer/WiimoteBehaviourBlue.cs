@@ -36,7 +36,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
         blueIsSet = false;
         aPressed = false;
         firstTime = false;
-        blueTime = 5.0f;
+        blueTime = 10.0f;
         DisplayTime();
     }
 
