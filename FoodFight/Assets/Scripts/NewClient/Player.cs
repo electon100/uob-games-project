@@ -41,6 +41,7 @@ public class Player : MonoBehaviour {
     networkClient = GameObject.Find("Client");
     network = networkClient.GetComponent<Client>();
     DontDestroyOnLoad(GameObject.Find("Player"));
+    errorText = GameObject.Find("ErrorText").GetComponent<Text>();
 
     if (network.getTeam().Equals("blue")) {
       background.material = blueBackground;
@@ -67,6 +68,9 @@ public class Player : MonoBehaviour {
     if (disabledTimer > 0) {
       displayDisabledStation();
       disabledTimer -= Time.deltaTime;
+    } else {
+      disabledTimer = 0.0f;
+      resetErrorText();
     }
   }
 
@@ -164,11 +168,15 @@ public class Player : MonoBehaviour {
 
   public static void displayDisabledStation() {
     errorText = GameObject.Find("ErrorText").GetComponent<Text>();
-    errorText.text = "Oh no! This station has been disabled.\n" + string.Format("{0:D2}", disabledTimer) + " seconds remaining.";
+    errorText.text = "Oh no! This station has been disabled.\n" + (int) disabledTimer + " seconds remaining.";
 	}
 
 	public static void displayOccupiedStation() {
     errorText = GameObject.Find("ErrorText").GetComponent<Text>();
     errorText.text = "Oh no! This station is occupied.";
 	}
+
+  private static void resetErrorText() {
+    errorText.text = "";
+  }
 }
