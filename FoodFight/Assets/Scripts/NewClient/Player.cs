@@ -31,6 +31,8 @@ public class Player : MonoBehaviour {
 	public Renderer background;
   public static Text errorText;
 
+  public static float disabledTimer = 0.0f;
+
   // NFC Stuff:
   private NFCHandler nfcHandler = new NFCHandler();
 
@@ -60,6 +62,11 @@ public class Player : MonoBehaviour {
     if (lastTag != "-1" && currentStation == "-1") {
       Handheld.Vibrate();
       checkStation(lastTag);
+    }
+
+    if (disabledTimer > 0) {
+      displayDisabledStation();
+      disabledTimer -= Time.deltaTime;
     }
   }
 
@@ -157,7 +164,7 @@ public class Player : MonoBehaviour {
 
   public static void displayDisabledStation() {
     errorText = GameObject.Find("ErrorText").GetComponent<Text>();
-    errorText.text = "Oh no! This station has been disabled.";
+    errorText.text = "Oh no! This station has been disabled.\n" + string.Format("{0:D2}", disabledTimer) + " seconds remaining.";
 	}
 
 	public static void displayOccupiedStation() {

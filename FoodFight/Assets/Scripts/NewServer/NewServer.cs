@@ -286,7 +286,7 @@ public class NewServer : MonoBehaviour {
       Station destinationStation = relevantTeam.Kitchen.getStationForId(messageContent);
       if (destinationStation.isDisabled()) {
         Debug.Log("Station disabled (" + destinationStation + ")");
-        SendMyMessage(messageType, "Station disabled", connectionId);
+        SendMyMessage(messageType, "Station disabled$" + destinationStation.DisabledTimer, connectionId);
       } else if (!relevantTeam.isStationOccupied(destinationStation)) {
         player.CurrentStation = destinationStation;
         MovePlayer(player.PlayerPrefab, relevantTeam, destinationStation);

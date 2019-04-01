@@ -240,6 +240,7 @@ public class Client : MonoBehaviour {
 	private void OnStationEnter(string messageType, string messageContent) {
 		string[] data = decodeMessage(messageContent, '$');
 		string stationId = data.Length > 0 ? data[0] : "";
+    string stationDisableTime = data.Length > 1 ? data[1] : "";
 
     if (stationId != "") {
       if (Kitchen.isValidStation(stationId)) {
@@ -262,7 +263,9 @@ public class Client : MonoBehaviour {
 				ingredientsInStation = new List<Ingredient>();
 			} else if (stationId.Equals("Station disabled")) {
 				Debug.Log("Station is disabled.");
-				Player.displayDisabledStation();
+        if (!stationDisableTime.Equals("")) {
+          Player.disabledTimer = float.Parse(stationDisableTime);
+        }
 				Player.resetCurrentStation();
 			} else if (stationId.Equals("Station occupied")) {
 				Debug.Log("Station is already occupied.");
