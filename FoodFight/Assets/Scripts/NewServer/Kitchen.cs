@@ -5,7 +5,7 @@ using System.Linq;
 
 public class Kitchen {
 
-  private static readonly string[] stations = {"0","1","2","3","4"};
+  private static readonly string[] stations = {"0", "1", "2", "3"};
 
   public List<Station> Stations { get; }
 

@@ -7,11 +7,11 @@ using System.Text;
 
 public class PlateBehaviour : MonoBehaviour {
 
-  public Button serveBtn, clearBtn, goBackBtn;
+  public Button serveBtn, throwBtn, clearBtn, goBackBtn;
   public Player player;
 
   /* Text representation of ingredients on Screen */
-  public Text ingredientListText;
+  public Text ingredientListText, statusText;
 
   /* Ingredient stuff */
 	private readonly int maxPlateContents = 3;
@@ -21,6 +21,7 @@ public class PlateBehaviour : MonoBehaviour {
   void Start () {
 
     Screen.orientation = ScreenOrientation.Portrait;
+    statusText.enabled = false;
 
     clearPlate();
 
@@ -121,6 +122,22 @@ public class PlateBehaviour : MonoBehaviour {
     }
   }
 
+  public void throwFood() {
+    if (plateContents.Count == 1) {
+      Ingredient recipe = getWorkingRecipe();
+
+      foreach (Ingredient ingredient in plateContents) {
+        recipe = ingredient;
+      }
+
+      if (isValidRecipe(recipe)) {
+        player.sendThrowToServer(recipe);
+        clearStation();
+        statusText.enabled = true;
+      }
+    }
+  }
+
 	public void pickUpIngredient() {
 		if (plateContents.Count == 1) {
 			/* Set the players current ingredient to the pan contents */
@@ -171,6 +188,7 @@ public class PlateBehaviour : MonoBehaviour {
   private void updateButtonStates() {
 		setButtonInteractable(clearBtn, plateContents.Count > 0);
 		setButtonInteractable(serveBtn, plateContents.Count == 1);
+    setButtonInteractable(throwBtn, plateContents.Count == 1);
 	}
 
 	private void setButtonInteractable(Button btn, bool interactable) {
