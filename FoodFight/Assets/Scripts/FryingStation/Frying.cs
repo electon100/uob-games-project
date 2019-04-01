@@ -7,7 +7,7 @@ using System.Text;
 
 public class Frying : MonoBehaviour {
 
-	public Button goBackBtn, putBtn, pickBtn, clearBtn;
+	public Button goBackBtn, clearBtn;
 	public Text test_text;
 	public Material successMaterial;
 	public Material neutralMaterial;
@@ -75,9 +75,9 @@ public class Frying : MonoBehaviour {
 		updateButtonStates();
 		updateTextList();
 		shakeIfNeeded();
+		checkForPanTap();
 
 		if (ingredientCookedStationComplete) {
-			test_text.text = "Ingredient cooked!";
 			background.material = successMaterial;
 		} else {
 			if (panContents.Count == 1) {
@@ -101,6 +101,8 @@ public class Frying : MonoBehaviour {
 					if (isValidRecipe(newIngred)) {
 						setPanContents(newIngred);
 						source.PlayOneShot(successSound);
+						test_text.text = "Ingredient cooked!";
+						background.material = successMaterial;
 						ingredientCookedStationComplete = true;
 					}
 				}
@@ -252,6 +254,29 @@ public class Frying : MonoBehaviour {
 		}
 	}
 
+	private void checkForPanTap() {
+		/* https://stackoverflow.com/a/38566276 */
+		bool isDesktop = Input.GetMouseButtonDown(0);
+		bool isMobile = (Input.touchCount > 0) && (Input.GetTouch(0).phase == TouchPhase.Began);
+		if (isDesktop || isMobile) {
+			Ray raycast = (isDesktop) ? Camera.main.ScreenPointToRay(Input.mousePosition) :
+																	Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+			RaycastHit raycastHit;
+			if (Physics.Raycast(raycast, out raycastHit)) {
+				if (!raycastHit.collider.name.Equals("Background")) { // <-- Requires ingredient prefabs to have colliders (approx) within pan bounds
+				// if (raycastHit.collider.name.Equals("Pan")) { // <-- Requires ingredient prefabs not to have colliders!
+					/* Pan was tapped! */
+					if (canPlaceHeldIngredient()) {
+						placeHeldIngredientInPan();
+					} else if (panContents.Count == 1) {
+						pickUpIngredient();
+						test_text.text = "Picked up ingredient!";
+					}
+				}
+			}
+		}
+	}
+
 	void updateTextList() {
 		if (panContents.Count > 0) {
 			ingredientListText.text = "Current Ingredients:\n";
@@ -262,10 +287,12 @@ public class Frying : MonoBehaviour {
 		} else ingredientListText.text = "";
   }
 
+	private bool canPlaceHeldIngredient() {
+		return !ingredientCookedStationComplete && Player.isHoldingIngredient() && panContents.Count < maxPanContents;
+	}
+
 	private void updateButtonStates() {
-		setButtonInteractable(putBtn, Player.isHoldingIngredient() && panContents.Count < maxPanContents);
 		setButtonInteractable(clearBtn, panContents.Count > 0);
-		setButtonInteractable(pickBtn, panContents.Count == 1);
 	}
 
 	private void setButtonInteractable(Button btn, bool interactable) {

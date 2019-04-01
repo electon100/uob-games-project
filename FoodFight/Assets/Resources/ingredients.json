@@ -107,7 +107,7 @@
       "orderable" : false,
       "correctFlips" : 30,
       "maxFlips" : 40,
-      "correctChops" : 20,
+      "correctChops" : 10,
       "score" : 20
     },
     {

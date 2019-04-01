@@ -123,7 +123,6 @@ GameObject:
   - component: {fileID: 4064346416602392}
   - component: {fileID: 33083729987599736}
   - component: {fileID: 23718541130025872}
-  - component: {fileID: 136349528437030632}
   m_Layer: 0
   m_Name: raw_steakPrefab
   m_TagString: Untagged
@@ -522,16 +521,3 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1302104451802076}
   m_Mesh: {fileID: 4300022, guid: e1d07aa0977d61143b15089176a5efcf, type: 3}
---- !u!136 &136349528437030632
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1934915141672362}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.005264379
-  m_Height: 0.017593604
-  m_Direction: 1
-  m_Center: {x: 0.00060936593, y: -0.00006810963, z: 0.0005827078}
