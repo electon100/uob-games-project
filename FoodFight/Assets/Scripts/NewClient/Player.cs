@@ -30,6 +30,7 @@ public class Player : MonoBehaviour {
   public Material redBackground, blueBackground;
 	public Renderer background;
   public static Text errorText;
+  public Text myScoreText, otherScoreText;
 
   // NFC Stuff:
   private NFCHandler nfcHandler = new NFCHandler();
@@ -61,6 +62,8 @@ public class Player : MonoBehaviour {
       Handheld.Vibrate();
       checkStation(lastTag);
     }
+
+    UpdateScore();
   }
 
   /* Alerts the server about the ingredient placed at the current station */
@@ -106,7 +109,13 @@ public class Player : MonoBehaviour {
     network.SendMyMessage("score", message);
   }
 
-    /* Sends throw to the server after a player throws a dish */
+  /* Updates the score of the player after plating a dish */
+  public void UpdateScore() {
+    myScoreText.text = "My score " + "\n" + network.myScore.ToString();
+    otherScoreText.text = "Other score " + "\n" + network.otherScore.ToString();
+  } 
+
+  /* Sends throw to the server after a player throws a dish */
   public void sendThrowToServer(Ingredient recipe) {
     string message = Ingredient.SerializeObject(recipe);
     network.SendMyMessage("throw", message);
@@ -164,4 +173,21 @@ public class Player : MonoBehaviour {
     errorText = GameObject.Find("ErrorText").GetComponent<Text>();
     errorText.text = "Oh no! This station is occupied.";
 	}
+
+  /* Ignore the code below, I forgot to get nfc-s so had to create buttons for stations - xoxo, Sisi */
+  public void goToCupboard() {
+    checkStation("0");
+  }
+
+  public void goToChopping() {
+    checkStation("1");
+  }
+
+  public void goToFrying() {
+    checkStation("2");
+  }
+
+  public void goToPlating() {
+    checkStation("3");
+  }
 }
