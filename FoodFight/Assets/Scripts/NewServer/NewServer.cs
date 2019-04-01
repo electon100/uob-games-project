@@ -77,8 +77,10 @@ public class NewServer : MonoBehaviour {
     Team[] allTeams = new Team[] {redTeam, blueTeam};
     foreach (Team team in allTeams) {
       foreach (Station station in team.Kitchen.Stations) {
-        GameObject visualDisable = GameObject.Find(team.Name + station.Id + "disable");
-        station.visualDisable = visualDisable;
+        GameObject StationDisablePrefab = GameObject.Find(team.Name + "station" + station.Id + "prefabdisable");
+        station.DisablePrefab = StationDisablePrefab;
+        GameObject StationPrefab = GameObject.Find(team.Name + "station" + station.Id + "prefab");
+        station.Prefab = StationPrefab;
       }
     }
   }
@@ -507,7 +509,8 @@ public class NewServer : MonoBehaviour {
             station.resetTimer();
           }
         }
-        station.VisualDisable.SetActive(station.isDisabled());
+        station.DisablePrefab.SetActive(station.isDisabled());
+        station.Prefab.SetActive(!station.isDisabled());
       }
     }
   }
