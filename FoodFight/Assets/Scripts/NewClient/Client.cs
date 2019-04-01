@@ -222,6 +222,9 @@ public class Client : MonoBehaviour {
         Debug.Log("Starting game...");
         startGame = true;
         break;
+			case "score": // Called after serving a recipe to update local score on phone
+				Player.UpdateScore(messageContent);
+				break;
 			case "add":
 				Debug.Log("Adding ingredient failed.");
 				break;

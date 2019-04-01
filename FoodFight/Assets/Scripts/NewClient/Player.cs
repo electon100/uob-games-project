@@ -108,7 +108,12 @@ public class Player : MonoBehaviour {
     network.SendMyMessage("score", message);
   }
 
-    /* Sends throw to the server after a player throws a dish */
+  /* Updates the score of the player after plating a dish */
+  public static void UpdateScore(string score) {
+    GameObject.Find("MyScore").GetComponent<Text>().text += score;
+  } 
+
+  /* Sends throw to the server after a player throws a dish */
   public void sendThrowToServer(Ingredient recipe) {
     string message = Ingredient.SerializeObject(recipe);
     network.SendMyMessage("throw", message);
