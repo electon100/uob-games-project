@@ -11,7 +11,7 @@ public class Station {
 
   public List<Ingredient> Ingredients { get; }
 
-  public GameObject visualDisable { get; set; }
+  public GameObject VisualDisable { get; set; }
 
 	public Station(string id) {
 		Id = id;

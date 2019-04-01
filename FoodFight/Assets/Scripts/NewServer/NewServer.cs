@@ -79,7 +79,7 @@ public class NewServer : MonoBehaviour {
       foreach (Station station in team.Kitchen.Stations) {
         if (!station.Id.Equals("4")) {
           GameObject visualDisable = GameObject.Find(team.Name + station.Id + "disable");
-          station.visualDisable = visualDisable;
+          station.VisualDisable = visualDisable;
         }
       }
     }
@@ -502,7 +502,7 @@ public class NewServer : MonoBehaviour {
           }
         }
         if (!station.Id.Equals("4")) {
-          // station.visualDisable.SetActive(station.isDisabled());
+          station.VisualDisable.SetActive(station.isDisabled());
         }
       }
     }
