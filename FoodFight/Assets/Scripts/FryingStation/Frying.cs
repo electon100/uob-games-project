@@ -7,7 +7,7 @@ using System.Text;
 
 public class Frying : MonoBehaviour {
 
-	public Button goBackBtn, putBtn, pickBtn, clearBtn, combineBtn;
+	public Button goBackBtn, putBtn, pickBtn, clearBtn;
 	public Text test_text;
 	public Material successMaterial;
 	public Material neutralMaterial;
@@ -71,8 +71,9 @@ public class Frying : MonoBehaviour {
 	}
 
 	void Update () {
-		/* Ensure correct buttons are interactable */
+
 		updateButtonStates();
+		updateTextList();
 		shakeIfNeeded();
 
 		if (ingredientCookedStationComplete) {
@@ -105,14 +106,17 @@ public class Frying : MonoBehaviour {
 				}
 
 			} else {
+				/* Try and combine the ingredients */
+				Ingredient combinationAttempt = getWorkingRecipe();
+
+				/* If the combined result is a valid recipe (not mush) */
+				if (isValidRecipe(combinationAttempt)) {
+					/* Set the pan contents to the new combined recipe */
+					setPanContents(combinationAttempt);
+				}
+
 				/* TODO: What happens when pan is empty or too full */
 				if (panContents.Count > maxPanContents) Debug.Log("Pan got too full!");
-			}
-		}
-
-		if (Input.GetKeyDown(KeyCode.E)) {
-			foreach (Ingredient ingredient in panContents) {
-				Debug.Log(ingredient.Name);
 			}
 		}
 	}
@@ -135,6 +139,10 @@ public class Frying : MonoBehaviour {
 			/* Increment the number of pan tosses of ingredient in pan */
 		}
 	}
+
+	private Ingredient getWorkingRecipe() {
+    return FoodData.Instance.TryCombineIngredients(panContents);
+  }
 
 	private bool isValidRecipe(Ingredient recipe) {
 		return !string.Equals(recipe.Name, "mush");
@@ -235,8 +243,8 @@ public class Frying : MonoBehaviour {
 		GameObject inst = Instantiate(model, modelPosition, modelRotation);
 		panContents.Add(ingredient);
 		panContentsObjects.Add(inst);
-		if (panContents.Count > 1) {
-			test_text.text = "Combine ingredients to cook";
+		if (!FoodData.Instance.isCookable(ingredient) || (panContents.Count > 1)) {
+			test_text.text = "Awaiting valid ingredients";
 			background.material = issueMaterial;
 		} else {
 			test_text.text = "Shake phone to cook";
@@ -245,18 +253,19 @@ public class Frying : MonoBehaviour {
 	}
 
 	void updateTextList() {
-    ingredientListText.text = "Current Ingredients:\n";
+		if (panContents.Count > 0) {
+			ingredientListText.text = "Current Ingredients:\n";
 
-    foreach(Ingredient ingredient in panContents) {
-      ingredientListText.text += ingredient.ToString() + "\n";
-    }
+			foreach(Ingredient ingredient in panContents) {
+				ingredientListText.text += ingredient.ToString() + "\n";
+			}
+		} else ingredientListText.text = "";
   }
 
 	private void updateButtonStates() {
 		setButtonInteractable(putBtn, Player.isHoldingIngredient() && panContents.Count < maxPanContents);
 		setButtonInteractable(clearBtn, panContents.Count > 0);
 		setButtonInteractable(pickBtn, panContents.Count == 1);
-		setButtonInteractable(combineBtn, panContents.Count > 1);
 	}
 
 	private void setButtonInteractable(Button btn, bool interactable) {

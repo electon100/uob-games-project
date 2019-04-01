@@ -502,7 +502,7 @@ public class NewServer : MonoBehaviour {
           }
         }
         if (!station.Id.Equals("4")) {
-          station.visualDisable.SetActive(station.isDisabled());
+          // station.visualDisable.SetActive(station.isDisabled());
         }
       }
     }

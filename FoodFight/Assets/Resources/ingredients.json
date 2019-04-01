@@ -13,7 +13,7 @@
     {
       "name" : "mixed_vegetables",
       "choppable" : true,
-      "cookable" : true,
+      "cookable" : false,
       "orderable" : false,
       "correctFlips" : 5,
       "maxFlips" : 20,
@@ -23,7 +23,7 @@
     {
       "name" : "chicken",
       "choppable" : true,
-      "cookable" : true,
+      "cookable" : false,
       "orderable" : false,
       "correctFlips" : 5,
       "maxFlips" : 40,
@@ -33,7 +33,7 @@
     {
       "name" : "chopped_mixed_vegetables",
       "choppable" : false,
-      "cookable" : true,
+      "cookable" : false,
       "orderable" : false,
       "correctFlips" : 5,
       "maxFlips" : 20,
@@ -43,7 +43,7 @@
     {
       "name" : "diced_chicken",
       "choppable" : false,
-      "cookable" : true,
+      "cookable" : false,
       "orderable" : false,
       "correctFlips" : 5,
       "maxFlips" : 40,
@@ -63,7 +63,7 @@
     {
       "name" : "noodles",
       "choppable" : false,
-      "cookable" : true,
+      "cookable" : false,
       "orderable" : false,
       "correctFlips" : 5,
       "maxFlips" : 40,
@@ -133,7 +133,7 @@
     {
       "name" : "duck",
       "choppable" : false,
-      "cookable" : true,
+      "cookable" : false,
       "orderable" : false,
       "correctFlips" : 15,
       "maxFlips" : 20,
@@ -283,7 +283,7 @@
     {
       "name" : "rice",
       "choppable" : false,
-      "cookable" : true,
+      "cookable" : false,
       "orderable" : false,
       "correctFlips" : 20,
       "maxFlips" : 30,
