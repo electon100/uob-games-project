@@ -73,6 +73,16 @@ public class NewServer : MonoBehaviour {
     if (redTeam != null) redTeam.removeAllOrders();
     if (blueTeam != null) blueTeam.removeAllOrders();
     redTeam = new Team("red", redTeamColour); blueTeam = new Team("blue", blueTeamColour);
+
+    Team[] allTeams = new Team[] {redTeam, blueTeam};
+    foreach (Team team in allTeams) {
+      foreach (Station station in team.Kitchen.Stations) {
+        if (!station.Id.Equals("4")) {
+          GameObject visualDisable = GameObject.Find(team.Name + station.Id + "disable");
+          station.visualDisable = visualDisable;
+        }
+      }
+    }
   }
 
   private void initialiseNetwork() {
@@ -259,7 +269,7 @@ public class NewServer : MonoBehaviour {
     else{
       startPosition = new Vector3(0, 0, 0);
     }
-    
+
     relevantPrefab = (GameObject) Instantiate(relevantPrefab, startPosition, Quaternion.identity);
     relevantPrefab.GetComponent<PlayerMovement>().startPosition = startPosition;
 
@@ -481,12 +491,18 @@ public class NewServer : MonoBehaviour {
   }
 
   private void TickStations() {
+
     Team[] allTeams = new Team[] {redTeam, blueTeam};
     foreach (Team team in allTeams) {
       foreach (Station station in team.Kitchen.Stations) {
         if (station.isDisabled()) {
           station.DisabledTimer -= Time.deltaTime;
-          if (station.DisabledTimer < 0) station.resetTimer();
+          if (station.DisabledTimer < 0) {
+            station.resetTimer();
+          }
+        }
+        if (!station.Id.Equals("4")) {
+          station.visualDisable.SetActive(station.isDisabled());
         }
       }
     }
