@@ -5,4 +5,5 @@ public enum ClientGameState {
     ChoppingTutorial, /* Second tutorial to show how to chop ingredients */
     FryingTutorial, /* Third tutorial to show how to fry ingredients */
     PlatingTutorial, /* Forth tutorial to show how to plate or throw ingredients */
+    EndTutorial
 };

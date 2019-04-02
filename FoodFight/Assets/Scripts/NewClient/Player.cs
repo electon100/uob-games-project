@@ -37,9 +37,12 @@ public class Player : MonoBehaviour {
 
   void Start () {
     Screen.orientation = ScreenOrientation.Portrait;
-    networkClient = GameObject.Find("Client");
-    network = networkClient.GetComponent<Client>();
-    DontDestroyOnLoad(GameObject.Find("Player"));
+    if (Client.gameState.Equals(ClientGameState.MainMode)) {
+      networkClient = GameObject.Find("Client");
+      network = networkClient.GetComponent<Client>();
+      DontDestroyOnLoad(GameObject.Find("Player"));
+      Destroy(GameObject.Find("SimulatedPlayer"));
+    }
 
     if (network.getTeam().Equals("blue")) {
       background.material = blueBackground;

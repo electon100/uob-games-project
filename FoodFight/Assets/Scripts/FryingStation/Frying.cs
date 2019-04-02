@@ -59,11 +59,15 @@ public class Frying : MonoBehaviour {
 
 		background.material = neutralMaterial;
 
-		List<Ingredient> ingredientsFromStation = Player.ingredientsFromStation;
-
 		clearPan();
 
-		player = GameObject.Find("Player").GetComponent<Player>();
+		List<Ingredient> ingredientsFromStation;
+		if (Client.gameState.Equals(ClientGameState.MainMode)) {
+			player = GameObject.Find("Player").GetComponent<Player>();
+			ingredientsFromStation = Player.ingredientsFromStation;
+		} else {
+			ingredientsFromStation = SimulatedPlayer.ingredientsInFrying;
+		}
 
 		foreach (Ingredient ingredient in ingredientsFromStation) {
 			addIngredientToPan(ingredient);
@@ -151,10 +155,20 @@ public class Frying : MonoBehaviour {
 	}
 
 	private void setPanContents(Ingredient ingredient) {
-		clearStation();
 
+		if (Client.gameState.Equals(ClientGameState.MainMode)) {
+			clearStation();
+			player.notifyServerAboutIngredientPlaced(ingredient);
+		} else {
+			/* Clear the station */
+			clearPan();
+			test_text.text = "Add ingredient to start";
+			background.material = neutralMaterial;
+			SimulatedPlayer.ingredientsInFrying.Clear();
+			SimulatedPlayer.ingredientsInFrying.Add(ingredient);
+		}
+		
 		addIngredientToPan(ingredient);
-		player.notifyServerAboutIngredientPlaced(ingredient);
 	}
 
 	/* Manages the sinusoidal movement of the pan */
@@ -178,7 +192,7 @@ public class Frying : MonoBehaviour {
 
 	public void placeHeldIngredientInPan() {
 		/* Add ingredient */
-		if (Player.isHoldingIngredient()) {
+		if (Player.isHoldingIngredient()) { /* Main mode */
 			if (panContents.Count < maxPanContents) {
 				addIngredientToPan(Player.currentIngred);
 
@@ -186,6 +200,15 @@ public class Frying : MonoBehaviour {
 				player.notifyServerAboutIngredientPlaced(Player.currentIngred);
 
 				Player.removeCurrentIngredient();
+			} else {
+				test_text.text = "Pan is full";
+				background.material = issueMaterial;
+			}
+		} else if (SimulatedPlayer.isHoldingIngredient()) { /* Tutorial mode */
+			if (panContents.Count < maxPanContents) {
+				addIngredientToPan(SimulatedPlayer.currentIngred);
+				SimulatedPlayer.ingredientsInFrying.Add(SimulatedPlayer.currentIngred);
+				SimulatedPlayer.removeCurrentIngredient();
 			} else {
 				test_text.text = "Pan is full";
 				background.material = issueMaterial;
@@ -223,13 +246,23 @@ public class Frying : MonoBehaviour {
 
 	public void pickUpIngredient() {
 		if (panContents.Count == 1) {
-			/* Set the players current ingredient to the pan contents */
-			foreach (Ingredient ingredient in panContents) {
-				Player.currentIngred = ingredient;
+			if (Client.gameState.Equals(ClientGameState.MainMode)) { /* Main mode */
+				/* Set the players current ingredient to the pan contents */
+				foreach (Ingredient ingredient in panContents) {
+					Player.currentIngred = ingredient;
+				}
+				/* Clear the station */
+				clearStation();
+			} else { /* Tutorial mode */
+				/* Set the players current ingredient to the pan contents */
+				foreach (Ingredient ingredient in panContents) {
+					SimulatedPlayer.currentIngred = ingredient;
+				}
+				/* Clear the station */
+				clearPan();
+				test_text.text = "Add ingredient to start";
+				background.material = neutralMaterial;
 			}
-
-			/* Clear the station */
-			clearStation();
 		} else {
 			/* What to do if there are more than (or fewer than) 1 ingredients in the pan*/
 			test_text.text = "Unable to pick up";
@@ -243,7 +276,9 @@ public class Frying : MonoBehaviour {
 		Quaternion modelRotation = modelTransform.rotation;
 		Vector3 modelPosition = modelTransform.position + new Vector3(Random.Range(-2, 2), Random.Range(-2, 2), 0);
 		GameObject inst = Instantiate(model, modelPosition, modelRotation);
+		Debug.Log(ingredient.Model);
 		panContents.Add(ingredient);
+		Debug.Log(panContents[0]);
 		panContentsObjects.Add(inst);
 		if (!FoodData.Instance.isCookable(ingredient) || (panContents.Count > 1)) {
 			test_text.text = "Awaiting valid ingredients";
@@ -288,7 +323,8 @@ public class Frying : MonoBehaviour {
   }
 
 	private bool canPlaceHeldIngredient() {
-		return !ingredientCookedStationComplete && Player.isHoldingIngredient() && panContents.Count < maxPanContents;
+		return !ingredientCookedStationComplete && (Player.isHoldingIngredient() || SimulatedPlayer.isHoldingIngredient())
+																						&& panContents.Count < maxPanContents;
 	}
 
 	private void updateButtonStates() {
@@ -310,7 +346,11 @@ public class Frying : MonoBehaviour {
 		/* TODO: Need to notify server of local updates to ingredients in pan before leaving */
 		/* Notify server that player has left the station */
 		Handheld.Vibrate();
-		player.notifyAboutStationLeft();
+		if (Client.gameState.Equals(ClientGameState.MainMode)) {
+			player.notifyAboutStationLeft();
+		} else { /* If in tutorial mode, advance to the next tutorial */
+			Client.gameState = ClientGameState.PlatingTutorial;
+		}
 		SceneManager.LoadScene("PlayerMainScreen");
 	}
 }

@@ -33,7 +33,12 @@ public class SimulatedClient : MonoBehaviour {
     if (Input.GetKeyDown(KeyCode.T)) LogInStation("1");
     if (Input.GetKeyDown(KeyCode.Y)) LogInStation("2");
     if (Input.GetKeyDown(KeyCode.U)) LogInStation("3");
-    if (Input.GetKeyDown(KeyCode.E)) Debug.Log(Player.currentIngred.Model);
+    if (Input.GetKeyDown(KeyCode.E)) {
+			foreach(Ingredient ingredient in SimulatedPlayer.ingredientsInFrying) {
+				Debug.Log(ingredient.Name);
+			}
+		} 
+			
 
     /* Check for any NFC scans, forwarding to checkStation if present */
     string lastTag = nfcHandler.getScannedTag();
@@ -43,7 +48,7 @@ public class SimulatedClient : MonoBehaviour {
     }
 	}
 
-  public void LogInStation(string stationId) {
+  public static void LogInStation(string stationId) {
     string currentScene = SceneManager.GetActiveScene().name;
 
 		Debug.Log(currentScene);

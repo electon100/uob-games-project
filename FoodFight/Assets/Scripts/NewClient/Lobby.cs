@@ -35,7 +35,7 @@ public class Lobby : MonoBehaviour {
     }
 
     void Update() {
-        if (network.startGame) {
+        if (true) {
             startCanvas.gameObject.SetActive(false);
             countDownCanvas.gameObject.SetActive(true);
             if ((Time.time - startTime) > 1.0f) {

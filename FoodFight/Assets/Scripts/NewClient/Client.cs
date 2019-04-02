@@ -53,7 +53,6 @@ public class Client : MonoBehaviour {
 
 	/* Did not enter tutorial mode */
 	public void SkipTutorialMode() {
-		Destroy(GameObject.Find("SimulatedCleint"));
 		gameState = ClientGameState.MainMode;
 	}
 
@@ -62,6 +61,7 @@ public class Client : MonoBehaviour {
 		Instantiate(simulatedClient, new Vector3(0, 0, 0), Quaternion.identity);
     SceneManager.LoadScene("PlayerMainScreen");
     gameState = ClientGameState.TutorialMode;
+		Destroy(GameObject.Find("Client"));
 		DontDestroyOnLoad(GameObject.Find("SimulatedClient(Clone)"));
   }
 

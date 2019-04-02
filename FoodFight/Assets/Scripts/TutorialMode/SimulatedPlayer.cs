@@ -12,16 +12,17 @@ public class SimulatedPlayer : MonoBehaviour {
 	private ClientGameState currentGameState;
 
   public static Ingredient currentIngred;
-  public static List<Ingredient> ingredientsFromStation;
+  public static List<Ingredient> ingredientsInFrying = new List<Ingredient>();
+	public static List<Ingredient> ingredientsInPlating = new List<Ingredient>();
 	
 	// Use this for initialization
 	void Start () {
 		Screen.orientation = ScreenOrientation.Portrait;
 		DontDestroyOnLoad(GameObject.Find("SimulatedPlayer"));
-		Destroy(GameObject.Find("Player"));
 		currentGameState = ClientGameState.TutorialMode;
 		fadeBackground.SetActive(true);
 		infoPanel.SetActive(true);
+		Destroy(GameObject.Find("Player"));
 	}
 	
 	void Update () {
@@ -45,6 +46,17 @@ public class SimulatedPlayer : MonoBehaviour {
 					infoPanel = GameObject.Find("InfoPanel");
 					GameObject.Find("InfoText").GetComponent<Text>().text = "Now log into the frying station \n to fry the ingredient.";
 					break;
+				case ClientGameState.PlatingTutorial:
+					fadeBackground = GameObject.Find("FadeBackgroundImage");
+					infoPanel = GameObject.Find("InfoPanel");
+					GameObject.Find("InfoText").GetComponent<Text>().text = "Now log into the plating station \n to serve or throw the food.";
+					break;
+				case ClientGameState.EndTutorial:
+					fadeBackground = GameObject.Find("FadeBackgroundImage");
+					infoPanel = GameObject.Find("InfoPanel");
+					GameObject.Find("InfoText").GetComponent<Text>().text = "Tutorial completed! \n You got 100 points!";
+					GameObject.Find("MyScore").GetComponent<Text>().text = "Your team: \n 100";
+					break;
 				default:
 					break;
 			}
@@ -63,4 +75,25 @@ public class SimulatedPlayer : MonoBehaviour {
     return currentIngred != null;
   }
 
+  /* Resets the player's current ingredient */
+  public static void removeCurrentIngredient() {
+    currentIngred = null;
+  }
+
+	  /* Ignore the code below, I forgot to get nfc-s so had to create buttons for stations - xoxo, Sisi */
+  public void goToCupboard() {
+    SimulatedClient.LogInStation("0");
+  }
+
+  public void goToChopping() {
+    SimulatedClient.LogInStation("1");
+  }
+
+  public void goToFrying() {
+    SimulatedClient.LogInStation("2");
+  }
+
+  public void goToPlating() {
+    SimulatedClient.LogInStation("3");
+  }
 }
