@@ -40,6 +40,7 @@ public class Player : MonoBehaviour {
     networkClient = GameObject.Find("Client");
     network = networkClient.GetComponent<Client>();
     DontDestroyOnLoad(GameObject.Find("Player"));
+    errorText = GameObject.Find("ErrorText").GetComponent<Text>();
 
     if (network.getTeam().Equals("blue")) {
       background.material = blueBackground;
@@ -125,6 +126,9 @@ public class Player : MonoBehaviour {
   private void checkStation(string text) {
     if (currentStation != text) {
 
+      resetErrorText();
+      Client.resetDisabledTimer();
+
       // Tell the server which station you're logging in at.
       switch (text) {
         case "0":
@@ -164,15 +168,20 @@ public class Player : MonoBehaviour {
     }
   }
 
-  public static void displayDisabledStation() {
+  public static void displayDisabledStation(float disabledTimer) {
+    TimeSpan t = TimeSpan.FromSeconds(disabledTimer);
+    string timerFormatted = string.Format("{0:D2}", t.Seconds);
     errorText = GameObject.Find("ErrorText").GetComponent<Text>();
-    errorText.text = "Oh no! This station has been disabled.";
+    errorText.text = "This station is disabled for another " + timerFormatted + " seconds.";
 	}
 
 	public static void displayOccupiedStation() {
     errorText = GameObject.Find("ErrorText").GetComponent<Text>();
     errorText.text = "Oh no! This station is occupied.";
 	}
+
+  public static void resetErrorText() {
+    errorText.text = "";
 
   /* Ignore the code below, I forgot to get nfc-s so had to create buttons for stations - xoxo, Sisi */
   public void goToCupboard() {

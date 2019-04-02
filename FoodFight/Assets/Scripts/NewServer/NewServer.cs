@@ -286,7 +286,7 @@ public class NewServer : MonoBehaviour {
       Station destinationStation = relevantTeam.Kitchen.getStationForId(messageContent);
       if (destinationStation.isDisabled()) {
         Debug.Log("Station disabled (" + destinationStation + ")");
-        SendMyMessage(messageType, "Station disabled", connectionId);
+        SendMyMessage(messageType, "Station disabled$" + destinationStation.DisabledTimer, connectionId);
       } else if (!relevantTeam.isStationOccupied(destinationStation)) {
         player.CurrentStation = destinationStation;
         MovePlayer(player.PlayerPrefab, relevantTeam, destinationStation);
@@ -472,9 +472,11 @@ public class NewServer : MonoBehaviour {
 
   public void manageOrders() {
     // Check if any orders have expired and remove some points
-    if (redTeam.checkExpiredOrders() > 0 || blueTeam.checkExpiredOrders() > 0) {
-      redTeam.Score -= (int) (redTeam.checkExpiredOrders() * negativeScoreMultiplier);
-      blueTeam.Score -= (int) (blueTeam.checkExpiredOrders() * negativeScoreMultiplier);
+    float blueDeltaScore = blueTeam.checkExpiredOrders();
+    float redDeltaScore = redTeam.checkExpiredOrders();
+    if (redDeltaScore > 0 || blueDeltaScore > 0) {
+      redTeam.Score -= (int) (redDeltaScore * negativeScoreMultiplier);
+      blueTeam.Score -= (int) (blueDeltaScore * negativeScoreMultiplier);
 
       /* Broadcast new scores to devices */
       BroadcastScores();

@@ -40,6 +40,8 @@ public class Client : MonoBehaviour {
 	public GameObject defaultIP;
 	public InputField changeIPText;
 
+  public static float disabledTimer = 0.0f;
+
 	public void Start() {
     DontDestroyOnLoad(GameObject.Find("Client"));
 		Screen.orientation = ScreenOrientation.Portrait;
@@ -47,6 +49,11 @@ public class Client : MonoBehaviour {
 
 	public void Update() {
 		listenForData();
+
+    if (disabledTimer > 0) {
+      disabledTimer -= Time.deltaTime;
+      Player.displayDisabledStation(disabledTimer);
+    }
 	}
 
 	public void Connect() {
@@ -244,6 +251,7 @@ public class Client : MonoBehaviour {
 	private void OnStationEnter(string messageType, string messageContent) {
 		string[] data = decodeMessage(messageContent, '$');
 		string stationId = data.Length > 0 ? data[0] : "";
+    string stationDisableTime = data.Length > 1 ? data[1] : "";
 
     if (stationId != "") {
       if (Kitchen.isValidStation(stationId)) {
@@ -266,7 +274,9 @@ public class Client : MonoBehaviour {
 				ingredientsInStation = new List<Ingredient>();
 			} else if (stationId.Equals("Station disabled")) {
 				Debug.Log("Station is disabled.");
-				Player.displayDisabledStation();
+        if (!stationDisableTime.Equals("")) {
+          disabledTimer = float.Parse(stationDisableTime);
+        }
 				Player.resetCurrentStation();
 			} else if (stationId.Equals("Station occupied")) {
 				Debug.Log("Station is already occupied.");
@@ -411,5 +421,9 @@ public class Client : MonoBehaviour {
 		connectButton.SetActive(true);
 		diffIPButton.SetActive(true);
 	}
+
+  public static void resetDisabledTimer() {
+    disabledTimer = 0.0f;
+  }
 
 }
