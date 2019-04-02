@@ -170,9 +170,8 @@ public class Player : MonoBehaviour {
 
   public static void displayDisabledStation(float disabledTimer) {
     TimeSpan t = TimeSpan.FromSeconds(disabledTimer);
-    string timerFormatted = string.Format("{0:D2}", t.Seconds);
     errorText = GameObject.Find("ErrorText").GetComponent<Text>();
-    errorText.text = "This station is disabled for another " + timerFormatted + " seconds.";
+    errorText.text = "This station is disabled for another " + t.Seconds " seconds.";
 	}
 
 	public static void displayOccupiedStation() {
