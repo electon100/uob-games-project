@@ -114,7 +114,7 @@ public class Player : MonoBehaviour {
   public void UpdateScore() {
     myScoreText.text = "My score " + "\n" + network.myScore.ToString();
     otherScoreText.text = "Other score " + "\n" + network.otherScore.ToString();
-  } 
+  }
 
   /* Sends throw to the server after a player throws a dish */
   public void sendThrowToServer(Ingredient recipe) {
@@ -182,6 +182,7 @@ public class Player : MonoBehaviour {
 
   public static void resetErrorText() {
     errorText.text = "";
+  }
 
   /* Ignore the code below, I forgot to get nfc-s so had to create buttons for stations - xoxo, Sisi */
   public void goToCupboard() {
