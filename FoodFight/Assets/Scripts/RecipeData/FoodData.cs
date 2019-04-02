@@ -6,6 +6,9 @@ using UnityEngine;
 
 public sealed class FoodData {
 
+	private readonly string ingredientsFileName = "test_ingredients"; /* The name of the JSON file containing ingredients */
+	private readonly string recipesFileName = "test_recipes"; /* The name of the JSON file containing recipes */
+
 	private static FoodData instance = null;
 	private static readonly object padlock = new object();
 
@@ -145,11 +148,11 @@ public sealed class FoodData {
 
 	FoodData() {
 		/* Read recipe data from JSON file */
-		TextAsset recipeFile = (TextAsset) Resources.Load("recipe", typeof(TextAsset));
+		TextAsset recipeFile = (TextAsset) Resources.Load(recipesFileName, typeof(TextAsset));
 		string recipeJSON = recipeFile.ToString();
 
 		/* Read ingredient data from JSON file */
-		TextAsset ingredientFile = (TextAsset)Resources.Load("ingredients", typeof(TextAsset));
+		TextAsset ingredientFile = (TextAsset) Resources.Load(ingredientsFileName, typeof(TextAsset));
 		string ingredientJSON = ingredientFile.ToString();
 
 		/* Parse recipe JSON data */
