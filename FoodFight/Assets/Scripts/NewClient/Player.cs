@@ -168,7 +168,7 @@ public class Player : MonoBehaviour {
 
   public static void displayDisabledStation() {
     errorText = GameObject.Find("ErrorText").GetComponent<Text>();
-    errorText.text = "Oh no! This station has been disabled.\n" + (int) disabledTimer + " seconds remaining.";
+    errorText.text = "Oh no! This station has been disabled.\n" + (int) Math.Ceiling(disabledTimer) + " seconds remaining.";
 	}
 
 	public static void displayOccupiedStation() {
