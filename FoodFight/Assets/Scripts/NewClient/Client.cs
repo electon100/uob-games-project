@@ -53,7 +53,7 @@ public class Client : MonoBehaviour {
     if (disabledTimer > 0) {
       disabledTimer -= Time.deltaTime;
       Player.displayDisabledStation(disabledTimer);
-      if (disabledTimer < 0) {
+      if (disabledTimer <= 0) {
         Player.resetErrorText();
       }
     }
