@@ -51,14 +51,13 @@ public class Chopping : MonoBehaviour {
     current chopping ingredient to whatever the Player's currently holding. */
     player = GameObject.Find("Player").GetComponent<Player>();
 
-    Screen.orientation = ScreenOrientation.Portrait;
-
     /* Set the ingredient the player is currently holding */
     currentChoppingIngred = Player.currentIngred;
 
     /* Set up scene */
     source = GetComponent<AudioSource>();
-    Screen.orientation = ScreenOrientation.LandscapeLeft;
+    //Screen.orientation = ScreenOrientation.LandscapeLeft;
+    Screen.orientation = ScreenOrientation.Portrait;
     originalPos = gameObject.transform.position;
 
     /* Initialise private variables */

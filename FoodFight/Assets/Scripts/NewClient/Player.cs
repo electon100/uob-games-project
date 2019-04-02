@@ -31,8 +31,6 @@ public class Player : MonoBehaviour {
 	public Renderer background;
   public static Text errorText;
 
-  public static float disabledTimer = 0.0f;
-
   // NFC Stuff:
   private NFCHandler nfcHandler = new NFCHandler();
 
@@ -63,14 +61,6 @@ public class Player : MonoBehaviour {
     if (lastTag != "-1" && currentStation == "-1") {
       Handheld.Vibrate();
       checkStation(lastTag);
-    }
-
-    if (disabledTimer > 0) {
-      displayDisabledStation();
-      disabledTimer -= Time.deltaTime;
-    } else {
-      disabledTimer = 0.0f;
-      resetErrorText();
     }
   }
 
@@ -127,6 +117,9 @@ public class Player : MonoBehaviour {
   private void checkStation(string text) {
     if (currentStation != text) {
 
+      resetErrorText();
+      Client.resetDisabledTimer();
+
       // Tell the server which station you're logging in at.
       switch (text) {
         case "0":
@@ -166,9 +159,11 @@ public class Player : MonoBehaviour {
     }
   }
 
-  public static void displayDisabledStation() {
+  public static void displayDisabledStation(float disabledTimer) {
+    TimeSpan t = TimeSpan.FromSeconds(disabledTimer);
+    string timerFormatted = string.Format("{0:D2}", t.Seconds);
     errorText = GameObject.Find("ErrorText").GetComponent<Text>();
-    errorText.text = "Oh no! This station has been disabled.\n" + (int) Math.Ceiling(disabledTimer) + " seconds remaining.";
+    errorText.text = "This station is disabled for another " + timerFormatted + " seconds.";
 	}
 
 	public static void displayOccupiedStation() {
@@ -176,7 +171,7 @@ public class Player : MonoBehaviour {
     errorText.text = "Oh no! This station is occupied.";
 	}
 
-  private static void resetErrorText() {
+  public static void resetErrorText() {
     errorText.text = "";
   }
 }

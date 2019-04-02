@@ -39,6 +39,8 @@ public class Client : MonoBehaviour {
 	public GameObject defaultIP;
 	public InputField changeIPText;
 
+  public static float disabledTimer = 0.0f;
+
 	public void Start() {
     DontDestroyOnLoad(GameObject.Find("Client"));
 		Screen.orientation = ScreenOrientation.Portrait;
@@ -46,6 +48,11 @@ public class Client : MonoBehaviour {
 
 	public void Update() {
 		listenForData();
+
+    if (disabledTimer > 0) {
+      disabledTimer -= Time.deltaTime;
+      Player.displayDisabledStation(disabledTimer);
+    }
 	}
 
 	public void Connect() {
@@ -264,7 +271,7 @@ public class Client : MonoBehaviour {
 			} else if (stationId.Equals("Station disabled")) {
 				Debug.Log("Station is disabled.");
         if (!stationDisableTime.Equals("")) {
-          Player.disabledTimer = float.Parse(stationDisableTime);
+          disabledTimer = float.Parse(stationDisableTime);
         }
 				Player.resetCurrentStation();
 			} else if (stationId.Equals("Station occupied")) {
@@ -400,5 +407,9 @@ public class Client : MonoBehaviour {
 		connectButton.SetActive(true);
 		diffIPButton.SetActive(true);
 	}
+
+  public static void resetDisabledTimer() {
+    disabledTimer = 0.0f;
+  }
 
 }
