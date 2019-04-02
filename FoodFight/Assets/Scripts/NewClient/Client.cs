@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -16,7 +17,7 @@ public class Client : MonoBehaviour {
 
   private const int MAX_CONNECTION = 10;
   public int port = 8000;
-	public static string serverIP = "192.168.0.100";
+	public static string serverIP = "192.168.2.47";
   public int hostId = 0;
 	public int connectionId, reliableChannel;
 
@@ -25,7 +26,7 @@ public class Client : MonoBehaviour {
 	public string team;
 
 	public List<Ingredient> ingredientsInStation = new List<Ingredient>();
-
+	public int myScore, otherScore = 0;
 	public GameEndState gameEndState;
 
 	public GameObject buttonPrefab;
@@ -229,6 +230,9 @@ public class Client : MonoBehaviour {
         Debug.Log("Starting game...");
         startGame = true;
         break;
+			case "score": // Called after serving a recipe to update local score on phone
+				OnScoreChange(messageContent);
+				break;
 			case "add":
 				Debug.Log("Adding ingredient failed.");
 				break;
@@ -290,7 +294,7 @@ public class Client : MonoBehaviour {
 	}
 
 	private void OnGameEnd(string messageType, string messageContent) {
-		string[] details = messageContent.Split('$');
+		string[] details = decodeMessage(messageContent, '$');
 
 		/* Check if content is empty */
 		if (messageContent != "") {
@@ -330,6 +334,16 @@ public class Client : MonoBehaviour {
 			PickTeam panel = GameObject.Find("buttonsPanel").GetComponent<PickTeam>();
 			panel.displayNotRunningText();
 			Debug.Log("Error: [" + messageContent + "]");
+		}
+	}
+
+	private void OnScoreChange(string messageContent) {
+		if (messageContent != "") {
+			string[] teamScores = decodeMessage(messageContent, '$');
+			myScore = Int32.Parse(teamScores[0]);
+			otherScore = Int32.Parse(teamScores[1]);
+		} else {
+			Debug.Log("Error: no content provided on score message.");
 		}
 	}
 
@@ -390,7 +404,7 @@ public class Client : MonoBehaviour {
 	}
 
 	public void changeIP() {
-		serverIP = "192.168.0." + Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
+		serverIP = "192.168.2." + Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
 		inputField.SetActive(false);
 		changeIPButton.SetActive(false);
 		goBackButton.SetActive(false);
