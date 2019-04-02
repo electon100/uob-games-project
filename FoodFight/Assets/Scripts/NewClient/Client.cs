@@ -363,9 +363,9 @@ public class Client : MonoBehaviour {
 				}
 				break;
 			case "1": // Chopping Minigame
-				if (!currentScene.Equals("ChoppingStation")) {
+				if (!currentScene.Equals("NewChoppingStation")) {
 					Player.ingredientsFromStation = ingredientsInStation;
-					SceneManager.LoadScene("ChoppingStation");
+					SceneManager.LoadScene("NewChoppingStation");
 				}
 				break;
 			case "2": // Frying Minigame
