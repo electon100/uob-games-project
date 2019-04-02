@@ -60,7 +60,8 @@ public class Chopping : MonoBehaviour {
 
     /* Set up scene */
     source = GetComponent<AudioSource>();
-    Screen.orientation = ScreenOrientation.LandscapeLeft;
+    //Screen.orientation = ScreenOrientation.LandscapeLeft;
+    Screen.orientation = ScreenOrientation.Portrait;
     originalPos = gameObject.transform.position;
 
     /* Initialise private variables */

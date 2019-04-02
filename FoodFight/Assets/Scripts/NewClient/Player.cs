@@ -116,7 +116,7 @@ public class Player : MonoBehaviour {
   public void UpdateScore() {
     myScoreText.text = "My score " + "\n" + network.myScore.ToString();
     otherScoreText.text = "Other score " + "\n" + network.otherScore.ToString();
-  } 
+  }
 
   /* Sends throw to the server after a player throws a dish */
   public void sendThrowToServer(Ingredient recipe) {
@@ -127,6 +127,9 @@ public class Player : MonoBehaviour {
   /* Notifies the server when the player logs into a station */
   private void checkStation(string text) {
     if (currentStation != text) {
+
+      resetErrorText();
+      Client.resetDisabledTimer();
 
       // Tell the server which station you're logging in at.
       switch (text) {
@@ -167,15 +170,20 @@ public class Player : MonoBehaviour {
     }
   }
 
-  public static void displayDisabledStation() {
+  public static void displayDisabledStation(float disabledTimer) {
+    TimeSpan t = TimeSpan.FromSeconds(disabledTimer);
     errorText = GameObject.Find("ErrorText").GetComponent<Text>();
-    errorText.text = "Oh no! This station has been disabled.";
+    errorText.text = "This station is disabled for another " + t.Seconds + " seconds.";
 	}
 
 	public static void displayOccupiedStation() {
     errorText = GameObject.Find("ErrorText").GetComponent<Text>();
     errorText.text = "Oh no! This station is occupied.";
 	}
+
+  public static void resetErrorText() {
+    errorText.text = "";
+  }
 
   /* Ignore the code below, I forgot to get nfc-s so had to create buttons for stations - xoxo, Sisi */
   public void goToCupboard() {

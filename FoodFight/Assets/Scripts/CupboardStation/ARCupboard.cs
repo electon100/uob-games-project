@@ -98,7 +98,7 @@ public class ARCupboard : MonoBehaviour
     }
 
     public void toggleButtons() {
-        backArrow.SetActive(true);
+        //backArrow.SetActive(true);
     }
 
     public void onPotato()
