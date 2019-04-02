@@ -501,7 +501,6 @@ public class NewServer : MonoBehaviour {
   }
 
   private void TickStations() {
-
     Team[] allTeams = new Team[] {redTeam, blueTeam};
     foreach (Team team in allTeams) {
       foreach (Station station in team.Kitchen.Stations) {
@@ -517,9 +516,11 @@ public class NewServer : MonoBehaviour {
     }
   }
 
+  /* Broadcasts scores to all connected players in the form: score&<myScore>$<enemyScore> */
   private void BroadcastScores() {
     Debug.Log("Broadcasting scores...");
-    BroadcastMessage("score", redTeam.Score + "$" + blueTeam.Score);
+    BroadcastMessageToTeam(redTeam, "score", redTeam.Score + "$" + blueTeam.Score);
+    BroadcastMessageToTeam(blueTeam, "score", blueTeam.Score + "$" + redTeam.Score);
   }
 
   /* Gets the team that a connected player is on, returning null if not found */
@@ -617,13 +618,18 @@ public class NewServer : MonoBehaviour {
   }
 
   /* Sends a message to all connected players */
-  public void BroadcastMessage(string messageType, string textInput) {
+  private void BroadcastMessage(string messageType, string textInput) {
     Team[] allTeams = new Team[] {redTeam, blueTeam};
     foreach (Team team in allTeams) {
-      foreach (ConnectedPlayer player in team.Players) {
-        Debug.Log("Broadcasting [" + messageType + ", " + textInput + "]");
-        SendMyMessage(messageType, textInput, player.ConnectionId);
-      }
+      BroadcastMessageToTeam(team, messageType, textInput);
+    }
+  }
+
+  /* Sends a message to all connected players */
+  private void BroadcastMessageToTeam(Team team, string messageType, string textInput) {
+    foreach (ConnectedPlayer player in team.Players) {
+      Debug.Log("Broadcasting [" + messageType + ", " + textInput + "]");
+      SendMyMessage(messageType, textInput, player.ConnectionId);
     }
   }
 
