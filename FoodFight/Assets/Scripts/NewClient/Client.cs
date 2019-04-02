@@ -17,7 +17,7 @@ public class Client : MonoBehaviour {
 
   private const int MAX_CONNECTION = 10;
   public int port = 8000;
-	public static string serverIP = "192.168.2.47";
+	public static string serverIP = "192.168.0.100";
   public int hostId = 0;
 	public int connectionId, reliableChannel;
 
@@ -53,6 +53,9 @@ public class Client : MonoBehaviour {
     if (disabledTimer > 0) {
       disabledTimer -= Time.deltaTime;
       Player.displayDisabledStation(disabledTimer);
+      if (disabledTimer < 0) {
+        Player.resetErrorText();
+      }
     }
 	}
 
