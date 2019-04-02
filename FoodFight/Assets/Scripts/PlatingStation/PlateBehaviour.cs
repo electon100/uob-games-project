@@ -9,6 +9,7 @@ public class PlateBehaviour : MonoBehaviour {
 
   public Button serveBtn, throwBtn, clearBtn, goBackBtn;
   public Player player;
+  public GameObject confirmationCanvas;
 
   /* Text representation of ingredients on Screen */
   public Text ingredientListText, statusText;
@@ -192,5 +193,19 @@ public class PlateBehaviour : MonoBehaviour {
 
 	private void setButtonInteractable(Button btn, bool interactable) {
 		btn.interactable = interactable;
+	}
+
+  public void confirmClear() {
+    Debug.Log("Confirm Clear");
+		confirmationCanvas.SetActive(true);
+	}
+
+	public void confirmNo() {
+		confirmationCanvas.SetActive(false);
+	}
+
+	public void confirmYes() {
+		confirmationCanvas.SetActive(false);
+		clearStation();
 	}
 }
