@@ -20,8 +20,12 @@ public class ARCupboard : MonoBehaviour
 
     void Start()
     {
-        Screen.orientation = ScreenOrientation.Portrait;
+      Screen.orientation = ScreenOrientation.Portrait;
+      if (Client.gameState.Equals(ClientGameState.MainMode)) {
         DontDestroyOnLoad(GameObject.Find("Player"));
+      } else {
+        DontDestroyOnLoad(GameObject.Find("SimulatedPlayer"));
+      }
     }
 
     void Update()
@@ -85,7 +89,12 @@ public class ARCupboard : MonoBehaviour
                 break;
         }
         /* Sets the player's current ingredient to that item */
-        Player.currentIngred = ingredient;
+        if (Client.gameState.Equals(ClientGameState.MainMode)) {
+          Player.currentIngred = ingredient;
+        } else {
+          Debug.Log(ingredient);
+          SimulatedPlayer.currentIngred = ingredient;
+        }
     }
 
     public void toggleButtons() {
@@ -187,8 +196,14 @@ public class ARCupboard : MonoBehaviour
     public void goBack()
     {
         Handheld.Vibrate();
-		player = GameObject.Find("Player").GetComponent<Player>();
-		player.notifyAboutStationLeft();
+        if (Client.gameState.Equals(ClientGameState.MainMode)) {
+          player = GameObject.Find("Player").GetComponent<Player>();
+          player.notifyAboutStationLeft();
+        } else if (FoodData.Instance.isChoppable(ingredient)) { /* Set the mode to the next step of the tutorial */
+          Client.gameState = ClientGameState.ChoppingTutorial;
+        } else if (ingredient != null) {
+          Client.gameState = ClientGameState.FryingTutorial;
+        }
         SceneManager.LoadScene("PlayerMainScreen");
     }
 

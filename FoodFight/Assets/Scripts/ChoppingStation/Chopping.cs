@@ -47,12 +47,16 @@ public class Chopping : MonoBehaviour {
   private Ingredient currentChoppingIngred;
 
   private void Start() {
-    /* Instantiates the player to access functions and sets the
-    current chopping ingredient to whatever the Player's currently holding. */
-    player = GameObject.Find("Player").GetComponent<Player>();
+    if (Client.gameState.Equals(ClientGameState.MainMode)) {
+      /* Instantiates the player to access functions and sets the
+      current chopping ingredient to whatever the Player's currently holding. */
+      player = GameObject.Find("Player").GetComponent<Player>();
 
-    /* Set the ingredient the player is currently holding */
-    currentChoppingIngred = Player.currentIngred;
+      /* Set the ingredient the player is currently holding */
+      currentChoppingIngred = Player.currentIngred;
+    } else {
+      currentChoppingIngred = SimulatedPlayer.currentIngred;
+    }
 
     /* Set up scene */
     source = GetComponent<AudioSource>();
@@ -84,7 +88,7 @@ public class Chopping : MonoBehaviour {
       }
 
       /* Updates the chops count on the screen. */
-      chops.text = Player.currentIngred.numberOfChops.ToString();
+      chops.text = currentChoppingIngred.numberOfChops.ToString();
       /* Simulates the movement of the knife. */
       KnifeMovement();
 
@@ -101,7 +105,7 @@ public class Chopping : MonoBehaviour {
         DoChop();
       }
 
-      if ((Player.currentIngred.numberOfChops % 3) == 0) {
+      if ((currentChoppingIngred.numberOfChops % 3) == 0) {
         transform.position = originalPos;
       }
     }
@@ -120,7 +124,7 @@ public class Chopping : MonoBehaviour {
       chops = GameObject.Find("ChopText").GetComponent<Text>();
       status = GameObject.Find("StatusText").GetComponent<Text>();
 
-      GameObject model = (GameObject) Resources.Load(Player.currentIngred.Model, typeof(GameObject));
+      GameObject model = (GameObject) Resources.Load(currentChoppingIngred.Model, typeof(GameObject));
       Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
 
       Quaternion modelRotation = modelTransform.rotation;
@@ -131,7 +135,7 @@ public class Chopping : MonoBehaviour {
 
   private void DoChop() {
     source.PlayOneShot(chopSound);
-    Player.currentIngred.numberOfChops++;
+    currentChoppingIngred.numberOfChops++;
     lastChop = Time.time;
     hasStartedChopping = true;
     shouldShake = true;
@@ -169,13 +173,18 @@ public class Chopping : MonoBehaviour {
 
   void ChoppingStatus() {
     /* Checks if the ingredient has been chopped the right amount of times and updates it */
-    if (FoodData.Instance.isChopped(Player.currentIngred)) {
+    if (FoodData.Instance.isChopped(currentChoppingIngred)) {
       isChopped = true;
       source.PlayOneShot(successSound);
       defaultCanvas.gameObject.SetActive(false);
       endCanvas.gameObject.SetActive(true);
 
-      Player.currentIngred = FoodData.Instance.TryAdvanceIngredient(Player.currentIngred);
+      /* Sets the player's current ingredient based on the mode */
+      if (Client.gameState.Equals(ClientGameState.MainMode)) {
+        Player.currentIngred = FoodData.Instance.TryAdvanceIngredient(currentChoppingIngred);
+      } else {
+        SimulatedPlayer.currentIngred = FoodData.Instance.TryAdvanceIngredient(currentChoppingIngred);
+      }
     }
     /* Checks if player has start chopping and instructs them to do so if not */
     if (hasStartedChopping) instructions.gameObject.SetActive(false);
@@ -184,7 +193,17 @@ public class Chopping : MonoBehaviour {
   private bool CheckIngredientValid() {
     if (Player.isHoldingIngredient()) {
       /* Stops the minigame if ingredient cannot be chopped */
-      if (FoodData.Instance.isChoppable(Player.currentIngred)) {
+      if (FoodData.Instance.isChoppable(currentChoppingIngred)) {
+        return true;
+      } else {
+        defaultCanvas.gameObject.SetActive(false);
+        notChoppableCanvas.gameObject.SetActive(true);
+        notChoppable.text = "Ingredient cannot be chopped";
+        return false;
+      }
+    } else if (SimulatedPlayer.isHoldingIngredient()) {
+      /* Stops the minigame if ingredient cannot be chopped */
+      if (FoodData.Instance.isChoppable(currentChoppingIngred)) {
         return true;
       } else {
         defaultCanvas.gameObject.SetActive(false);
@@ -204,7 +223,11 @@ public class Chopping : MonoBehaviour {
   public void goBack() {
     /* Notify server that player has left the station */
     Handheld.Vibrate();
-    player.notifyAboutStationLeft();
+    if (Client.gameState.Equals(ClientGameState.MainMode)) {
+      player.notifyAboutStationLeft();
+    } else if (currentChoppingIngred != null) { /* Set the mode to the next step of the tutorial */
+      Client.gameState = ClientGameState.FryingTutorial;
+    }
     SceneManager.LoadScene("PlayerMainScreen");
   }
 

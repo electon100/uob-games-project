@@ -17,16 +17,30 @@ public class ViewItem : MonoBehaviour {
 
 	public void viewItems() {
 		/* If the current item is null, instantiate it when viewing */
-		if (Player.isHoldingIngredient()) {
-			GameObject model = (GameObject) Resources.Load(Player.currentIngred.Model, typeof(GameObject));
-			Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
-			Vector3 modelPosition = modelTransform.position;
-			Quaternion modelRotation = modelTransform.rotation;
-			currentItem = (GameObject) Instantiate(model, modelPosition, modelRotation);
-			ingredText.text = Player.currentIngred.ToString();
-		}
-		else {
-			ingredText.text = "Nothing";
+		if (Client.gameState.Equals(ClientGameState.MainMode)) {
+			if (Player.isHoldingIngredient()) {
+				GameObject model = (GameObject) Resources.Load(Player.currentIngred.Model, typeof(GameObject));
+				Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
+				Vector3 modelPosition = modelTransform.position;
+				Quaternion modelRotation = modelTransform.rotation;
+				currentItem = (GameObject) Instantiate(model, modelPosition, modelRotation);
+				ingredText.text = Player.currentIngred.ToString();
+			}
+			else {
+				ingredText.text = "Nothing";
+			}
+		} else {
+			if (SimulatedPlayer.isHoldingIngredient()) {
+				GameObject model = (GameObject) Resources.Load(SimulatedPlayer.currentIngred.Model, typeof(GameObject));
+				Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
+				Vector3 modelPosition = modelTransform.position;
+				Quaternion modelRotation = modelTransform.rotation;
+				currentItem = (GameObject) Instantiate(model, modelPosition, modelRotation);
+				ingredText.text = SimulatedPlayer.currentIngred.ToString();
+			}
+			else {
+				ingredText.text = "Nothing";
+			}
 		}
 	}
 
