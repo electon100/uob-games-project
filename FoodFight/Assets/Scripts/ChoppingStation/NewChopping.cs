@@ -44,10 +44,10 @@ public class NewChopping : MonoBehaviour {
 
 		/* Load currently held ingredient into scene */
 		if (Player.isHoldingIngredient() || SimulatedPlayer.isHoldingIngredient()) {
+			GetIngredientFromPlayers();
 			LoadHeldIngredient();
 		}
 
-		Debug.Log(SimulatedPlayer.currentIngred);
 		originalPos = gameObject.transform.position;
 		lastChop = Time.time;
 	}
@@ -55,7 +55,6 @@ public class NewChopping : MonoBehaviour {
 	void Update () {
 
 		KnifeMovement();
-		GetIngredientFromPlayers();
 
 		if (ingredientChoppedStationComplete) {
 			ChangeView("Ingredient chopped", successMaterial);
@@ -67,7 +66,7 @@ public class NewChopping : MonoBehaviour {
 					audioSource.PlayOneShot(successSound);
 
 					ingredientToChop = FoodData.Instance.TryAdvanceIngredient(ingredientToChop);
-					
+
 					if (Client.gameState.Equals(ClientGameState.MainMode)) {
 						Player.currentIngred = ingredientToChop;
 					} else {
@@ -110,7 +109,7 @@ public class NewChopping : MonoBehaviour {
       float xTransform = -1 * Mathf.Sin((Time.time - lastChop) * shakeSpeed) * shakeAmount;
 
       if (negSinCount > 0 && posSinCount > 0 && xTransform < 0) {
-        ResetKnifePosition();
+        // ResetKnifePosition();
         negSinCount = 0; posSinCount = 0;
         shouldShake = false;
       }	else if (xTransform < 0) {

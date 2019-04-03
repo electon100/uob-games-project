@@ -106,6 +106,8 @@ public class ARCupboard : MonoBehaviour
         if (Client.gameState.Equals(ClientGameState.MainMode)) {
           Player.currentIngred = ingredient;
           backArrow.SetActive(true);
+          imageTargetCupboard.SetActive(false);
+          imageTargetFridge.SetActive(false);
         } else {
           if (!ingredient.Name.Equals("potato")) {
             infoPanel.SetActive(true);

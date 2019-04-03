@@ -114,8 +114,11 @@ public class Player : MonoBehaviour {
 
   /* Updates the score of the player after plating a dish */
   public void UpdateScore() {
-    myScoreText.text = "My score " + "\n" + network.myScore.ToString();
-    otherScoreText.text = "Other score " + "\n" + network.otherScore.ToString();
+    string currentScene = SceneManager.GetActiveScene().name;
+    if (currentScene == "PlayerMainScreen") { /* Scene where those two texts exist */
+      myScoreText.text = "My score " + "\n" + network.myScore.ToString();
+      otherScoreText.text = "Other score " + "\n" + network.otherScore.ToString();
+    }
   }
 
   /* Sends throw to the server after a player throws a dish */
@@ -182,6 +185,7 @@ public class Player : MonoBehaviour {
 	}
 
   public static void resetErrorText() {
+    errorText = GameObject.Find("ErrorText").GetComponent<Text>();
     errorText.text = "";
   }
 

@@ -1564,7 +1564,6 @@ MonoBehaviour:
   ingredientsInStation: []
   myScore: 0
   otherScore: 0
-  gameState: 0
   simulatedClient: {fileID: 1098963686903706, guid: eeab7b3a28024c64d96dd8e969fef1f1,
     type: 2}
   buttonPrefab: {fileID: 1411581202713964, guid: 5f1ce651aa958e84db74687760fa28a0,
