@@ -42,12 +42,12 @@ public class Lobby : MonoBehaviour {
                 countDown += 1;
                 startTime = Time.time;
             }
-            if (countDown == 4) {
+            if (countDown == 3) {
                 countDownText.text = "Go, go, go!";
-            } else if (countDown == 5) {
+            } else if (countDown == 4) {
                 StartGame();
             } else {
-                countDownText.text = (4 - countDown).ToString();
+                countDownText.text = (3 - countDown).ToString();
             }
         }
     }

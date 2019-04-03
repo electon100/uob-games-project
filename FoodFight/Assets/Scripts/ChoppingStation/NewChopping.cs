@@ -23,6 +23,7 @@ public class NewChopping : MonoBehaviour {
 	private Player player;
 	private GameObject ingredientInstantiation;
 	private bool ingredientChoppedStationComplete = false;
+	private Ingredient ingredientToChop;
 
 	private readonly float minimumChopInterval = 0.25f; // seconds
 
@@ -39,11 +40,11 @@ public class NewChopping : MonoBehaviour {
 	void Start () {
 		Screen.orientation = ScreenOrientation.Portrait;
 		background.material = neutralMaterial;
-		player = GameObject.Find("Player").GetComponent<Player>();
 		audioSource = GetComponent<AudioSource>();
 
 		/* Load currently held ingredient into scene */
-		if (Player.isHoldingIngredient()) {
+		if (Player.isHoldingIngredient() || SimulatedPlayer.isHoldingIngredient()) {
+			GetIngredientFromPlayers();
 			LoadHeldIngredient();
 		}
 
@@ -57,14 +58,21 @@ public class NewChopping : MonoBehaviour {
 
 		if (ingredientChoppedStationComplete) {
 			ChangeView("Ingredient chopped", successMaterial);
-		} else if (Player.isHoldingIngredient()) {
-			if (FoodData.Instance.isChoppable(Player.currentIngred)) {
+		} else if (Player.isHoldingIngredient() || SimulatedPlayer.isHoldingIngredient()) {
+			if (FoodData.Instance.isChoppable(ingredientToChop)) {
 
-				if (FoodData.Instance.isChopped(Player.currentIngred)) {
+				if (FoodData.Instance.isChopped(ingredientToChop)) {
 					ingredientChoppedStationComplete = true;
 					audioSource.PlayOneShot(successSound);
 
-					Player.currentIngred = FoodData.Instance.TryAdvanceIngredient(Player.currentIngred);
+					ingredientToChop = FoodData.Instance.TryAdvanceIngredient(ingredientToChop);
+
+					if (Client.gameState.Equals(ClientGameState.MainMode)) {
+						Player.currentIngred = ingredientToChop;
+					} else {
+						SimulatedPlayer.currentIngred = ingredientToChop;
+					}
+			
 					LoadHeldIngredient();
 				}
 
@@ -85,12 +93,23 @@ public class NewChopping : MonoBehaviour {
 
 	}
 
+	private void GetIngredientFromPlayers() {
+		if (!ingredientChoppedStationComplete) {
+			/* Check if game is running in tutorial mode */
+			if (Client.gameState.Equals(ClientGameState.MainMode)) {
+				player = GameObject.Find("Player").GetComponent<Player>();
+				ingredientToChop = Player.currentIngred;
+			} else {
+				ingredientToChop = SimulatedPlayer.currentIngred;
+			}
+		}
+	}
 	private void KnifeMovement() {
     if (shouldShake) {
       float xTransform = -1 * Mathf.Sin((Time.time - lastChop) * shakeSpeed) * shakeAmount;
 
       if (negSinCount > 0 && posSinCount > 0 && xTransform < 0) {
-        ResetKnifePosition();
+        // ResetKnifePosition();
         negSinCount = 0; posSinCount = 0;
         shouldShake = false;
       }	else if (xTransform < 0) {
@@ -109,7 +128,7 @@ public class NewChopping : MonoBehaviour {
 
 	private void LoadHeldIngredient() {
 		if (ingredientInstantiation != null) Destroy(ingredientInstantiation);
-		GameObject model = (GameObject) Resources.Load(Player.currentIngred.Model, typeof(GameObject));
+		GameObject model = (GameObject) Resources.Load(ingredientToChop.Model, typeof(GameObject));
 		Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
 
 		Quaternion modelRotation = modelTransform.rotation;
@@ -119,7 +138,7 @@ public class NewChopping : MonoBehaviour {
 
 	private void DoSingleChop() {
     audioSource.PlayOneShot(chopSound);
-    Player.currentIngred.numberOfChops++;
+    ingredientToChop.numberOfChops++;
     lastChop = Time.time;
 		shouldShake = true;
 	}
@@ -140,7 +159,11 @@ public class NewChopping : MonoBehaviour {
 	private void goBack() {
 		/* Notify server that player has left the station */
 		Handheld.Vibrate();
-		player.notifyAboutStationLeft();
+		if (Client.gameState.Equals(ClientGameState.MainMode)) {
+			player.notifyAboutStationLeft();
+		} else { /* Advance to the next step of the tutorial */
+			Client.gameState = ClientGameState.FryingTutorial;
+		}
 		SceneManager.LoadScene("PlayerMainScreen");
 	}
 }

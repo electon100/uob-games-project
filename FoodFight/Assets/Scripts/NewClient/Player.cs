@@ -37,16 +37,18 @@ public class Player : MonoBehaviour {
 
   void Start () {
     Screen.orientation = ScreenOrientation.Portrait;
-    networkClient = GameObject.Find("Client");
-    network = networkClient.GetComponent<Client>();
-    DontDestroyOnLoad(GameObject.Find("Player"));
-    errorText = GameObject.Find("ErrorText").GetComponent<Text>();
-
-    if (network.getTeam().Equals("blue")) {
-      background.material = blueBackground;
-    } else if (network.getTeam().Equals("red")) {
-      background.material = redBackground;
+    if (Client.gameState.Equals(ClientGameState.MainMode)) {
+      networkClient = GameObject.Find("Client");
+      network = networkClient.GetComponent<Client>();
+      DontDestroyOnLoad(GameObject.Find("Player"));
+      Destroy(GameObject.Find("SimulatedPlayer"));
+      if (network.getTeam().Equals("blue")) {
+        background.material = blueBackground;
+      } else if (network.getTeam().Equals("red")) {
+        background.material = redBackground;
+      }
     }
+
   }
 
   void Update () {
@@ -112,8 +114,11 @@ public class Player : MonoBehaviour {
 
   /* Updates the score of the player after plating a dish */
   public void UpdateScore() {
-    myScoreText.text = "My score " + "\n" + network.myScore.ToString();
-    otherScoreText.text = "Other score " + "\n" + network.otherScore.ToString();
+    string currentScene = SceneManager.GetActiveScene().name;
+    if (currentScene == "PlayerMainScreen") { /* Scene where those two texts exist */
+      myScoreText.text = "My score " + "\n" + network.myScore.ToString();
+      otherScoreText.text = "Other score " + "\n" + network.otherScore.ToString();
+    }
   }
 
   /* Sends throw to the server after a player throws a dish */
@@ -180,6 +185,7 @@ public class Player : MonoBehaviour {
 	}
 
   public static void resetErrorText() {
+    errorText = GameObject.Find("ErrorText").GetComponent<Text>();
     errorText.text = "";
   }
 

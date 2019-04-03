@@ -17,7 +17,7 @@ public class Client : MonoBehaviour {
 
   private const int MAX_CONNECTION = 10;
   public int port = 8000;
-	public static string serverIP = "192.168.0.100";
+	public static string serverIP = "192.168.2.47";
   public int hostId = 0;
 	public int connectionId, reliableChannel;
 
@@ -27,7 +27,9 @@ public class Client : MonoBehaviour {
 
 	public List<Ingredient> ingredientsInStation = new List<Ingredient>();
 	public int myScore, otherScore = 0;
+	public static ClientGameState gameState = ClientGameState.MainMode;
 	public GameEndState gameEndState;
+	public GameObject simulatedClient;
 
 	public GameObject buttonPrefab;
 	public GameObject startPanel;
@@ -59,7 +61,24 @@ public class Client : MonoBehaviour {
     }
 	}
 
+	/* Did not enter tutorial mode */
+	public void SkipTutorialMode() {
+		gameState = ClientGameState.MainMode;
+	}
+
+  /* On click of the Tutorial Mode button */
+  public void StartTutorial() {
+		Instantiate(simulatedClient, new Vector3(0, 0, 0), Quaternion.identity);
+    SceneManager.LoadScene("PlayerMainScreen");
+    gameState = ClientGameState.TutorialMode;
+		Destroy(GameObject.Find("Client"));
+		DontDestroyOnLoad(GameObject.Find("SimulatedClient(Clone)"));
+  }
+
 	public void Connect() {
+
+		SkipTutorialMode();
+
 		NetworkTransport.Init();
 		ConnectionConfig connectConfig = new ConnectionConfig();
 

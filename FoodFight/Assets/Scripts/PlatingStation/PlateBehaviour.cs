@@ -26,10 +26,16 @@ public class PlateBehaviour : MonoBehaviour {
 
     clearPlate();
 
-    player = GameObject.Find("Player").GetComponent<Player>();
+    if (Client.gameState.Equals(ClientGameState.MainMode)) {
+      player = GameObject.Find("Player").GetComponent<Player>();
 
-    foreach (Ingredient ingredient in Player.ingredientsFromStation) {
-      addIngredientToPlate(ingredient);
+      foreach (Ingredient ingredient in Player.ingredientsFromStation) {
+        addIngredientToPlate(ingredient);
+      }
+    } else {
+      foreach (Ingredient ingredient in SimulatedPlayer.ingredientsInPlating) {
+        addIngredientToPlate(ingredient);
+      }
     }
   }
 
@@ -44,9 +50,12 @@ public class PlateBehaviour : MonoBehaviour {
     /* If the combined result is a valid recipe (not mush) */
     if (isValidRecipe(combinationAttempt)) {
       /* Set the pan contents to the new combined recipe */
-      clearStation();
+      clearPlate();
       addIngredientToPlate(combinationAttempt);
-      player.notifyServerAboutIngredientPlaced(combinationAttempt);
+      if (Client.gameState.Equals(ClientGameState.MainMode)) {
+        player.notifyServerAboutIngredientPlaced(combinationAttempt);
+        player.clearIngredientsInStation();
+      }
     }
   }
 
@@ -86,6 +95,16 @@ public class PlateBehaviour : MonoBehaviour {
 			} else {
         /* TODO: What happens plate is full */
 			}
+    } else if (SimulatedPlayer.isHoldingIngredient()) {
+      if (plateContents.Count < maxPlateContents) {
+        addIngredientToPlate(SimulatedPlayer.currentIngred);
+
+        /* Notify server that player has placed ingredient */
+        SimulatedPlayer.ingredientsInPlating.Add(SimulatedPlayer.currentIngred);
+        SimulatedPlayer.removeCurrentIngredient();
+			} else {
+        /* TODO: What happens plate is full */
+			}
     } else {
       /* TODO: What happens when player is not holding an ingredient */
     }
@@ -116,8 +135,13 @@ public class PlateBehaviour : MonoBehaviour {
       }
 
       if (isValidRecipe(recipe)) {
-        player.sendScoreToServer(recipe);
-        clearStation();
+        if (Client.gameState.Equals(ClientGameState.MainMode)){
+          player.sendScoreToServer(recipe);
+          clearStation();
+        } else {
+          Client.gameState = ClientGameState.EndTutorial;
+          clearPlate();
+        }
       }
     }
   }
@@ -131,8 +155,13 @@ public class PlateBehaviour : MonoBehaviour {
       }
 
       if (isValidRecipe(recipe)) {
-        player.sendThrowToServer(recipe);
-        clearStation();
+        if (Client.gameState.Equals(ClientGameState.MainMode)){
+          player.sendThrowToServer(recipe);
+          clearStation();
+        } else {
+          Client.gameState = ClientGameState.EndTutorial;
+          clearPlate();
+        }
         statusText.enabled = true;
       }
     }
@@ -141,12 +170,21 @@ public class PlateBehaviour : MonoBehaviour {
 	public void pickUpIngredient() {
 		if (plateContents.Count == 1) {
 			/* Set the players current ingredient to the pan contents */
-			foreach (Ingredient ingredient in plateContents) {
-				Player.currentIngred = ingredient;
-			}
+      if (Client.gameState.Equals(ClientGameState.MainMode)) {
+        foreach (Ingredient ingredient in plateContents) {
+          Player.currentIngred = ingredient;
+        }
+        /* Clear the station */
+        clearStation();
+      } else {
+        foreach (Ingredient ingredient in plateContents) {
+          SimulatedPlayer.currentIngred = ingredient;
+        }
+        /* Clear the station */
+        clearPlate();
+        SimulatedPlayer.ingredientsInPlating.Clear();
+      }
 
-			/* Clear the station */
-			clearStation();
 		} else {
 			/* What to do if there are more than (or fewer than) 1 ingredients in the plate*/
 		}
@@ -175,13 +213,17 @@ public class PlateBehaviour : MonoBehaviour {
 	}
 
   private bool canPlaceHeldIngredient() {
-		return Player.isHoldingIngredient() && plateContents.Count < maxPlateContents;
+		return (Player.isHoldingIngredient() || SimulatedPlayer.isHoldingIngredient()) && plateContents.Count < maxPlateContents;
 	}
 
   public void goBack() {
     /* Notify server that player has left the station */
     Handheld.Vibrate();
-    player.notifyAboutStationLeft();
+    if (Client.gameState.Equals(ClientGameState.MainMode)) {
+      player.notifyAboutStationLeft();
+    } else { /* If in tutorial mode, advance to the next tutorial */
+			Client.gameState = ClientGameState.EndTutorial;
+		}
     SceneManager.LoadScene("PlayerMainScreen");
   }
 
