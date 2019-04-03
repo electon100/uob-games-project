@@ -35,19 +35,19 @@ public class Lobby : MonoBehaviour {
     }
 
     void Update() {
-        if (true) {
+        if (network.startGame) {
             startCanvas.gameObject.SetActive(false);
             countDownCanvas.gameObject.SetActive(true);
             if ((Time.time - startTime) > 1.0f) {
                 countDown += 1;
                 startTime = Time.time;
             }
-            if (countDown == 4) {
+            if (countDown == 3) {
                 countDownText.text = "Go, go, go!";
-            } else if (countDown == 5) {
+            } else if (countDown == 4) {
                 StartGame();
             } else {
-                countDownText.text = (4 - countDown).ToString();
+                countDownText.text = (3 - countDown).ToString();
             }
         }
     }

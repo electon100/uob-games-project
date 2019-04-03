@@ -54,8 +54,8 @@ public class SimulatedPlayer : MonoBehaviour {
 				case ClientGameState.EndTutorial:
 					fadeBackground = GameObject.Find("FadeBackgroundImage");
 					infoPanel = GameObject.Find("InfoPanel");
-					GameObject.Find("InfoText").GetComponent<Text>().text = "Tutorial completed! \n You got 100 points!";
-					GameObject.Find("MyScore").GetComponent<Text>().text = "Your team: \n 100";
+					GameObject.Find("InfoText").GetComponent<Text>().text = "Tutorial completed! \n You got 70 points!";
+					GameObject.Find("MyScore").GetComponent<Text>().text = "Your team: \n 70";
 					break;
 				default:
 					break;

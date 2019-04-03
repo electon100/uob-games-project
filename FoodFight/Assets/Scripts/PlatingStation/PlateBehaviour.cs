@@ -154,8 +154,13 @@ public class PlateBehaviour : MonoBehaviour {
       }
 
       if (isValidRecipe(recipe)) {
-        player.sendThrowToServer(recipe);
-        clearStation();
+        if (Client.gameState.Equals(ClientGameState.MainMode)){
+          player.sendThrowToServer(recipe);
+          clearStation();
+        } else {
+          Client.gameState = ClientGameState.EndTutorial;
+          clearPlate();
+        }
         statusText.enabled = true;
       }
     }
