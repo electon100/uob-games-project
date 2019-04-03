@@ -17,7 +17,7 @@ public class Client : MonoBehaviour {
 
   private const int MAX_CONNECTION = 10;
   public int port = 8000;
-	public static string serverIP = "192.168.2.47";
+	public static string serverIP = "192.168.0.100";
   public int hostId = 0;
 	public int connectionId, reliableChannel;
 
@@ -47,6 +47,12 @@ public class Client : MonoBehaviour {
 	public void Start() {
     DontDestroyOnLoad(GameObject.Find("Client"));
 		Screen.orientation = ScreenOrientation.Portrait;
+		
+		/* When player logs back into main mode after completing the tutorial, destroy the tutorial instances */
+		if (gameState.Equals(ClientGameState.MainMode)) {
+			Destroy(GameObject.Find("SimulatedPlayer"));
+			Destroy(GameObject.Find("SimulatedClient(Clone)"));
+		}
 	}
 
 	public void Update() {

@@ -9,7 +9,7 @@ public class SimulatedPlayer : MonoBehaviour {
   private GameObject networkClient;
   private SimulatedClient network;
 
-	public GameObject fadeBackground, infoPanel;
+	public GameObject fadeBackground, infoPanel, mainModeButton, player;
 	private ClientGameState currentGameState;
 
   public static Ingredient currentIngred;
@@ -69,6 +69,10 @@ public class SimulatedPlayer : MonoBehaviour {
   public void GotIt() {
     GameObject.Find("FadeBackgroundImage").SetActive(false);
     GameObject.Find("InfoPanel").SetActive(false);
+		if (Client.gameState.Equals(ClientGameState.EndTutorial)) {
+			mainModeButton.SetActive(true);
+			fadeBackground.SetActive(true);
+		}
   }
 
 	/* Checks if the player is currently holding anything */
@@ -81,7 +85,15 @@ public class SimulatedPlayer : MonoBehaviour {
     currentIngred = null;
   }
 
-	  /* Ignore the code below, I forgot to get nfc-s so had to create buttons for stations - xoxo, Sisi */
+	public void GoBackToMainMode() {
+		if (Client.gameState.Equals(ClientGameState.EndTutorial)) {
+			Client.gameState = ClientGameState.MainMode;
+			Destroy(GameObject.Find("SimulatedClient"));
+			SceneManager.LoadScene("PlayerStartScreen");
+		}
+	}
+
+	/* Ignore the code below, I forgot to get nfc-s so had to create buttons for stations - xoxo, Sisi */
   public void goToCupboard() {
     SimulatedClient.LogInStation("0");
   }

@@ -14,6 +14,8 @@ public class NewChopping : MonoBehaviour {
 	public Material neutralMaterial;
 	public Material issueMaterial;
 	public Renderer background;
+	public GameObject infoPanel;
+	public GameObject fadeBackground;
 
 	/* Sound stuff */
 	public AudioClip chopSound;
@@ -42,6 +44,13 @@ public class NewChopping : MonoBehaviour {
 		background.material = neutralMaterial;
 		audioSource = GetComponent<AudioSource>();
 
+		/* Set up scene based on mode */
+		if (Client.gameState.Equals(ClientGameState.MainMode)) {
+			player = GameObject.Find("Player").GetComponent<Player>();
+		} else {
+			infoPanel.SetActive(true);
+			fadeBackground.SetActive(true);
+		}
 		/* Load currently held ingredient into scene */
 		if (Player.isHoldingIngredient() || SimulatedPlayer.isHoldingIngredient()) {
 			GetIngredientFromPlayers();
@@ -97,7 +106,6 @@ public class NewChopping : MonoBehaviour {
 		if (!ingredientChoppedStationComplete) {
 			/* Check if game is running in tutorial mode */
 			if (Client.gameState.Equals(ClientGameState.MainMode)) {
-				player = GameObject.Find("Player").GetComponent<Player>();
 				ingredientToChop = Player.currentIngred;
 			} else {
 				ingredientToChop = SimulatedPlayer.currentIngred;
@@ -161,9 +169,14 @@ public class NewChopping : MonoBehaviour {
 		Handheld.Vibrate();
 		if (Client.gameState.Equals(ClientGameState.MainMode)) {
 			player.notifyAboutStationLeft();
-		} else { /* Advance to the next step of the tutorial */
+		} else if (ingredientChoppedStationComplete) { /* Advance to the next step of the tutorial */
 			Client.gameState = ClientGameState.FryingTutorial;
 		}
 		SceneManager.LoadScene("PlayerMainScreen");
+	}
+
+	public void GotIt() {
+		infoPanel.SetActive(false);
+		fadeBackground.SetActive(false);
 	}
 }

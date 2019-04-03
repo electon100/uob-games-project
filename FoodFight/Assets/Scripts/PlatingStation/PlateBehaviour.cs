@@ -63,7 +63,7 @@ public class PlateBehaviour : MonoBehaviour {
     GameObject ingred = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
     Transform ingredTransform = ingred.GetComponentsInChildren<Transform>(true)[0];
     Quaternion ingredRotation = ingredTransform.rotation;
-    Vector3 ingredPosition = ingredTransform.position + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1) + 17, 0);
+    Vector3 ingredPosition = ingredTransform.position;
     GameObject inst = Instantiate(ingred, ingredPosition, ingredRotation);
 
     plateContents.Add(ingredient);
