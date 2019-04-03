@@ -14,6 +14,8 @@ public class NewChopping : MonoBehaviour {
 	public Material neutralMaterial;
 	public Material issueMaterial;
 	public Renderer background;
+	public GameObject infoPanel;
+	public GameObject fadeBackground;
 
 	/* Sound stuff */
 	public AudioClip chopSound;
@@ -165,5 +167,10 @@ public class NewChopping : MonoBehaviour {
 			Client.gameState = ClientGameState.FryingTutorial;
 		}
 		SceneManager.LoadScene("PlayerMainScreen");
+	}
+
+	public void GotIt() {
+		infoPanel.SetActive(false);
+		fadeBackground.SetActive(false);
 	}
 }

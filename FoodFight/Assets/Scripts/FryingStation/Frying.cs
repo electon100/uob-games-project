@@ -7,6 +7,7 @@ using System.Text;
 
 public class Frying : MonoBehaviour {
 
+	/* Scene stuff */
 	public Button goBackBtn, clearBtn;
 	public Text test_text;
 	public GameObject confirmationCanvas;
@@ -16,6 +17,11 @@ public class Frying : MonoBehaviour {
 	public Renderer background;
 	public Player player;
 	public AudioClip fryingSound, successSound;
+	public GameObject infoPanel;
+	public Text infoText;
+	public GameObject fryingImage;
+	public GameObject tapImage;
+	public GameObject fadeBackground;
 
 	/* Text representation of ingredients on Screen */
   public Text ingredientListText;
@@ -299,7 +305,7 @@ public class Frying : MonoBehaviour {
 																	Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
 			RaycastHit raycastHit;
 			if (Physics.Raycast(raycast, out raycastHit)) {
-				if (!raycastHit.collider.name.Equals("Background")) { // <-- Requires ingredient prefabs to have colliders (approx) within pan bounds
+				if (!raycastHit.collider.name.Equals("Background") && !(infoPanel.active)) { // <-- Requires ingredient prefabs to have colliders (approx) within pan bounds
 				// if (raycastHit.collider.name.Equals("Pan")) { // <-- Requires ingredient prefabs not to have colliders!
 					/* Pan was tapped! */
 					if (canPlaceHeldIngredient()) {
@@ -349,10 +355,19 @@ public class Frying : MonoBehaviour {
 		Handheld.Vibrate();
 		if (Client.gameState.Equals(ClientGameState.MainMode)) {
 			player.notifyAboutStationLeft();
+			SceneManager.LoadScene("PlayerMainScreen");
 		} else { /* If in tutorial mode, advance to the next tutorial */
-			Client.gameState = ClientGameState.PlatingTutorial;
+			if (panContents.Count != 0) {
+				infoPanel.SetActive(true);
+				fadeBackground.SetActive(true);
+				fryingImage.SetActive(false);
+				tapImage.SetActive(true);
+				infoText.text = "Oops! \n You forgot to pick up \n the ingredient!";
+			} else {
+				Client.gameState = ClientGameState.PlatingTutorial;
+				SceneManager.LoadScene("PlayerMainScreen");
+			}
 		}
-		SceneManager.LoadScene("PlayerMainScreen");
 	}
 
 	public void confirmClear() {
@@ -366,5 +381,10 @@ public class Frying : MonoBehaviour {
 	public void confirmYes() {
 		confirmationCanvas.SetActive(false);
 		clearStation();
+	}
+
+	public void GotIt() {
+		infoPanel.SetActive(false);
+		fadeBackground.SetActive(false);
 	}
 }
