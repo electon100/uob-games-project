@@ -47,6 +47,12 @@ public class Client : MonoBehaviour {
 	public void Start() {
     DontDestroyOnLoad(GameObject.Find("Client"));
 		Screen.orientation = ScreenOrientation.Portrait;
+		
+		/* When player logs back into main mode after completing the tutorial, destroy the tutorial instances */
+		if (gameState.Equals(ClientGameState.MainMode)) {
+			Destroy(GameObject.Find("SimulatedPlayer"));
+			Destroy(GameObject.Find("SimulatedClient(Clone)"));
+		}
 	}
 
 	public void Update() {

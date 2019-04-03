@@ -73,6 +73,8 @@ public class Frying : MonoBehaviour {
 			player = GameObject.Find("Player").GetComponent<Player>();
 			ingredientsFromStation = Player.ingredientsFromStation;
 		} else {
+			infoPanel.SetActive(true);
+			fadeBackground.SetActive(true);
 			ingredientsFromStation = SimulatedPlayer.ingredientsInFrying;
 		}
 
@@ -264,6 +266,7 @@ public class Frying : MonoBehaviour {
 				/* Set the players current ingredient to the pan contents */
 				foreach (Ingredient ingredient in panContents) {
 					SimulatedPlayer.currentIngred = ingredient;
+					SimulatedPlayer.ingredientsInFrying.Clear();
 				}
 				/* Clear the station */
 				clearPan();
@@ -363,7 +366,7 @@ public class Frying : MonoBehaviour {
 				fryingImage.SetActive(false);
 				tapImage.SetActive(true);
 				infoText.text = "Oops! \n You forgot to pick up \n the ingredient!";
-			} else {
+			} else if (ingredientCookedStationComplete) {
 				Client.gameState = ClientGameState.PlatingTutorial;
 				SceneManager.LoadScene("PlayerMainScreen");
 			}

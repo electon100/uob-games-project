@@ -105,10 +105,7 @@ public class ARCupboard : MonoBehaviour
         /* Sets the player's current ingredient to that item */
         if (Client.gameState.Equals(ClientGameState.MainMode)) {
           Player.currentIngred = ingredient;
-          backArrow.SetActive(true);
-          imageTargetCupboard.SetActive(false);
-          imageTargetFridge.SetActive(false);
-        } else {
+        } else { /*Entered in tutorial mode */
           if (!ingredient.Name.Equals("potato")) {
             infoPanel.SetActive(true);
             fadeBackground.SetActive(true);
@@ -130,12 +127,17 @@ public class ARCupboard : MonoBehaviour
         if (Client.gameState.Equals(ClientGameState.MainMode)) {
           player = GameObject.Find("Player").GetComponent<Player>();
           player.notifyAboutStationLeft();
+          SceneManager.LoadScene("PlayerMainScreen");
         } else if (FoodData.Instance.isChoppable(ingredient)) { /* Set the mode to the next step of the tutorial */
           Client.gameState = ClientGameState.ChoppingTutorial;
-        } else if (ingredient != null) {
-          Client.gameState = ClientGameState.FryingTutorial;
-        }
-        SceneManager.LoadScene("PlayerMainScreen");
+          SceneManager.LoadScene("PlayerMainScreen");
+        } else if (ingredient.Name != "potato") {
+           infoPanel.SetActive(true);
+          fadeBackground.SetActive(true);
+          imageTargetCupboard.SetActive(false);
+          imageTargetFridge.SetActive(false);
+          infoText.text = "Make sure you grab \n a potato before leaving!";
+        } 
     }
 
     /* Reset canvas if player has picked something by mistake. */

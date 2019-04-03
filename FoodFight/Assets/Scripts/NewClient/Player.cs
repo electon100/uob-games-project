@@ -115,7 +115,7 @@ public class Player : MonoBehaviour {
   /* Updates the score of the player after plating a dish */
   public void UpdateScore() {
     string currentScene = SceneManager.GetActiveScene().name;
-    if (currentScene == "PlayerMainScreen") { /* Scene where those two texts exist */
+    if (currentScene == "PlayerMainScreen" && Client.gameState == ClientGameState.MainMode) { /* Scene where those two texts exist */
       myScoreText.text = "My score " + "\n" + network.myScore.ToString();
       otherScoreText.text = "Other score " + "\n" + network.otherScore.ToString();
     }
