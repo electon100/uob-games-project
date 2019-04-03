@@ -9,6 +9,7 @@ public class Frying : MonoBehaviour {
 
 	public Button goBackBtn, clearBtn;
 	public Text test_text;
+	public GameObject confirmationCanvas;
 	public Material successMaterial;
 	public Material neutralMaterial;
 	public Material issueMaterial;
@@ -352,5 +353,18 @@ public class Frying : MonoBehaviour {
 			Client.gameState = ClientGameState.PlatingTutorial;
 		}
 		SceneManager.LoadScene("PlayerMainScreen");
+	}
+
+	public void confirmClear() {
+		confirmationCanvas.SetActive(true);
+	}
+
+	public void confirmNo() {
+		confirmationCanvas.SetActive(false);
+	}
+
+	public void confirmYes() {
+		confirmationCanvas.SetActive(false);
+		clearStation();
 	}
 }

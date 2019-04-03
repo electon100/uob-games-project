@@ -42,13 +42,13 @@ public class Player : MonoBehaviour {
       network = networkClient.GetComponent<Client>();
       DontDestroyOnLoad(GameObject.Find("Player"));
       Destroy(GameObject.Find("SimulatedPlayer"));
+      if (network.getTeam().Equals("blue")) {
+        background.material = blueBackground;
+      } else if (network.getTeam().Equals("red")) {
+        background.material = redBackground;
+      }
     }
 
-    if (network.getTeam().Equals("blue")) {
-      background.material = blueBackground;
-    } else if (network.getTeam().Equals("red")) {
-      background.material = redBackground;
-    }
   }
 
   void Update () {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SimulatedPlayer : MonoBehaviour {
 
@@ -26,9 +27,9 @@ public class SimulatedPlayer : MonoBehaviour {
 	}
 	
 	void Update () {
-
 		/* Check what step of the tutorial the player is at. */
-		if (currentGameState != Client.gameState) {
+		string currentScene = SceneManager.GetActiveScene().name;
+		if ((currentGameState != Client.gameState) && (currentScene == "PlayerMainScreen")) {
 			switch(Client.gameState) {
 				case ClientGameState.TutorialMode:
 					break;

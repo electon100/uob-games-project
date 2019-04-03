@@ -15,6 +15,7 @@ public class ARCupboard : MonoBehaviour
     public GameObject goBackButtonBig;
     public GameObject backArrow;
     public GameObject infoPanel;
+    public GameObject fadeBackground;
     public Text infoText;
     private Player player;
     private RaycastHit hit;
@@ -25,6 +26,8 @@ public class ARCupboard : MonoBehaviour
       Screen.orientation = ScreenOrientation.Portrait;
       if (Client.gameState.Equals(ClientGameState.MainMode)) {
         DontDestroyOnLoad(GameObject.Find("Player"));
+        infoPanel.SetActive(false);
+        fadeBackground.SetActive(false);
       } else {
         DontDestroyOnLoad(GameObject.Find("SimulatedPlayer"));
       }
@@ -106,6 +109,7 @@ public class ARCupboard : MonoBehaviour
         } else {
           if (!ingredient.Name.Equals("potato")) {
             infoPanel.SetActive(true);
+            fadeBackground.SetActive(true);
             imageTargetCupboard.SetActive(false);
             imageTargetFridge.SetActive(false);
             foodName.text = "";
@@ -143,6 +147,7 @@ public class ARCupboard : MonoBehaviour
 
     public void GotIt() {
       infoPanel.SetActive(false);
+      fadeBackground.SetActive(false);
       imageTargetCupboard.SetActive(true);
       imageTargetFridge.SetActive(true);
     }

@@ -34,9 +34,7 @@ public class SimulatedClient : MonoBehaviour {
     if (Input.GetKeyDown(KeyCode.Y)) LogInStation("2");
     if (Input.GetKeyDown(KeyCode.U)) LogInStation("3");
     if (Input.GetKeyDown(KeyCode.E)) {
-			foreach(Ingredient ingredient in SimulatedPlayer.ingredientsInFrying) {
-				Debug.Log(ingredient.Name);
-			}
+			Debug.Log(SimulatedPlayer.currentIngred.Name);
 		} 
 			
 
@@ -60,8 +58,8 @@ public class SimulatedClient : MonoBehaviour {
 				}
 				break;
 			case "1": // Chopping Minigame
-				if (!currentScene.Equals("ChoppingStation")) {
-					SceneManager.LoadScene("ChoppingStation");
+				if (!currentScene.Equals("NewChoppingStation")) {
+					SceneManager.LoadScene("NewChoppingStation");
 				}
 				break;
 			case "2": // Frying Minigame
