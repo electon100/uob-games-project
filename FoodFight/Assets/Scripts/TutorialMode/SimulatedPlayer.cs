@@ -50,7 +50,7 @@ public class SimulatedPlayer : MonoBehaviour {
 				case ClientGameState.PlatingTutorial:
 					fadeBackground = GameObject.Find("FadeBackgroundImage");
 					infoPanel = GameObject.Find("InfoPanel");
-					GameObject.Find("InfoText").GetComponent<Text>().text = "Now log into the plating station \n to serve or throw the food.";
+					GameObject.Find("InfoText").GetComponent<Text>().text = "Now log into the plating station \n to serve the food.";
 					break;
 				case ClientGameState.EndTutorial:
 					fadeBackground = GameObject.Find("FadeBackgroundImage");

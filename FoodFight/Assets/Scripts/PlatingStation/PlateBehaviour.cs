@@ -9,7 +9,7 @@ public class PlateBehaviour : MonoBehaviour {
 
   public Button serveBtn, throwBtn, clearBtn, goBackBtn;
   public Player player;
-  public GameObject confirmationCanvas;
+  public GameObject confirmationCanvas, tapImage, backArrow;
 
   /* Text representation of ingredients on Screen */
   public Text ingredientListText, statusText;
@@ -33,6 +33,7 @@ public class PlateBehaviour : MonoBehaviour {
         addIngredientToPlate(ingredient);
       }
     } else {
+      tapImage.SetActive(true);
       foreach (Ingredient ingredient in SimulatedPlayer.ingredientsInPlating) {
         addIngredientToPlate(ingredient);
       }
@@ -97,6 +98,7 @@ public class PlateBehaviour : MonoBehaviour {
 			}
     } else if (SimulatedPlayer.isHoldingIngredient()) {
       if (plateContents.Count < maxPlateContents) {
+        tapImage.SetActive(false);
         addIngredientToPlate(SimulatedPlayer.currentIngred);
 
         /* Notify server that player has placed ingredient */
@@ -140,6 +142,7 @@ public class PlateBehaviour : MonoBehaviour {
           clearStation();
         } else {
           Client.gameState = ClientGameState.EndTutorial;
+          backArrow.SetActive(true);
           clearPlate();
         }
       }
@@ -230,7 +233,7 @@ public class PlateBehaviour : MonoBehaviour {
   private void updateButtonStates() {
 		setButtonInteractable(clearBtn, plateContents.Count > 0);
 		setButtonInteractable(serveBtn, plateContents.Count == 1);
-    setButtonInteractable(throwBtn, plateContents.Count == 1);
+    setButtonInteractable(throwBtn, plateContents.Count == 1 && Client.gameState.Equals(ClientGameState.MainMode));
 	}
 
 	private void setButtonInteractable(Button btn, bool interactable) {
