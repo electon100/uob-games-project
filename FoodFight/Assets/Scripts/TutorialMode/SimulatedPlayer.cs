@@ -13,6 +13,7 @@ public class SimulatedPlayer : MonoBehaviour {
 	private ClientGameState currentGameState;
 
   public static Ingredient currentIngred;
+	public static Ingredient ingredientInChopping;
   public static List<Ingredient> ingredientsInFrying = new List<Ingredient>();
 	public static List<Ingredient> ingredientsInPlating = new List<Ingredient>();
 	
@@ -88,6 +89,7 @@ public class SimulatedPlayer : MonoBehaviour {
 	public void GoBackToMainMode() {
 		if (Client.gameState.Equals(ClientGameState.EndTutorial)) {
 			Client.gameState = ClientGameState.MainMode;
+			removeCurrentIngredient();
 			Destroy(GameObject.Find("SimulatedClient"));
 			SceneManager.LoadScene("PlayerStartScreen");
 		}
