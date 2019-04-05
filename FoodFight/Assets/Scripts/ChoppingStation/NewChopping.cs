@@ -8,7 +8,8 @@ using System.Text;
 public class NewChopping : MonoBehaviour {
 
 	/* Scene stuff */
-	public Button goBackBtn;
+	public Button goBackBtn, clearBtn;
+	public GameObject confirmationCanvas;
 	public Text statusText;
 	public Material successMaterial;
 	public Material neutralMaterial;
@@ -24,8 +25,8 @@ public class NewChopping : MonoBehaviour {
 
 	private Player player;
 	private GameObject ingredientInstantiation;
-	private bool ingredientChoppedStationComplete = false;
 	private Ingredient ingredientToChop;
+	private bool ingredientChoppedStationComplete = false;
 
 	private readonly float minimumChopInterval = 0.25f; // seconds
 
@@ -47,14 +48,11 @@ public class NewChopping : MonoBehaviour {
 		/* Set up scene based on mode */
 		if (Client.gameState.Equals(ClientGameState.MainMode)) {
 			player = GameObject.Find("Player").GetComponent<Player>();
+			if (Player.ingredientsFromStation.Count > 0) SetIngredientToChop(Player.ingredientsFromStation[0]);
 		} else {
-			infoPanel.SetActive(true);
-			fadeBackground.SetActive(true);
-		}
-		/* Load currently held ingredient into scene */
-		if (Player.isHoldingIngredient() || SimulatedPlayer.isHoldingIngredient()) {
-			GetIngredientFromPlayers();
-			LoadHeldIngredient();
+			SetIngredientToChop(SimulatedPlayer.ingredientInChopping);
+			infoPanel.SetActive(ingredientToChop != null);
+			fadeBackground.SetActive(ingredientToChop != null);
 		}
 
 		originalPos = gameObject.transform.position;
@@ -63,26 +61,22 @@ public class NewChopping : MonoBehaviour {
 
 	void Update () {
 
+		updateButtonStates();
 		KnifeMovement();
+		checkForBoardTap();
 
 		if (ingredientChoppedStationComplete) {
 			ChangeView("Ingredient chopped", successMaterial);
-		} else if (Player.isHoldingIngredient() || SimulatedPlayer.isHoldingIngredient()) {
+		} else if (ingredientToChop != null) {
 			if (FoodData.Instance.isChoppable(ingredientToChop)) {
 
 				if (FoodData.Instance.isChopped(ingredientToChop)) {
 					ingredientChoppedStationComplete = true;
 					audioSource.PlayOneShot(successSound);
 
-					ingredientToChop = FoodData.Instance.TryAdvanceIngredient(ingredientToChop);
-
-					if (Client.gameState.Equals(ClientGameState.MainMode)) {
-						Player.currentIngred = ingredientToChop;
-					} else {
-						SimulatedPlayer.currentIngred = ingredientToChop;
-					}
-			
-					LoadHeldIngredient();
+					Ingredient choppedIngredient = FoodData.Instance.TryAdvanceIngredient(ingredientToChop);
+					SetIngredientToChop(choppedIngredient);
+					return;
 				}
 
 				ChangeView("Shake phone to start chopping", neutralMaterial);
@@ -97,27 +91,129 @@ public class NewChopping : MonoBehaviour {
 				ChangeView("Ingredient not choppable", issueMaterial);
 			}
 		} else {
-			ChangeView("No ingredient to chop", issueMaterial);
+			ChangeView("Place ingredient on board to start", neutralMaterial);
 		}
 
 	}
 
-	private void GetIngredientFromPlayers() {
-		if (!ingredientChoppedStationComplete) {
-			/* Check if game is running in tutorial mode */
-			if (Client.gameState.Equals(ClientGameState.MainMode)) {
-				ingredientToChop = Player.currentIngred;
+	private Ingredient GetPlayerIngredient() {
+		/* Check if game is running in tutorial mode */
+		if (Client.gameState.Equals(ClientGameState.MainMode)) {
+			return Player.currentIngred;
+		} else {
+			return SimulatedPlayer.currentIngred;
+		}
+	}
+
+	private void SetPlayerIngredient(Ingredient ingredient) {
+		/* Check if game is running in tutorial mode */
+		if (Client.gameState.Equals(ClientGameState.MainMode)) {
+			Player.currentIngred = ingredient;
+		} else {
+			SimulatedPlayer.currentIngred = ingredient;
+		}
+	}
+
+	private void SetIngredientToChop(Ingredient ingredient) {
+		clearStation();
+		if (Client.gameState.Equals(ClientGameState.MainMode)) {
+			player.notifyServerAboutIngredientPlaced(ingredient);
+		} else {
+			SimulatedPlayer.ingredientInChopping = ingredient;
+		}
+		ingredientToChop = ingredient;
+		LoadIngredient(ingredient);
+	}
+
+	private bool canPlaceHeldIngredient() {
+		return !ingredientChoppedStationComplete && isPlayerHoldingIngredient() && ingredientToChop == null;
+	}
+
+	private void placeHeldIngredientOnBoard() {
+		if (Client.gameState.Equals(ClientGameState.MainMode)) { /* Main mode */
+			if (Player.isHoldingIngredient()) { /* Main mode */
+				if (ingredientToChop == null) {
+					SetIngredientToChop(Player.currentIngred);
+					Player.removeCurrentIngredient();
+				} else {
+					Debug.Log("Already an item on the chopping board");
+				}
 			} else {
-				ingredientToChop = SimulatedPlayer.currentIngred;
+				Debug.Log("No held item to add to board");
+			}
+		} else { /* Tutorial mode */
+			if (SimulatedPlayer.isHoldingIngredient()) {
+				if (ingredientToChop == null) {
+					SetIngredientToChop(SimulatedPlayer.currentIngred);
+					SimulatedPlayer.ingredientInChopping = SimulatedPlayer.currentIngred;
+					SimulatedPlayer.removeCurrentIngredient();
+					infoPanel.SetActive(ingredientToChop != null);
+					fadeBackground.SetActive(ingredientToChop != null);
+				} else {
+					Debug.Log("Already an item on the chopping board");
+				}
+			} else {
+				Debug.Log("No held item to add to board");
 			}
 		}
 	}
+
+	private void pickUpIngredient() {
+		if (ingredientToChop != null) {
+			if (Client.gameState.Equals(ClientGameState.MainMode)) { /* Main mode */
+				/* Set the players current ingredient to the pan contents */
+				Player.currentIngred = ingredientToChop;
+			} else { /* Tutorial mode */
+				/* Set the players current ingredient to the pan contents */
+				SimulatedPlayer.currentIngred = ingredientToChop;
+				SimulatedPlayer.ingredientInChopping = null;
+			}
+			/* Clear the station */
+			clearStation();
+		} else {
+			/* What to do if there are more than (or fewer than) 1 ingredients in the pan*/
+			Debug.Log("No ingredient to pick up");
+		}
+	}
+
+	private void clearStation() {
+		if (ingredientInstantiation != null) Destroy(ingredientInstantiation);
+		ingredientToChop = null;
+		if (Client.gameState.Equals(ClientGameState.MainMode)) {
+			player.clearIngredientsInStation();
+		} else {
+			SimulatedPlayer.ingredientInChopping = null;
+		}
+	}
+
+	private void checkForBoardTap() {
+		/* https://stackoverflow.com/a/38566276 */
+		bool isDesktop = Input.GetMouseButtonDown(0);
+		bool isMobile = (Input.touchCount > 0) && (Input.GetTouch(0).phase == TouchPhase.Began);
+		if (isDesktop || isMobile) {
+			Ray raycast = (isDesktop) ? Camera.main.ScreenPointToRay(Input.mousePosition) :
+																	Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+			RaycastHit raycastHit;
+			if (Physics.Raycast(raycast, out raycastHit)) {
+				if (!raycastHit.collider.name.Equals("Background") && !(infoPanel.active) && !(confirmationCanvas.active)) { // <-- Requires ingredient prefabs to have colliders (approx) within board bounds
+					/* Board was tapped! */
+					if (canPlaceHeldIngredient()) {
+						placeHeldIngredientOnBoard();
+					} else if (ingredientToChop != null) {
+						pickUpIngredient();
+						/* TODO status text */
+					}
+				}
+			}
+		}
+	}
+
 	private void KnifeMovement() {
     if (shouldShake) {
       float xTransform = -1 * Mathf.Sin((Time.time - lastChop) * shakeSpeed) * shakeAmount;
 
       if (negSinCount > 0 && posSinCount > 0 && xTransform < 0) {
-        // ResetKnifePosition();
+        ResetKnifePosition();
         negSinCount = 0; posSinCount = 0;
         shouldShake = false;
       }	else if (xTransform < 0) {
@@ -130,13 +226,17 @@ public class NewChopping : MonoBehaviour {
     }
   }
 
+	private bool isPlayerHoldingIngredient() {
+		return GetPlayerIngredient() != null;
+	}
+
 	private void ResetKnifePosition() {
 		gameObject.transform.position = originalPos;
 	}
 
-	private void LoadHeldIngredient() {
+	private void LoadIngredient(Ingredient ingredient) {
 		if (ingredientInstantiation != null) Destroy(ingredientInstantiation);
-		GameObject model = (GameObject) Resources.Load(ingredientToChop.Model, typeof(GameObject));
+		GameObject model = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
 		Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
 
 		Quaternion modelRotation = modelTransform.rotation;
@@ -160,8 +260,29 @@ public class NewChopping : MonoBehaviour {
 		background.material = material;
 	}
 
+	private void updateButtonStates() {
+		setButtonInteractable(clearBtn, ingredientToChop != null);
+	}
+
+	private void setButtonInteractable(Button btn, bool interactable) {
+		btn.interactable = interactable;
+	}
+
 	public void OnGoBack() {
 		goBack();
+	}
+
+	public void OnConfirmClear() {
+		confirmationCanvas.SetActive(true);
+	}
+
+	public void OnConfirmNo() {
+		confirmationCanvas.SetActive(false);
+	}
+
+	public void OnConfirmYes() {
+		confirmationCanvas.SetActive(false);
+		clearStation();
 	}
 
 	private void goBack() {
