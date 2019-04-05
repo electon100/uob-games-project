@@ -17,7 +17,7 @@ public class Client : MonoBehaviour {
 
   private const int MAX_CONNECTION = 10;
   public int port = 8000;
-	public static string serverIP = "192.168.0.100";
+	public static string serverIP = "192.168.1.47";
   public int hostId = 0;
 	public int connectionId, reliableChannel;
 
@@ -432,7 +432,7 @@ public class Client : MonoBehaviour {
 	}
 
 	public void changeIP() {
-		serverIP = "192.168.0." + Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
+		serverIP = "192.168.1." + Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
 		inputField.SetActive(false);
 		changeIPButton.SetActive(false);
 		goBackButton.SetActive(false);
