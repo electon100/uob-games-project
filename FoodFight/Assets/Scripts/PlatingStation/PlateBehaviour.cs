@@ -32,6 +32,7 @@ public class PlateBehaviour : MonoBehaviour {
       foreach (Ingredient ingredient in Player.ingredientsFromStation) {
         addIngredientToPlate(ingredient);
       }
+      tapImage.SetActive(false);
     } else {
       tapImage.SetActive(true);
       foreach (Ingredient ingredient in SimulatedPlayer.ingredientsInPlating) {

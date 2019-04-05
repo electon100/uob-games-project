@@ -17,6 +17,8 @@ public class NewChopping : MonoBehaviour {
 	public Renderer background;
 	public GameObject infoPanel;
 	public GameObject fadeBackground;
+	public GameObject tapAnimation;
+	public GameObject	backArrow;
 
 	/* Sound stuff */
 	public AudioClip chopSound;
@@ -51,9 +53,11 @@ public class NewChopping : MonoBehaviour {
 			if (Player.ingredientsFromStation.Count > 0) SetIngredientToChop(Player.ingredientsFromStation[0]);
 		} else {
 			SetIngredientToChop(SimulatedPlayer.ingredientInChopping);
-			infoPanel.SetActive(ingredientToChop != null);
-			fadeBackground.SetActive(ingredientToChop != null);
 		}
+
+		tapAnimation.SetActive(!Client.gameState.Equals(ClientGameState.MainMode) && ingredientToChop == null);
+		infoPanel.SetActive(!Client.gameState.Equals(ClientGameState.MainMode) && ingredientToChop != null);
+		fadeBackground.SetActive(!Client.gameState.Equals(ClientGameState.MainMode) && ingredientToChop != null);
 
 		originalPos = gameObject.transform.position;
 		lastChop = Time.time;
@@ -76,6 +80,7 @@ public class NewChopping : MonoBehaviour {
 
 					Ingredient choppedIngredient = FoodData.Instance.TryAdvanceIngredient(ingredientToChop);
 					SetIngredientToChop(choppedIngredient);
+					tapAnimation.SetActive(Client.gameState.Equals(ClientGameState.ChoppingTutorial));
 					return;
 				}
 
@@ -147,6 +152,7 @@ public class NewChopping : MonoBehaviour {
 					SetIngredientToChop(SimulatedPlayer.currentIngred);
 					SimulatedPlayer.ingredientInChopping = SimulatedPlayer.currentIngred;
 					SimulatedPlayer.removeCurrentIngredient();
+					tapAnimation.SetActive(ingredientToChop == null);
 					infoPanel.SetActive(ingredientToChop != null);
 					fadeBackground.SetActive(ingredientToChop != null);
 				} else {
@@ -167,6 +173,8 @@ public class NewChopping : MonoBehaviour {
 				/* Set the players current ingredient to the pan contents */
 				SimulatedPlayer.currentIngred = ingredientToChop;
 				SimulatedPlayer.ingredientInChopping = null;
+				tapAnimation.SetActive(!ingredientChoppedStationComplete);
+				backArrow.SetActive(ingredientChoppedStationComplete); /* Guide the user to go back */
 			}
 			/* Clear the station */
 			clearStation();
