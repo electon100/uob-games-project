@@ -17,11 +17,8 @@ public class Frying : MonoBehaviour {
 	public Renderer background;
 	public Player player;
 	public AudioClip fryingSound, successSound;
-	public GameObject infoPanel;
 	public Text infoText;
-	public GameObject fryingImage;
-	public GameObject tapImage;
-	public GameObject fadeBackground;
+	public GameObject infoPanel, fryingImage, tapImage, fadeBackground, tapAnimation, backArrow;
 
 	/* Text representation of ingredients on Screen */
   public Text ingredientListText;
@@ -73,8 +70,6 @@ public class Frying : MonoBehaviour {
 			player = GameObject.Find("Player").GetComponent<Player>();
 			ingredientsFromStation = Player.ingredientsFromStation;
 		} else {
-			infoPanel.SetActive(true);
-			fadeBackground.SetActive(true);
 			ingredientsFromStation = SimulatedPlayer.ingredientsInFrying;
 		}
 
@@ -117,6 +112,9 @@ public class Frying : MonoBehaviour {
 						test_text.text = "Ingredient cooked!";
 						background.material = successMaterial;
 						ingredientCookedStationComplete = true;
+						if (Client.gameState.Equals(ClientGameState.FryingTutorial)) {
+							tapAnimation.SetActive(true);
+						}
 					}
 				}
 
@@ -215,6 +213,9 @@ public class Frying : MonoBehaviour {
 			}
 		} else if (SimulatedPlayer.isHoldingIngredient()) { /* Tutorial mode */
 			if (panContents.Count < maxPanContents) {
+				tapAnimation.SetActive(false);
+				infoPanel.SetActive(true);
+				fadeBackground.SetActive(true);
 				addIngredientToPan(SimulatedPlayer.currentIngred);
 				SimulatedPlayer.ingredientsInFrying.Add(SimulatedPlayer.currentIngred);
 				SimulatedPlayer.removeCurrentIngredient();
@@ -272,6 +273,8 @@ public class Frying : MonoBehaviour {
 				clearPan();
 				test_text.text = "Add ingredient to start";
 				background.material = neutralMaterial;
+				tapAnimation.SetActive(false);
+				if (ingredientCookedStationComplete) backArrow.SetActive(true); /* Guide the user to go back */
 			}
 		} else {
 			/* What to do if there are more than (or fewer than) 1 ingredients in the pan*/

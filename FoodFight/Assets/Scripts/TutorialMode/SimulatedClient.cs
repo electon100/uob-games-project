@@ -53,22 +53,22 @@ public class SimulatedClient : MonoBehaviour {
 
 		switch(stationId) {
 			case "0": // Cupboard Minigame
-				if (!currentScene.Equals("CupboardStation")) {
+				if (!currentScene.Equals("CupboardStation") && Client.gameState.Equals(ClientGameState.CupboardTutorial)) {
 					SceneManager.LoadScene("CupboardStation");
 				}
 				break;
 			case "1": // Chopping Minigame
-				if (!currentScene.Equals("NewChoppingStation")) {
+				if (!currentScene.Equals("NewChoppingStation") && Client.gameState.Equals(ClientGameState.ChoppingTutorial)) {
 					SceneManager.LoadScene("NewChoppingStation");
 				}
 				break;
 			case "2": // Frying Minigame
-				if (!currentScene.Equals("FryingStation")) {
+				if (!currentScene.Equals("FryingStation") && Client.gameState.Equals(ClientGameState.FryingTutorial)) {
 					SceneManager.LoadScene("FryingStation");
 				}
 				break;
 			case "3": // Plating Minigame
-				if (!currentScene.Equals("PlatingStation")) {
+				if (!currentScene.Equals("PlatingStation") && Client.gameState.Equals(ClientGameState.PlatingTutorial)) {
 					SceneManager.LoadScene("PlatingStation");
 				}
 				break;
