@@ -69,6 +69,7 @@ public class Frying : MonoBehaviour {
 		if (Client.gameState.Equals(ClientGameState.MainMode)) {
 			player = GameObject.Find("Player").GetComponent<Player>();
 			ingredientsFromStation = Player.ingredientsFromStation;
+			tapAnimation.SetActive(false);
 		} else {
 			ingredientsFromStation = SimulatedPlayer.ingredientsInFrying;
 		}
