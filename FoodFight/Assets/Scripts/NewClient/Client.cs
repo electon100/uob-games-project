@@ -17,7 +17,8 @@ public class Client : MonoBehaviour {
 
   private const int MAX_CONNECTION = 10;
   public int port = 8000;
-	public static string serverIP = "192.168.1.47";
+	private readonly string serverIPBase = "192.168.0."; // The base IP
+	private string serverIPSuffix = "100"; // The default IP suffix
   public int hostId = 0;
 	public int connectionId, reliableChannel;
 
@@ -116,7 +117,7 @@ public class Client : MonoBehaviour {
 			NetworkTransport.RemoveHost(hostId);
 		}
 		hostId = NetworkTransport.AddHost(topo, port, null /*ipAddress*/);
-		connectionId = NetworkTransport.Connect(hostId, serverIP, port, 0, out error);
+		connectionId = NetworkTransport.Connect(hostId, getServerIp(), port, 0, out error);
 
 		/* Check if there is an error */
 		if ((NetworkError)error != NetworkError.Ok)
@@ -131,6 +132,10 @@ public class Client : MonoBehaviour {
 		else {
 			isConnected = true;
 		}
+	}
+
+	private string getServerIp() {
+		return serverIPBase + serverIPSuffix;
 	}
 
 	public string getTeam() {
@@ -432,7 +437,7 @@ public class Client : MonoBehaviour {
 	}
 
 	public void changeIP() {
-		serverIP = "192.168.1." + Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
+		serverIPSuffix = Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
 		inputField.SetActive(false);
 		changeIPButton.SetActive(false);
 		goBackButton.SetActive(false);
