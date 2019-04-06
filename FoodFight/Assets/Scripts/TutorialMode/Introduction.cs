@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class Introduction : MonoBehaviour {
 
-	public Button nextButton, backButton;
+	public Button nextButton, backButton, startTutorialButton;
 	public Slider progressBar;
 	public Image logoImg, serveImg, warningImg, chefImg, throwImg;
 	public Text mainText;
@@ -39,6 +39,8 @@ public class Introduction : MonoBehaviour {
 				return "Stay on top of orders! If you miss one, you will lose points.";
 			case 4:
 				return "Damage the enemy kitchen's stations by throwing food at them. This prevents them from logging in for a minimum of 10 seconds.";
+			// case 5:
+			// 	return "Damage the enemy kitchen's stations by throwing food at them. This prevents them from logging in for a minimum of 10 seconds.";
 			default:
 				return "";
 		}
@@ -84,6 +86,7 @@ public class Introduction : MonoBehaviour {
 	private void UpdateButtonStates() {
 		SetButtonInteractable(nextButton, hasNextSlide());
 		SetButtonInteractable(backButton, hasPrevSlide());
+		startTutorialButton.gameObject.SetActive(currentSlide == totalSlides);
 	}
 
 	private void SetButtonInteractable(Button btn, bool interactable) {
@@ -100,5 +103,9 @@ public class Introduction : MonoBehaviour {
 
 	public void OnGotItButtonPress() {
 		nextSlide();
+	}
+
+	public void OnStartTutorialPress() {
+		EndIntroduction();
 	}
 }
