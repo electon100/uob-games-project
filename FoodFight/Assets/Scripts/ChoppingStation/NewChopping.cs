@@ -127,7 +127,7 @@ public class NewChopping : MonoBehaviour {
 			SimulatedPlayer.ingredientInChopping = ingredient;
 		}
 		ingredientToChop = ingredient;
-		LoadIngredient(ingredient);
+		if (ingredient != null) LoadIngredient(ingredient);
 	}
 
 	private bool canPlaceHeldIngredient() {
