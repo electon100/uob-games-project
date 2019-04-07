@@ -23,7 +23,7 @@ public class SimulatedClient : MonoBehaviour {
 
 	void Start () {
 		Screen.orientation = ScreenOrientation.Portrait;
-    Client.gameState = ClientGameState.CupboardTutorial;
+    Client.gameState = ClientGameState.RecipeIntro;
 	}
 	
 	void Update () {

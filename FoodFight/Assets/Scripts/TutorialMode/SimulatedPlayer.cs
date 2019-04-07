@@ -9,7 +9,7 @@ public class SimulatedPlayer : MonoBehaviour {
   private GameObject networkClient;
   private SimulatedClient network;
 
-	public GameObject fadeBackground, infoPanel, mainModeButton, player;
+	public GameObject fadeBackground, infoPanel, mainModeButton, backButton, player;
 	private ClientGameState currentGameState;
 
   public static Ingredient currentIngred;
@@ -32,11 +32,15 @@ public class SimulatedPlayer : MonoBehaviour {
 		string currentScene = SceneManager.GetActiveScene().name;
 		if ((currentGameState != Client.gameState) && (currentScene == "PlayerMainScreen")) {
 			switch(Client.gameState) {
-				case ClientGameState.TutorialMode:
+				case ClientGameState.RecipeIntro:
+					fadeBackground = GameObject.Find("FadeBackgroundImage");
+					infoPanel = GameObject.Find("InfoPanel");
+					GameObject.Find("InfoText").GetComponent<Text>().text = "We are going to make Steak Hache. \n To do that, we need to cook \n a steak and some chips.";
 					break;
 				case ClientGameState.CupboardTutorial:
 					fadeBackground = GameObject.Find("FadeBackgroundImage");
 					infoPanel = GameObject.Find("InfoPanel");
+					GameObject.Find("InfoText").GetComponent<Text>().text = "Fisrt, log into the cupboard \n to pick up some potatoes.";					
 					break;
 				case ClientGameState.ChoppingTutorial:
 					fadeBackground = GameObject.Find("FadeBackgroundImage");
@@ -56,8 +60,8 @@ public class SimulatedPlayer : MonoBehaviour {
 				case ClientGameState.EndTutorial:
 					fadeBackground = GameObject.Find("FadeBackgroundImage");
 					infoPanel = GameObject.Find("InfoPanel");
-					GameObject.Find("InfoText").GetComponent<Text>().text = "Tutorial completed! \n You got 70 points!";
-					GameObject.Find("MyScore").GetComponent<Text>().text = "Your team: \n 70";
+					GameObject.Find("InfoText").GetComponent<Text>().text = "Tutorial completed! \n You got 100 points!";
+					GameObject.Find("MyScore").GetComponent<Text>().text = "Your team: \n 100";
 					break;
 				default:
 					break;
@@ -68,13 +72,25 @@ public class SimulatedPlayer : MonoBehaviour {
 
 	/* On click of the Got It button */
   public void GotIt() {
-    GameObject.Find("FadeBackgroundImage").SetActive(false);
-    GameObject.Find("InfoPanel").SetActive(false);
-		if (Client.gameState.Equals(ClientGameState.EndTutorial)) {
+		if (Client.gameState.Equals(ClientGameState.RecipeIntro)) {
+			Client.gameState = ClientGameState.CupboardTutorial;
+			backButton.SetActive(true);
+		} 
+		else if (Client.gameState.Equals(ClientGameState.EndTutorial)) {
+			GameObject.Find("InfoPanel").SetActive(false);
 			mainModeButton.SetActive(true);
 			fadeBackground.SetActive(true);
+		} else {
+			GameObject.Find("FadeBackgroundImage").SetActive(false);
+    	GameObject.Find("InfoPanel").SetActive(false);
 		}
   }
+
+	/* On click of the Back button */
+	public void Back() {
+		Client.gameState = ClientGameState.RecipeIntro;
+		backButton.SetActive(false);
+	}
 
 	/* Checks if the player is currently holding anything */
   public static bool isHoldingIngredient() {

@@ -48,7 +48,7 @@ public class Client : MonoBehaviour {
 	public void Start() {
     DontDestroyOnLoad(GameObject.Find("Client"));
 		Screen.orientation = ScreenOrientation.Portrait;
-		
+
 		/* When player logs back into main mode after completing the tutorial, destroy the tutorial instances */
 		if (gameState.Equals(ClientGameState.MainMode)) {
 			Destroy(GameObject.Find("SimulatedPlayer"));
@@ -74,6 +74,11 @@ public class Client : MonoBehaviour {
 	}
 
   /* On click of the Tutorial Mode button */
+	public void OnTutorialStartClick() {
+		SceneManager.LoadScene("TutorialIntro");
+	}
+
+	/* Called after tutorial introduction is complete */
   public void StartTutorial() {
 		Instantiate(simulatedClient, new Vector3(0, 0, 0), Quaternion.identity);
     SceneManager.LoadScene("PlayerMainScreen");

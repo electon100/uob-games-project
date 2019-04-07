@@ -9,7 +9,7 @@ public class PlateBehaviour : MonoBehaviour {
 
   public Button serveBtn, throwBtn, clearBtn, goBackBtn;
   public Player player;
-  public GameObject confirmationCanvas, tapImage, backArrow;
+  public GameObject confirmationCanvas, tapImage, backArrow, infoPanel, fadeBackground;
 
   /* Text representation of ingredients on Screen */
   public Text ingredientListText, statusText;
@@ -34,7 +34,12 @@ public class PlateBehaviour : MonoBehaviour {
       }
       tapImage.SetActive(false);
     } else {
+      infoPanel.SetActive(true);
+      fadeBackground.SetActive(true);
       tapImage.SetActive(true);
+      /* Adding a steak to plating to explain it's a team game */
+      Ingredient steak = new Ingredient("steak", "steakPrefab");
+      SimulatedPlayer.ingredientsInPlating.Add(steak);
       foreach (Ingredient ingredient in SimulatedPlayer.ingredientsInPlating) {
         addIngredientToPlate(ingredient);
       }
@@ -105,6 +110,9 @@ public class PlateBehaviour : MonoBehaviour {
         /* Notify server that player has placed ingredient */
         SimulatedPlayer.ingredientsInPlating.Add(SimulatedPlayer.currentIngred);
         SimulatedPlayer.removeCurrentIngredient();
+
+        /* Instruct the player to serve the food */
+        InstructToServe();
 			} else {
         /* TODO: What happens plate is full */
 			}
@@ -203,7 +211,7 @@ public class PlateBehaviour : MonoBehaviour {
 																	Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
 			RaycastHit raycastHit;
 			if (Physics.Raycast(raycast, out raycastHit)) {
-				if (!raycastHit.collider.name.Equals("Background")) { // <-- Requires ingredient prefabs to have colliders (approx) within plate bounds
+				if (!raycastHit.collider.name.Equals("Background") && !(infoPanel.active)) { // <-- Requires ingredient prefabs to have colliders (approx) within plate bounds
 				// if (raycastHit.collider.name.Equals("Plate")) { // <-- Requires ingredient prefabs not to have colliders!
 					/* Plate was tapped! */
 					if (canPlaceHeldIngredient()) {
@@ -254,4 +262,15 @@ public class PlateBehaviour : MonoBehaviour {
 		confirmationCanvas.SetActive(false);
 		clearStation();
 	}
+
+  public void GotIt() {
+    infoPanel.SetActive(false);
+    fadeBackground.SetActive(false);
+  }
+
+  private void InstructToServe() {
+    infoPanel.SetActive(true);
+    fadeBackground.SetActive(true);
+    GameObject.Find("InfoText").GetComponent<Text>().text = "Now serve the food \n to get points!";
+  }
 }

@@ -1,6 +1,7 @@
 public enum ClientGameState {
     TutorialMode, /* When someone presses tutorial mode */
     MainMode, /* Normal playing mode */
+    RecipeIntro, /* Introduces the user to the recipe */
     CupboardTutorial, /* First tutorial to show how to pick up ingredients */
     ChoppingTutorial, /* Second tutorial to show how to chop ingredients */
     FryingTutorial, /* Third tutorial to show how to fry ingredients */
