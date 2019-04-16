@@ -16,7 +16,7 @@ public class NewServer : MonoBehaviour {
   private int minimumPlayers = -1;
 
   public GameObject bluePlayerPrefab, redPlayerPrefab;
-  public Transform mainMenuCanvas, pickPlayersCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
+  public Transform mainMenuCanvas, pickModeCanvas, pickPlayersCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
   public Text startScreenText, redEndGameText, blueEndGameText, redScoreText, blueScoreText;
   public Image gameOverBackground;
 
@@ -34,6 +34,7 @@ public class NewServer : MonoBehaviour {
 
   private Team redTeam, blueTeam;
   public GameState gameState = GameState.MainMenu;
+  public GameMode gameMode = GameMode.None;
 
   private void Start () {
     initialiseTeams();
@@ -49,7 +50,10 @@ public class NewServer : MonoBehaviour {
     TickStations(); /* Ticks down the disabled timers on all stations */
 
     switch(gameState) {
-      case GameState.ConfigureGame:
+      case GameState.ConfigureMode:
+        listenForData();
+        break;
+      case GameState.ConfigurePlayers:
         listenForData();
         break;
       case GameState.AwaitingPlayers:
@@ -539,7 +543,8 @@ public class NewServer : MonoBehaviour {
   /* Sets the active canvas based on the game state */
   public void SetCanvasForGameState() {
     mainMenuCanvas.gameObject.SetActive(gameState.Equals(GameState.MainMenu));
-    pickPlayersCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigureGame));
+    pickModeCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigureMode));
+    pickPlayersCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigurePlayers));
     startGameCanvas.gameObject.SetActive(gameState.Equals(GameState.AwaitingPlayers));
     gameOverCanvas.gameObject.SetActive(gameState.Equals(GameState.EndGame));
     mainGameCanvas.gameObject.SetActive(gameState.Equals(GameState.GameRunning) || gameState.Equals(GameState.Countdown));
@@ -602,7 +607,21 @@ public class NewServer : MonoBehaviour {
 
   public void ExitMainScreen() {
     if (gameState == GameState.MainMenu) {
-      SetGameState(GameState.ConfigureGame);
+      SetGameState(GameState.ConfigureMode);
+    }
+  }
+
+  public void OnLatinMode() {
+    if (gameState == GameState.ConfigureMode) {
+      gameMode = GameMode.Latin;
+      SetGameState(GameState.ConfigurePlayers);
+    }
+  }
+
+  public void OnFrenchMode() {
+    if (gameState == GameState.ConfigureMode) {
+      gameMode = GameMode.French;
+      SetGameState(GameState.ConfigurePlayers);
     }
   }
 
@@ -725,6 +744,6 @@ public class NewServer : MonoBehaviour {
 
     /* Reset teams */
     initialiseTeams();
-    gameState = GameState.ConfigureGame;
+    gameState = GameState.ConfigurePlayers;
   }
 }
