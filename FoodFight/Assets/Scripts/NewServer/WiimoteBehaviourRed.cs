@@ -60,7 +60,7 @@ public class WiimoteBehaviourRed : MonoBehaviour {
             {
                 CollectWiimoteData(wiimoteRed);
 
-                if (!wiimoteRed.Button.b && redTime > 0)
+                if (!wiimoteRed.Button.a && redTime > 0)
                 {
                     redTime -= Time.deltaTime;
                     UpdateCrosshairPosition(wiimoteRed, redCrosshair);
@@ -193,7 +193,7 @@ public class WiimoteBehaviourRed : MonoBehaviour {
     public void reset(Ingredient ingredient)
     {
         firstTime = true;
-        redTime = 5.0f;
+        redTime = 10.0f;
         gamestarted = false;
         aPressed = false;
         redTimeOverPanel.gameObject.SetActive(false);

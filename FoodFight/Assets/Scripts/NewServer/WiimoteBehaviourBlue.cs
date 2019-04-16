@@ -60,7 +60,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
             {
                 CollectWiimoteData(wiimoteBlue);
 
-                if (!wiimoteBlue.Button.b && blueTime > 0)
+                if (!wiimoteBlue.Button.a && blueTime > 0)
                 {
                     blueTime -= Time.deltaTime;
                     UpdateCrosshairPosition(wiimoteBlue, blueCrosshair);
@@ -192,7 +192,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
     public void reset(Ingredient ingredient)
     {
         firstTime = true;
-        blueTime = 5.0f;
+        blueTime = 10.0f;
         gamestarted = false;
         aPressed = false;
         blueTimeOverPanel.gameObject.SetActive(false);
