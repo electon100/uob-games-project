@@ -67,6 +67,7 @@ public class WiimoteBehaviourRed : MonoBehaviour {
                     if (redTime <= 0)
                     {
                         roundOver("Too late! Times up");
+                        ammoCount = 0;
                     }
                 }
 
