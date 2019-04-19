@@ -18,7 +18,8 @@ public class NewServer : MonoBehaviour {
   public GameObject bluePlayerPrefab, redPlayerPrefab;
   public Transform mainMenuCanvas, pickModeCanvas, pickPlayersCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
   public Text startScreenText, redEndGameText, blueEndGameText, redScoreText, blueScoreText;
-  public Image gameOverBackground;
+  public Image gameOverBackground, redStars, blueStars;
+  public Sprite numOfStars;
 
   private NewGameTimer timer;
   private WiimoteBehaviourBlue wiiBlue;
@@ -43,6 +44,8 @@ public class NewServer : MonoBehaviour {
     timer = GameObject.Find("GameTimer").GetComponent<NewGameTimer>();
     wiiBlue = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourBlue>();
     wiiRed = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourRed>();
+    // redStars = GameObject.Find("RedStars2").GetComponent<GameObject>();
+    // blueStars = GameObject.Find("BlueStars2").GetComponent<GameObject>();
   }
 
   void Update() {
@@ -65,11 +68,47 @@ public class NewServer : MonoBehaviour {
       case GameState.GameRunning:
         listenForData();
         manageOrders();
+        setTeamStars();
         redScoreText.text = "Red score: " + redTeam.Score;
         blueScoreText.text = "Blue score: " + blueTeam.Score;
         break;
       case GameState.EndGame:
         break;
+    }
+  }
+
+  private void setTeamStars(){
+
+    if(redTeam.Score < 10){
+      numOfStars = (Sprite)Resources.Load("star0p5", typeof(Sprite));
+      redStars.sprite = numOfStars;
+    }else if(redTeam.Score >=10 && redTeam.Score < 50){
+      numOfStars = (Sprite)Resources.Load("star1", typeof(Sprite));
+      redStars.sprite = numOfStars;
+    }else if(redTeam.Score >=50 && redTeam.Score < 100){
+      numOfStars = (Sprite)Resources.Load("star1p5", typeof(Sprite));
+      redStars.sprite = numOfStars;
+    }else if(redTeam.Score >=100 && redTeam.Score < 150){
+      numOfStars = (Sprite)Resources.Load("star2", typeof(Sprite));
+      redStars.sprite = numOfStars;
+    }else if(redTeam.Score >=150 && redTeam.Score < 200){
+      numOfStars = (Sprite)Resources.Load("star2p5", typeof(Sprite));
+      redStars.sprite = numOfStars;
+    }else if(redTeam.Score >=200 && redTeam.Score < 250){
+      numOfStars = (Sprite)Resources.Load("star3", typeof(Sprite));
+      redStars.sprite = numOfStars;
+    }else if(redTeam.Score >=250 && redTeam.Score < 300){
+      numOfStars = (Sprite)Resources.Load("star3p5", typeof(Sprite));
+      redStars.sprite = numOfStars;
+    }else if(redTeam.Score >=300 && redTeam.Score < 350){
+      numOfStars = (Sprite)Resources.Load("star4", typeof(Sprite));
+      redStars.sprite = numOfStars;
+    }else if(redTeam.Score >=350 && redTeam.Score < 400){
+      numOfStars = (Sprite)Resources.Load("star4p5", typeof(Sprite));
+      redStars.sprite = numOfStars;
+    }else if(redTeam.Score >=400){
+      numOfStars = (Sprite)Resources.Load("star5", typeof(Sprite));
+      redStars.sprite = numOfStars;
     }
   }
 
@@ -355,7 +394,7 @@ public class NewServer : MonoBehaviour {
   private void OnMessageScore(int connectionId, string messageType, string messageContent)  {
     /* Determine the team from which the message originated */
     Team relevantTeam = getTeamForConnectionId(connectionId);
-
+    
     if (relevantTeam != null) {
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
 
