@@ -18,7 +18,8 @@ public class NewServer : MonoBehaviour {
   public GameObject bluePlayerPrefab, redPlayerPrefab;
   public Transform mainMenuCanvas, pickModeCanvas, pickPlayersCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
   public Text startScreenText, redEndGameText, blueEndGameText, redScoreText, blueScoreText;
-  public Image gameOverBackground;
+  public Image gameOverBackground, redStarSlider, blueStarSlider;
+  public Sprite numOfStars;
 
   private NewGameTimer timer;
   private WiimoteBehaviourBlue wiiBlue;
@@ -43,6 +44,8 @@ public class NewServer : MonoBehaviour {
     timer = GameObject.Find("GameTimer").GetComponent<NewGameTimer>();
     wiiBlue = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourBlue>();
     wiiRed = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourRed>();
+    // redStars = GameObject.Find("RedStars2").GetComponent<GameObject>();
+    // blueStars = GameObject.Find("BlueStars2").GetComponent<GameObject>();
   }
 
   void Update() {
@@ -65,12 +68,18 @@ public class NewServer : MonoBehaviour {
       case GameState.GameRunning:
         listenForData();
         manageOrders();
+        setTeamStars();
         redScoreText.text = "Red score: " + redTeam.Score;
         blueScoreText.text = "Blue score: " + blueTeam.Score;
         break;
       case GameState.EndGame:
         break;
     }
+  }
+
+  private void setTeamStars(){
+    redStarSlider.rectTransform.sizeDelta = new Vector2(redTeam.Score, 82);
+    blueStarSlider.rectTransform.sizeDelta = new Vector2(blueTeam.Score, 82);
   }
 
   private void initialiseTeams() {
@@ -355,7 +364,7 @@ public class NewServer : MonoBehaviour {
   private void OnMessageScore(int connectionId, string messageType, string messageContent)  {
     /* Determine the team from which the message originated */
     Team relevantTeam = getTeamForConnectionId(connectionId);
-
+    
     if (relevantTeam != null) {
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
 
