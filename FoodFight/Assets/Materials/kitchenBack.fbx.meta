@@ -1,0 +1,390 @@
+fileFormatVersion: 2
+guid: bd78777517e8f3b4aaa065be4304d54c
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: areaLight1
+    100002: BackWall
+    100004: BenjiPoster
+    100006: BigPot
+    100008: BigPot1
+    100010: BigPot2
+    100012: Button
+    100014: DoorHandle
+    100016: DoorHandle 1
+    100018: DoorHandle 2
+    100020: DoorHandle1
+    100022: DoorHandle1 1
+    100024: DoorHandle1 2
+    100026: FryingPan2
+    100028: FryingPan3
+    100030: Handle
+    100032: Handle 1
+    100034: Hob
+    100036: Hob1
+    100038: Hob2
+    100040: Hob3
+    100042: Jar
+    100044: Jar1
+    100046: Jar2
+    100048: Jar3
+    100050: Jar4
+    100052: Jar5
+    100054: JarLid
+    100056: JarLid 1
+    100058: JarLid 2
+    100060: JarLid 3
+    100062: JarLid 4
+    100064: JarLid 5
+    100066: //RootNode
+    100068: Knife
+    100070: Knife1
+    100072: Knife2
+    100074: Knife4
+    100076: KnifeGrip
+    100078: KnifeGrip 1
+    100080: KnifeGrip 2
+    100082: KnifeGrip1
+    100084: RedButton
+    100086: Shelf1
+    100088: Shelf2
+    100090: Shelf3
+    100092: TableDoors
+    100094: TableDoors 1
+    100096: TableDoors 2
+    100098: TableDoors 3
+    100100: TableDoors 4
+    100102: TableDoors 5
+    100104: TableTops
+    100106: TableTops1
+    100108: TableTops2
+    100110: TableTops3
+    100112: TableTops4
+    100114: TableTops5
+    100116: Wok
+    100118: WokHandle
+    400000: areaLight1
+    400002: BackWall
+    400004: BenjiPoster
+    400006: BigPot
+    400008: BigPot1
+    400010: BigPot2
+    400012: Button
+    400014: DoorHandle
+    400016: DoorHandle 1
+    400018: DoorHandle 2
+    400020: DoorHandle1
+    400022: DoorHandle1 1
+    400024: DoorHandle1 2
+    400026: FryingPan2
+    400028: FryingPan3
+    400030: Handle
+    400032: Handle 1
+    400034: Hob
+    400036: Hob1
+    400038: Hob2
+    400040: Hob3
+    400042: Jar
+    400044: Jar1
+    400046: Jar2
+    400048: Jar3
+    400050: Jar4
+    400052: Jar5
+    400054: JarLid
+    400056: JarLid 1
+    400058: JarLid 2
+    400060: JarLid 3
+    400062: JarLid 4
+    400064: JarLid 5
+    400066: //RootNode
+    400068: Knife
+    400070: Knife1
+    400072: Knife2
+    400074: Knife4
+    400076: KnifeGrip
+    400078: KnifeGrip 1
+    400080: KnifeGrip 2
+    400082: KnifeGrip1
+    400084: RedButton
+    400086: Shelf1
+    400088: Shelf2
+    400090: Shelf3
+    400092: TableDoors
+    400094: TableDoors 1
+    400096: TableDoors 2
+    400098: TableDoors 3
+    400100: TableDoors 4
+    400102: TableDoors 5
+    400104: TableTops
+    400106: TableTops1
+    400108: TableTops2
+    400110: TableTops3
+    400112: TableTops4
+    400114: TableTops5
+    400116: Wok
+    400118: WokHandle
+    2100000: Wall
+    2100002: lambert2
+    2100004: lambert4
+    2100006: lambert3
+    2100008: lambert1
+    2100010: WhiteJar
+    2100012: lambert6
+    2300000: BackWall
+    2300002: BenjiPoster
+    2300004: BigPot
+    2300006: BigPot1
+    2300008: BigPot2
+    2300010: Button
+    2300012: DoorHandle
+    2300014: DoorHandle 1
+    2300016: DoorHandle 2
+    2300018: DoorHandle1
+    2300020: DoorHandle1 1
+    2300022: DoorHandle1 2
+    2300024: FryingPan2
+    2300026: FryingPan3
+    2300028: Handle
+    2300030: Handle 1
+    2300032: Hob
+    2300034: Hob1
+    2300036: Hob2
+    2300038: Hob3
+    2300040: Jar
+    2300042: Jar1
+    2300044: Jar2
+    2300046: Jar3
+    2300048: Jar4
+    2300050: Jar5
+    2300052: JarLid
+    2300054: JarLid 1
+    2300056: JarLid 2
+    2300058: JarLid 3
+    2300060: JarLid 4
+    2300062: JarLid 5
+    2300064: Knife
+    2300066: Knife1
+    2300068: Knife2
+    2300070: Knife4
+    2300072: KnifeGrip
+    2300074: KnifeGrip 1
+    2300076: KnifeGrip 2
+    2300078: KnifeGrip1
+    2300080: RedButton
+    2300082: Shelf1
+    2300084: Shelf2
+    2300086: Shelf3
+    2300088: TableDoors
+    2300090: TableDoors 1
+    2300092: TableDoors 2
+    2300094: TableDoors 3
+    2300096: TableDoors 4
+    2300098: TableDoors 5
+    2300100: TableTops
+    2300102: TableTops1
+    2300104: TableTops2
+    2300106: TableTops3
+    2300108: TableTops4
+    2300110: TableTops5
+    2300112: Wok
+    2300114: WokHandle
+    3300000: BackWall
+    3300002: BenjiPoster
+    3300004: BigPot
+    3300006: BigPot1
+    3300008: BigPot2
+    3300010: Button
+    3300012: DoorHandle
+    3300014: DoorHandle 1
+    3300016: DoorHandle 2
+    3300018: DoorHandle1
+    3300020: DoorHandle1 1
+    3300022: DoorHandle1 2
+    3300024: FryingPan2
+    3300026: FryingPan3
+    3300028: Handle
+    3300030: Handle 1
+    3300032: Hob
+    3300034: Hob1
+    3300036: Hob2
+    3300038: Hob3
+    3300040: Jar
+    3300042: Jar1
+    3300044: Jar2
+    3300046: Jar3
+    3300048: Jar4
+    3300050: Jar5
+    3300052: JarLid
+    3300054: JarLid 1
+    3300056: JarLid 2
+    3300058: JarLid 3
+    3300060: JarLid 4
+    3300062: JarLid 5
+    3300064: Knife
+    3300066: Knife1
+    3300068: Knife2
+    3300070: Knife4
+    3300072: KnifeGrip
+    3300074: KnifeGrip 1
+    3300076: KnifeGrip 2
+    3300078: KnifeGrip1
+    3300080: RedButton
+    3300082: Shelf1
+    3300084: Shelf2
+    3300086: Shelf3
+    3300088: TableDoors
+    3300090: TableDoors 1
+    3300092: TableDoors 2
+    3300094: TableDoors 3
+    3300096: TableDoors 4
+    3300098: TableDoors 5
+    3300100: TableTops
+    3300102: TableTops1
+    3300104: TableTops2
+    3300106: TableTops3
+    3300108: TableTops4
+    3300110: TableTops5
+    3300112: Wok
+    3300114: WokHandle
+    4300000: BackWall
+    4300002: Shelf1
+    4300004: Shelf2
+    4300006: BigPot
+    4300008: Shelf3
+    4300010: BigPot1
+    4300012: BigPot2
+    4300014: Knife
+    4300016: KnifeGrip
+    4300018: Knife1
+    4300020: KnifeGrip
+    4300022: Knife2
+    4300024: KnifeGrip
+    4300026: TableTops
+    4300028: TableDoors
+    4300030: DoorHandle
+    4300032: TableTops1
+    4300034: TableDoors
+    4300036: DoorHandle1
+    4300038: TableTops2
+    4300040: TableDoors
+    4300042: DoorHandle
+    4300044: TableTops3
+    4300046: TableDoors
+    4300048: DoorHandle1
+    4300050: TableTops4
+    4300052: TableDoors
+    4300054: DoorHandle
+    4300056: TableTops5
+    4300058: TableDoors
+    4300060: DoorHandle1
+    4300062: BenjiPoster
+    4300064: Wok
+    4300066: WokHandle
+    4300068: Jar
+    4300070: JarLid
+    4300072: Jar1
+    4300074: JarLid
+    4300076: Jar2
+    4300078: JarLid
+    4300080: Jar3
+    4300082: JarLid
+    4300084: Jar5
+    4300086: JarLid
+    4300088: Jar4
+    4300090: JarLid
+    4300092: RedButton
+    4300094: Button
+    4300096: FryingPan2
+    4300098: Handle
+    4300100: Knife4
+    4300102: KnifeGrip1
+    4300104: Hob
+    4300106: Hob1
+    4300108: Hob2
+    4300110: Hob3
+    4300112: FryingPan3
+    4300114: Handle
+    10800000: areaLight1
+    2186277476908879412: ImportLogs
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
