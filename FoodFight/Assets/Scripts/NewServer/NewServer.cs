@@ -92,6 +92,20 @@ public class NewServer : MonoBehaviour {
       foreach (Station station in team.Kitchen.Stations) {
         GameObject StationDisablePrefab = GameObject.Find(team.Name + "station" + station.Id + "prefabdisable");
         station.DisablePrefab = StationDisablePrefab;
+
+        // if (station.Id == "2"){
+          
+        //   ParticleSystem[] ps = GetComponentsInChildren<ParticleSystem>();
+        //   for (int i = 0; i < ps.Length; i++){
+        //     if (ps[i].gameObject.name == team.Name + "station" + station.Id + "smoke"){
+        //       station.SmokeParticleEffect = ps[i];
+        //     } 
+        //   }
+
+        //   ParticleSystem StationSmokeEffect = GameObject.Find(team.Name + "station" + station.Id + "smoke").GetComponent<ParticleSystem>();
+        //   station.SmokeParticleEffect = StationSmokeEffect;
+        // }
+
         GameObject StationPrefab = GameObject.Find(team.Name + "stationprefab" + station.Id);
         station.Prefab = StationPrefab;
       }
@@ -522,6 +536,9 @@ public class NewServer : MonoBehaviour {
           if (station.DisabledTimer < 0) {
             station.resetTimer();
           }
+          // station.SmokeParticleEffect.Play();
+        } else {
+          // station.SmokeParticleEffect.Stop();
         }
         station.DisablePrefab.SetActive(station.isDisabled());
         station.Prefab.SetActive(!station.isDisabled());
