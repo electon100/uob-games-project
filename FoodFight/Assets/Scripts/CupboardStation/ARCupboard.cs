@@ -99,6 +99,14 @@ public class ARCupboard : MonoBehaviour
                 ingredient = new Ingredient("rice", "ricePrefab");
                 foodName.text = "You picked some rice!";
                 break;
+            case "Cheese":
+                ingredient = new Ingredient("cheese", "cheesePrefab");
+                foodName.text = "You picked some cheese!";
+                break;
+            case "Calamari":
+                ingredient = new Ingredient("raw_calamari", "raw_calamariPrefab");
+                foodName.text = "You picked some raw calamari!";
+                break;                
             default:
                 break;
         }

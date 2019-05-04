@@ -19,7 +19,6 @@ public class NewServer : MonoBehaviour {
   public Transform mainMenuCanvas, pickModeCanvas, pickPlayersCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
   public Text startScreenText, redEndGameText, blueEndGameText, redScoreText, blueScoreText;
   public Image gameOverBackground, redStarSlider, blueStarSlider;
-  public Sprite numOfStars;
 
   private NewGameTimer timer;
   private WiimoteBehaviourBlue wiiBlue;
@@ -35,7 +34,7 @@ public class NewServer : MonoBehaviour {
 
   private Team redTeam, blueTeam;
   public GameState gameState = GameState.MainMenu;
-  public GameMode gameMode = GameMode.None;
+  public static GameMode gameMode = GameMode.None;
 
   private void Start () {
     initialiseTeams();
@@ -44,8 +43,6 @@ public class NewServer : MonoBehaviour {
     timer = GameObject.Find("GameTimer").GetComponent<NewGameTimer>();
     wiiBlue = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourBlue>();
     wiiRed = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourRed>();
-    // redStars = GameObject.Find("RedStars2").GetComponent<GameObject>();
-    // blueStars = GameObject.Find("BlueStars2").GetComponent<GameObject>();
   }
 
   void Update() {
@@ -641,6 +638,7 @@ public class NewServer : MonoBehaviour {
     if (gameState == GameState.ConfigureMode) {
       gameMode = GameMode.Latin;
       SetGameState(GameState.ConfigurePlayers);
+      FoodData.Instance.mode = "latin";
     }
   }
 
@@ -648,6 +646,7 @@ public class NewServer : MonoBehaviour {
     if (gameState == GameState.ConfigureMode) {
       gameMode = GameMode.French;
       SetGameState(GameState.ConfigurePlayers);
+      FoodData.Instance.mode = "french";
     }
   }
 

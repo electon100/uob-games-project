@@ -5,7 +5,7 @@ public class IngredientDefinitions {
 
 [System.Serializable]
 public class IngredientDescription {
-	public string name;
-	public bool choppable, cookable, orderable;
+	public string name, mode;
+	public bool choppable, cookable;
 	public int correctFlips, maxFlips, correctChops, score;
 }
