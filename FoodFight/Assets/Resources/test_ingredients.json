@@ -11,6 +11,17 @@
       "score" : 0
     },
     {
+      "name" : "onion",
+      "choppable" : false,
+      "cookable" : false,
+      "orderable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
       "name" : "mixed_vegetables",
       "choppable" : true,
       "cookable" : false,
@@ -324,6 +335,16 @@
       "score" : 40
     },
     {
+      "name" : "raw_patatas_bravas",
+      "choppable" : false,
+      "cookable" : true,
+      "mode": "none",
+      "correctFlips" : 7,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 40
+    },
+    {
       "name" : "patatas_bravas",
       "choppable" : false,
       "cookable" : false,
@@ -331,7 +352,7 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 70
+      "score" : 80
     },
     {
       "name" : "raw_churros",
@@ -374,7 +395,17 @@
       "score" : 70
     },
     {
-      "name" : "raw_quesadila",
+      "name" : "tortillas",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "raw_quesadilla",
       "choppable" : false,
       "cookable" : true,
       "mode": "none",
@@ -384,7 +415,7 @@
       "score" : 40
     },
     {
-      "name" : "quesadila",
+      "name" : "quesadilla",
       "choppable" : false,
       "cookable" : false,
       "mode": "latin",

@@ -204,11 +204,6 @@
           "chopped": false
         },
         {
-          "name": "milk",
-          "cooked": false,
-          "chopped": false
-        },
-        {
           "name": "flour",
           "cooked": false,
           "chopped": false
@@ -231,10 +226,25 @@
       ]
     },
     {
-      "name": "patatas_bravas",
+      "name": "raw_patatas_bravas",
       "ingredients": [
         {
           "name": "diced_potato",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "onion",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "patatas_bravas",
+      "ingredients": [
+        {
+          "name": "raw_patatas_bravas",
           "cooked": true,
           "chopped": false
         }
@@ -299,12 +309,7 @@
       "name": "raw_quesadilla",
       "ingredients": [
         {
-          "name": "tortilla",
-          "cooked": false,
-          "chopped": false
-        },
-        {
-          "name": "chopped_mixed_vegetables",
+          "name": "tortillas",
           "cooked": false,
           "chopped": false
         },
@@ -339,11 +344,6 @@
           "chopped": false
         },
         {
-          "name": "milk",
-          "cooked": false,
-          "chopped": false
-        },
-        {
           "name": "eggs",
           "cooked": false,
           "chopped": false
@@ -352,8 +352,13 @@
     },
     {
       "name": "churros",
-      "cooked": true,
-      "chopped": false
+      "ingredients": [
+        {
+          "name": "raw_churros",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
     }
   ]
 }

@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 33601980294333122}
   - component: {fileID: 23242172082967626}
   m_Layer: 0
-  m_Name: MilkPrefab 1
+  m_Name: raw_patatas_bravasPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

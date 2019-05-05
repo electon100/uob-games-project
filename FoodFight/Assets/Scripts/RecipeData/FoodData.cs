@@ -121,7 +121,7 @@ public sealed class FoodData {
 		for (int r = 0; r < allRecipes.recipes.Length; r++) {
 			RecipeDescription recipe = allRecipes.recipes[r];
 			bool allIngredientsMatch = false;
-
+			
 			/* Check whether ingredients and recipe criteria list match in length */
 			if (recipe.ingredients.Length == ingredients.Count) {
 

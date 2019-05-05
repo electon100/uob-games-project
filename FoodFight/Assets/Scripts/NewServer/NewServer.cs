@@ -34,7 +34,7 @@ public class NewServer : MonoBehaviour {
 
   private Team redTeam, blueTeam;
   public GameState gameState = GameState.MainMenu;
-  public static GameMode gameMode = GameMode.None;
+  public GameMode gameMode = GameMode.None;
 
   private void Start () {
     initialiseTeams();
