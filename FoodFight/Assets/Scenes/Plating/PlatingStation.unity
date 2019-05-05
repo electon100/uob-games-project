@@ -2588,7 +2588,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serveBtn: {fileID: 222259016}
   throwBtn: {fileID: 1306138234}
-  clearBtn: {fileID: 0}
+  clearBtn: {fileID: 978238960}
   goBackBtn: {fileID: 288030526}
   player: {fileID: 0}
   confirmationCanvas: {fileID: 1628431892}
