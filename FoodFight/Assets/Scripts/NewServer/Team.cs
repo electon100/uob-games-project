@@ -68,30 +68,15 @@ public class Team {
     Ingredient recipe = new Ingredient(recipeName, recipeName + "Prefab");
     string id = recipeName + Orders.Count + Name + "Object";
 
-    Orders.Add(new Order(id, recipe, new GameObject(id), 150, mainGameCanvas));
+    Orders.Add(new Order(id, recipe, new GameObject(id), 150, mainGameCanvas, Name));
 
     return true;
   }
 
   public void updateOrders() {
-    int side = Name.Equals("red") ? -1 : 1;
-    int zeroOffset = 175;
-    int oneOffset = 300;
-    int X = side * zeroOffset;
-    int Y = -Screen.height/2 + 100;
-
-    Orders[0].updateCanvas(new Vector3(X, Y, 0), 1.3f);
-    if (Orders[0].Timer <= 30) Orders[0].setTextRed();
-
-    for (int i = 1; i < Orders.Count; i++) {
-      side = Name.Equals("red") ? -1 : 1;
-      int offset = (i == 1) ? oneOffset : oneOffset + 265;
-
-      X = side * (zeroOffset + offset);
-      Y = -Screen.height/2 + 75;
-
-      Orders[i].updateCanvas(new Vector3(X, Y, 0), 1.0f);
-      if (Orders[i].Timer <= 30) Orders[i].setTextRed();
+    Debug.Log(new Vector2(Screen.width, Screen.height));
+    for (int i = 0; i < Orders.Count; i++) {
+      Orders[i].updateCanvas(i, Screen.width, Screen.height);
     }
   }
 
