@@ -301,10 +301,10 @@
       ]
     },
     {
-      "name": "raw_calamari",
+      "name": "calamari_mix",
       "ingredients": [
         {
-          "name": "calamari",
+          "name": "raw_calamari",
           "cooked": false,
           "chopped": false
         },
@@ -324,7 +324,7 @@
       "name": "calamari",
       "ingredients": [
         {
-          "name": "raw_calamari",
+          "name": "calamari_mix",
           "cooked": true,
           "chopped": false
         }

@@ -427,6 +427,16 @@
     {
       "name" : "raw_calamari",
       "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 40
+    },
+    {
+      "name" : "calamari_mix",
+      "choppable" : false,
       "cookable" : true,
       "mode": "none",
       "correctFlips" : 10,
