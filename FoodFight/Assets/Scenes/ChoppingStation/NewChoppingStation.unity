@@ -1487,7 +1487,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goBackBtn: {fileID: 1547417638}
-  clearBtn: {fileID: 0}
+  clearBtn: {fileID: 1036484353}
   confirmationCanvas: {fileID: 424527727}
   statusText: {fileID: 1669642651}
   successMaterial: {fileID: 2100000, guid: 2f3446cdf9a18cf4bbca0a1aec19befe, type: 2}

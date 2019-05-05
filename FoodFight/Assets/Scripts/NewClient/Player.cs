@@ -48,7 +48,6 @@ public class Player : MonoBehaviour {
         background.material = redBackground;
       }
     }
-
   }
 
   void Update () {
@@ -116,6 +115,8 @@ public class Player : MonoBehaviour {
   public void UpdateScore() {
     string currentScene = SceneManager.GetActiveScene().name;
     if (currentScene == "PlayerMainScreen" && Client.gameState == ClientGameState.MainMode) { /* Scene where those two texts exist */
+      myScoreText = GameObject.Find("MyScore").GetComponent<Text>();
+      otherScoreText = GameObject.Find("OtherScore").GetComponent<Text>();
       myScoreText.text = "My score " + "\n" + network.myScore.ToString();
       otherScoreText.text = "Other score " + "\n" + network.otherScore.ToString();
     }
