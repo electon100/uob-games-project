@@ -1,0 +1,164 @@
+fileFormatVersion: 2
+guid: 34c5e43dfd3678541a420af489cf9dac
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: nurbsToPoly1
+    100002: nurbsToPoly2
+    100004: nurbsToPoly3
+    100006: //RootNode
+    100008: wedge
+    100010: wedge17
+    100012: wedge18
+    100014: wedge19
+    100016: wedge20
+    100018: wedge21
+    100020: wedge22
+    100022: wedge23
+    100024: wedge3
+    100026: wedge7
+    100028: wedge9
+    100030: wedges
+    400000: nurbsToPoly1
+    400002: nurbsToPoly2
+    400004: nurbsToPoly3
+    400006: //RootNode
+    400008: wedge
+    400010: wedge17
+    400012: wedge18
+    400014: wedge19
+    400016: wedge20
+    400018: wedge21
+    400020: wedge22
+    400022: wedge23
+    400024: wedge3
+    400026: wedge7
+    400028: wedge9
+    400030: wedges
+    2100000: potatoskin
+    2100002: potatoinner
+    2100004: sauce
+    2300000: nurbsToPoly1
+    2300002: nurbsToPoly2
+    2300004: nurbsToPoly3
+    2300006: wedge
+    2300008: wedge17
+    2300010: wedge18
+    2300012: wedge19
+    2300014: wedge20
+    2300016: wedge21
+    2300018: wedge22
+    2300020: wedge23
+    2300022: wedge3
+    2300024: wedge7
+    2300026: wedge9
+    3300000: nurbsToPoly1
+    3300002: nurbsToPoly2
+    3300004: nurbsToPoly3
+    3300006: wedge
+    3300008: wedge17
+    3300010: wedge18
+    3300012: wedge19
+    3300014: wedge20
+    3300016: wedge21
+    3300018: wedge22
+    3300020: wedge23
+    3300022: wedge3
+    3300024: wedge7
+    3300026: wedge9
+    4300000: wedge9
+    4300002: wedge7
+    4300004: wedge3
+    4300006: wedge
+    4300008: wedge17
+    4300010: wedge18
+    4300012: wedge19
+    4300014: wedge20
+    4300016: wedge21
+    4300018: wedge22
+    4300020: wedge23
+    4300022: nurbsToPoly1
+    4300024: nurbsToPoly2
+    4300026: nurbsToPoly3
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
