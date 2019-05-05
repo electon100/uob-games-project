@@ -119,7 +119,7 @@
           "chopped": false
         },
         {
-          "name": "diced_potato",
+          "name": "milk",
           "cooked": false,
           "chopped": false
         }
@@ -194,6 +194,166 @@
           "chopped": false
         }
       ]
+    },
+    {
+      "name": "quiche_mix",
+      "ingredients": [
+        {
+          "name": "eggs",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "milk",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "flour",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "chopped_mixed_vegetables",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "quiche",
+      "ingredients": [
+        {
+          "name": "quiche_mix",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "patatas_bravas",
+      "ingredients": [
+        {
+          "name": "diced_potato",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "raw_spanish_omelette",
+      "ingredients": [
+        {
+          "name": "eggs",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "diced_potato",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "spanish_omelette",
+      "ingredients": [
+        {
+          "name": "raw_spanish_omelette",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "raw_calamari",
+      "ingredients": [
+        {
+          "name": "calamari",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "flour",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "eggs",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "calamari",
+      "ingredients": [
+        {
+          "name": "raw_calamari",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "raw_quesadilla",
+      "ingredients": [
+        {
+          "name": "tortilla",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "chopped_mixed_vegetables",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "diced_chicken",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "cheese",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "quesadilla",
+      "ingredients": [
+        {
+          "name": "raw_quesadilla",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "raw_churros",
+      "ingredients": [
+        {
+          "name": "flour",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "milk",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "eggs",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "churros",
+      "cooked": true,
+      "chopped": false
     }
   ]
 }

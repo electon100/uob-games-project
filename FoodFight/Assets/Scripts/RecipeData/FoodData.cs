@@ -15,6 +15,8 @@ public sealed class FoodData {
 	private static RecipeDefinitions allRecipes;
 	private static IngredientDefinitions allIngredients;
 
+	public string mode = " ";
+
 	public RecipeDefinitions GetAllRecipes {
 		get {
 			return allRecipes;
@@ -58,12 +60,14 @@ public sealed class FoodData {
 	/* Gets a random recipe name*/
 	public string getRandomRecipeName() {
 		int numIngredients = allIngredients.ingredients.Length;
-		bool orderable = false;
-		IngredientDescription recipe = allIngredients.ingredients[Random.Range(0, numIngredients - 1)];;
+		bool rightMode = false;
+		IngredientDescription recipe = allIngredients.ingredients[Random.Range(0, numIngredients - 1)];
 
-		while (!orderable) {
+		if (mode == recipe.mode) rightMode = true;
+
+		while (!rightMode) {
 			recipe = allIngredients.ingredients[Random.Range(0, numIngredients - 1)];
-			if (recipe.orderable) orderable = true;
+			if (mode == recipe.mode) rightMode = true;
 		}
 
 		return recipe.name;
