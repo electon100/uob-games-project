@@ -239,7 +239,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4424645516427296}
   m_Layer: 0
-  m_Name: patatas_bravasPrefab 1
+  m_Name: patatas_bravasPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
