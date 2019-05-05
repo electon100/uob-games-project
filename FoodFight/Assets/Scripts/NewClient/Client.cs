@@ -27,7 +27,8 @@ public class Client : MonoBehaviour {
 	public string team;
 
 	public List<Ingredient> ingredientsInStation = new List<Ingredient>();
-	public int myScore, otherScore = 0;
+	public int myScore = 0;
+	public int otherScore = 0;
 	public static ClientGameState gameState = ClientGameState.MainMode;
 	public GameEndState gameEndState;
 	public GameObject simulatedClient;
