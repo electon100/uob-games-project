@@ -74,8 +74,23 @@ public class Team {
   }
 
   public void updateOrders() {
-    for (int i = 0; i < Orders.Count; i++) {
-      Orders[i].updateCanvas(new Vector3(((Name.Equals("red")) ? -1 : 1 )*175, 120-(i*120), 0));
+    int side = Name.Equals("red") ? -1 : 1;
+    int zeroOffset = 175;
+    int oneOffset = 300;
+    int X = side * zeroOffset;
+    int Y = -Screen.height/2 + 100;
+
+    Orders[0].updateCanvas(new Vector3(X, Y, 0), 1.3f);
+    if (Orders[0].Timer <= 30) Orders[0].setTextRed();
+
+    for (int i = 1; i < Orders.Count; i++) {
+      side = Name.Equals("red") ? -1 : 1;
+      int offset = (i == 1) ? oneOffset : oneOffset + 265;
+
+      X = side * (zeroOffset + offset);
+      Y = -Screen.height/2 + 75;
+
+      Orders[i].updateCanvas(new Vector3(X, Y, 0), 1.0f);
       if (Orders[i].Timer <= 30) Orders[i].setTextRed();
     }
   }
