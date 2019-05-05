@@ -166,6 +166,31 @@
       ]
     },
     {
+      "name": "ratatouille_mix",
+      "ingredients": [
+        {
+          "name": "chopped_mixed_vegetables",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "cheese",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "ratatouille",
+      "ingredients": [
+        {
+          "name": "ratatouille_mix",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
       "name": "paella_mix",
       "ingredients": [
         {
