@@ -27,7 +27,7 @@ public class NewServer : MonoBehaviour {
 
   private readonly Color redTeamColour = new Color(1.0f, 0.3f, 0.3f, 1.0f), blueTeamColour = new Color(0.3f, 0.5f, 1.0f, 1.0f);
 
-  private readonly float disableStationDuration = 10.0f; /* 15 seconds */
+  private readonly float disableStationDuration = 10.0f; /* 10 seconds */
   private readonly float negativeScoreMultiplier = 0.2f;
   private readonly bool testing = true; /* Whether we are in test mode */
   private readonly float minNextOrderTime = 15.0f; /* Minimum time before a new order is added */
