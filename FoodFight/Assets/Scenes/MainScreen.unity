@@ -13493,7 +13493,6 @@ GameObject:
   - component: {fileID: 2060196648}
   - component: {fileID: 2060196647}
   - component: {fileID: 2060196646}
-  - component: {fileID: 2060196645}
   m_Layer: 0
   m_Name: PickModeCanvas
   m_TagString: Untagged
@@ -13501,19 +13500,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &2060196645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2060196644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbf448ff42f17804699a954ebab3a480, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  logo: {fileID: 0}
-  startPanel: {fileID: 0}
 --- !u!114 &2060196646
 MonoBehaviour:
   m_ObjectHideFlags: 0
