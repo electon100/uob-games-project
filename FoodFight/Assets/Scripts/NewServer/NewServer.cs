@@ -66,8 +66,8 @@ public class NewServer : MonoBehaviour {
         listenForData();
         manageOrders();
         setTeamStars();
-        redScoreText.text = "Red score: " + redTeam.Score;
-        blueScoreText.text = "Blue score: " + blueTeam.Score;
+        redScoreText.text = redTeam.Score.ToString();
+        blueScoreText.text = blueTeam.Score.ToString();
         break;
       case GameState.EndGame:
         break;
@@ -91,12 +91,12 @@ public class NewServer : MonoBehaviour {
         station.DisablePrefab = StationDisablePrefab;
 
         // if (station.Id == "2"){
-          
+
         //   ParticleSystem[] ps = GetComponentsInChildren<ParticleSystem>();
         //   for (int i = 0; i < ps.Length; i++){
         //     if (ps[i].gameObject.name == team.Name + "station" + station.Id + "smoke"){
         //       station.SmokeParticleEffect = ps[i];
-        //     } 
+        //     }
         //   }
 
         //   ParticleSystem StationSmokeEffect = GameObject.Find(team.Name + "station" + station.Id + "smoke").GetComponent<ParticleSystem>();
@@ -375,7 +375,7 @@ public class NewServer : MonoBehaviour {
   private void OnMessageScore(int connectionId, string messageType, string messageContent)  {
     /* Determine the team from which the message originated */
     Team relevantTeam = getTeamForConnectionId(connectionId);
-    
+
     if (relevantTeam != null) {
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
 
@@ -624,6 +624,7 @@ public class NewServer : MonoBehaviour {
   }
 
   public void RestartGame() {
+    Debug.Log("restart game");
     initialiseTeams();
     timer.ResetTimer();
   }

@@ -26,7 +26,7 @@ public class NewGameTimer : MonoBehaviour {
     server = GameObject.Find("Server").GetComponent<NewServer>();
 
     timerSignObject = new GameObject("GameTimerSignObject", typeof(RectTransform));
-    timerSignObject.transform.SetParent(GameObject.Find("MainScreenCanvas").transform);
+    timerSignObject.transform.SetParent(GameObject.Find("Timer").transform);
 
     // Sign position
     timerSignTransform = timerSignObject.GetComponent<RectTransform>();
@@ -38,7 +38,7 @@ public class NewGameTimer : MonoBehaviour {
 		timerSignImage.sprite = Resources.Load("Timer Sign", typeof(Sprite)) as Sprite;
 
     timerTextObject = new GameObject("GameTimerObject", typeof(RectTransform));
-    timerTextObject.transform.SetParent(GameObject.Find("MainScreenCanvas").transform);
+    timerTextObject.transform.SetParent(GameObject.Find("Timer").transform);
 
     // Text position
     timerTransform = timerTextObject.GetComponent<RectTransform>();
