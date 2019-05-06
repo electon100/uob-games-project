@@ -281,6 +281,16 @@
       "score" : 40
     },
     {
+      "name" : "cooked_ratatoille_mix",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 40
+    },
+    {
       "name" : "ratatouille",
       "choppable" : false,
       "cookable" : false,
@@ -341,7 +351,7 @@
       "score" : 20
     },
     {
-      "name" : "cinammon_sugar",
+      "name" : "cinnamon_sugar",
       "choppable" : false,
       "cookable" : false,
       "mode": "none",
