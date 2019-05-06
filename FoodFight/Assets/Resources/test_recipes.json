@@ -21,51 +21,6 @@
       ]
     },
     {
-      "name": "stir_fry_mix",
-      "ingredients": [
-        {
-          "name": "noodles",
-          "cooked": false,
-          "chopped": false
-        },
-        {
-          "name": "chopped_mixed_vegetables",
-          "cooked": false,
-          "chopped": false
-        },
-        {
-          "name": "diced_chicken",
-          "cooked": false,
-          "chopped": false
-        }
-      ]
-    },
-    {
-      "name": "cooked_stir_fry_mix",
-      "ingredients": [
-        {
-          "name": "stir_fry_mix",
-          "cooked": true,
-          "chopped": false
-        }
-      ]
-    },
-    {
-      "name": "stir_fry",
-      "ingredients": [
-        {
-          "name": "soy_sauce",
-          "cooked": false,
-          "chopped": false
-        },
-        {
-          "name": "cooked_stir_fry_mix",
-          "cooked": false,
-          "chopped": false
-        }
-      ]
-    },
-    {
       "name": "diced_chicken",
       "ingredients": [
         {
@@ -80,6 +35,16 @@
       "ingredients": [
         {
           "name": "mixed_vegetables",
+          "cooked": false,
+          "chopped": true
+        }
+      ]
+    },
+    {
+      "name": "chopped_onion",
+      "ingredients": [
+        {
+          "name": "onion",
           "cooked": false,
           "chopped": true
         }
@@ -119,7 +84,7 @@
           "chopped": false
         },
         {
-          "name": "milk",
+          "name": "chopped_mixed_vegetables",
           "cooked": false,
           "chopped": false
         }
@@ -174,8 +139,18 @@
           "chopped": false
         },
         {
-          "name": "cheese",
+          "name": "chopped_onion",
           "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "cooked_ratatouille_mix",
+      "ingredients": [
+        {
+          "name": "ratatouille_mix",
+          "cooked": true,
           "chopped": false
         }
       ]
@@ -184,8 +159,13 @@
       "name": "ratatouille",
       "ingredients": [
         {
-          "name": "ratatouille_mix",
-          "cooked": true,
+          "name": "cooked_ratatouille_mix",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "cheese",
+          "cooked": false,
           "chopped": false
         }
       ]
@@ -224,7 +204,7 @@
       "name": "quiche_mix",
       "ingredients": [
         {
-          "name": "eggs",
+          "name": "cheese",
           "cooked": false,
           "chopped": false
         },
@@ -259,7 +239,7 @@
           "chopped": false
         },
         {
-          "name": "onion",
+          "name": "chopped_onion",
           "cooked": false,
           "chopped": false
         }
@@ -310,11 +290,6 @@
         },
         {
           "name": "flour",
-          "cooked": false,
-          "chopped": false
-        },
-        {
-          "name": "eggs",
           "cooked": false,
           "chopped": false
         }
@@ -369,8 +344,18 @@
           "chopped": false
         },
         {
-          "name": "eggs",
+          "name": "oil",
           "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "churros_mix",
+      "ingredients": [
+        {
+          "name": "raw_churros",
+          "cooked": true,
           "chopped": false
         }
       ]
@@ -379,8 +364,13 @@
       "name": "churros",
       "ingredients": [
         {
-          "name": "raw_churros",
-          "cooked": true,
+          "name": "churros_mix",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "cinnamon_sugar",
+          "cooked": false,
           "chopped": false
         }
       ]
