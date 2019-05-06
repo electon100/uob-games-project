@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PickTeam : MonoBehaviour {
 	public GameObject networkClient;
@@ -12,6 +13,7 @@ public class PickTeam : MonoBehaviour {
 		Screen.orientation = ScreenOrientation.Portrait;
 		networkClient = GameObject.Find("Client");
     network = networkClient.GetComponent<Client>();
+		DontDestroyOnLoad(networkClient);
 	}
 	
 	public void onClickRed() {
@@ -24,10 +26,15 @@ public class PickTeam : MonoBehaviour {
 
 	public void displayNotRunningText() {
 		gameNotRunningText.gameObject.SetActive(true);
-		gameNotRunningText.text = "Game is not running. Please try again.";
+		gameNotRunningText.text = "Game is not running.\n Please try again.";
 	}
 	
 	void Update () {
 		
+	}
+
+	public void OnGoHome() {
+		Client.gameState = ClientGameState.JoinState;
+		SceneManager.LoadScene("PlayerStartScreen");
 	}
 }

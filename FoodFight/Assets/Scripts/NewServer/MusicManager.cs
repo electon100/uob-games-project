@@ -2,48 +2,54 @@ using UnityEngine;
 
 public class MusicManager : MonoBehaviour {
     private AudioSource source;
-    private AudioClip gameTheme;
+    private AudioClip frenchTheme, latinTheme;
     private NewServer server;
-    private string mode = "none";
 
     public void Start() {
-        server = GameObject.Find("Server").GetComponent<NewServer>();
-        source = GetComponent<AudioSource>();
-        source.Play();
+      server = GameObject.Find("Server").GetComponent<NewServer>();
+      source = GetComponent<AudioSource>();
+      source.Play();
+
+      frenchTheme = (AudioClip) Resources.Load("frenchTheme", typeof(AudioClip));
+      latinTheme = (AudioClip) Resources.Load("latinTheme", typeof(AudioClip));
     }
 
     public void Update() {
-        switch (server.gameState) {
-            case GameState.AwaitingPlayers:
-                if (server.gameMode.Equals(GameMode.Latin)) mode="latin";
-                else if (server.gameMode.Equals(GameMode.French)) mode="french";
-                gameTheme = (AudioClip) Resources.Load(mode + "Theme", typeof(AudioClip));
-                break;
-            case GameState.Countdown:
-                AudioFadeOut();
-                break;
-            case GameState.GameRunning:
-                source.clip = gameTheme;
-                source.volume = 1;
-                if (!source.isPlaying) {
-                    source.Play();
-                }
-                break;
-            case GameState.EndGame:
-                AudioFadeOut();
-                break;
+      switch (server.gameState) {
+        case GameState.MainMenu:
+          PlayClip(frenchTheme);
+          break;
+        case GameState.Countdown:
+          AudioFadeOut();
+          break;
+        case GameState.GameRunning:
+          switch(server.gameMode) {
+            case GameMode.Latin:
+              PlayClip(latinTheme);
+              break;
+            case GameMode.French:
+              PlayClip(frenchTheme);
+              break;
             default:
-                break;
-        }
-        if (server.gameState == GameState.Countdown) {
-            AudioFadeOut();
-        } 
+              break;
+          }
+          break;
+        case GameState.EndGame:
+          AudioFadeOut();
+          break;
+        default:
+          break;
+      }
     }
 
-    public void AudioFadeOut(){
-        source.volume -= 1 * Time.deltaTime;
-        if (source.volume == 0) {
-            source.Stop();
-        }
+    private void PlayClip(AudioClip clip) {
+      source.clip = clip;
+      source.volume = 1;
+      if (!source.isPlaying) source.Play();
+    }
+
+    public void AudioFadeOut() {
+      source.volume -= 1 * Time.deltaTime;
+      if (source.volume == 0) source.Stop();
     }
 }
