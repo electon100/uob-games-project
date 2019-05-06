@@ -74,7 +74,7 @@ public class Team {
   }
 
   public void updateOrders() {
-    Debug.Log(new Vector2(Screen.width, Screen.height));
+    // Debug.Log(new Vector2(Screen.width, Screen.height));
     for (int i = 0; i < Orders.Count; i++) {
       Orders[i].updateCanvas(i, Screen.width, Screen.height);
     }

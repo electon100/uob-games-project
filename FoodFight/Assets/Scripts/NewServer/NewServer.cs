@@ -36,6 +36,8 @@ public class NewServer : MonoBehaviour {
   public GameState gameState = GameState.MainMenu;
   public GameMode gameMode = GameMode.None;
 
+  private List<int> allConnections = new List<int>();
+
   private void Start () {
     initialiseTeams();
     initialiseNetwork();
@@ -154,6 +156,7 @@ public class NewServer : MonoBehaviour {
         break;
       case NetworkEventType.ConnectEvent: // Have a phone connect to the server
         Debug.Log("Player " + connectionId + " has connected");
+        allConnections.Add(connectionId);
         break;
       case NetworkEventType.DataEvent: // Have the phone send data to the server
         string message = OnNetworkData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError) error);
@@ -185,19 +188,8 @@ public class NewServer : MonoBehaviour {
 
   /* Manages the disconnection of a player */
   private void OnNetworkDisconnect(int connectionId) {
-    /* Determine the team from which the message originated */
-    Team relevantTeam = getTeamForConnectionId(connectionId);
-
-    if (relevantTeam != null) {
-      ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
-      if (player != null) {
-        Destroy(player.PlayerPrefab);
-        relevantTeam.removePlayer(player);
-        Debug.Log("Player " + connectionId + " removed from team " + relevantTeam.Name);
-      }
-    } else {
-      Debug.Log("Disconnected player not part of a team");
-    }
+    removePlayerFromTeam(connectionId);
+    allConnections.Remove(connectionId);
   }
 
   /* Sends a message across the network */
@@ -225,6 +217,9 @@ public class NewServer : MonoBehaviour {
     switch (messageType) {
       case "connect": // Player chooses team to play on
         OnMessageConnect(connectionId, messageType, messageContent);
+        break;
+      case "disconnect": // Player goes to home page
+        OnMessageDisconnect(connectionId, messageType, messageContent);
         break;
       case "station": // Player logs into station
         OnMessageStation(connectionId, messageType, messageContent);
@@ -260,6 +255,26 @@ public class NewServer : MonoBehaviour {
       }
     } else {
       SendMyMessage(messageType, "Server not awaiting players", connectionId);
+    }
+  }
+
+  private void OnMessageDisconnect(int connectionId, string messageType, string messageContent) {
+    removePlayerFromTeam(connectionId);
+  }
+
+  private void removePlayerFromTeam(int connectionId) {
+    /* Determine the team from which the request originated */
+    Team relevantTeam = getTeamForConnectionId(connectionId);
+
+    if (relevantTeam != null) {
+      ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
+      if (player != null) {
+        Destroy(player.PlayerPrefab);
+        relevantTeam.removePlayer(player);
+        Debug.Log("Player " + connectionId + " removed from team " + relevantTeam.Name);
+      }
+    } else {
+      Debug.Log("Player not part of a team");
     }
   }
 
@@ -618,14 +633,37 @@ public class NewServer : MonoBehaviour {
     BroadcastMessage("endgame", broadcastMessage);
   }
 
+  /* Sets all disabled stations to active so they can be found */
+  private void ShowDisabledStations() {
+    Team[] allTeams = new Team[] {redTeam, blueTeam};
+    foreach (Team team in allTeams) {
+      foreach (Station station in team.Kitchen.Stations) {
+        station.DisablePrefab.SetActive(true);
+      }
+    }
+  }
+
+  private void DestroyAllPlayerPrefabs() {
+    Team[] allTeams = new Team[] {redTeam, blueTeam};
+    foreach (Team team in allTeams) {
+      foreach (ConnectedPlayer player in team.Players) {
+        Destroy(player.PlayerPrefab);
+      }
+    }
+  }
+
   /* Called by GameTimer.cs */
   public void OnGameStart() {
     SetGameState(GameState.GameRunning);
   }
 
   public void RestartGame() {
+    DestroyAllPlayerPrefabs();
+    ShowDisabledStations();
+    SetGameState(GameState.MainMenu);
     initialiseTeams();
     timer.ResetTimer();
+    BroadcastAllConnections("newgame", "");
   }
 
   public void ExitMainScreen() {
@@ -661,6 +699,14 @@ public class NewServer : MonoBehaviour {
     gameState = state;
   }
 
+  /* Sends a message to all network connections */
+  private void BroadcastAllConnections(string messageType, string textInput) {
+    foreach (int connectionId in allConnections) {
+      Debug.Log("Global Broadcasting [" + messageType + ", " + textInput + "]");
+      SendMyMessage(messageType, textInput, connectionId);
+    }
+  }
+
   /* Sends a message to all connected players */
   private void BroadcastMessage(string messageType, string textInput) {
     Team[] allTeams = new Team[] {redTeam, blueTeam};
@@ -669,7 +715,7 @@ public class NewServer : MonoBehaviour {
     }
   }
 
-  /* Sends a message to all connected players */
+  /* Sends a message to all connected players on a certain team */
   private void BroadcastMessageToTeam(Team team, string messageType, string textInput) {
     foreach (ConnectedPlayer player in team.Players) {
       Debug.Log("Broadcasting [" + messageType + ", " + textInput + "]");
