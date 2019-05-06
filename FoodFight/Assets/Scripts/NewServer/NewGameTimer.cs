@@ -25,16 +25,14 @@ public class NewGameTimer : MonoBehaviour {
   public void Start() {
     server = GameObject.Find("Server").GetComponent<NewServer>();
 
+    Debug.Log(new Vector2(Screen.width, Screen.height));
+
     timerSignObject = new GameObject("GameTimerSignObject", typeof(RectTransform));
     timerSignObject.transform.SetParent(GameObject.Find("Timer").transform);
 
     // Sign position
     timerSignTransform = timerSignObject.GetComponent<RectTransform>();
-    //timerSignTransform.localPosition = new Vector3(0, (int) (Screen.height / 2) - 100, 0);
     timerSignTransform.sizeDelta = new Vector2(300, 200);
-
-    timerSignTransform.anchorMin = new Vector2(0.5f, 1);
-    timerSignTransform.anchorMax = new Vector2(0.5f, 1);
 
     // Sign Image
 		timerSignImage = timerSignObject.AddComponent<Image>();
@@ -45,7 +43,6 @@ public class NewGameTimer : MonoBehaviour {
 
     // Text position
     timerTransform = timerTextObject.GetComponent<RectTransform>();
-    timerTransform.localPosition = new Vector3(0, (int) (Screen.height / 2) - 150, 0);
     timerTransform.sizeDelta = new Vector2(300, 200);
 
     // Timer Text
@@ -69,6 +66,9 @@ public class NewGameTimer : MonoBehaviour {
   }
 
   void Update() {
+    timerSignTransform.localPosition = new Vector3(0, (int) (Screen.height / 2) - 100, 0);
+    timerTransform.localPosition = new Vector3(0, (int) (Screen.height / 2) - 150, 0);
+
     if (isStarted) {
       timer -= Time.deltaTime;
     }
