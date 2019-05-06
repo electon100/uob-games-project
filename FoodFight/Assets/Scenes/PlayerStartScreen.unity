@@ -1295,6 +1295,8 @@ MonoBehaviour:
   warningText: {fileID: 599238282}
   connectButton: {fileID: 1847535569}
   joinButton: {fileID: 479195199}
+  text: {fileID: 984004525}
+  tutorialButton: {fileID: 1621823149}
 --- !u!1 &1141996558
 GameObject:
   m_ObjectHideFlags: 0

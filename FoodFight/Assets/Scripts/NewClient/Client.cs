@@ -31,11 +31,11 @@ public class Client : MonoBehaviour {
 	public List<Ingredient> ingredientsInStation = new List<Ingredient>();
 	public int myScore = 0;
 	public int otherScore = 0;
-	public static ClientGameState gameState = ClientGameState.ConnectState;
+	public static ClientGameState gameState = ClientGameState.MainMode;
 	public GameEndState gameEndState;
 	public GameObject simulatedClient;
 
-	public GameObject buttonPrefab, startPanel, warningText, connectButton, joinButton;
+	public GameObject buttonPrefab, startPanel, warningText, connectButton, joinButton, text, tutorialButton;
 
   public static float disabledTimer = 0.0f;
 
@@ -49,7 +49,12 @@ public class Client : MonoBehaviour {
 			Destroy(GameObject.Find("SimulatedClient(Clone)"));
 		}
 
-		changeStartScreenButtons();
+		if (gameState.Equals(ClientGameState.JoinState)) {
+			GameObject.Find("MainMenuCanvas").SetActive(false);
+			joinButton = GameObject.Find("JoinButton");
+			text = GameObject.Find("OrText");
+			tutorialButton = GameObject.Find("TutorialModeButton");
+		}
 	}
 
 	public void Update() {
@@ -66,31 +71,33 @@ public class Client : MonoBehaviour {
 		if (isConnected) {
 			isJoined = true;
 		}
+
+		currentScene = SceneManager.GetActiveScene().name;
+		if (currentScene == "PlayerStartScreen") changeStartScreenButtons();
 	}
 
 	/* Change start screen buttons to either Connect or Join */
 	private void changeStartScreenButtons() {
 		if (gameState.Equals(ClientGameState.ConnectState)) {
-			connectButton = GameObject.Find("ConnectButton");
-			joinButton = GameObject.Find("JoinButton");
+			startPanel = GameObject.Find("startPanel");
+			startPanel.gameObject.SetActive(true);
 			connectButton.SetActive(true);
 			joinButton.SetActive(false);
+			text.SetActive(false);
+			tutorialButton.SetActive(false);
 		} 
 		else if (gameState.Equals(ClientGameState.JoinState)) {
-			GameObject.Find("MainMenuCanvas").SetActive(false);
 			startPanel = GameObject.Find("startPanel");
       startPanel.gameObject.SetActive(true);
-			connectButton = GameObject.Find("ConnectButton");
-			joinButton = GameObject.Find("JoinButton");
-			connectButton.SetActive(false);
-			joinButton.SetActive(true);
+			if (connectButton) connectButton.SetActive(false);
+			if (joinButton) joinButton.SetActive(true);
+			if (text) text.SetActive(true);
+			if (tutorialButton) tutorialButton.SetActive(true);
 		}
-
 	}
 
 	/* Did not enter tutorial mode */
 	public void SkipTutorialMode() {
-		gameState = ClientGameState.MainMode;
 		Destroy(GameObject.Find("SimulatedClient(Clone)"));
 	}
 
@@ -109,7 +116,12 @@ public class Client : MonoBehaviour {
 
 	public void JoinGame() {
 		SkipTutorialMode();
-		SceneManager.LoadScene("PickTeamScreen");
+		Debug.Log(isConnected + " " + isJoined);
+		if (isJoined) {
+			SceneManager.LoadScene("PickTeamScreen");
+		} else {
+			warningText.SetActive(true);
+		}
 	}
 
 	public void Connect() {
@@ -154,9 +166,7 @@ public class Client : MonoBehaviour {
 		{
 			//Output this message in the console with the Network Error
 			Debug.Log("There was this error : " + (NetworkError)error);
-			NetworkTransport.Disconnect(hostId, connectionId, out error);
 			isConnected = false;
-			NetworkTransport.RemoveHost(hostId);
 			warningText.SetActive(true);
 		}
 		else {
@@ -179,7 +189,7 @@ public class Client : MonoBehaviour {
 		}
 
 		int recHostId; // Player ID
-		int connectionId; // ID of connection to recHostId.
+		int connectionId; // Connection ID
 		int channelID; // ID of channel connected to recHostId.
 		byte[] recBuffer = new byte[4096];
 		int bufferSize = 4096;
@@ -194,7 +204,7 @@ public class Client : MonoBehaviour {
 					break;
 			case NetworkEventType.ConnectEvent:
 					Debug.Log("Player " + connectionId + " has been connected to server.");
-					SceneManager.LoadScene("PickTeamScreen");
+					gameState = ClientGameState.JoinState;
 					break;
 			case NetworkEventType.DataEvent:
 					string message = OnData(hostId, connectionId, channelID, recBuffer, bufferSize, (NetworkError)error);
@@ -242,8 +252,9 @@ public class Client : MonoBehaviour {
 		//Serialize the message
 		string messageToSend = messageType + "&" + textInput;
 		formatter.Serialize(message, messageToSend);
-		Debug.Log("Sending station " + messageToSend);
+		Debug.Log("Sending " + messageToSend);
 		//Send the message from the "client" with the serialized message and the connection information
+		Debug.Log("Host: " + hostId + " connection id: " + connectionId + " channel " + reliableChannel);
 		NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
 
 		//If there is an error, output message error to the console

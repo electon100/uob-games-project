@@ -49,8 +49,9 @@ public class Animation : MonoBehaviour {
     }
 
     public void GoToConnect() {
-        if (Client.gameState.Equals(ClientGameState.ConnectState) || Client.gameState.Equals(ClientGameState.JoinState)) {
+        if (Client.gameState.Equals(ClientGameState.MainMode)) {
             GameObject.Find("MainMenuCanvas").SetActive(false);
+            Client.gameState = ClientGameState.ConnectState;
         }
     }
 }

@@ -13,6 +13,7 @@ public class PickTeam : MonoBehaviour {
 		Screen.orientation = ScreenOrientation.Portrait;
 		networkClient = GameObject.Find("Client");
     network = networkClient.GetComponent<Client>();
+		DontDestroyOnLoad(networkClient);
 	}
 	
 	public void onClickRed() {
@@ -25,7 +26,7 @@ public class PickTeam : MonoBehaviour {
 
 	public void displayNotRunningText() {
 		gameNotRunningText.gameObject.SetActive(true);
-		gameNotRunningText.text = "Game is not running. Please try again.";
+		gameNotRunningText.text = "Game is not running.\n Please try again.";
 	}
 	
 	void Update () {
@@ -33,7 +34,7 @@ public class PickTeam : MonoBehaviour {
 	}
 
 	public void OnGoHome() {
-		SceneManager.LoadScene("PlayerStartScreen");
 		Client.gameState = ClientGameState.JoinState;
+		SceneManager.LoadScene("PlayerStartScreen");
 	}
 }
