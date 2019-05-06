@@ -25,8 +25,6 @@ public class NewGameTimer : MonoBehaviour {
   public void Start() {
     server = GameObject.Find("Server").GetComponent<NewServer>();
 
-    Debug.Log(new Vector2(Screen.width, Screen.height));
-
     timerSignObject = new GameObject("GameTimerSignObject", typeof(RectTransform));
     timerSignObject.transform.SetParent(GameObject.Find("Timer").transform);
 
