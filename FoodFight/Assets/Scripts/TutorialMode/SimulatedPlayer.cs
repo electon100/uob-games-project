@@ -104,9 +104,13 @@ public class SimulatedPlayer : MonoBehaviour {
 
 	public void GoBackToMainMode() {
 		if (Client.gameState.Equals(ClientGameState.EndTutorial)) {
-			Client.gameState = ClientGameState.MainMode;
+			if (Client.isJoined) Client.gameState = ClientGameState.JoinState;
+			else Client.gameState = ClientGameState.ConnectState;
+			
 			removeCurrentIngredient();
 			Destroy(GameObject.Find("SimulatedClient"));
+			Destroy(GameObject.Find("SimulatedClient(Clone)"));
+			Destroy(GameObject.Find("SimulatedPlayer"));
 			SceneManager.LoadScene("PlayerStartScreen");
 		}
 	}

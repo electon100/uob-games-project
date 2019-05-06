@@ -57,11 +57,13 @@ public class PlateBehaviour : MonoBehaviour {
     /* If the combined result is a valid recipe (not mush) */
     if (isValidRecipe(combinationAttempt)) {
       /* Set the pan contents to the new combined recipe */
-      clearPlate();
-      addIngredientToPlate(combinationAttempt);
       if (Client.gameState.Equals(ClientGameState.MainMode)) {
+        clearStation();
+        addIngredientToPlate(combinationAttempt);
         player.notifyServerAboutIngredientPlaced(combinationAttempt);
-        player.clearIngredientsInStation();
+      } else {
+        clearPlate();
+        addIngredientToPlate(combinationAttempt);
       }
     }
   }
