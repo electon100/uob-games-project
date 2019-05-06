@@ -146,11 +146,21 @@
       ]
     },
     {
-      "name": "ratatouille",
+      "name": "cooked_ratatouille_mix",
       "ingredients": [
         {
           "name": "ratatouille_mix",
           "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "ratatouille",
+      "ingredients": [
+        {
+          "name": "cooked_ratatouille_mix",
+          "cooked": false,
           "chopped": false
         },
         {
@@ -359,7 +369,7 @@
           "chopped": false
         },
         {
-          "name": "cinammon_sugar",
+          "name": "cinnamon_sugar",
           "cooked": false,
           "chopped": false
         }

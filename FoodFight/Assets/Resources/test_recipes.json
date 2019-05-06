@@ -159,7 +159,7 @@
       "name": "ratatouille",
       "ingredients": [
         {
-          "name": "cooked_ratatoille_mix",
+          "name": "cooked_ratatouille_mix",
           "cooked": false,
           "chopped": false
         },
