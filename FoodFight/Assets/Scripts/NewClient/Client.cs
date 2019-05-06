@@ -31,7 +31,7 @@ public class Client : MonoBehaviour {
 	public List<Ingredient> ingredientsInStation = new List<Ingredient>();
 	public int myScore = 0;
 	public int otherScore = 0;
-	public static ClientGameState gameState = ClientGameState.MainMode;
+	public static ClientGameState gameState = ClientGameState.ConnectState;
 	public GameEndState gameEndState;
 	public GameObject simulatedClient;
 
@@ -50,7 +50,8 @@ public class Client : MonoBehaviour {
 		}
 
 		if (gameState.Equals(ClientGameState.JoinState)) {
-			GameObject.Find("MainMenuCanvas").SetActive(false);
+			GameObject mainCanvas = GameObject.Find("MainMenuCanvas");
+			if(mainCanvas) mainCanvas.SetActive(false);
 			joinButton = GameObject.Find("JoinButton");
 			text = GameObject.Find("OrText");
 			tutorialButton = GameObject.Find("TutorialModeButton");
@@ -116,7 +117,7 @@ public class Client : MonoBehaviour {
 
 	public void JoinGame() {
 		SkipTutorialMode();
-		Debug.Log(isConnected + " " + isJoined);
+		
 		if (isJoined) {
 			SceneManager.LoadScene("PickTeamScreen");
 		} else {
@@ -307,6 +308,7 @@ public class Client : MonoBehaviour {
       case "start": // Broadcasted from the server when the required number of players is reached
         Debug.Log("Starting game...");
         startGame = true;
+				gameState = ClientGameState.MainMode;
         break;
 			case "score": // Called after serving a recipe to update local score on phone
 				OnScoreChange(messageContent);
