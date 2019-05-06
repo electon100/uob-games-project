@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PickTeam : MonoBehaviour {
 	public GameObject networkClient;
@@ -29,5 +30,10 @@ public class PickTeam : MonoBehaviour {
 	
 	void Update () {
 		
+	}
+
+	public void OnGoHome() {
+		SceneManager.LoadScene("PlayerStartScreen");
+		Client.gameState = ClientGameState.JoinState;
 	}
 }

@@ -24,25 +24,18 @@ public class Client : MonoBehaviour {
 
 	public bool isConnected = false;
 	public bool startGame = false;
+	public static bool isJoined = false;
+	private string currentScene = "";
 	public string team;
 
 	public List<Ingredient> ingredientsInStation = new List<Ingredient>();
 	public int myScore = 0;
 	public int otherScore = 0;
-	public static ClientGameState gameState = ClientGameState.MainMode;
+	public static ClientGameState gameState = ClientGameState.ConnectState;
 	public GameEndState gameEndState;
 	public GameObject simulatedClient;
 
-	public GameObject buttonPrefab;
-	public GameObject startPanel;
-	public GameObject warningText;
-	public GameObject connectButton;
-	public GameObject diffIPButton;
-	public GameObject inputField;
-	public GameObject changeIPButton;
-	public GameObject goBackButton;
-	public GameObject defaultIP;
-	public InputField changeIPText;
+	public GameObject buttonPrefab, startPanel, warningText, connectButton, joinButton;
 
   public static float disabledTimer = 0.0f;
 
@@ -51,10 +44,12 @@ public class Client : MonoBehaviour {
 		Screen.orientation = ScreenOrientation.Portrait;
 
 		/* When player logs back into main mode after completing the tutorial, destroy the tutorial instances */
-		if (gameState.Equals(ClientGameState.MainMode)) {
+		if (gameState.Equals(ClientGameState.JoinState) || gameState.Equals(ClientGameState.ConnectState) || gameState.Equals(ClientGameState.MainMode)) {
 			Destroy(GameObject.Find("SimulatedPlayer"));
 			Destroy(GameObject.Find("SimulatedClient(Clone)"));
 		}
+
+		changeStartScreenButtons();
 	}
 
 	public void Update() {
@@ -67,11 +62,36 @@ public class Client : MonoBehaviour {
         Player.resetErrorText();
       }
     }
+
+		if (isConnected) {
+			isJoined = true;
+		}
+	}
+
+	/* Change start screen buttons to either Connect or Join */
+	private void changeStartScreenButtons() {
+		if (gameState.Equals(ClientGameState.ConnectState)) {
+			connectButton = GameObject.Find("ConnectButton");
+			joinButton = GameObject.Find("JoinButton");
+			connectButton.SetActive(true);
+			joinButton.SetActive(false);
+		} 
+		else if (gameState.Equals(ClientGameState.JoinState)) {
+			GameObject.Find("MainMenuCanvas").SetActive(false);
+			startPanel = GameObject.Find("startPanel");
+      startPanel.gameObject.SetActive(true);
+			connectButton = GameObject.Find("ConnectButton");
+			joinButton = GameObject.Find("JoinButton");
+			connectButton.SetActive(false);
+			joinButton.SetActive(true);
+		}
+
 	}
 
 	/* Did not enter tutorial mode */
 	public void SkipTutorialMode() {
 		gameState = ClientGameState.MainMode;
+		Destroy(GameObject.Find("SimulatedClient(Clone)"));
 	}
 
   /* On click of the Tutorial Mode button */
@@ -84,9 +104,13 @@ public class Client : MonoBehaviour {
 		Instantiate(simulatedClient, new Vector3(0, 0, 0), Quaternion.identity);
     SceneManager.LoadScene("PlayerMainScreen");
     gameState = ClientGameState.TutorialMode;
-		Destroy(GameObject.Find("Client"));
 		DontDestroyOnLoad(GameObject.Find("SimulatedClient(Clone)"));
   }
+
+	public void JoinGame() {
+		SkipTutorialMode();
+		SceneManager.LoadScene("PickTeamScreen");
+	}
 
 	public void Connect() {
 
@@ -262,6 +286,10 @@ public class Client : MonoBehaviour {
 			case "endgame": // Called when the game is ended with the name of the winning team and the relevant scores
 				OnGameEnd(messageType, messageContent);
 				break;
+			case "newgame": // Called after the new game button is pressed on the server, resets the whole game state
+				Debug.Log("Resetting game state");
+				OnGameReset();
+				break;
       case "connect": // Called after a join team event, for the player to find out which team they are on and load the lobby
 				OnConnect(messageContent);
         break;
@@ -364,6 +392,29 @@ public class Client : MonoBehaviour {
 		}
 	}
 
+	private void OnGameReset() {
+		/* Reset the player's saved variables */
+		ingredientsInStation = new List<Ingredient>();
+		Player.ingredientsFromStation = ingredientsInStation;
+		Player.removeCurrentIngredient();
+		Player.resetCurrentStation();
+		SimulatedPlayer.currentIngred = null;
+		SimulatedPlayer.ingredientInChopping = null;
+		SimulatedPlayer.ingredientsInFrying = ingredientsInStation;
+		SimulatedPlayer.ingredientsInPlating = ingredientsInStation;
+
+		/* Reset the scores */
+		myScore = 0;
+		otherScore = 0;
+
+		/* Update game state */
+		gameState = ClientGameState.JoinState;
+		startGame = false;
+
+		/* Go back to start screen */
+		SceneManager.LoadScene("PlayerStartScreen");
+	}
+
 	private void OnConnect(string messageContent) {
 		if (messageContent == "red" || messageContent == "blue") {
 			team = messageContent;
@@ -428,37 +479,6 @@ public class Client : MonoBehaviour {
 
 	public void onClickBlue() {
 		SendMyMessage("connect", "blue");
-	}
-
-	public void useDifferentIP() {
-		connectButton.SetActive(false);
-		diffIPButton.SetActive(false);
-		inputField.SetActive(true);
-    changeIPText.Select();
-    changeIPText.ActivateInputField();
-    changeIPText.shouldHideMobileInput = true;
-		changeIPButton.SetActive(true);
-		goBackButton.SetActive(true);
-		defaultIP.SetActive(true);
-	}
-
-	public void changeIP() {
-		serverIPSuffix = Regex.Replace(changeIPText.text, @"\t|\n|\r", "");
-		inputField.SetActive(false);
-		changeIPButton.SetActive(false);
-		goBackButton.SetActive(false);
-		defaultIP.SetActive(false);
-		connectButton.SetActive(true);
-		diffIPButton.SetActive(true);
-	}
-
-	public void goBack() {
-		inputField.SetActive(false);
-		changeIPButton.SetActive(false);
-		goBackButton.SetActive(false);
-		defaultIP.SetActive(false);
-		connectButton.SetActive(true);
-		diffIPButton.SetActive(true);
 	}
 
   public static void resetDisabledTimer() {
