@@ -12,13 +12,13 @@
     },
     {
       "name" : "onion",
-      "choppable" : false,
+      "choppable" : true,
       "cookable" : false,
       "orderable" : false,
       "mode": "none",
       "correctFlips" : 0,
       "maxFlips" : 0,
-      "correctChops" : 0,
+      "correctChops" : 5,
       "score" : 0
     },
     {
@@ -26,7 +26,7 @@
       "choppable" : true,
       "cookable" : false,
       "mode": "none",
-      "correctFlips" : 5,
+      "correctFlips" : 6,
       "maxFlips" : 20,
       "correctChops" : 10,
       "score" : 20
@@ -40,6 +40,17 @@
       "maxFlips" : 40,
       "correctChops" : 15,
       "score" : 20
+    },
+    {
+      "name" : "chopped_onion",
+      "choppable" : false,
+      "cookable" : false,
+      "orderable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
     },
     {
       "name" : "chopped_mixed_vegetables",
@@ -80,36 +91,6 @@
       "maxFlips" : 40,
       "correctChops" : 0,
       "score" : 20
-    },
-    {
-      "name" : "stir_fry_mix",
-      "choppable" : false,
-      "cookable" : true,
-      "mode": "none",
-      "correctFlips" : 5,
-      "maxFlips" : 40,
-      "correctChops" : 0,
-      "score" : 50
-    },
-    {
-      "name" : "cooked_stir_fry_mix",
-      "choppable" : false,
-      "cookable" : false,
-      "mode": "none",
-      "correctFlips" : 0,
-      "maxFlips" : 0,
-      "correctChops" : 0,
-      "score" : 50
-    },
-    {
-      "name" : "stir_fry",
-      "choppable" : false,
-      "cookable" : false,
-      "mode": "none",
-      "correctFlips" : 0,
-      "maxFlips" : 0,
-      "correctChops" : 0,
-      "score" : 100
     },
     {
       "name" : "potato",
@@ -355,11 +336,41 @@
       "score" : 80
     },
     {
+      "name" : "oil",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 20
+    },
+    {
+      "name" : "cinammon_sugar",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 20
+    },
+    {
       "name" : "raw_churros",
       "choppable" : false,
       "cookable" : true,
       "mode": "none",
       "correctFlips" : 9,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 40
+    },
+    {
+      "name" : "churros_mix",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
       "score" : 40
@@ -423,6 +434,16 @@
       "maxFlips" : 0,
       "correctChops" : 0,
       "score" : 100
+    },
+    {
+      "name" : "beer",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 50
     },
     {
       "name" : "raw_calamari",

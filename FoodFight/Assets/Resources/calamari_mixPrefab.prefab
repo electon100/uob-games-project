@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4324225786388278}
   m_Layer: 0
-  m_Name: raw_calamariPrefab
+  m_Name: calamari_mixPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
