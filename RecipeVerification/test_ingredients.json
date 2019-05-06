@@ -281,7 +281,7 @@
       "score" : 40
     },
     {
-      "name" : "cooked_ratatoille_mix",
+      "name" : "cooked_ratatouille_mix",
       "choppable" : false,
       "cookable" : false,
       "mode": "none",
