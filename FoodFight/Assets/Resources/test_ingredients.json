@@ -436,16 +436,6 @@
       "score" : 100
     },
     {
-      "name" : "beer",
-      "choppable" : false,
-      "cookable" : false,
-      "mode": "none",
-      "correctFlips" : 0,
-      "maxFlips" : 0,
-      "correctChops" : 0,
-      "score" : 50
-    },
-    {
       "name" : "raw_calamari",
       "choppable" : false,
       "cookable" : false,

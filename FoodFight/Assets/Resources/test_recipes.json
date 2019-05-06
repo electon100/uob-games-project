@@ -282,11 +282,6 @@
           "name": "flour",
           "cooked": false,
           "chopped": false
-        },
-        {
-          "name": "beer",
-          "cooked": false,
-          "chopped": false
         }
       ]
     },
@@ -352,11 +347,6 @@
           "name": "raw_churros",
           "cooked": true,
           "chopped": false
-        },
-        {
-          "name": "cinammon_sugar",
-          "cooked": false,
-          "chopped": false
         }
       ]
     },
@@ -365,6 +355,11 @@
       "ingredients": [
         {
           "name": "churros_mix",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "cinammon_sugar",
           "cooked": false,
           "chopped": false
         }
