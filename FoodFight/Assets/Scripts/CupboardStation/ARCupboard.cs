@@ -114,7 +114,15 @@ public class ARCupboard : MonoBehaviour
             case "Calamari":
                 ingredient = new Ingredient("raw_calamari", "raw_calamariPrefab");
                 foodName.text = "You picked some raw calamari!";
-                break;                
+                break;        
+            case "Oil":
+                ingredient = new Ingredient("oil", "oilPrefab");
+                foodName.text = "You picked some oil!";
+                break;
+            case "CinnamonSugar":
+                ingredient = new Ingredient("cinnamon_sugar", "cinnamon_sugarPrefab");
+                foodName.text = "You picked some cinnamon sugar!";
+                break;        
             default:
                 break;
         }
