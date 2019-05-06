@@ -66,7 +66,7 @@ public class Team {
   public bool addOrder(Transform mainGameCanvas) {
     string recipeName = FoodData.Instance.getRandomRecipeName();
     Ingredient recipe = new Ingredient(recipeName, recipeName + "Prefab");
-    string id = recipeName + Orders.Count + Name + "Object";
+    string id = Name + recipeName + Orders.Count + "Object";
 
     Orders.Add(new Order(id, recipe, new GameObject(id), 150, mainGameCanvas, Name));
 
@@ -74,7 +74,6 @@ public class Team {
   }
 
   public void updateOrders() {
-    // Debug.Log(new Vector2(Screen.width, Screen.height));
     for (int i = 0; i < Orders.Count; i++) {
       Orders[i].updateCanvas(i, Screen.width, Screen.height);
     }
