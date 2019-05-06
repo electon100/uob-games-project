@@ -30,8 +30,11 @@ public class NewGameTimer : MonoBehaviour {
 
     // Sign position
     timerSignTransform = timerSignObject.GetComponent<RectTransform>();
-    timerSignTransform.localPosition = new Vector3(0, (int) (Screen.height / 2) - 100, 0);
+    //timerSignTransform.localPosition = new Vector3(0, (int) (Screen.height / 2) - 100, 0);
     timerSignTransform.sizeDelta = new Vector2(300, 200);
+
+    timerSignTransform.anchorMin = new Vector2(0.5f, 1);
+    timerSignTransform.anchorMax = new Vector2(0.5f, 1);
 
     // Sign Image
 		timerSignImage = timerSignObject.AddComponent<Image>();
