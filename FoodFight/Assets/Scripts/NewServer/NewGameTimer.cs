@@ -6,7 +6,13 @@ using UnityEngine.UI;
 
 public class NewGameTimer : MonoBehaviour {
 
-  public Text timerText;
+  private GameObject timerTextObject;
+  private RectTransform timerTransform;
+  private Text timerText;
+
+  private GameObject timerSignObject;
+  private RectTransform timerSignTransform;
+  private Image timerSignImage;
 
   private NewServer server;
 
@@ -18,6 +24,34 @@ public class NewGameTimer : MonoBehaviour {
 
   public void Start() {
     server = GameObject.Find("Server").GetComponent<NewServer>();
+
+    timerSignObject = new GameObject("GameTimerSignObject", typeof(RectTransform));
+    timerSignObject.transform.SetParent(GameObject.Find("MainScreenCanvas").transform);
+
+    // Sign position
+    timerSignTransform = timerSignObject.GetComponent<RectTransform>();
+    timerSignTransform.localPosition = new Vector3(0, (int) (Screen.height / 2) - 100, 0);
+    timerSignTransform.sizeDelta = new Vector2(300, 200);
+
+    // Sign Image
+		timerSignImage = timerSignObject.AddComponent<Image>();
+		timerSignImage.sprite = Resources.Load("Timer Sign", typeof(Sprite)) as Sprite;
+
+    timerTextObject = new GameObject("GameTimerObject", typeof(RectTransform));
+    timerTextObject.transform.SetParent(GameObject.Find("MainScreenCanvas").transform);
+
+    // Text position
+    timerTransform = timerTextObject.GetComponent<RectTransform>();
+    timerTransform.localPosition = new Vector3(0, (int) (Screen.height / 2) - 150, 0);
+    timerTransform.sizeDelta = new Vector2(300, 200);
+
+    // Timer Text
+    timerText = timerTextObject.AddComponent<Text>();
+    timerText.fontSize = 100;
+    timerText.color = Color.black;
+    timerText.font = Resources.Load("Acids!", typeof(Font)) as Font;//Assets/Resources/Acids!.otf
+    timerText.alignment = TextAnchor.MiddleCenter;
+
     ResetTimer();
   }
 
