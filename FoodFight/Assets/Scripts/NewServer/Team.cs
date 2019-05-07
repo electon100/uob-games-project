@@ -97,8 +97,10 @@ public class Team {
   }
 
   public void removeAllOrders() {
-    for (int i = 0; i < Orders.Count; i++) {
-      removeOrder(Orders[i]);
+    int count = Orders.Count;
+
+    for (int i = 0; i < count; i++) {
+      removeOrder(Orders[0]);
     }
   }
 
@@ -111,6 +113,9 @@ public class Team {
         break;
       }
     }
+
+    if (Score > 10000) Score = 10000;
+    if (Score < 0) Score = 0;
   }
 
   public override string ToString() {

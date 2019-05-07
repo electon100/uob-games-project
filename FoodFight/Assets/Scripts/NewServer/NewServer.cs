@@ -153,9 +153,6 @@ public class NewServer : MonoBehaviour {
     blueBannerImage = blueBannerObject.AddComponent<Image>();
     blueBannerImage.sprite = Resources.Load("star_banner_blue", typeof(Sprite)) as Sprite;
 
-    redTeam.Score = 100;
-    blueTeam.Score = 100;
-
     setTeamStars();
   }
 
@@ -172,13 +169,16 @@ public class NewServer : MonoBehaviour {
     }catch{
       UnityEngine.Debug.Log("Problem running python script");
     }
-    
+
   }
 
   private void initialiseTeams() {
     if (redTeam != null) redTeam.removeAllOrders();
     if (blueTeam != null) blueTeam.removeAllOrders();
     redTeam = new Team("red", redTeamColour); blueTeam = new Team("blue", blueTeamColour);
+
+    redTeam.Score = 100;
+    blueTeam.Score = 100;
 
     Team[] allTeams = new Team[] {redTeam, blueTeam};
     foreach (Team team in allTeams) {
@@ -609,6 +609,7 @@ public class NewServer : MonoBehaviour {
     // Check if any orders have expired and remove some points
     float blueDeltaScore = blueTeam.checkExpiredOrders();
     float redDeltaScore = redTeam.checkExpiredOrders();
+    
     if (redDeltaScore > 0 || blueDeltaScore > 0) {
       redTeam.Score -= (int) (redDeltaScore * negativeScoreMultiplier);
       blueTeam.Score -= (int) (blueDeltaScore * negativeScoreMultiplier);
