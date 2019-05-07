@@ -70,6 +70,7 @@ ModelImporter:
     100128: pCylinder9
     100130: slices
     100132: //RootNode
+    100134: pCylinder72
     400000: container
     400002: pCylinder10
     400004: pCylinder11
@@ -137,12 +138,14 @@ ModelImporter:
     400128: pCylinder9
     400130: slices
     400132: //RootNode
+    400134: pCylinder72
     2100000: container1
     2100002: sauce
     2100004: red
     2100006: yellow
     2100008: green
     2100010: lambert1
+    2100012: green1
     2300000: container
     2300002: pCylinder10
     2300004: pCylinder11
@@ -208,6 +211,7 @@ ModelImporter:
     2300124: pCylinder71
     2300126: pCylinder8
     2300128: pCylinder9
+    2300130: pCylinder72
     3300000: container
     3300002: pCylinder10
     3300004: pCylinder11
@@ -273,6 +277,7 @@ ModelImporter:
     3300124: pCylinder71
     3300126: pCylinder8
     3300128: pCylinder9
+    3300130: pCylinder72
     4300000: container
     4300002: pCylinder8
     4300004: pCylinder9
@@ -338,6 +343,7 @@ ModelImporter:
     4300124: pCylinder69
     4300126: pCylinder70
     4300128: pCylinder71
+    4300130: pCylinder72
   externalObjects: {}
   materials:
     importMaterials: 1

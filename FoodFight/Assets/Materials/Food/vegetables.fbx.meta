@@ -667,6 +667,9 @@ ModelImporter:
     2100010: lambert8
     2100012: carrot
     2100014: phong2
+    2100016: lambert11
+    2100018: lambert12
+    2100020: lambert13
     2300000: nurbsToPoly1
     2300002: nurbsToPoly10
     2300004: nurbsToPoly11

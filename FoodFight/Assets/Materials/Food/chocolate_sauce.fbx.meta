@@ -1,44 +1,22 @@
 fileFormatVersion: 2
-guid: 4a102f42938ffad41adcee1711b9c094
+guid: 31b0c73e2dcc06c43aefddb2f96de7c6
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: meat
-    100002: meat1
-    100004: meat2
-    100006: shell
-    100008: shell1
-    100010: shell2
-    100012: //RootNode
-    400000: meat
-    400002: meat1
-    400004: meat2
-    400006: shell
-    400008: shell1
-    400010: shell2
-    400012: //RootNode
-    2100000: skin
-    2100002: lambert3
-    2100004: lambert17
-    2300000: meat
-    2300002: meat1
-    2300004: meat2
-    2300006: shell
-    2300008: shell1
-    2300010: shell2
-    3300000: meat
-    3300002: meat1
-    3300004: meat2
-    3300006: shell
-    3300008: shell1
-    3300010: shell2
-    4300000: shell
-    4300002: meat
-    4300004: meat1
-    4300006: shell1
-    4300008: shell2
-    4300010: meat2
-    2186277476908879412: ImportLogs
+    100000: //RootNode
+    100002: nurbsToPoly1
+    100004: pDisc1
+    400000: //RootNode
+    400002: nurbsToPoly1
+    400004: pDisc1
+    2100000: lambert3
+    2100002: lambert1
+    2300000: nurbsToPoly1
+    2300002: pDisc1
+    3300000: nurbsToPoly1
+    3300002: pDisc1
+    4300000: pDisc1
+    4300002: nurbsToPoly1
   externalObjects: {}
   materials:
     importMaterials: 1
