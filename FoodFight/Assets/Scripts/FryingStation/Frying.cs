@@ -175,7 +175,7 @@ public class Frying : MonoBehaviour {
 			SimulatedPlayer.ingredientsInFrying.Clear();
 			SimulatedPlayer.ingredientsInFrying.Add(ingredient);
 		}
-		
+
 		addIngredientToPan(ingredient);
 	}
 
@@ -312,7 +312,7 @@ public class Frying : MonoBehaviour {
 																	Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
 			RaycastHit raycastHit;
 			if (Physics.Raycast(raycast, out raycastHit)) {
-				if (!raycastHit.collider.name.Equals("Background") && !(infoPanel.active)) { // <-- Requires ingredient prefabs to have colliders (approx) within pan bounds
+				if (!raycastHit.collider.name.Equals("Background") && !(infoPanel.active) && !(confirmationCanvas.active)) { // <-- Requires ingredient prefabs to have colliders (approx) within pan bounds
 				// if (raycastHit.collider.name.Equals("Pan")) { // <-- Requires ingredient prefabs not to have colliders!
 					/* Pan was tapped! */
 					if (canPlaceHeldIngredient()) {
