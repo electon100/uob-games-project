@@ -52,6 +52,7 @@ public class Client : MonoBehaviour {
 		if (gameState.Equals(ClientGameState.JoinState)) {
 			GameObject mainCanvas = GameObject.Find("MainMenuCanvas");
 			if(mainCanvas) mainCanvas.SetActive(false);
+			warningText = GameObject.Find("ConnectionFailedText");
 			joinButton = GameObject.Find("JoinButton");
 			text = GameObject.Find("OrText");
 			tutorialButton = GameObject.Find("TutorialModeButton");
@@ -90,6 +91,7 @@ public class Client : MonoBehaviour {
 		else if (gameState.Equals(ClientGameState.JoinState)) {
 			startPanel = GameObject.Find("startPanel");
       startPanel.gameObject.SetActive(true);
+			if (warningText) warningText.SetActive(false);
 			if (connectButton) connectButton.SetActive(false);
 			if (joinButton) joinButton.SetActive(true);
 			if (text) text.SetActive(true);
