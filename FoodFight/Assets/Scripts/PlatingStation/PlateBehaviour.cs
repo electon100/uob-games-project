@@ -213,7 +213,7 @@ public class PlateBehaviour : MonoBehaviour {
 																	Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
 			RaycastHit raycastHit;
 			if (Physics.Raycast(raycast, out raycastHit)) {
-				if (!raycastHit.collider.name.Equals("Background") && !(infoPanel.active)) { // <-- Requires ingredient prefabs to have colliders (approx) within plate bounds
+				if (!raycastHit.collider.name.Equals("Background") && !(infoPanel.active) && !(confirmationCanvas.active)) { // <-- Requires ingredient prefabs to have colliders (approx) within plate bounds
 				// if (raycastHit.collider.name.Equals("Plate")) { // <-- Requires ingredient prefabs not to have colliders!
 					/* Plate was tapped! */
 					if (canPlaceHeldIngredient()) {
