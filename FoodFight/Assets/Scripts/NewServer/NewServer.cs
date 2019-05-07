@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Diagnostics;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -158,6 +159,22 @@ public class NewServer : MonoBehaviour {
     setTeamStars();
   }
 
+  private void turnLightsOn(string team, char stationID){
+    try{
+      ProcessStartInfo startInfo = new ProcessStartInfo("C:\\Program Files\\Python36\\python.exe");
+      startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+      Process.Start(startInfo);
+
+      string pythonArgs = "C:\\Users\\Benji\\Desktop\\red_lights_client.py " + team + " " + stationID;
+      startInfo.Arguments = pythonArgs;
+      UnityEngine.Debug.Log(pythonArgs);
+      Process.Start(startInfo);
+    }catch{
+      UnityEngine.Debug.Log("Problem running python script");
+    }
+    
+  }
+
   private void initialiseTeams() {
     if (redTeam != null) redTeam.removeAllOrders();
     if (blueTeam != null) blueTeam.removeAllOrders();
@@ -232,7 +249,7 @@ public class NewServer : MonoBehaviour {
       case NetworkEventType.Nothing: // Do nothing if nothing was sent to server
         break;
       case NetworkEventType.ConnectEvent: // Have a phone connect to the server
-        Debug.Log("Player " + connectionId + " has connected");
+        UnityEngine.Debug.Log("Player " + connectionId + " has connected");
         allConnections.Add(connectionId);
         break;
       case NetworkEventType.DataEvent: // Have the phone send data to the server
@@ -240,11 +257,11 @@ public class NewServer : MonoBehaviour {
         manageMessageEvents(message, connectionId);
         break;
       case NetworkEventType.DisconnectEvent: // Remove the player from the game
-        Debug.Log("Player " + connectionId + " has disconnected");
+        UnityEngine.Debug.Log("Player " + connectionId + " has disconnected");
         OnNetworkDisconnect(connectionId);
         break;
       case NetworkEventType.BroadcastEvent:
-        Debug.Log("Broadcast event.");
+        UnityEngine.Debug.Log("Broadcast event.");
         break;
     }
   }
@@ -256,7 +273,7 @@ public class NewServer : MonoBehaviour {
     BinaryFormatter formatter = new BinaryFormatter();
     string message = formatter.Deserialize(serializedMessage).ToString();
 
-    Debug.Log("OnData(hostId = " + hostId + ", connectionId = "
+    UnityEngine.Debug.Log("OnData(hostId = " + hostId + ", connectionId = "
       + connectionId + ", channelId = " + channelId + ", data = "
       + message + ", size = " + size + ", error = " + error.ToString() + ")");
 
@@ -282,7 +299,7 @@ public class NewServer : MonoBehaviour {
     NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, (int)message.Position, out error);
 
     if ((NetworkError) error != NetworkError.Ok) {
-      Debug.Log("Message send error: " + (NetworkError) error);
+      UnityEngine.Debug.Log("Message send error: " + (NetworkError) error);
     }
   }
 
@@ -317,7 +334,7 @@ public class NewServer : MonoBehaviour {
         OnMessageLeave(connectionId, messageType, messageContent);
         break;
       default:
-        Debug.Log("Invalid message type.");
+        UnityEngine.Debug.Log("Invalid message type.");
         break;
     }
   }
@@ -348,10 +365,10 @@ public class NewServer : MonoBehaviour {
       if (player != null) {
         Destroy(player.PlayerPrefab);
         relevantTeam.removePlayer(player);
-        Debug.Log("Player " + connectionId + " removed from team " + relevantTeam.Name);
+        UnityEngine.Debug.Log("Player " + connectionId + " removed from team " + relevantTeam.Name);
       }
     } else {
-      Debug.Log("Player not part of a team");
+      UnityEngine.Debug.Log("Player not part of a team");
     }
   }
 
@@ -366,12 +383,12 @@ public class NewServer : MonoBehaviour {
       relevantTeam = blueTeam;
       relevantPrefab = bluePlayerPrefab;
     } else {
-      Debug.Log("Invalid team name [" + teamName + "], could not allocate player to team.");
+      UnityEngine.Debug.Log("Invalid team name [" + teamName + "], could not allocate player to team.");
       return false;
     }
 
     if (relevantTeam.isPlayerOnTeam(connectionId)) {
-      Debug.Log("Player [" + connectionId + "] already on team [" + teamName + "].");
+      UnityEngine.Debug.Log("Player [" + connectionId + "] already on team [" + teamName + "].");
       return false;
     }
 
@@ -401,7 +418,7 @@ public class NewServer : MonoBehaviour {
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
       Station destinationStation = relevantTeam.Kitchen.getStationForId(messageContent);
       if (destinationStation.isDisabled()) {
-        Debug.Log("Station disabled (" + destinationStation + ")");
+        UnityEngine.Debug.Log("Station disabled (" + destinationStation + ")");
         SendMyMessage(messageType, "Station disabled$" + destinationStation.DisabledTimer, connectionId);
       } else if (!relevantTeam.isStationOccupied(destinationStation)) {
         player.CurrentStation = destinationStation;
@@ -411,17 +428,17 @@ public class NewServer : MonoBehaviour {
         foreach (Ingredient ingredient in destinationStation.Ingredients) {
           messageToSend += Ingredient.SerializeObject(ingredient) + "$";
         }
-        Debug.Log("Sending back to team [" + relevantTeam.Name + "]: " + messageToSend);
+        UnityEngine.Debug.Log("Sending back to team [" + relevantTeam.Name + "]: " + messageToSend);
         SendMyMessage(messageType, messageToSend, connectionId);
       } else if (player.CurrentStation == destinationStation) {
-        Debug.Log("Player already at station (" + destinationStation + ")");
+        UnityEngine.Debug.Log("Player already at station (" + destinationStation + ")");
         SendMyMessage(messageType, "Already at station", connectionId);
       } else {
-        Debug.Log("Station already occupied (" + destinationStation + ")");
+        UnityEngine.Debug.Log("Station already occupied (" + destinationStation + ")");
         SendMyMessage(messageType, "Station occupied", connectionId);
       }
     } else {
-      Debug.Log("Could not determine team for given connectionId");
+      UnityEngine.Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
     }
   }
@@ -435,7 +452,7 @@ public class NewServer : MonoBehaviour {
       ConnectedPlayer player = relevantTeam.getPlayerForId(connectionId);
       if (player.CurrentStation != null) player.CurrentStation.clearIngredientsInStation();
     } else {
-      Debug.Log("Could not determine team for given connectionId");
+      UnityEngine.Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
     }
   }
@@ -452,14 +469,14 @@ public class NewServer : MonoBehaviour {
       if (!messageContent.Equals("")) {
         Ingredient ingredientToAdd = new Ingredient();
         ingredientToAdd = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToAdd.GetType());
-        Debug.Log("Ingredient to add: " + ingredientToAdd.Name);
+        UnityEngine.Debug.Log("Ingredient to add: " + ingredientToAdd.Name);
         player.CurrentStation.addIngredientToStation(ingredientToAdd);
       } else {
-        Debug.Log("Invalid messageContent");
+        UnityEngine.Debug.Log("Invalid messageContent");
         SendMyMessage(messageType, "Fail", connectionId);
       }
     } else {
-      Debug.Log("Could not determine team for given connectionId");
+      UnityEngine.Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
     }
   }
@@ -474,17 +491,17 @@ public class NewServer : MonoBehaviour {
       if (!messageContent.Equals("")) {
         Ingredient ingredientToScore = new Ingredient();
         ingredientToScore = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToScore.GetType());
-        Debug.Log("Ingredient to score: " + ingredientToScore.Name);
+        UnityEngine.Debug.Log("Ingredient to score: " + ingredientToScore.Name);
         relevantTeam.scoreRecipe(ingredientToScore);
 
         /* Broadcast new scores to devices */
         BroadcastScores();
       } else {
-        Debug.Log("Invalid messageContent");
+        UnityEngine.Debug.Log("Invalid messageContent");
         SendMyMessage(messageType, "Fail", connectionId);
       }
     } else {
-      Debug.Log("Could not determine team for given connectionId");
+      UnityEngine.Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
     }
   }
@@ -499,7 +516,7 @@ public class NewServer : MonoBehaviour {
       if (!messageContent.Equals("")) {
         Ingredient ingredientToThrow = new Ingredient();
         ingredientToThrow = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToThrow.GetType());
-        Debug.Log("Ingredient to throw: " + ingredientToThrow.Name);
+        UnityEngine.Debug.Log("Ingredient to throw: " + ingredientToThrow.Name);
         if (relevantTeam.Name.Equals("red")) {
           wiiRed.reset(ingredientToThrow);
         } else if (relevantTeam.Name.Equals("blue")) {
@@ -507,11 +524,11 @@ public class NewServer : MonoBehaviour {
         }
         /* Call fighting reset here!!! */
       } else {
-        Debug.Log("Invalid messageContent");
+        UnityEngine.Debug.Log("Invalid messageContent");
         SendMyMessage(messageType, "Fail", connectionId);
       }
     } else {
-      Debug.Log("Could not determine team for given connectionId");
+      UnityEngine.Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
     }
   }
@@ -526,7 +543,7 @@ public class NewServer : MonoBehaviour {
       player.CurrentStation = null;
       player.PlayerPrefab.GetComponent<PlayerMovement>().movePlayer(new Vector3(0, 0, 0));
     } else {
-      Debug.Log("Could not determine team for given connectionId");
+      UnityEngine.Debug.Log("Could not determine team for given connectionId");
       SendMyMessage(messageType, "Fail", connectionId);
     }
   }
@@ -546,12 +563,14 @@ public class NewServer : MonoBehaviour {
       if (relevantTeam != null) {
         Station stationToDisable = relevantTeam.Kitchen.getStationForId(station);
         stationToDisable.DisabledTimer = disableStationDuration;
-        Debug.Log("Station has been disabled: " + stationToDisable);
+        UnityEngine.Debug.Log("Station has been disabled: " + stationToDisable);
+
+        turnLightsOn(relevantTeam.Name, station[station.Length-1]);
       } else {
-        Debug.Log("Invalid team name [" + team + "], could not process station hit.");
+        UnityEngine.Debug.Log("Invalid team name [" + team + "], could not process station hit.");
       }
     } else {
-      Debug.Log("Invalid station id [" + station + "], could not process station hit.");
+      UnityEngine.Debug.Log("Invalid station id [" + station + "], could not process station hit.");
     }
   }
 
@@ -644,7 +663,7 @@ public class NewServer : MonoBehaviour {
 
   /* Broadcasts scores to all connected players in the form: score&<myScore>$<enemyScore> */
   private void BroadcastScores() {
-    Debug.Log("Broadcasting scores...");
+    UnityEngine.Debug.Log("Broadcasting scores...");
     BroadcastMessageToTeam(redTeam, "score", redTeam.Score + "$" + blueTeam.Score);
     BroadcastMessageToTeam(blueTeam, "score", blueTeam.Score + "$" + redTeam.Score);
   }
@@ -786,7 +805,7 @@ public class NewServer : MonoBehaviour {
   /* Sends a message to all network connections */
   private void BroadcastAllConnections(string messageType, string textInput) {
     foreach (int connectionId in allConnections) {
-      Debug.Log("Global Broadcasting [" + messageType + ", " + textInput + "]");
+      UnityEngine.Debug.Log("Global Broadcasting [" + messageType + ", " + textInput + "]");
       SendMyMessage(messageType, textInput, connectionId);
     }
   }
@@ -802,7 +821,7 @@ public class NewServer : MonoBehaviour {
   /* Sends a message to all connected players on a certain team */
   private void BroadcastMessageToTeam(Team team, string messageType, string textInput) {
     foreach (ConnectedPlayer player in team.Players) {
-      Debug.Log("Broadcasting [" + messageType + ", " + textInput + "]");
+      UnityEngine.Debug.Log("Broadcasting [" + messageType + ", " + textInput + "]");
       SendMyMessage(messageType, textInput, player.ConnectionId);
     }
   }
@@ -814,88 +833,88 @@ public class NewServer : MonoBehaviour {
     gameState = GameState.AwaitingPlayers;
     Ingredient egg = new Ingredient("Eggs", "eggsPrefab");
 
-    Debug.Assert(Kitchen.isValidStation("0"));
-    Debug.Assert(Kitchen.isValidStation("3"));
-    Debug.Assert(!Kitchen.isValidStation("hello"));
+    UnityEngine.Debug.Assert(Kitchen.isValidStation("0"));
+    UnityEngine.Debug.Assert(Kitchen.isValidStation("3"));
+    UnityEngine.Debug.Assert(!Kitchen.isValidStation("hello"));
 
     /* Simulate connections */
     OnMessageConnect(100, "connect", "red");
     OnMessageConnect(101, "connect", "red");
     OnMessageConnect(102, "connect", "red");
-    Debug.Assert(redTeam.Players.Count == 3);
+    UnityEngine.Debug.Assert(redTeam.Players.Count == 3);
 
     /* Simulate connection with duplicate id */
     OnMessageConnect(555, "connect", "blue");
     OnMessageConnect(556, "connect", "blue");
     OnMessageConnect(557, "connect", "blue");
     OnMessageConnect(555, "connect", "blue");
-    Debug.Assert(blueTeam.Players.Count == 3);
-    Debug.Assert(blueTeam.getPlayerForId(555) != null);
-    Debug.Assert(blueTeam.getPlayerForId(556) != null);
-    Debug.Assert(blueTeam.getPlayerForId(557) != null);
-    Debug.Assert(blueTeam.getPlayerForId(558) == null);
+    UnityEngine.Debug.Assert(blueTeam.Players.Count == 3);
+    UnityEngine.Debug.Assert(blueTeam.getPlayerForId(555) != null);
+    UnityEngine.Debug.Assert(blueTeam.getPlayerForId(556) != null);
+    UnityEngine.Debug.Assert(blueTeam.getPlayerForId(557) != null);
+    UnityEngine.Debug.Assert(blueTeam.getPlayerForId(558) == null);
 
     /* Simulate connection with mis-spelled content */
     OnMessageConnect(558, "connect", "bule");
-    Debug.Assert(blueTeam.Players.Count == 3);
-    Debug.Assert(blueTeam.getPlayerForId(558) == null);
+    UnityEngine.Debug.Assert(blueTeam.Players.Count == 3);
+    UnityEngine.Debug.Assert(blueTeam.getPlayerForId(558) == null);
 
     /* Simulate station joining */
     OnMessageStation(101, "station", "1");
-    Debug.Assert(redTeam.getPlayerForId(101).CurrentStation.Id.Equals("1"));
+    UnityEngine.Debug.Assert(redTeam.getPlayerForId(101).CurrentStation.Id.Equals("1"));
 
     /* Simulate station ingredient storage */
     blueTeam.Kitchen.getStationForId("2").addIngredientToStation(egg);
     blueTeam.Kitchen.getStationForId("3").addIngredientToStation(egg);
     OnMessageStation(555, "station", "2");
     OnMessageStation(556, "station", "1");
-    Debug.Assert(blueTeam.getPlayerForId(557).CurrentStation == null);
-    Debug.Assert(blueTeam.getPlayerForId(555).CurrentStation.Ingredients.Count == 1);
-    Debug.Assert(blueTeam.getPlayerForId(556).CurrentStation.Ingredients.Count == 0);
+    UnityEngine.Debug.Assert(blueTeam.getPlayerForId(557).CurrentStation == null);
+    UnityEngine.Debug.Assert(blueTeam.getPlayerForId(555).CurrentStation.Ingredients.Count == 1);
+    UnityEngine.Debug.Assert(blueTeam.getPlayerForId(556).CurrentStation.Ingredients.Count == 0);
 
     /* Simulate station clearing */
     OnMessageClear(555, "clear", "2");
     OnMessageClear(555, "clear", "3"); /* Player is not at this station, so it should not be cleared */
-    Debug.Assert(blueTeam.getPlayerForId(555).CurrentStation.Ingredients.Count == 0);
-    Debug.Assert(blueTeam.Kitchen.getStationForId("3").Ingredients.Count == 1);
+    UnityEngine.Debug.Assert(blueTeam.getPlayerForId(555).CurrentStation.Ingredients.Count == 0);
+    UnityEngine.Debug.Assert(blueTeam.Kitchen.getStationForId("3").Ingredients.Count == 1);
 
     /* Station occupied tests */
     OnMessageStation(100, "station", "0");
     OnMessageStation(101, "station", "4");
-    Debug.Assert(redTeam.isStationOccupied("0"));
-    Debug.Assert(redTeam.isStationOccupied("4"));
-    Debug.Assert(!redTeam.isStationOccupied("3"));
+    UnityEngine.Debug.Assert(redTeam.isStationOccupied("0"));
+    UnityEngine.Debug.Assert(redTeam.isStationOccupied("4"));
+    UnityEngine.Debug.Assert(!redTeam.isStationOccupied("3"));
 
     /* Checking if station is occupied before moving */
     OnMessageStation(101, "station", "4");
     OnMessageStation(100, "station", "0");
     OnMessageStation(101, "station", "0");
-    Debug.Assert(redTeam.isStationOccupied("0"));
-    Debug.Assert(redTeam.getPlayerForId(100).CurrentStation.Id.Equals("0"));
-    Debug.Assert(redTeam.getPlayerForId(101).CurrentStation.Id.Equals("4"));
+    UnityEngine.Debug.Assert(redTeam.isStationOccupied("0"));
+    UnityEngine.Debug.Assert(redTeam.getPlayerForId(100).CurrentStation.Id.Equals("0"));
+    UnityEngine.Debug.Assert(redTeam.getPlayerForId(101).CurrentStation.Id.Equals("4"));
 
     /* Tests for leaving stations */
     OnMessageStation(555, "station", "0");
     OnMessageStation(556, "station", "1");
     OnMessageStation(557, "station", "2");
-    Debug.Assert(blueTeam.isStationOccupied("1"));
-    Debug.Assert(blueTeam.isStationOccupied("2"));
+    UnityEngine.Debug.Assert(blueTeam.isStationOccupied("1"));
+    UnityEngine.Debug.Assert(blueTeam.isStationOccupied("2"));
     OnMessageLeave(556, "leave", "");
-    Debug.Assert(!blueTeam.isStationOccupied("1"));
-    Debug.Assert(blueTeam.isStationOccupied("2"));
+    UnityEngine.Debug.Assert(!blueTeam.isStationOccupied("1"));
+    UnityEngine.Debug.Assert(blueTeam.isStationOccupied("2"));
     OnMessageLeave(557, "leave", "2");
-    Debug.Assert(!blueTeam.isStationOccupied("2"));
+    UnityEngine.Debug.Assert(!blueTeam.isStationOccupied("2"));
     OnMessageStation(557, "station", "2");
-    Debug.Assert(blueTeam.isStationOccupied("2"));
+    UnityEngine.Debug.Assert(blueTeam.isStationOccupied("2"));
 
     /* Simulate adding to station */
     OnMessageStation(101, "station", "0");
     OnMessageStation(102, "station", "1");
     OnMessageAdd(101, "add", Ingredient.SerializeObject(egg));
-    Debug.Assert(redTeam.getPlayerForId(101).CurrentStation.Ingredients.Count == 1);
+    UnityEngine.Debug.Assert(redTeam.getPlayerForId(101).CurrentStation.Ingredients.Count == 1);
     OnMessageAdd(101, "add", Ingredient.SerializeObject(egg));
-    Debug.Assert(redTeam.getPlayerForId(101).CurrentStation.Ingredients.Count == 2);
-    Debug.Assert(redTeam.getPlayerForId(102).CurrentStation.Ingredients.Count == 0);
+    UnityEngine.Debug.Assert(redTeam.getPlayerForId(101).CurrentStation.Ingredients.Count == 2);
+    UnityEngine.Debug.Assert(redTeam.getPlayerForId(102).CurrentStation.Ingredients.Count == 0);
 
     /* Reset teams */
     initialiseTeams();
