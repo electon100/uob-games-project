@@ -25,7 +25,8 @@ public class WiimoteBehaviourRed : MonoBehaviour {
 
     public GameObject redProjectile;
     private Vector3 targetVector;
-    public float force;
+    public float forcex;
+    public float forcey;
     public float forcez;
     public bool redfired = false;
     private int ammoCount = 0;
@@ -102,7 +103,7 @@ public class WiimoteBehaviourRed : MonoBehaviour {
                         foodBullet.GetComponent<SphereCollider>().radius = 0.01f;
                         ScaleProjectile(foodBullet);
                         Debug.Log(foodBullet.transform.localScale);
-                        foodBullet.GetComponent<Rigidbody>().AddForce(force, targetVector.y * force, -targetVector.x * forcez);
+                        foodBullet.GetComponent<Rigidbody>().AddForce(forcex, -targetVector.y * forcey, -targetVector.x * forcez);
                         redfired = true;
                         ammoCount -= 1;
                     }

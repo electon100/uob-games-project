@@ -25,7 +25,8 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
 
     public GameObject blueProjectile;
     private Vector3 targetVector;
-    public float force;
+    public float forcex;
+    public float forcey;
     public float forcez;
     public bool bluefired = false;
     private int ammoCount = 0;
@@ -101,7 +102,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
                         foodBullet.GetComponent<Rigidbody>().useGravity = true;
                         foodBullet.GetComponent<SphereCollider>().radius = 0.01f;
                         ScaleProjectile(foodBullet);
-                        foodBullet.GetComponent<Rigidbody>().AddForce(-force, targetVector.y * force, targetVector.x * forcez);
+                        foodBullet.GetComponent<Rigidbody>().AddForce(-forcex, -targetVector.y * forcey, targetVector.x * forcez);
                         bluefired = true;
                         ammoCount -= 1;
                     }
