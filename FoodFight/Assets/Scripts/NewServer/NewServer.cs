@@ -394,10 +394,10 @@ public class NewServer : MonoBehaviour {
 
     Vector3 startPosition;
     if (relevantTeam.Colour == redTeamColour){
-      startPosition = new Vector3(-40, 2, 5 * (relevantTeam.Players.Count + 1));
+      startPosition = new Vector3(-35, 2, 5 * (relevantTeam.Players.Count + 1));
     }
     else if (relevantTeam.Colour == blueTeamColour){
-      startPosition = new Vector3(40, 2, 5 * (relevantTeam.Players.Count + 1));
+      startPosition = new Vector3(35, 2, 5 * (relevantTeam.Players.Count + 1));
     }
     else{
       startPosition = new Vector3(0, 0, 0);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour{
-    float speed = 10.0f;
+  float speed = 15.0f;
 	private Vector3 targetPosition;
 	private Vector3 targetRotation;
 	public Vector3 startPosition;
