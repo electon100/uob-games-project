@@ -97,8 +97,10 @@ public class Team {
   }
 
   public void removeAllOrders() {
-    for (int i = 0; i < Orders.Count; i++) {
-      removeOrder(Orders[i]);
+    int count = Orders.Count;
+
+    for (int i = 0; i < count; i++) {
+      removeOrder(Orders[0]);
     }
   }
 

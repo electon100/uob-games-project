@@ -493,7 +493,7 @@ public class NewServer : MonoBehaviour {
         ingredientToScore = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToScore.GetType());
         UnityEngine.Debug.Log("Ingredient to score: " + ingredientToScore.Name);
         relevantTeam.scoreRecipe(ingredientToScore);
-        
+
         /* Broadcast new scores to devices */
         BroadcastScores();
       } else {
@@ -609,6 +609,7 @@ public class NewServer : MonoBehaviour {
     // Check if any orders have expired and remove some points
     float blueDeltaScore = blueTeam.checkExpiredOrders();
     float redDeltaScore = redTeam.checkExpiredOrders();
+    
     if (redDeltaScore > 0 || blueDeltaScore > 0) {
       redTeam.Score -= (int) (redDeltaScore * negativeScoreMultiplier);
       blueTeam.Score -= (int) (blueDeltaScore * negativeScoreMultiplier);
