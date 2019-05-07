@@ -35,23 +35,27 @@ public class ProjectileBehaviour : MonoBehaviour {
             case '0':
                 // send 0
                 SetResultText("You hit the enemy cupboard");
-                server.OnStationHit(team, id+"");      
+                server.OnStationHit(team, id+"");
+                this.GetComponent<AudioSource>().Play(0);
                 break;
             case '1':
                 // send 1
                 SetResultText("You hit the enemy chopping board");
-                server.OnStationHit(team, id+"");   
+                server.OnStationHit(team, id+"");
+                this.GetComponent<AudioSource>().Play(0);
                 break;
             case '2':
                 // send 2
                 SetResultText("You hit the enemy frying station");
-                server.OnStationHit(team, id+"");   
+                server.OnStationHit(team, id+"");
+                this.GetComponent<AudioSource>().Play(0);
                 break;
             case '3':
                  // send 3
                  SetResultText("You hit the enemy plating station");
-                 server.OnStationHit(team, id+"");   
-                 break;
+                 server.OnStationHit(team, id+"");
+                this.GetComponent<AudioSource>().Play(0);
+                break;
             default:
                 // send miss
                 SetResultText("You missed the enemy stations");

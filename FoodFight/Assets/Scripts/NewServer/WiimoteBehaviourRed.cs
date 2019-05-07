@@ -97,6 +97,11 @@ public class WiimoteBehaviourRed : MonoBehaviour {
                         if(foodBullet.GetComponent<ProjectileBehaviour>() == null){
                             foodBullet.AddComponent<ProjectileBehaviour>();
                         }
+                        if (foodBullet.GetComponent<AudioSource>() == null)
+                        {
+                            foodBullet.AddComponent<AudioSource>();
+                            foodBullet.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Assets/Sounds/BlueDisabled.mp3");
+                        }
                         // GameObject foodBullet = Instantiate(redProjectile, redProjectile.transform.position, Quaternion.identity) as GameObject;
                         foodBullet.name = "RedProjectile";
                         foodBullet.GetComponent<Rigidbody>().useGravity = true;
