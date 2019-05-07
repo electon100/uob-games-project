@@ -243,7 +243,7 @@ public class PlateBehaviour : MonoBehaviour {
 
   private void updateButtonStates() {
 		setButtonInteractable(clearBtn, plateContents.Count > 0);
-		setButtonInteractable(serveBtn, plateContents.Count == 1);
+		setButtonInteractable(serveBtn, plateContents.Count == 1 && FoodData.Instance.isOrderable(plateContents[0]));
     setButtonInteractable(throwBtn, plateContents.Count == 1 && Client.gameState.Equals(ClientGameState.MainMode));
 	}
 
