@@ -15,7 +15,7 @@ public sealed class FoodData {
 	private static RecipeDefinitions allRecipes;
 	private static IngredientDefinitions allIngredients;
 
-	public string mode = " ";
+	public string mode = "french";
 
 	public RecipeDefinitions GetAllRecipes {
 		get {
@@ -57,17 +57,20 @@ public sealed class FoodData {
 		return desc != null && desc.cookable;
 	}
 
-	/* Gets a random recipe name*/
+	/* Determins whether a recipe is orderable */
+	public bool isOrderable(Ingredient ingredient) {
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		if (desc != null) return !string.Equals(desc.mode, "none");
+		return false;
+	}
+
+	/* Gets a random recipe name */
 	public string getRandomRecipeName() {
 		int numIngredients = allIngredients.ingredients.Length;
-		bool rightMode = false;
 		IngredientDescription recipe = allIngredients.ingredients[Random.Range(0, numIngredients - 1)];
 
-		if (mode == recipe.mode) rightMode = true;
-
-		while (!rightMode) {
+		while (!string.Equals(recipe.mode, mode)) {
 			recipe = allIngredients.ingredients[Random.Range(0, numIngredients - 1)];
-			if (mode == recipe.mode) rightMode = true;
 		}
 
 		return recipe.name;
@@ -108,7 +111,7 @@ public sealed class FoodData {
 				if (string.Equals(ingredient.Name, testIngredient.name)) return testIngredient;
 			}
 		}
-			return null;
+		return null;
 	}
 
 	public Ingredient TryAdvanceIngredient(Ingredient ingredient) {
@@ -121,7 +124,7 @@ public sealed class FoodData {
 		for (int r = 0; r < allRecipes.recipes.Length; r++) {
 			RecipeDescription recipe = allRecipes.recipes[r];
 			bool allIngredientsMatch = false;
-			
+
 			/* Check whether ingredients and recipe criteria list match in length */
 			if (recipe.ingredients.Length == ingredients.Count) {
 
