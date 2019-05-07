@@ -394,10 +394,10 @@ public class NewServer : MonoBehaviour {
 
     Vector3 startPosition;
     if (relevantTeam.Colour == redTeamColour){
-      startPosition = new Vector3(-35, 2, 5 * (relevantTeam.Players.Count + 1));
+      startPosition = new Vector3(-35, 2, 4 * (relevantTeam.Players.Count + 1));
     }
     else if (relevantTeam.Colour == blueTeamColour){
-      startPosition = new Vector3(35, 2, 5 * (relevantTeam.Players.Count + 1));
+      startPosition = new Vector3(35, 2, 4 * (relevantTeam.Players.Count + 1));
     }
     else{
       startPosition = new Vector3(0, 0, 0);
@@ -579,16 +579,16 @@ public class NewServer : MonoBehaviour {
     newPosition.y = 1.7f;
     switch(station.Id){
       case "0":
-        newPosition.z = -23f;
+        newPosition.z = 25f;
         break;
       case "1":
-        newPosition.z = -9f;
+        newPosition.z = 7f;
         break;
       case "2":
-        newPosition.z = 13f;
+        newPosition.z = -26f;
         break;
       case "3":
-        newPosition.z = 24f;
+        newPosition.z = -14f;
         break;
       default:
         newPosition.z = 0f;
