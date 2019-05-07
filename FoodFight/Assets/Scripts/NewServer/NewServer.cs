@@ -15,10 +15,11 @@ public class NewServer : MonoBehaviour {
 
   private int minimumPlayers = -1;
 
-  public GameObject bluePlayerPrefab, redPlayerPrefab;
+  public GameObject bluePlayerPrefab, redPlayerPrefab, redBannerObject, blueBannerObject;
   public Transform mainMenuCanvas, pickModeCanvas, pickPlayersCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
+  public RectTransform redBannerTransform, blueBannerTransform;
   public Text startScreenText, redEndGameText, blueEndGameText, redScoreText, blueScoreText;
-  public Image gameOverBackground, redStarSlider, blueStarSlider;
+  public Image gameOverBackground, redStarSlider, blueStarSlider, redStarBackground, blueStarBackground, blueBannerImage, redBannerImage;
 
   private NewGameTimer timer;
   private WiimoteBehaviourBlue wiiBlue;
@@ -41,6 +42,7 @@ public class NewServer : MonoBehaviour {
   private void Start () {
     initialiseTeams();
     initialiseNetwork();
+    initialiseUI();
 
     timer = GameObject.Find("GameTimer").GetComponent<NewGameTimer>();
     wiiBlue = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourBlue>();
@@ -68,8 +70,6 @@ public class NewServer : MonoBehaviour {
         listenForData();
         manageOrders();
         setTeamStars();
-        redScoreText.text = redTeam.Score.ToString();
-        blueScoreText.text = blueTeam.Score.ToString();
         break;
       case GameState.EndGame:
         break;
@@ -77,8 +77,85 @@ public class NewServer : MonoBehaviour {
   }
 
   private void setTeamStars(){
-    redStarSlider.rectTransform.sizeDelta = new Vector2(redTeam.Score, 82);
-    blueStarSlider.rectTransform.sizeDelta = new Vector2(blueTeam.Score, 82);
+    int bannerWidth;
+    int bannerHeight;
+
+    bannerWidth = (int) Screen.width / 4;
+    bannerHeight = (int) bannerWidth / 2;
+
+    redBannerTransform.sizeDelta = new Vector2(bannerWidth, bannerHeight);
+    blueBannerTransform.sizeDelta = new Vector2(bannerWidth, bannerHeight);
+
+    int xPosRed = (int) (-Screen.width / 2 + bannerWidth / 2 + bannerWidth / 12);
+    int xPosBlue = (int) (Screen.width / 2 - bannerWidth / 2 - bannerWidth / 12);
+
+    int yPos = (int) (Screen.height / 2 - bannerHeight / 2);
+
+    redBannerTransform.localPosition = new Vector2(xPosRed, yPos);
+    blueBannerTransform.localPosition = new Vector2(xPosBlue, yPos);
+
+    float maxScore = 500.0f;
+
+    int redSliderWidth = clampScore(redTeam.Score, 0, (int) maxScore);
+    int blueSliderWidth = clampScore(blueTeam.Score, 0, (int) maxScore);
+
+    redSliderWidth = (int) ((redSliderWidth / maxScore) * (bannerWidth * 0.95f));
+    blueSliderWidth = (int) ((blueSliderWidth / maxScore) * (bannerWidth * 0.95f));
+
+    redStarSlider.rectTransform.sizeDelta = new Vector2(redSliderWidth, (int) (bannerHeight / 2.5f));
+    blueStarSlider.rectTransform.sizeDelta = new Vector2(blueSliderWidth, (int) (bannerHeight / 2.5f));
+
+    redStarSlider.rectTransform.localPosition = new Vector2((int) (xPosRed - bannerWidth / 2 + 0.025f * bannerWidth), yPos);
+    blueStarSlider.rectTransform.localPosition = new Vector2((int) (xPosBlue + bannerWidth / 2 - 0.025f * bannerWidth), yPos);
+
+    redStarBackground.rectTransform.sizeDelta = new Vector2((int) (0.95f * bannerWidth), (int) (bannerHeight / 2.5f));
+    blueStarBackground.rectTransform.sizeDelta = new Vector2((int) (0.95f * bannerWidth), (int) (bannerHeight / 2.5f));
+
+    redStarBackground.rectTransform.localPosition = new Vector2((int) (xPosRed - bannerWidth / 2 + 0.025f * bannerWidth), yPos);
+    blueStarBackground.rectTransform.localPosition = new Vector2((int) (xPosBlue + bannerWidth / 2 - 0.025f * bannerWidth), yPos);
+
+    redScoreText.text = redTeam.Score.ToString();
+    blueScoreText.text = blueTeam.Score.ToString();
+
+    redScoreText.alignment = TextAnchor.MiddleCenter;
+    blueScoreText.alignment = TextAnchor.MiddleCenter;
+
+    redScoreText.rectTransform.sizeDelta = new Vector2(bannerWidth / 4, bannerHeight / 2);
+    blueScoreText.rectTransform.sizeDelta = new Vector2(bannerWidth / 4, bannerHeight / 2);
+
+    redScoreText.fontSize = bannerHeight;
+    blueScoreText.fontSize = bannerHeight;
+
+    redScoreText.rectTransform.localPosition = new Vector2((int) (xPosRed - bannerWidth / 2 + bannerWidth / 4.5f), (int) (yPos - bannerHeight / 3.2f));
+    blueScoreText.rectTransform.localPosition = new Vector2((int) (xPosBlue + bannerWidth / 2 - bannerWidth / 4.5f), (int) (yPos - bannerHeight / 3.2f));
+
+  }
+
+  private void initialiseUI() {
+    redBannerObject = new GameObject("redBannerObject", typeof(RectTransform));
+    redBannerObject.transform.SetParent(GameObject.Find("redBanner").transform);
+
+    // Banner Position
+    redBannerTransform = redBannerObject.GetComponent<RectTransform>();
+
+    // Banner Image
+		redBannerImage = redBannerObject.AddComponent<Image>();
+		redBannerImage.sprite = Resources.Load("star_banner_red", typeof(Sprite)) as Sprite;
+
+    blueBannerObject = new GameObject("blueBannerObject", typeof(RectTransform));
+    blueBannerObject.transform.SetParent(GameObject.Find("blueBanner").transform);
+
+    // Banner Position
+    blueBannerTransform = blueBannerObject.GetComponent<RectTransform>();
+
+    // Banner Image
+    blueBannerImage = blueBannerObject.AddComponent<Image>();
+    blueBannerImage.sprite = Resources.Load("star_banner_blue", typeof(Sprite)) as Sprite;
+
+    redTeam.Score = 100;
+    blueTeam.Score = 100;
+
+    setTeamStars();
   }
 
   private void initialiseTeams() {
@@ -537,6 +614,13 @@ public class NewServer : MonoBehaviour {
     // Update the position of the orders
     redTeam.updateOrders();
     blueTeam.updateOrders();
+  }
+
+  private int clampScore(int score, int min, int max) {
+    if (score > max) score = max;
+    if (score < min) score = min;
+
+    return score;
   }
 
   private void TickStations() {

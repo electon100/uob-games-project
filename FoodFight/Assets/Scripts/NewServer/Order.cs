@@ -115,7 +115,7 @@ public class Order {
 		}
 
 		// Font Sizes
-		int timerFontSize = (int) (height / 6);
+		int timerFontSize = (int) (height / 5);
 		int recipeFontSize = (int) (height / 4);
 
 		// Y Offset for text
