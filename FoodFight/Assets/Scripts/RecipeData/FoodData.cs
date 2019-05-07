@@ -6,11 +6,16 @@ using UnityEngine;
 
 public sealed class FoodData {
 
+	private readonly string ingredientsFileName = "test_ingredients"; /* The name of the JSON file containing ingredients */
+	private readonly string recipesFileName = "test_recipes"; /* The name of the JSON file containing recipes */
+
 	private static FoodData instance = null;
 	private static readonly object padlock = new object();
 
 	private static RecipeDefinitions allRecipes;
 	private static IngredientDefinitions allIngredients;
+
+	public string mode = "french";
 
 	public RecipeDefinitions GetAllRecipes {
 		get {
@@ -52,15 +57,20 @@ public sealed class FoodData {
 		return desc != null && desc.cookable;
 	}
 
-	/* Gets a random recipe name*/
+	/* Determins whether a recipe is orderable */
+	public bool isOrderable(Ingredient ingredient) {
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		if (desc != null) return !string.Equals(desc.mode, "none");
+		return false;
+	}
+
+	/* Gets a random recipe name */
 	public string getRandomRecipeName() {
 		int numIngredients = allIngredients.ingredients.Length;
-		bool orderable = false;
-		IngredientDescription recipe = allIngredients.ingredients[Random.Range(0, numIngredients - 1)];;
+		IngredientDescription recipe = allIngredients.ingredients[Random.Range(0, numIngredients - 1)];
 
-		while (!orderable) {
+		while (!string.Equals(recipe.mode, mode)) {
 			recipe = allIngredients.ingredients[Random.Range(0, numIngredients - 1)];
-			if (recipe.orderable) orderable = true;
 		}
 
 		return recipe.name;
@@ -101,7 +111,7 @@ public sealed class FoodData {
 				if (string.Equals(ingredient.Name, testIngredient.name)) return testIngredient;
 			}
 		}
-			return null;
+		return null;
 	}
 
 	public Ingredient TryAdvanceIngredient(Ingredient ingredient) {
@@ -145,11 +155,11 @@ public sealed class FoodData {
 
 	FoodData() {
 		/* Read recipe data from JSON file */
-		TextAsset recipeFile = (TextAsset) Resources.Load("recipe", typeof(TextAsset));
+		TextAsset recipeFile = (TextAsset) Resources.Load(recipesFileName, typeof(TextAsset));
 		string recipeJSON = recipeFile.ToString();
 
 		/* Read ingredient data from JSON file */
-		TextAsset ingredientFile = (TextAsset)Resources.Load("ingredients", typeof(TextAsset));
+		TextAsset ingredientFile = (TextAsset) Resources.Load(ingredientsFileName, typeof(TextAsset));
 		string ingredientJSON = ingredientFile.ToString();
 
 		/* Parse recipe JSON data */

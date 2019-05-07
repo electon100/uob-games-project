@@ -136,7 +136,7 @@
       ]
     },
     {
-      "name": "raw_omlette",
+      "name": "raw_omelette",
       "ingredients": [
         {
           "name": "eggs",
@@ -144,17 +144,17 @@
           "chopped": false
         },
         {
-          "name": "cheese",
+          "name": "diced_potato",
           "cooked": false,
           "chopped": false
         }
       ]
     },
     {
-      "name": "omlette",
+      "name": "omelette",
       "ingredients": [
         {
-          "name": "raw_omlette",
+          "name": "raw_omelette",
           "cooked": true,
           "chopped": false
         }
@@ -399,6 +399,11 @@
       "name": "fajita_mix",
       "ingredients": [
         {
+          "name": "chopped_onion",
+          "cooked": false,
+          "chopped": false
+        },
+        {
           "name": "diced_chicken",
           "cooked": false,
           "chopped": false
@@ -421,16 +426,6 @@
         {
           "name": "tortilla",
           "cooked": false,
-          "chopped": false
-        }
-      ]
-    },
-    {
-      "name": "fried_egg",
-      "ingredients": [
-        {
-          "name": "eggs",
-          "cooked": true,
           "chopped": false
         }
       ]

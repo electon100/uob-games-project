@@ -21,8 +21,7 @@ public class Player : MonoBehaviour {
   0  - Cupboard
   1  - Chopping
   2  - Frying
-  3  - Plating
-  4  - Fighting */
+  3  - Plating */
   public static string currentStation = "-1";
 
   public static Ingredient currentIngred;
@@ -31,20 +30,23 @@ public class Player : MonoBehaviour {
   public Material redBackground, blueBackground;
 	public Renderer background;
   public static Text errorText;
+  public Text myScoreText, otherScoreText;
 
   // NFC Stuff:
   private NFCHandler nfcHandler = new NFCHandler();
 
   void Start () {
     Screen.orientation = ScreenOrientation.Portrait;
-    networkClient = GameObject.Find("Client");
-    network = networkClient.GetComponent<Client>();
-    DontDestroyOnLoad(GameObject.Find("Player"));
-
-    if (network.getTeam().Equals("blue")) {
-      background.material = blueBackground;
-    } else if (network.getTeam().Equals("red")) {
-      background.material = redBackground;
+    if (Client.gameState.Equals(ClientGameState.MainMode)) {
+      networkClient = GameObject.Find("Client");
+      network = networkClient.GetComponent<Client>();
+      DontDestroyOnLoad(GameObject.Find("Player"));
+      Destroy(GameObject.Find("SimulatedPlayer"));
+      if (network.getTeam().Equals("blue")) {
+        background.material = blueBackground;
+      } else if (network.getTeam().Equals("red")) {
+        background.material = redBackground;
+      }
     }
   }
 
@@ -54,7 +56,6 @@ public class Player : MonoBehaviour {
     if (Input.GetKeyDown(KeyCode.T)) checkStation("1");
     if (Input.GetKeyDown(KeyCode.Y)) checkStation("2");
     if (Input.GetKeyDown(KeyCode.U)) checkStation("3");
-    if (Input.GetKeyDown(KeyCode.I)) checkStation("4");
     if (Input.GetKeyDown(KeyCode.E)) Debug.Log(Player.currentIngred.Model);
 
     /* Check for any NFC scans, forwarding to checkStation if present */
@@ -63,6 +64,8 @@ public class Player : MonoBehaviour {
       Handheld.Vibrate();
       checkStation(lastTag);
     }
+
+    UpdateScore();
   }
 
   /* Alerts the server about the ingredient placed at the current station */
@@ -108,7 +111,18 @@ public class Player : MonoBehaviour {
     network.SendMyMessage("score", message);
   }
 
-    /* Sends throw to the server after a player throws a dish */
+  /* Updates the score of the player after plating a dish */
+  public void UpdateScore() {
+    string currentScene = SceneManager.GetActiveScene().name;
+    if (currentScene == "PlayerMainScreen" && Client.gameState == ClientGameState.MainMode) { /* Scene where those two texts exist */
+      myScoreText = GameObject.Find("MyScore").GetComponent<Text>();
+      otherScoreText = GameObject.Find("OtherScore").GetComponent<Text>();
+      myScoreText.text = "My score " + "\n" + network.myScore.ToString();
+      otherScoreText.text = "Other score " + "\n" + network.otherScore.ToString();
+    }
+  }
+
+  /* Sends throw to the server after a player throws a dish */
   public void sendThrowToServer(Ingredient recipe) {
     string message = Ingredient.SerializeObject(recipe);
     network.SendMyMessage("throw", message);
@@ -117,6 +131,9 @@ public class Player : MonoBehaviour {
   /* Notifies the server when the player logs into a station */
   private void checkStation(string text) {
     if (currentStation != text) {
+
+      resetErrorText();
+      Client.resetDisabledTimer();
 
       // Tell the server which station you're logging in at.
       switch (text) {
@@ -133,10 +150,6 @@ public class Player : MonoBehaviour {
           network.SendMyMessage("station", text);
           break;
         case "3":
-          currentStation = text;
-          network.SendMyMessage("station", text);
-          break;
-        case "4":
           currentStation = text;
           network.SendMyMessage("station", text);
           break;
@@ -161,13 +174,36 @@ public class Player : MonoBehaviour {
     }
   }
 
-  public static void displayDisabledStation() {
+  public static void displayDisabledStation(float disabledTimer) {
+    TimeSpan t = TimeSpan.FromSeconds(disabledTimer);
     errorText = GameObject.Find("ErrorText").GetComponent<Text>();
-    errorText.text = "Oh no! This station has been disabled.";
+    errorText.text = "This station is disabled for another " + t.Seconds + " seconds.";
 	}
 
 	public static void displayOccupiedStation() {
     errorText = GameObject.Find("ErrorText").GetComponent<Text>();
     errorText.text = "Oh no! This station is occupied.";
 	}
+
+  public static void resetErrorText() {
+    errorText = GameObject.Find("ErrorText").GetComponent<Text>();
+    errorText.text = "";
+  }
+
+  /* Ignore the code below, I forgot to get nfc-s so had to create buttons for stations - xoxo, Sisi */
+  public void goToCupboard() {
+    checkStation("0");
+  }
+
+  public void goToChopping() {
+    checkStation("1");
+  }
+
+  public void goToFrying() {
+    checkStation("2");
+  }
+
+  public void goToPlating() {
+    checkStation("3");
+  }
 }

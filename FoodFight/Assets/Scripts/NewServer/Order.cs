@@ -10,6 +10,7 @@ public class Order {
 	public Ingredient Recipe { get; set; }
 	public GameObject ParentGameObject { get; set; }
 	public float Timer { get; set; }
+	public string Team { get; set; }
 
 	private Canvas canvas;
 	private Transform orderPanel;
@@ -22,15 +23,17 @@ public class Order {
 	private Text timerText;
 	private RectTransform timerTransform;
 
-	private GameObject recipePrefabObject;
-	private RectTransform recipePrefabTransform;
+	private GameObject backgroundObject;
+	private Image backgroundImage;
+	private RectTransform backgroundTransform;
 
-	public Order(string ID, Ingredient Recipe, GameObject ParentGameObject, float Timer, Transform orderPanel) {
+	public Order(string ID, Ingredient Recipe, GameObject ParentGameObject, float Timer, Transform orderPanel, string Team) {
 		this.ID = ID;
 		this.Recipe = Recipe;
 		this.ParentGameObject = ParentGameObject;
 		this.Timer = Timer;
 		this.orderPanel = orderPanel;
+		this.Team = Team;
 
 		ParentGameObject.AddComponent<Canvas>();
 		ParentGameObject.transform.SetParent(orderPanel.transform);
@@ -43,6 +46,18 @@ public class Order {
 
     ParentGameObject.AddComponent<CanvasScaler>();
     ParentGameObject.AddComponent<GraphicRaycaster>();
+
+		// Background Parent Object
+		backgroundObject = new GameObject("backgroundObject", typeof(RectTransform));
+		backgroundObject.transform.SetParent(canvas.transform);
+
+		// Background position
+		backgroundTransform = backgroundObject.GetComponent<RectTransform>();
+		backgroundTransform.sizeDelta = new Vector2(250, 200);
+
+		// Background Image
+		backgroundImage = backgroundObject.AddComponent<Image>();
+		backgroundImage.sprite = Resources.Load("Ripped Note", typeof(Sprite)) as Sprite;
 
     // Timer Text Parent Object
     timerTextObject = new GameObject("timerText", typeof(RectTransform));
@@ -58,7 +73,7 @@ public class Order {
 		timerText.fontSize = 40;
 		timerText.color = Color.black;
 		timerText.font = Resources.Load("Acids!", typeof(Font)) as Font;//Assets/Resources/Acids!.otf
-		timerText.alignment = TextAnchor.MiddleCenter;
+		timerText.alignment = TextAnchor.UpperCenter;
 
 		// Recipe Name Parent Object
 		recipeNameTextObject = new GameObject("recipeNameText", typeof(RectTransform));
@@ -66,31 +81,71 @@ public class Order {
 
 		// Recipe Name position
 		recipeNameTransform = recipeNameTextObject.GetComponent<RectTransform>();
-		recipeNameTransform.sizeDelta = new Vector2(400, 200);
 
 		// Recipe Name Text
 		recipeNameText = recipeNameTextObject.AddComponent<Text>();
-		recipeNameText.fontSize = 70;
+		recipeNameText.fontSize = 60;
 		recipeNameText.color = Color.black;
-		recipeNameText.font = Resources.Load("Acids!", typeof(Font)) as Font;//Assets/Resources/Acids!.otf
+		recipeNameText.font = Resources.Load("Acids!", typeof(Font)) as Font;
 		recipeNameText.alignment = TextAnchor.MiddleCenter;
 		recipeNameText.text = Recipe.ToString();
-		recipeNameText.horizontalOverflow = HorizontalWrapMode.Overflow;
-
-		/*GameObject recipeModel = (GameObject) ((Resources.Load(Recipe.Model) == null) ? Resources.Load("chipsPrefab") : Resources.Load(Recipe.Model));
-		recipePrefabObject = GameObject.Instantiate(recipeModel) as GameObject;
-		recipePrefabObject.transform.SetParent(canvas.transform);
-
-		// recipePrefab position
-		recipePrefabTransform = recipePrefabObject.AddComponent<RectTransform>();
-		recipePrefabTransform.sizeDelta = new Vector2(200, 200);
-		recipePrefabTransform.localScale = new Vector3(200.0F, 200.0F, 200.0F);*/
+		recipeNameText.horizontalOverflow = HorizontalWrapMode.Wrap;
 	}
 
-	public void updateCanvas(Vector3 pos) {
-		timerTransform.localPosition = pos;
-		recipeNameTransform.localPosition = pos + new Vector3(0,-50,0);
-		//recipePrefabTransform.localPosition = pos + new Vector3(-100,-25,-200);
+	public void updateCanvas(int index, int screenWidth, int screenHeight) {
+		ParentGameObject.name = Team + Recipe.Name + index + "Object";
+
+		// 4 gap + 2 small orders + 1 big order = screenWidth / 2
+		int bigWidth = (screenWidth / 2) / 3;
+		int smallWidth = (screenWidth / 2) / 4;
+		int gapWidth = ((screenWidth / 2) - bigWidth - smallWidth * 2) / 4;
+
+		int bigHeight = (screenHeight / 2) / 2;
+		int smallHeight = (screenHeight / 2) / 3;
+
+		int width;
+		int height;
+
+		if (index == 0) {
+			height = bigHeight;
+			width = bigWidth;
+		} else {
+			height = smallHeight;
+			width = smallWidth;
+		}
+
+		// Font Sizes
+		int timerFontSize = (int) (height / 5);
+		int recipeFontSize = (int) (height / 4);
+
+		// Y Offset for text
+		int timerOffset = -timerFontSize;
+		int recipeOffset = (height / 2) + timerOffset - (height / 3) - (int) (recipeFontSize / 2);
+
+		backgroundTransform.sizeDelta = new Vector2(width, height);
+
+		timerTransform.sizeDelta = new Vector2(width, height);
+		timerText.fontSize = timerFontSize;
+
+		recipeNameTransform.sizeDelta = new Vector2(width, height);
+		recipeNameText.fontSize = recipeFontSize;
+
+		int posX;
+		int posY = -(screenHeight / 2) + (height / 2) - (height / 8);
+
+		int side = Team.Equals("red") ? -1 : 1;
+
+		if (index == 0) {
+			posX = side * (gapWidth + width / 2);
+		} else {
+			posX = side * ((1 + index) * gapWidth + bigWidth + (index - 1) * smallWidth + smallWidth / 2);
+		}
+
+		Vector3 position = new Vector3(posX, posY, 0);
+
+		backgroundTransform.localPosition = position;
+		timerTransform.localPosition = position + new Vector3(0, timerOffset, 0);
+		recipeNameTransform.localPosition = position + new Vector3(0, recipeOffset, 0);
 
 		if (!timerExpired()) {
 			Timer -= Time.deltaTime;
@@ -102,7 +157,8 @@ public class Order {
 
 	private void displayTime() {
 		TimeSpan t = TimeSpan.FromSeconds(Timer);
-		timerText.text = string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
+		timerText.text = string.Format("{0:0}:{1:D2}", t.Minutes, t.Seconds);
+		if (Timer <= 30) setTextRed();
 	}
 
 	public bool timerExpired() {

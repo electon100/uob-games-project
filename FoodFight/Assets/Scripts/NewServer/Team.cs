@@ -66,17 +66,16 @@ public class Team {
   public bool addOrder(Transform mainGameCanvas) {
     string recipeName = FoodData.Instance.getRandomRecipeName();
     Ingredient recipe = new Ingredient(recipeName, recipeName + "Prefab");
-    string id = recipeName + Orders.Count + Name + "Object";
+    string id = Name + recipeName + Orders.Count + "Object";
 
-    Orders.Add(new Order(id, recipe, new GameObject(id), 120, mainGameCanvas));
+    Orders.Add(new Order(id, recipe, new GameObject(id), 150, mainGameCanvas, Name));
 
     return true;
   }
 
   public void updateOrders() {
     for (int i = 0; i < Orders.Count; i++) {
-      Orders[i].updateCanvas(new Vector3(((Name.Equals("red")) ? -1 : 1 )*175, -(i*120), 0));
-      if (Orders[i].Timer <= 30) Orders[i].setTextRed();
+      Orders[i].updateCanvas(i, Screen.width, Screen.height);
     }
   }
 
@@ -98,8 +97,10 @@ public class Team {
   }
 
   public void removeAllOrders() {
-    for (int i = 0; i < Orders.Count; i++) {
-      removeOrder(Orders[i]);
+    int count = Orders.Count;
+
+    for (int i = 0; i < count; i++) {
+      removeOrder(Orders[0]);
     }
   }
 
@@ -112,6 +113,9 @@ public class Team {
         break;
       }
     }
+
+    if (Score > 10000) Score = 10000;
+    if (Score < 0) Score = 0;
   }
 
   public override string ToString() {

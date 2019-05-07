@@ -1,0 +1,379 @@
+{
+  "recipes": [
+    {
+      "name": "chips",
+      "ingredients": [
+        {
+          "name": "diced_potato",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "diced_potato",
+      "ingredients": [
+        {
+          "name": "potato",
+          "cooked": false,
+          "chopped": true
+        }
+      ]
+    },
+    {
+      "name": "diced_chicken",
+      "ingredients": [
+        {
+          "name": "chicken",
+          "cooked": false,
+          "chopped": true
+        }
+      ]
+    },
+    {
+      "name": "chopped_mixed_vegetables",
+      "ingredients": [
+        {
+          "name": "mixed_vegetables",
+          "cooked": false,
+          "chopped": true
+        }
+      ]
+    },
+    {
+      "name": "chopped_onion",
+      "ingredients": [
+        {
+          "name": "onion",
+          "cooked": false,
+          "chopped": true
+        }
+      ]
+    },
+    {
+      "name": "steak",
+      "ingredients": [
+        {
+          "name": "raw_steak",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "steak_hache",
+      "ingredients": [
+        {
+          "name": "steak",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "chips",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "raw_omelette",
+      "ingredients": [
+        {
+          "name": "eggs",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "chopped_mixed_vegetables",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "omelette",
+      "ingredients": [
+        {
+          "name": "raw_omelette",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "crepe_mix",
+      "ingredients": [
+        {
+          "name": "flour",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "eggs",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "milk",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "crepe",
+      "ingredients": [
+        {
+          "name": "crepe_mix",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "ratatouille_mix",
+      "ingredients": [
+        {
+          "name": "chopped_mixed_vegetables",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "chopped_onion",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "cooked_ratatouille_mix",
+      "ingredients": [
+        {
+          "name": "ratatouille_mix",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "ratatouille",
+      "ingredients": [
+        {
+          "name": "cooked_ratatouille_mix",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "cheese",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "paella_mix",
+      "ingredients": [
+        {
+          "name": "rice",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "shrimp",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "peas",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "paella",
+      "ingredients": [
+        {
+          "name": "paella_mix",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "quiche_mix",
+      "ingredients": [
+        {
+          "name": "cheese",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "flour",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "chopped_mixed_vegetables",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "quiche",
+      "ingredients": [
+        {
+          "name": "quiche_mix",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "raw_patatas_bravas",
+      "ingredients": [
+        {
+          "name": "diced_potato",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "chopped_onion",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "patatas_bravas",
+      "ingredients": [
+        {
+          "name": "raw_patatas_bravas",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "raw_spanish_omelette",
+      "ingredients": [
+        {
+          "name": "eggs",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "diced_potato",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "spanish_omelette",
+      "ingredients": [
+        {
+          "name": "raw_spanish_omelette",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "calamari_mix",
+      "ingredients": [
+        {
+          "name": "raw_calamari",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "flour",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "calamari",
+      "ingredients": [
+        {
+          "name": "calamari_mix",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "raw_quesadilla",
+      "ingredients": [
+        {
+          "name": "tortillas",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "diced_chicken",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "cheese",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "quesadilla",
+      "ingredients": [
+        {
+          "name": "raw_quesadilla",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "raw_churros",
+      "ingredients": [
+        {
+          "name": "flour",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "oil",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "churros_mix",
+      "ingredients": [
+        {
+          "name": "raw_churros",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
+    },
+    {
+      "name": "churros",
+      "ingredients": [
+        {
+          "name": "churros_mix",
+          "cooked": false,
+          "chopped": false
+        },
+        {
+          "name": "chocolate_sauce",
+          "cooked": false,
+          "chopped": false
+        }
+      ]
+    }
+  ]
+}

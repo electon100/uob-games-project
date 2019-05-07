@@ -22,8 +22,8 @@ public class WiimoteBehaviour : MonoBehaviour {
     void Start () {
         redIsSet = false;
         blueIsSet = false;
-        redTime = 5.0f;
-        blueTime = 5.0f;
+        redTime = 10.0f;
+        blueTime = 10.0f;
         displayTime();
     }
 

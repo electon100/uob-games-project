@@ -7,14 +7,18 @@ using System.Text;
 
 public class Frying : MonoBehaviour {
 
-	public Button goBackBtn, putBtn, pickBtn, clearBtn, combineBtn;
+	/* Scene stuff */
+	public Button goBackBtn, clearBtn;
 	public Text test_text;
+	public GameObject confirmationCanvas;
 	public Material successMaterial;
 	public Material neutralMaterial;
 	public Material issueMaterial;
 	public Renderer background;
 	public Player player;
 	public AudioClip fryingSound, successSound;
+	public Text infoText;
+	public GameObject infoPanel, fryingImage, tapImage, fadeBackground, tapAnimation, backArrow;
 
 	/* Text representation of ingredients on Screen */
   public Text ingredientListText;
@@ -59,11 +63,16 @@ public class Frying : MonoBehaviour {
 
 		background.material = neutralMaterial;
 
-		List<Ingredient> ingredientsFromStation = Player.ingredientsFromStation;
-
 		clearPan();
 
-		player = GameObject.Find("Player").GetComponent<Player>();
+		List<Ingredient> ingredientsFromStation;
+		if (Client.gameState.Equals(ClientGameState.MainMode)) {
+			player = GameObject.Find("Player").GetComponent<Player>();
+			ingredientsFromStation = Player.ingredientsFromStation;
+			tapAnimation.SetActive(false);
+		} else {
+			ingredientsFromStation = SimulatedPlayer.ingredientsInFrying;
+		}
 
 		foreach (Ingredient ingredient in ingredientsFromStation) {
 			addIngredientToPan(ingredient);
@@ -71,12 +80,13 @@ public class Frying : MonoBehaviour {
 	}
 
 	void Update () {
-		/* Ensure correct buttons are interactable */
+
 		updateButtonStates();
+		updateTextList();
 		shakeIfNeeded();
+		checkForPanTap();
 
 		if (ingredientCookedStationComplete) {
-			test_text.text = "Ingredient cooked!";
 			background.material = successMaterial;
 		} else {
 			if (panContents.Count == 1) {
@@ -100,19 +110,27 @@ public class Frying : MonoBehaviour {
 					if (isValidRecipe(newIngred)) {
 						setPanContents(newIngred);
 						source.PlayOneShot(successSound);
+						test_text.text = "Ingredient cooked!";
+						background.material = successMaterial;
 						ingredientCookedStationComplete = true;
+						if (Client.gameState.Equals(ClientGameState.FryingTutorial)) {
+							tapAnimation.SetActive(true);
+						}
 					}
 				}
 
 			} else {
+				/* Try and combine the ingredients */
+				Ingredient combinationAttempt = getWorkingRecipe();
+
+				/* If the combined result is a valid recipe (not mush) */
+				if (isValidRecipe(combinationAttempt)) {
+					/* Set the pan contents to the new combined recipe */
+					setPanContents(combinationAttempt);
+				}
+
 				/* TODO: What happens when pan is empty or too full */
 				if (panContents.Count > maxPanContents) Debug.Log("Pan got too full!");
-			}
-		}
-
-		if (Input.GetKeyDown(KeyCode.E)) {
-			foreach (Ingredient ingredient in panContents) {
-				Debug.Log(ingredient.Name);
 			}
 		}
 	}
@@ -136,15 +154,29 @@ public class Frying : MonoBehaviour {
 		}
 	}
 
+	private Ingredient getWorkingRecipe() {
+    return FoodData.Instance.TryCombineIngredients(panContents);
+  }
+
 	private bool isValidRecipe(Ingredient recipe) {
 		return !string.Equals(recipe.Name, "mush");
 	}
 
 	private void setPanContents(Ingredient ingredient) {
-		clearStation();
+
+		if (Client.gameState.Equals(ClientGameState.MainMode)) {
+			clearStation();
+			player.notifyServerAboutIngredientPlaced(ingredient);
+		} else {
+			/* Clear the station */
+			clearPan();
+			test_text.text = "Add ingredient to start";
+			background.material = neutralMaterial;
+			SimulatedPlayer.ingredientsInFrying.Clear();
+			SimulatedPlayer.ingredientsInFrying.Add(ingredient);
+		}
 
 		addIngredientToPan(ingredient);
-		player.notifyServerAboutIngredientPlaced(ingredient);
 	}
 
 	/* Manages the sinusoidal movement of the pan */
@@ -168,7 +200,7 @@ public class Frying : MonoBehaviour {
 
 	public void placeHeldIngredientInPan() {
 		/* Add ingredient */
-		if (Player.isHoldingIngredient()) {
+		if (Player.isHoldingIngredient()) { /* Main mode */
 			if (panContents.Count < maxPanContents) {
 				addIngredientToPan(Player.currentIngred);
 
@@ -176,6 +208,18 @@ public class Frying : MonoBehaviour {
 				player.notifyServerAboutIngredientPlaced(Player.currentIngred);
 
 				Player.removeCurrentIngredient();
+			} else {
+				test_text.text = "Pan is full";
+				background.material = issueMaterial;
+			}
+		} else if (SimulatedPlayer.isHoldingIngredient()) { /* Tutorial mode */
+			if (panContents.Count < maxPanContents) {
+				tapAnimation.SetActive(false);
+				infoPanel.SetActive(true);
+				fadeBackground.SetActive(true);
+				addIngredientToPan(SimulatedPlayer.currentIngred);
+				SimulatedPlayer.ingredientsInFrying.Add(SimulatedPlayer.currentIngred);
+				SimulatedPlayer.removeCurrentIngredient();
 			} else {
 				test_text.text = "Pan is full";
 				background.material = issueMaterial;
@@ -213,13 +257,26 @@ public class Frying : MonoBehaviour {
 
 	public void pickUpIngredient() {
 		if (panContents.Count == 1) {
-			/* Set the players current ingredient to the pan contents */
-			foreach (Ingredient ingredient in panContents) {
-				Player.currentIngred = ingredient;
+			if (Client.gameState.Equals(ClientGameState.MainMode)) { /* Main mode */
+				/* Set the players current ingredient to the pan contents */
+				foreach (Ingredient ingredient in panContents) {
+					Player.currentIngred = ingredient;
+				}
+				/* Clear the station */
+				clearStation();
+			} else { /* Tutorial mode */
+				/* Set the players current ingredient to the pan contents */
+				foreach (Ingredient ingredient in panContents) {
+					SimulatedPlayer.currentIngred = ingredient;
+					SimulatedPlayer.ingredientsInFrying.Clear();
+				}
+				/* Clear the station */
+				clearPan();
+				test_text.text = "Add ingredient to start";
+				background.material = neutralMaterial;
+				tapAnimation.SetActive(false);
+				if (ingredientCookedStationComplete) backArrow.SetActive(true); /* Guide the user to go back */
 			}
-
-			/* Clear the station */
-			clearStation();
 		} else {
 			/* What to do if there are more than (or fewer than) 1 ingredients in the pan*/
 			test_text.text = "Unable to pick up";
@@ -233,10 +290,12 @@ public class Frying : MonoBehaviour {
 		Quaternion modelRotation = modelTransform.rotation;
 		Vector3 modelPosition = modelTransform.position + new Vector3(Random.Range(-2, 2), Random.Range(-2, 2), 0);
 		GameObject inst = Instantiate(model, modelPosition, modelRotation);
+		Debug.Log(ingredient.Model);
 		panContents.Add(ingredient);
+		Debug.Log(panContents[0]);
 		panContentsObjects.Add(inst);
-		if (panContents.Count > 1) {
-			test_text.text = "Combine ingredients to cook";
+		if (!FoodData.Instance.isCookable(ingredient) || (panContents.Count > 1)) {
+			test_text.text = "Awaiting valid ingredients";
 			background.material = issueMaterial;
 		} else {
 			test_text.text = "Shake phone to cook";
@@ -244,19 +303,46 @@ public class Frying : MonoBehaviour {
 		}
 	}
 
-	void updateTextList() {
-    ingredientListText.text = "Current Ingredients:\n";
+	private void checkForPanTap() {
+		/* https://stackoverflow.com/a/38566276 */
+		bool isDesktop = Input.GetMouseButtonDown(0);
+		bool isMobile = (Input.touchCount > 0) && (Input.GetTouch(0).phase == TouchPhase.Began);
+		if (isDesktop || isMobile) {
+			Ray raycast = (isDesktop) ? Camera.main.ScreenPointToRay(Input.mousePosition) :
+																	Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+			RaycastHit raycastHit;
+			if (Physics.Raycast(raycast, out raycastHit)) {
+				if (!raycastHit.collider.name.Equals("Background") && !(infoPanel.active) && !(confirmationCanvas.active)) { // <-- Requires ingredient prefabs to have colliders (approx) within pan bounds
+				// if (raycastHit.collider.name.Equals("Pan")) { // <-- Requires ingredient prefabs not to have colliders!
+					/* Pan was tapped! */
+					if (canPlaceHeldIngredient()) {
+						placeHeldIngredientInPan();
+					} else if (panContents.Count == 1) {
+						pickUpIngredient();
+						test_text.text = "Picked up ingredient!";
+					}
+				}
+			}
+		}
+	}
 
-    foreach(Ingredient ingredient in panContents) {
-      ingredientListText.text += ingredient.ToString() + "\n";
-    }
+	void updateTextList() {
+		if (panContents.Count > 0) {
+			ingredientListText.text = "Current Ingredients:\n";
+
+			foreach(Ingredient ingredient in panContents) {
+				ingredientListText.text += ingredient.ToString() + "\n";
+			}
+		} else ingredientListText.text = "";
   }
 
+	private bool canPlaceHeldIngredient() {
+		return !ingredientCookedStationComplete && (Player.isHoldingIngredient() || SimulatedPlayer.isHoldingIngredient())
+																						&& panContents.Count < maxPanContents;
+	}
+
 	private void updateButtonStates() {
-		setButtonInteractable(putBtn, Player.isHoldingIngredient() && panContents.Count < maxPanContents);
 		setButtonInteractable(clearBtn, panContents.Count > 0);
-		setButtonInteractable(pickBtn, panContents.Count == 1);
-		setButtonInteractable(combineBtn, panContents.Count > 1);
 	}
 
 	private void setButtonInteractable(Button btn, bool interactable) {
@@ -274,7 +360,38 @@ public class Frying : MonoBehaviour {
 		/* TODO: Need to notify server of local updates to ingredients in pan before leaving */
 		/* Notify server that player has left the station */
 		Handheld.Vibrate();
-		player.notifyAboutStationLeft();
-		SceneManager.LoadScene("PlayerMainScreen");
+		if (Client.gameState.Equals(ClientGameState.MainMode)) {
+			player.notifyAboutStationLeft();
+			SceneManager.LoadScene("PlayerMainScreen");
+		} else { /* If in tutorial mode, advance to the next tutorial */
+			if (panContents.Count != 0) {
+				infoPanel.SetActive(true);
+				fadeBackground.SetActive(true);
+				fryingImage.SetActive(false);
+				tapImage.SetActive(true);
+				infoText.text = "Oops! \n You forgot to pick up \n the ingredient!";
+			} else if (ingredientCookedStationComplete) {
+				Client.gameState = ClientGameState.PlatingTutorial;
+				SceneManager.LoadScene("PlayerMainScreen");
+			}
+		}
+	}
+
+	public void confirmClear() {
+		confirmationCanvas.SetActive(true);
+	}
+
+	public void confirmNo() {
+		confirmationCanvas.SetActive(false);
+	}
+
+	public void confirmYes() {
+		confirmationCanvas.SetActive(false);
+		clearStation();
+	}
+
+	public void GotIt() {
+		infoPanel.SetActive(false);
+		fadeBackground.SetActive(false);
 	}
 }

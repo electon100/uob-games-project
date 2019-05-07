@@ -25,7 +25,8 @@ public class WiimoteBehaviourRed : MonoBehaviour {
 
     public GameObject redProjectile;
     private Vector3 targetVector;
-    public float force;
+    public float forcex;
+    public float forcey;
     public float forcez;
     public bool redfired = false;
     private int ammoCount = 0;
@@ -36,7 +37,7 @@ public class WiimoteBehaviourRed : MonoBehaviour {
         redIsSet = false;
         aPressed = false;
         firstTime = false;
-        redTime = 5.0f;
+        redTime = 10.0f;
         DisplayTime();
     }
 
@@ -60,13 +61,14 @@ public class WiimoteBehaviourRed : MonoBehaviour {
             {
                 CollectWiimoteData(wiimoteRed);
 
-                if (!wiimoteRed.Button.b && redTime > 0)
+                if (!wiimoteRed.Button.a && redTime > 0)
                 {
                     redTime -= Time.deltaTime;
                     UpdateCrosshairPosition(wiimoteRed, redCrosshair);
                     if (redTime <= 0)
                     {
                         roundOver("Too late! Times up");
+                        ammoCount = 0;
                     }
                 }
 
@@ -101,7 +103,7 @@ public class WiimoteBehaviourRed : MonoBehaviour {
                         foodBullet.GetComponent<SphereCollider>().radius = 0.01f;
                         ScaleProjectile(foodBullet);
                         Debug.Log(foodBullet.transform.localScale);
-                        foodBullet.GetComponent<Rigidbody>().AddForce(force, targetVector.y * force, -targetVector.x * forcez);
+                        foodBullet.GetComponent<Rigidbody>().AddForce(forcex, -targetVector.y * forcey, -targetVector.x * forcez);
                         redfired = true;
                         ammoCount -= 1;
                     }
@@ -193,7 +195,7 @@ public class WiimoteBehaviourRed : MonoBehaviour {
     public void reset(Ingredient ingredient)
     {
         firstTime = true;
-        redTime = 5.0f;
+        redTime = 10.0f;
         gamestarted = false;
         aPressed = false;
         redTimeOverPanel.gameObject.SetActive(false);

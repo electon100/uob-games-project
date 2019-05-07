@@ -7,11 +7,12 @@ using System.Text;
 
 public class PlateBehaviour : MonoBehaviour {
 
-  public Button serveBtn, putBtn, pickBtn, clearBtn, goBackBtn;
+  public Button serveBtn, throwBtn, clearBtn, goBackBtn;
   public Player player;
+  public GameObject confirmationCanvas, tapImage, backArrow, infoPanel, fadeBackground;
 
   /* Text representation of ingredients on Screen */
-  public Text ingredientListText;
+  public Text ingredientListText, statusText;
 
   /* Ingredient stuff */
 	private readonly int maxPlateContents = 3;
@@ -21,38 +22,57 @@ public class PlateBehaviour : MonoBehaviour {
   void Start () {
 
     Screen.orientation = ScreenOrientation.Portrait;
+    statusText.enabled = false;
 
     clearPlate();
 
-    player = GameObject.Find("Player").GetComponent<Player>();
+    if (Client.gameState.Equals(ClientGameState.MainMode)) {
+      player = GameObject.Find("Player").GetComponent<Player>();
 
-    foreach (Ingredient ingredient in Player.ingredientsFromStation) {
-      addIngredientToPlate(ingredient);
+      foreach (Ingredient ingredient in Player.ingredientsFromStation) {
+        addIngredientToPlate(ingredient);
+      }
+      tapImage.SetActive(false);
+    } else {
+      infoPanel.SetActive(true);
+      fadeBackground.SetActive(true);
+      tapImage.SetActive(true);
+      /* Adding a steak to plating to explain it's a team game */
+      Ingredient steak = new Ingredient("steak", "steakPrefab");
+      SimulatedPlayer.ingredientsInPlating.Add(steak);
+      foreach (Ingredient ingredient in SimulatedPlayer.ingredientsInPlating) {
+        addIngredientToPlate(ingredient);
+      }
     }
-
   }
 
   void Update() {
+    updateTextList();
+    updateButtonStates();
+    checkForPlateTap();
+
     /* Try and combine the ingredients */
     Ingredient combinationAttempt = getWorkingRecipe();
 
     /* If the combined result is a valid recipe (not mush) */
     if (isValidRecipe(combinationAttempt)) {
       /* Set the pan contents to the new combined recipe */
-      clearStation();
-      addIngredientToPlate(combinationAttempt);
-      player.notifyServerAboutIngredientPlaced(combinationAttempt);
+      if (Client.gameState.Equals(ClientGameState.MainMode)) {
+        clearStation();
+        addIngredientToPlate(combinationAttempt);
+        player.notifyServerAboutIngredientPlaced(combinationAttempt);
+      } else {
+        clearPlate();
+        addIngredientToPlate(combinationAttempt);
+      }
     }
-
-    updateTextList();
-    updateButtonStates();
   }
 
   private void addIngredientToPlate(Ingredient ingredient) {
     GameObject ingred = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
     Transform ingredTransform = ingred.GetComponentsInChildren<Transform>(true)[0];
     Quaternion ingredRotation = ingredTransform.rotation;
-    Vector3 ingredPosition = ingredTransform.position + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0);
+    Vector3 ingredPosition = ingredTransform.position;
     GameObject inst = Instantiate(ingred, ingredPosition, ingredRotation);
 
     plateContents.Add(ingredient);
@@ -81,6 +101,20 @@ public class PlateBehaviour : MonoBehaviour {
         player.notifyServerAboutIngredientPlaced(Player.currentIngred);
 
         Player.removeCurrentIngredient();
+			} else {
+        /* TODO: What happens plate is full */
+			}
+    } else if (SimulatedPlayer.isHoldingIngredient()) {
+      if (plateContents.Count < maxPlateContents) {
+        tapImage.SetActive(false);
+        addIngredientToPlate(SimulatedPlayer.currentIngred);
+
+        /* Notify server that player has placed ingredient */
+        SimulatedPlayer.ingredientsInPlating.Add(SimulatedPlayer.currentIngred);
+        SimulatedPlayer.removeCurrentIngredient();
+
+        /* Instruct the player to serve the food */
+        InstructToServe();
 			} else {
         /* TODO: What happens plate is full */
 			}
@@ -114,8 +148,35 @@ public class PlateBehaviour : MonoBehaviour {
       }
 
       if (isValidRecipe(recipe)) {
-        player.sendScoreToServer(recipe);
-        clearStation();
+        if (Client.gameState.Equals(ClientGameState.MainMode)){
+          player.sendScoreToServer(recipe);
+          clearStation();
+        } else {
+          Client.gameState = ClientGameState.EndTutorial;
+          backArrow.SetActive(true);
+          clearPlate();
+        }
+      }
+    }
+  }
+
+  public void throwFood() {
+    if (plateContents.Count == 1) {
+      Ingredient recipe = getWorkingRecipe();
+
+      foreach (Ingredient ingredient in plateContents) {
+        recipe = ingredient;
+      }
+
+      if (isValidRecipe(recipe)) {
+        if (Client.gameState.Equals(ClientGameState.MainMode)){
+          player.sendThrowToServer(recipe);
+          clearStation();
+        } else {
+          Client.gameState = ClientGameState.EndTutorial;
+          clearPlate();
+        }
+        statusText.enabled = true;
       }
     }
   }
@@ -123,32 +184,95 @@ public class PlateBehaviour : MonoBehaviour {
 	public void pickUpIngredient() {
 		if (plateContents.Count == 1) {
 			/* Set the players current ingredient to the pan contents */
-			foreach (Ingredient ingredient in plateContents) {
-				Player.currentIngred = ingredient;
-			}
+      if (Client.gameState.Equals(ClientGameState.MainMode)) {
+        foreach (Ingredient ingredient in plateContents) {
+          Player.currentIngred = ingredient;
+        }
+        /* Clear the station */
+        clearStation();
+      } else {
+        foreach (Ingredient ingredient in plateContents) {
+          SimulatedPlayer.currentIngred = ingredient;
+        }
+        /* Clear the station */
+        clearPlate();
+        SimulatedPlayer.ingredientsInPlating.Clear();
+      }
 
-			/* Clear the station */
-			clearStation();
 		} else {
 			/* What to do if there are more than (or fewer than) 1 ingredients in the plate*/
 		}
 	}
 
+  private void checkForPlateTap() {
+		/* https://stackoverflow.com/a/38566276 */
+		bool isDesktop = Input.GetMouseButtonDown(0);
+		bool isMobile = (Input.touchCount > 0) && (Input.GetTouch(0).phase == TouchPhase.Began);
+		if (isDesktop || isMobile) {
+			Ray raycast = (isDesktop) ? Camera.main.ScreenPointToRay(Input.mousePosition) :
+																	Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+			RaycastHit raycastHit;
+			if (Physics.Raycast(raycast, out raycastHit)) {
+				if (!raycastHit.collider.name.Equals("Background") && !(infoPanel.active) && !(confirmationCanvas.active)) { // <-- Requires ingredient prefabs to have colliders (approx) within plate bounds
+				// if (raycastHit.collider.name.Equals("Plate")) { // <-- Requires ingredient prefabs not to have colliders!
+					/* Plate was tapped! */
+					if (canPlaceHeldIngredient()) {
+						placeHeldIngredientInPlate();
+					} else if (plateContents.Count == 1) {
+						pickUpIngredient();
+					}
+				}
+			}
+		}
+	}
+
+  private bool canPlaceHeldIngredient() {
+		return (Player.isHoldingIngredient() || SimulatedPlayer.isHoldingIngredient()) && plateContents.Count < maxPlateContents;
+	}
+
   public void goBack() {
     /* Notify server that player has left the station */
     Handheld.Vibrate();
-    player.notifyAboutStationLeft();
+    if (Client.gameState.Equals(ClientGameState.MainMode)) {
+      player.notifyAboutStationLeft();
+    } else { /* If in tutorial mode, advance to the next tutorial */
+			Client.gameState = ClientGameState.EndTutorial;
+		}
     SceneManager.LoadScene("PlayerMainScreen");
   }
 
   private void updateButtonStates() {
-		setButtonInteractable(putBtn, Player.isHoldingIngredient() && plateContents.Count < maxPlateContents);
-    setButtonInteractable(pickBtn, plateContents.Count == 1);
 		setButtonInteractable(clearBtn, plateContents.Count > 0);
-		setButtonInteractable(serveBtn, plateContents.Count == 1);
+		setButtonInteractable(serveBtn, plateContents.Count == 1 && FoodData.Instance.isOrderable(plateContents[0]));
+    setButtonInteractable(throwBtn, plateContents.Count == 1 && Client.gameState.Equals(ClientGameState.MainMode));
 	}
 
 	private void setButtonInteractable(Button btn, bool interactable) {
 		btn.interactable = interactable;
 	}
+
+  public void confirmClear() {
+    Debug.Log("Confirm Clear");
+		confirmationCanvas.SetActive(true);
+	}
+
+	public void confirmNo() {
+		confirmationCanvas.SetActive(false);
+	}
+
+	public void confirmYes() {
+		confirmationCanvas.SetActive(false);
+		clearStation();
+	}
+
+  public void GotIt() {
+    infoPanel.SetActive(false);
+    fadeBackground.SetActive(false);
+  }
+
+  private void InstructToServe() {
+    infoPanel.SetActive(true);
+    fadeBackground.SetActive(true);
+    GameObject.Find("InfoText").GetComponent<Text>().text = "Now serve the food \n to get points!";
+  }
 }

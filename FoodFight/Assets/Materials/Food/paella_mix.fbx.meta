@@ -1218,6 +1218,11 @@ ModelImporter:
     2100004: prawn_model_prawnskin
     2100006: prawn_model_shellcol
     2100008: prawn_model_tailcol
+    2100010: peas_peacol1
+    2100012: rice_pile_ricecol2
+    2100014: prawn_model_prawnskin1
+    2100016: prawn_model_shellcol1
+    2100018: prawn_model_tailcol1
     2300000: body
     2300002: body 1
     2300004: body 2

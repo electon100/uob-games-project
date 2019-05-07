@@ -6,7 +6,13 @@ using UnityEngine.UI;
 
 public class NewGameTimer : MonoBehaviour {
 
-  public Text timerText;
+  private GameObject timerTextObject;
+  private RectTransform timerTransform;
+  private Text timerText;
+
+  private GameObject timerSignObject;
+  private RectTransform timerSignTransform;
+  private Image timerSignImage;
 
   private NewServer server;
 
@@ -18,7 +24,9 @@ public class NewGameTimer : MonoBehaviour {
 
   public void Start() {
     server = GameObject.Find("Server").GetComponent<NewServer>();
+
     ResetTimer();
+    initialiseUI();
   }
 
   public void ResetTimer() {
@@ -29,6 +37,31 @@ public class NewGameTimer : MonoBehaviour {
 
   public void StartTimer() {
     isStarted = true;
+  }
+
+  void initialiseUI() {
+    timerSignObject = new GameObject("GameTimerSignObject", typeof(RectTransform));
+    timerSignObject.transform.SetParent(GameObject.Find("Timer").transform);
+
+    // Sign position
+    timerSignTransform = timerSignObject.GetComponent<RectTransform>();
+
+    // Sign Image
+    timerSignImage = timerSignObject.AddComponent<Image>();
+    timerSignImage.sprite = Resources.Load("Timer Sign", typeof(Sprite)) as Sprite;
+
+    timerTextObject = new GameObject("GameTimerObject", typeof(RectTransform));
+    timerTextObject.transform.SetParent(GameObject.Find("Timer").transform);
+
+    // Text position
+    timerTransform = timerTextObject.GetComponent<RectTransform>();
+
+    // Timer Text
+    timerText = timerTextObject.AddComponent<Text>();
+    timerText.fontSize = 100;
+    timerText.color = Color.black;
+    timerText.font = Resources.Load("Acids!", typeof(Font)) as Font;//Assets/Resources/Acids!.otf
+    timerText.alignment = TextAnchor.MiddleCenter;
   }
 
   void Update() {
@@ -50,6 +83,24 @@ public class NewGameTimer : MonoBehaviour {
         notifiedServerOfStart = true;
       }
     }
+
+    updateUI();
+  }
+
+  void updateUI() {
+    int width;
+    int height;
+
+    width = (int) (Screen.width / 6);
+    height = (int) (width / 1.5f);
+
+    timerText.fontSize = (int) (height / 2);
+
+    timerTransform.sizeDelta = new Vector2(width, height);
+    timerSignTransform.sizeDelta = new Vector2(width, height);
+
+    timerSignTransform.localPosition = new Vector3(0, (int) (Screen.height / 2 - height / 2), 0);
+    timerTransform.localPosition = new Vector3(0, (int) (Screen.height / 2 - height / 2 - height / 4), 0);
   }
 
   private void displayTime() {

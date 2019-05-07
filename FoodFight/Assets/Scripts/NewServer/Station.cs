@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Station {
 
@@ -9,6 +10,12 @@ public class Station {
 	public float DisabledTimer { get; set; }
 
   public List<Ingredient> Ingredients { get; }
+
+	public ParticleSystem SmokeParticleEffect { get; set; }
+
+  public GameObject DisablePrefab { get; set; }
+
+  public GameObject Prefab { get; set; }
 
 	public Station(string id) {
 		Id = id;

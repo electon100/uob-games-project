@@ -60,4 +60,9 @@ public class Lobby : MonoBehaviour {
         SceneManager.LoadScene("PlayerMainScreen");
     }
 
+    public void OnGoHomeFromLobby() {
+        network.SendMyMessage("disconnect", "");
+		Client.gameState = ClientGameState.JoinState;
+		SceneManager.LoadScene("PlayerStartScreen");
+	}
 }

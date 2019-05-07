@@ -4,7 +4,7 @@ using System.Collections;
 public class Animation : MonoBehaviour {
     private GameObject serverObject;
     private NewServer server;
-    private GameObject logo;
+    public GameObject logo;
     public Transform startPanel;
     private int next = 1;
     private float lastMovement;
@@ -14,7 +14,6 @@ public class Animation : MonoBehaviour {
         if (serverObject != null) {
             server = serverObject.GetComponent<NewServer>();
         }
-        logo = GameObject.Find("Logo");
         lastMovement = Time.time;
     }
     
@@ -50,7 +49,9 @@ public class Animation : MonoBehaviour {
     }
 
     public void GoToConnect() {
-        GameObject.Find("MainMenuCanvas").SetActive(false);
-        startPanel.gameObject.SetActive(true);
+        if (Client.gameState.Equals(ClientGameState.MainMode)) {
+            GameObject.Find("MainMenuCanvas").SetActive(false);
+            Client.gameState = ClientGameState.ConnectState;
+        }
     }
 }
