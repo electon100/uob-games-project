@@ -120,7 +120,7 @@ public class ARCupboard : MonoBehaviour
                 foodName.text = "You picked some oil!";
                 break;
             case "ChocolateSauce":
-                ingredient = new Ingredient("chocolate_sauce", "chocolate_saucePreab");
+                ingredient = new Ingredient("chocolate_sauce", "chocolate_saucePrefab");
                 foodName.text = "You picked some chocolate sauce!";
                 break;        
             default:

@@ -258,7 +258,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4812809958308178}
   m_Layer: 0
-  m_Name: ratatouille_mixPrefab 1
+  m_Name: ratatouille_mixPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

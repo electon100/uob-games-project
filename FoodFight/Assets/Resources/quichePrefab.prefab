@@ -154,7 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4797978360350312}
   m_Layer: 0
-  m_Name: quichePrefab 1
+  m_Name: quichePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

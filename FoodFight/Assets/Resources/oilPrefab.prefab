@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33227396348518950}
   - component: {fileID: 23828527049961354}
   m_Layer: 0
-  m_Name: oilPrefab 1
+  m_Name: oilPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
