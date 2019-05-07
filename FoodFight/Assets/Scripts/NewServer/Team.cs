@@ -111,6 +111,9 @@ public class Team {
         break;
       }
     }
+
+    if (Score > 10000) Score = 10000;
+    if (Score < 0) Score = 0;
   }
 
   public override string ToString() {

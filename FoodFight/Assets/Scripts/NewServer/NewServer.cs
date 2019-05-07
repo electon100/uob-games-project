@@ -153,9 +153,6 @@ public class NewServer : MonoBehaviour {
     blueBannerImage = blueBannerObject.AddComponent<Image>();
     blueBannerImage.sprite = Resources.Load("star_banner_blue", typeof(Sprite)) as Sprite;
 
-    redTeam.Score = 100;
-    blueTeam.Score = 100;
-
     setTeamStars();
   }
 
@@ -172,13 +169,16 @@ public class NewServer : MonoBehaviour {
     }catch{
       UnityEngine.Debug.Log("Problem running python script");
     }
-    
+
   }
 
   private void initialiseTeams() {
     if (redTeam != null) redTeam.removeAllOrders();
     if (blueTeam != null) blueTeam.removeAllOrders();
     redTeam = new Team("red", redTeamColour); blueTeam = new Team("blue", blueTeamColour);
+
+    redTeam.Score = 100;
+    blueTeam.Score = 100;
 
     Team[] allTeams = new Team[] {redTeam, blueTeam};
     foreach (Team team in allTeams) {
@@ -493,7 +493,7 @@ public class NewServer : MonoBehaviour {
         ingredientToScore = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToScore.GetType());
         UnityEngine.Debug.Log("Ingredient to score: " + ingredientToScore.Name);
         relevantTeam.scoreRecipe(ingredientToScore);
-
+        
         /* Broadcast new scores to devices */
         BroadcastScores();
       } else {
