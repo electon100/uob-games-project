@@ -27,7 +27,8 @@ public class ProjectileBehaviour : MonoBehaviour {
             team = "red";
         }
 
-        Debug.Log("GameObject Hit: " + collision.gameObject.name);
+        Destroy(this.gameObject);
+        //Debug.Log("GameObject Hit: " + collision.gameObject.name);
         stationHit = collision.gameObject.name;
         id = stationHit[stationHit.Length-1];
         switch (id)
@@ -35,29 +36,33 @@ public class ProjectileBehaviour : MonoBehaviour {
             case '0':
                 // send 0
                 SetResultText("You hit the enemy cupboard");
-                server.OnStationHit(team, id+"");      
+                // if(collision.gameObject.GetComponent<AudioSource>() != null){
+                //     AudioSource source = collision.gameObject.GetComponent<AudioSource>();
+                //     // source.PlayOneShot(source.clip, 1.0f);
+                //     source.Play();
+                // }
+                server.OnStationHit(team, id+"");
                 break;
             case '1':
                 // send 1
                 SetResultText("You hit the enemy chopping board");
-                server.OnStationHit(team, id+"");   
+                server.OnStationHit(team, id+"");
                 break;
             case '2':
                 // send 2
                 SetResultText("You hit the enemy frying station");
-                server.OnStationHit(team, id+"");   
+                server.OnStationHit(team, id+"");
                 break;
             case '3':
                  // send 3
                  SetResultText("You hit the enemy plating station");
-                 server.OnStationHit(team, id+"");   
-                 break;
+                 server.OnStationHit(team, id+"");
+                break;
             default:
                 // send miss
                 SetResultText("You missed the enemy stations");
                 break;
         }
-        Destroy(this.gameObject);
     }
 
     private void SetResultText(string objectHit){
