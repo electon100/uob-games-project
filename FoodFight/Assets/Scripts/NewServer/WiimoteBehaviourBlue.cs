@@ -206,6 +206,20 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
         blueProjectile = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
     }
 
+    public void gameReset()
+    {
+        blueIsSet = false;
+        firstTime = false;
+        blueTime = 20.0f;
+        gamestarted = false;
+        aPressed = false;
+        blueTimeOverPanel.gameObject.SetActive(false);
+        mainPanel.gameObject.SetActive(false);
+        BlueStartPanel.gameObject.SetActive(true);
+        blueStartText.text = "Press -a- to start game";
+        DisplayTime();
+    }
+
     float scaleX;
     float scaleY;
     float scaleZ;

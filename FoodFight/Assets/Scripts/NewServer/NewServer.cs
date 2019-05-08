@@ -767,6 +767,8 @@ public class NewServer : MonoBehaviour {
     SetGameState(GameState.MainMenu);
     initialiseTeams();
     timer.ResetTimer();
+    wiiBlue.gameReset();
+    wiiRed.gameReset();
     BroadcastAllConnections("newgame", "");
   }
 
