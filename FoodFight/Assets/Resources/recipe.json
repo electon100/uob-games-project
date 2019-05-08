@@ -439,6 +439,26 @@
           "chopped": true
         }
       ]
+    },
+    {
+      "name": "prawn_pasta",
+      "ingredients": [
+        {
+          "name": "steak",
+          "cooked": true,
+          "chopped": false
+        },
+        {
+          "name": "shrimp",
+          "cooked": false,
+          "chopped": false
+        }
+        {
+          "name": "stir_fry_mix",
+          "cooked": true,
+          "chopped": false
+        }
+      ]
     }
   ]
 }
