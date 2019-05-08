@@ -37,7 +37,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
         blueIsSet = false;
         aPressed = false;
         firstTime = false;
-        blueTime = 10.0f;
+        blueTime = 20.0f;
         DisplayTime();
     }
 
@@ -83,9 +83,11 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
                         targetVector.y = blueCrosshair.anchorMin.y - 0.5f;
                         targetVector.x = blueCrosshair.anchorMin.x - 0.5f;
 
+                        if (targetVector.y < 0.0f) targetVector.y = 0.0f; //cap it for calibration
+
                         Transform ingredTransform = blueProjectile.GetComponentsInChildren<Transform>(true)[0];
                         Quaternion ingredRotation = ingredTransform.rotation;
-                        Vector3 ingredPosition = new Vector3(11, 10, 0);
+                        Vector3 ingredPosition = new Vector3(12, 9.66f, -1.5f);
 
                         GameObject foodBullet = Instantiate(blueProjectile, ingredPosition, ingredRotation) as GameObject;
                         if (foodBullet.GetComponent<Rigidbody>() == null){
@@ -97,17 +99,12 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
                         if(foodBullet.GetComponent<ProjectileBehaviour>() == null){
                             foodBullet.AddComponent<ProjectileBehaviour>();
                         }
-                        if(foodBullet.GetComponent<AudioSource>() == null)
-                        {
-                            foodBullet.AddComponent<AudioSource>();
-                            foodBullet.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Assets/Sounds/RedDisabled.mp3");
-                        }
                         // GameObject foodBullet = Instantiate(blueProjectile, blueProjectile.transform.position, Quaternion.identity) as GameObject;
                         foodBullet.name = "BlueProjectile";
                         foodBullet.GetComponent<Rigidbody>().useGravity = true;
                         foodBullet.GetComponent<SphereCollider>().radius = 0.01f;
                         ScaleProjectile(foodBullet);
-                        foodBullet.GetComponent<Rigidbody>().AddForce(-forcex, -targetVector.y * forcey, targetVector.x * forcez);
+                        foodBullet.GetComponent<Rigidbody>().AddForce(-forcex, targetVector.y * forcey, targetVector.x * forcez);
                         bluefired = true;
                         ammoCount -= 1;
                     }
@@ -199,7 +196,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
     public void reset(Ingredient ingredient)
     {
         firstTime = true;
-        blueTime = 10.0f;
+        blueTime = 20.0f;
         gamestarted = false;
         aPressed = false;
         blueTimeOverPanel.gameObject.SetActive(false);
