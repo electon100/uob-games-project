@@ -19,7 +19,6 @@ public class NewChopping : MonoBehaviour {
 	public GameObject infoPanel;
 	public GameObject fadeBackground;
 	public GameObject tapAnimation;
-	public GameObject	backArrow;
 	public GameObject choppingImage;
 
 	/* Sound stuff */
@@ -176,7 +175,6 @@ public class NewChopping : MonoBehaviour {
 				SimulatedPlayer.currentIngred = ingredientToChop;
 				SimulatedPlayer.ingredientInChopping = null;
 				tapAnimation.SetActive(!ingredientChoppedStationComplete);
-				backArrow.SetActive(ingredientChoppedStationComplete); /* Guide the user to go back */
 			}
 			/* Clear the station */
 			clearStation();
