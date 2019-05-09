@@ -21,7 +21,7 @@ public class ViewItem : MonoBehaviour {
 			if (Player.isHoldingIngredient()) {
 				GameObject model = (GameObject) Resources.Load(Player.currentIngred.Model, typeof(GameObject));
 				Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
-				Vector3 modelPosition = modelTransform.position - new Vector3(0, 100, 0);
+				Vector3 modelPosition = modelTransform.position;
 				Quaternion modelRotation = modelTransform.rotation;
 				currentItem = (GameObject) Instantiate(model, modelPosition, modelRotation);
 				ingredText.text = Player.currentIngred.ToString();
@@ -33,7 +33,7 @@ public class ViewItem : MonoBehaviour {
 			if (SimulatedPlayer.isHoldingIngredient()) {
 				GameObject model = (GameObject) Resources.Load(SimulatedPlayer.currentIngred.Model, typeof(GameObject));
 				Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
-				Vector3 modelPosition = modelTransform.position  - new Vector3(0, 100, 0);
+				Vector3 modelPosition = modelTransform.position;
 				Quaternion modelRotation = modelTransform.rotation;
 				currentItem = (GameObject) Instantiate(model, modelPosition, modelRotation);
 				ingredText.text = SimulatedPlayer.currentIngred.ToString();
