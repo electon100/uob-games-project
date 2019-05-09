@@ -235,10 +235,10 @@ public class PlateBehaviour : MonoBehaviour {
     Handheld.Vibrate();
     if (Client.gameState.Equals(ClientGameState.MainMode)) {
       player.notifyAboutStationLeft();
+      SceneManager.LoadScene("PlayerMainScreen");
     } else { /* If in tutorial mode, advance to the next tutorial */
-			Client.gameState = ClientGameState.EndTutorial;
+      if (Client.gameState.Equals(ClientGameState.EndTutorial)) SceneManager.LoadScene("PlayerMainScreen");
 		}
-    SceneManager.LoadScene("PlayerMainScreen");
   }
 
   private void updateButtonStates() {
@@ -252,8 +252,7 @@ public class PlateBehaviour : MonoBehaviour {
 	}
 
   public void confirmClear() {
-    Debug.Log("Confirm Clear");
-		confirmationCanvas.SetActive(true);
+    if (Client.gameState.Equals(ClientGameState.MainMode)) confirmationCanvas.SetActive(true);
 	}
 
 	public void confirmNo() {

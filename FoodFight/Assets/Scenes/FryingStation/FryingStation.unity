@@ -1870,7 +1870,7 @@ MonoBehaviour:
   successSound: {fileID: 8300000, guid: e664e5d9004e08e4db285c1dd7e77c98, type: 3}
   infoText: {fileID: 1851476620}
   infoPanel: {fileID: 2002965267}
-  fryingImage: {fileID: 0}
+  fryingImage: {fileID: 920430919}
   tapImage: {fileID: 1270301536}
   fadeBackground: {fileID: 1268528613}
   tapAnimation: {fileID: 342830091}

@@ -1490,6 +1490,7 @@ MonoBehaviour:
   clearBtn: {fileID: 1036484353}
   confirmationCanvas: {fileID: 424527727}
   statusText: {fileID: 1669642651}
+  infoText: {fileID: 1612634723}
   successMaterial: {fileID: 2100000, guid: 2f3446cdf9a18cf4bbca0a1aec19befe, type: 2}
   neutralMaterial: {fileID: 2100000, guid: d0800149d74fe264582c3871bee0699d, type: 2}
   issueMaterial: {fileID: 2100000, guid: 0c96941e6d6f06c4dbdf05299a6c809f, type: 2}
@@ -1498,6 +1499,7 @@ MonoBehaviour:
   fadeBackground: {fileID: 743995780}
   tapAnimation: {fileID: 1935208582}
   backArrow: {fileID: 146189045}
+  choppingImage: {fileID: 1453541906}
   chopSound: {fileID: 8300000, guid: be402bde3e5f0a84eb5fd510003e1a55, type: 3}
   successSound: {fileID: 8300000, guid: e664e5d9004e08e4db285c1dd7e77c98, type: 3}
 --- !u!4 &954371503
