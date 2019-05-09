@@ -6,8 +6,8 @@ using UnityEngine;
 
 public sealed class FoodData {
 
-	private readonly string ingredientsFileName = "test_ingredients"; /* The name of the JSON file containing ingredients */
-	private readonly string recipesFileName = "test_recipes"; /* The name of the JSON file containing recipes */
+	private readonly string ingredientsFileName = "gd_ingredients"; /* The name of the JSON file containing ingredients */
+	private readonly string recipesFileName = "gd_recipes"; /* The name of the JSON file containing recipes */
 
 	private static FoodData instance = null;
 	private static readonly object padlock = new object();
