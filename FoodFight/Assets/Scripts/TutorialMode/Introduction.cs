@@ -74,6 +74,10 @@ public class Introduction : MonoBehaviour {
 		if (hasPrevSlide()) currentSlide--;
 	}
 
+	private bool isOnFirstSlide() {
+		return currentSlide == 0;
+	}
+
 	private void SetProgressBarValue() {
 		progressBar.maxValue = totalSlides;
 		progressBar.value = currentSlide;
@@ -81,7 +85,7 @@ public class Introduction : MonoBehaviour {
 
 	private void UpdateButtonStates() {
 		SetButtonInteractable(nextButton, hasNextSlide());
-		SetButtonInteractable(backButton, hasPrevSlide());
+		SetButtonInteractable(backButton, hasPrevSlide() || isOnFirstSlide());
 		startTutorialButton.gameObject.SetActive(currentSlide == totalSlides);
 	}
 
@@ -94,7 +98,8 @@ public class Introduction : MonoBehaviour {
 	}
 
 	public void OnBackButtonPress() {
-		prevSlide();
+		if (hasPrevSlide()) prevSlide();
+		else if (isOnFirstSlide()) networkClient.OnGameReset();
 	}
 
 	public void OnGotItButtonPress() {

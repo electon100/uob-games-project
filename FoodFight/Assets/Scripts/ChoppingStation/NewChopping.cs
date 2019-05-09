@@ -11,6 +11,7 @@ public class NewChopping : MonoBehaviour {
 	public Button goBackBtn, clearBtn;
 	public GameObject confirmationCanvas;
 	public Text statusText;
+	public Text infoText;
 	public Material successMaterial;
 	public Material neutralMaterial;
 	public Material issueMaterial;
@@ -19,6 +20,7 @@ public class NewChopping : MonoBehaviour {
 	public GameObject fadeBackground;
 	public GameObject tapAnimation;
 	public GameObject	backArrow;
+	public GameObject choppingImage;
 
 	/* Sound stuff */
 	public AudioClip chopSound;
@@ -281,7 +283,7 @@ public class NewChopping : MonoBehaviour {
 	}
 
 	public void OnConfirmClear() {
-		confirmationCanvas.SetActive(true);
+		if (Client.gameState.Equals(ClientGameState.MainMode)) confirmationCanvas.SetActive(true);
 	}
 
 	public void OnConfirmNo() {
@@ -298,10 +300,21 @@ public class NewChopping : MonoBehaviour {
 		Handheld.Vibrate();
 		if (Client.gameState.Equals(ClientGameState.MainMode)) {
 			player.notifyAboutStationLeft();
-		} else if (ingredientChoppedStationComplete) { /* Advance to the next step of the tutorial */
-			Client.gameState = ClientGameState.FryingTutorial;
+			SceneManager.LoadScene("PlayerMainScreen");
+		} else {
+			if (ingredientChoppedStationComplete) {
+				if (ingredientToChop != null) {
+					infoPanel.SetActive(true);
+					fadeBackground.SetActive(true);
+					choppingImage.SetActive(false);
+					tapAnimation.SetActive(true);
+					infoText.text = "Oops! \n You forgot to pick up \n the ingredient!";
+				} else {
+					Client.gameState = ClientGameState.FryingTutorial;
+					SceneManager.LoadScene("PlayerMainScreen");
+				}
+			}
 		}
-		SceneManager.LoadScene("PlayerMainScreen");
 	}
 
 	public void GotIt() {

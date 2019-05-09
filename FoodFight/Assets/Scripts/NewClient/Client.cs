@@ -407,7 +407,7 @@ public class Client : MonoBehaviour {
 		}
 	}
 
-	private void OnGameReset() {
+	public void OnGameReset() {
 		/* Reset the player's saved variables */
 		ingredientsInStation = new List<Ingredient>();
 		Player.ingredientsFromStation = ingredientsInStation;

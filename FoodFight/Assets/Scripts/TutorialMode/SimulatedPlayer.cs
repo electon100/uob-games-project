@@ -16,7 +16,7 @@ public class SimulatedPlayer : MonoBehaviour {
 	public static Ingredient ingredientInChopping;
   public static List<Ingredient> ingredientsInFrying = new List<Ingredient>();
 	public static List<Ingredient> ingredientsInPlating = new List<Ingredient>();
-	
+
 	// Use this for initialization
 	void Start () {
 		Screen.orientation = ScreenOrientation.Portrait;
@@ -26,7 +26,7 @@ public class SimulatedPlayer : MonoBehaviour {
 		infoPanel.SetActive(true);
 		Destroy(GameObject.Find("Player"));
 	}
-	
+
 	void Update () {
 		/* Check what step of the tutorial the player is at. */
 		string currentScene = SceneManager.GetActiveScene().name;
@@ -75,7 +75,7 @@ public class SimulatedPlayer : MonoBehaviour {
 		if (Client.gameState.Equals(ClientGameState.RecipeIntro)) {
 			Client.gameState = ClientGameState.CupboardTutorial;
 			backButton.SetActive(true);
-		} 
+		}
 		else if (Client.gameState.Equals(ClientGameState.EndTutorial)) {
 			GameObject.Find("InfoPanel").SetActive(false);
 			mainModeButton.SetActive(true);
@@ -104,13 +104,23 @@ public class SimulatedPlayer : MonoBehaviour {
 
 	public void GoBackToMainMode() {
 		if (Client.gameState.Equals(ClientGameState.EndTutorial)) {
+
 			if (Client.isJoined) Client.gameState = ClientGameState.JoinState;
 			else Client.gameState = ClientGameState.ConnectState;
-			
+
 			removeCurrentIngredient();
+			Player.ingredientsFromStation = new List<Ingredient>();
+			Player.removeCurrentIngredient();
+			Player.resetCurrentStation();
+			currentIngred = null;
+			ingredientInChopping = null;
+			ingredientsInFrying = new List<Ingredient>();
+			ingredientsInPlating = new List<Ingredient>();
+
 			Destroy(GameObject.Find("SimulatedClient"));
 			Destroy(GameObject.Find("SimulatedClient(Clone)"));
 			Destroy(GameObject.Find("SimulatedPlayer"));
+
 			SceneManager.LoadScene("PlayerStartScreen");
 		}
 	}

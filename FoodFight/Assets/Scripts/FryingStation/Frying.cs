@@ -364,21 +364,23 @@ public class Frying : MonoBehaviour {
 			player.notifyAboutStationLeft();
 			SceneManager.LoadScene("PlayerMainScreen");
 		} else { /* If in tutorial mode, advance to the next tutorial */
-			if (panContents.Count != 0) {
-				infoPanel.SetActive(true);
-				fadeBackground.SetActive(true);
-				fryingImage.SetActive(false);
-				tapImage.SetActive(true);
-				infoText.text = "Oops! \n You forgot to pick up \n the ingredient!";
-			} else if (ingredientCookedStationComplete) {
-				Client.gameState = ClientGameState.PlatingTutorial;
-				SceneManager.LoadScene("PlayerMainScreen");
+			if (ingredientCookedStationComplete) {
+				if (panContents.Count != 0) {
+					infoPanel.SetActive(true);
+					fadeBackground.SetActive(true);
+					fryingImage.SetActive(false);
+					tapImage.SetActive(true);
+					infoText.text = "Oops! \n You forgot to pick up \n the ingredient!";
+				} else {
+					Client.gameState = ClientGameState.PlatingTutorial;
+					SceneManager.LoadScene("PlayerMainScreen");
+				}
 			}
 		}
 	}
 
 	public void confirmClear() {
-		confirmationCanvas.SetActive(true);
+		if (Client.gameState.Equals(ClientGameState.MainMode)) confirmationCanvas.SetActive(true);
 	}
 
 	public void confirmNo() {
