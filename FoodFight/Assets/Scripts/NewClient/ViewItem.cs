@@ -21,19 +21,18 @@ public class ViewItem : MonoBehaviour {
 			if (Player.isHoldingIngredient()) {
 				GameObject model = (GameObject) Resources.Load(Player.currentIngred.Model, typeof(GameObject));
 				Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
-				Vector3 modelPosition = modelTransform.position;
+				Vector3 modelPosition = modelTransform.position - (new Vector3(0, 15, 0));
 				Quaternion modelRotation = modelTransform.rotation;
 				currentItem = (GameObject) Instantiate(model, modelPosition, modelRotation);
 				ingredText.text = Player.currentIngred.ToString();
-			}
-			else {
+			} else {
 				ingredText.text = "Nothing";
 			}
 		} else {
 			if (SimulatedPlayer.isHoldingIngredient()) {
 				GameObject model = (GameObject) Resources.Load(SimulatedPlayer.currentIngred.Model, typeof(GameObject));
 				Transform modelTransform = model.GetComponentsInChildren<Transform>(true)[0];
-				Vector3 modelPosition = modelTransform.position;
+				Vector3 modelPosition = modelTransform.position - (new Vector3(0, 15, 0));
 				Quaternion modelRotation = modelTransform.rotation;
 				currentItem = (GameObject) Instantiate(model, modelPosition, modelRotation);
 				ingredText.text = SimulatedPlayer.currentIngred.ToString();
@@ -46,6 +45,5 @@ public class ViewItem : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
 	}
 }
