@@ -37,7 +37,7 @@ public class WiimoteBehaviourRed : MonoBehaviour {
         redIsSet = false;
         aPressed = false;
         firstTime = false;
-        redTime = 10.0f;
+        redTime = 20.0f;
         DisplayTime();
     }
 
@@ -83,9 +83,11 @@ public class WiimoteBehaviourRed : MonoBehaviour {
                         targetVector.y = redCrosshair.anchorMin.y - 0.5f;
                         targetVector.x = redCrosshair.anchorMin.x - 0.5f;
 
+                        if (targetVector.y < 0.0f) targetVector.y = 0.0f; //cap it for calibration
+
                         Transform ingredTransform = redProjectile.GetComponentsInChildren<Transform>(true)[0];
                         Quaternion ingredRotation = ingredTransform.rotation;
-                        Vector3 ingredPosition = new Vector3(-11, 10, 0);
+                        Vector3 ingredPosition = new Vector3(-12, 9.66f, -1.5f);
                         
                         GameObject foodBullet = Instantiate(redProjectile, ingredPosition, ingredRotation) as GameObject;
                         if (foodBullet.GetComponent<Rigidbody>() == null){
@@ -97,13 +99,14 @@ public class WiimoteBehaviourRed : MonoBehaviour {
                         if(foodBullet.GetComponent<ProjectileBehaviour>() == null){
                             foodBullet.AddComponent<ProjectileBehaviour>();
                         }
+                        
                         // GameObject foodBullet = Instantiate(redProjectile, redProjectile.transform.position, Quaternion.identity) as GameObject;
                         foodBullet.name = "RedProjectile";
                         foodBullet.GetComponent<Rigidbody>().useGravity = true;
                         foodBullet.GetComponent<SphereCollider>().radius = 0.01f;
                         ScaleProjectile(foodBullet);
                         Debug.Log(foodBullet.transform.localScale);
-                        foodBullet.GetComponent<Rigidbody>().AddForce(forcex, -targetVector.y * forcey, -targetVector.x * forcez);
+                        foodBullet.GetComponent<Rigidbody>().AddForce(forcex, targetVector.y * forcey, -targetVector.x * forcez);
                         redfired = true;
                         ammoCount -= 1;
                     }
@@ -195,7 +198,7 @@ public class WiimoteBehaviourRed : MonoBehaviour {
     public void reset(Ingredient ingredient)
     {
         firstTime = true;
-        redTime = 10.0f;
+        redTime = 20.0f;
         gamestarted = false;
         aPressed = false;
         redTimeOverPanel.gameObject.SetActive(false);
