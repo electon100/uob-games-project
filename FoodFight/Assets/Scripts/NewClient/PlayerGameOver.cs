@@ -6,11 +6,12 @@ using UnityEngine.UI;
 public class PlayerGameOver : MonoBehaviour {
 
 	public Text MainText;
-	public Text RedScoreText;
-	public Text BlueScoreText;
+	public Text YourScoreText;
+	public Text TheirScoreText;
 	public Material redBackground;
 	public Material blueBackground;
 	public Renderer background;
+	public GameObject winnerObject, loserObject;
 
 	private Client client;
 
@@ -24,10 +25,13 @@ public class PlayerGameOver : MonoBehaviour {
 
 		gameEndState = client.gameEndState;
 
-		MainText.text = gameEndState.winningTeamStr() + " Team Wins!";
-
-		RedScoreText.text = "Red Score: " + gameEndState.getRedScore().ToString();
-		BlueScoreText.text = "Blue Score: " + gameEndState.getBlueScore().ToString();
+		if (client.getTeam().Equals("red")) {
+			YourScoreText.text = "Your Score: " + gameEndState.getRedScore().ToString();
+			TheirScoreText.text = "Their Score: " + gameEndState.getBlueScore().ToString();
+		} else if (client.getTeam().Equals("blue")) {
+			YourScoreText.text = "Your Score: " + gameEndState.getBlueScore().ToString();
+			TheirScoreText.text = "Their Score: " + gameEndState.getRedScore().ToString();
+		}
 
 		UpdateBackground();
 
@@ -46,14 +50,20 @@ public class PlayerGameOver : MonoBehaviour {
 
 	void Winner() {
 		MainText.text = "You win!";
+		winnerObject.SetActive(true);
+		loserObject.SetActive(false);
 	}
 
 	void Loser() {
 		MainText.text = "You lose!";
+		winnerObject.SetActive(false);
+		loserObject.SetActive(true);
 	}
 
 	void Draw() {
 		MainText.text = "Draw!";
+		winnerObject.SetActive(false);
+		loserObject.SetActive(false);
 	}
 
 	void UpdateBackground() {

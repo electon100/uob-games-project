@@ -18,7 +18,7 @@ public class Client : MonoBehaviour {
   private const int MAX_CONNECTION = 10;
   public int port = 8000;
 	private readonly string serverIPBase = "192.168.0."; // The base IP
-	private string serverIPSuffix = "100"; // The default IP suffix
+	private string serverIPSuffix = "107"; // The default IP suffix
   public int hostId = 0;
 	public int connectionId, reliableChannel;
 
@@ -87,7 +87,7 @@ public class Client : MonoBehaviour {
 			joinButton.SetActive(false);
 			text.SetActive(false);
 			tutorialButton.SetActive(false);
-		} 
+		}
 		else if (gameState.Equals(ClientGameState.JoinState)) {
 			startPanel = GameObject.Find("startPanel");
       startPanel.gameObject.SetActive(true);
@@ -119,7 +119,7 @@ public class Client : MonoBehaviour {
 
 	public void JoinGame() {
 		SkipTutorialMode();
-		
+
 		if (isJoined) {
 			SceneManager.LoadScene("PickTeamScreen");
 		} else {
