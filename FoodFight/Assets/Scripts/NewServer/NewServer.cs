@@ -568,6 +568,23 @@ public class NewServer : MonoBehaviour {
       if (team.Equals(redTeam.Name)) relevantTeam = blueTeam;
       else if (team.Equals(blueTeam.Name)) relevantTeam = redTeam;
 
+      // Modify score when you hit an enemy station
+      // Score depends on the station hit: cupboard = 4, chopping = 10, frying = 8, plating = 6
+      switch(station) {
+        case "0":
+          relevantTeam.modifyScore(4);
+          break;
+        case "1":
+          relevantTeam.modifyScore(10);
+          break;
+        case "2":
+          relevantTeam.modifyScore(8);
+          break;
+        case "3":
+          relevantTeam.modifyScore(6);
+          break;
+      }
+
       if (relevantTeam != null) {
         Station stationToDisable = relevantTeam.Kitchen.getStationForId(station);
         stationToDisable.DisabledTimer = disableStationDuration;
