@@ -45,7 +45,14 @@ public class Animation : MonoBehaviour {
 
     public void Update() {
         CheckClicked();
+        checkForSpacePress();
         MoveLogo();
+    }
+
+    private void checkForSpacePress() {
+        if (server != null && Input.GetKeyDown(KeyCode.Space)) {
+            server.ExitMainScreen();
+        }
     }
 
     public void GoToConnect() {
