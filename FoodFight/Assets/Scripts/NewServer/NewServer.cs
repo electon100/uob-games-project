@@ -14,10 +14,10 @@ public class NewServer : MonoBehaviour {
   private const int port = 8000;
   private int hostId, webHostId, reliableChannel;
 
-  private int minimumPlayers = -1;
+  // private int minimumPlayers = -1;
 
   public GameObject bluePlayerPrefab, redPlayerPrefab, redBannerObject, blueBannerObject;
-  public Transform mainMenuCanvas, pickModeCanvas, pickPlayersCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
+  public Transform mainMenuCanvas, pickModeCanvas,/*  pickPlayersCanvas,*/ startGameCanvas, mainGameCanvas, gameOverCanvas;
   public RectTransform redBannerTransform, blueBannerTransform;
   public Text startScreenText, redEndGameText, blueEndGameText, redScoreText, blueScoreText;
   public Image gameOverBackground, redStarSlider, blueStarSlider, redStarBackground, blueStarBackground, blueBannerImage, redBannerImage;
@@ -30,7 +30,7 @@ public class NewServer : MonoBehaviour {
 
   private readonly float disableStationDuration = 10.0f; /* 15 seconds */
   private readonly float negativeScoreMultiplier = 0.2f;
-  private readonly bool testing = true; /* Whether we are in test mode */
+  // private readonly bool testing = true; /* Whether we are in test mode */
   private readonly float minNextOrderTime = 15.0f; /* Minimum time before a new order is added */
   private readonly float maxNextOrderTime = 25.0f; /* Maximum time before a new order is added */
 
@@ -53,14 +53,15 @@ public class NewServer : MonoBehaviour {
   void Update() {
     SetCanvasForGameState(); /* Sets the main screen visible canvas based on game state */
     TickStations(); /* Ticks down the disabled timers on all stations */
+    listenForKeyboardInput(); /* Process keyboard input */
 
     switch(gameState) {
       case GameState.ConfigureMode:
         listenForData();
         break;
-      case GameState.ConfigurePlayers:
-        listenForData();
-        break;
+      // case GameState.ConfigurePlayers:
+      //   listenForData();
+      //   break;
       case GameState.AwaitingPlayers:
         listenForData();
         startScreenText.text = "Red: " + redTeam.Players.Count + " | Blue: " + blueTeam.Players.Count;
@@ -77,7 +78,14 @@ public class NewServer : MonoBehaviour {
     }
   }
 
-  private void setTeamStars(){
+  private void listenForKeyboardInput() {
+    if (Input.GetKeyDown(KeyCode.R)) RestartGame();
+    if (Input.GetKeyDown(KeyCode.S)) OnLatinMode();
+    if (Input.GetKeyDown(KeyCode.F)) OnFrenchMode();
+    if (Input.GetKeyDown(KeyCode.Space) && gameState == GameState.AwaitingPlayers) StartGame();
+  }
+
+  private void setTeamStars() {
     int bannerWidth;
     int bannerHeight;
 
@@ -686,35 +694,37 @@ public class NewServer : MonoBehaviour {
   public void SetCanvasForGameState() {
     mainMenuCanvas.gameObject.SetActive(gameState.Equals(GameState.MainMenu));
     pickModeCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigureMode));
-    pickPlayersCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigurePlayers));
+    // pickPlayersCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigurePlayers));
     startGameCanvas.gameObject.SetActive(gameState.Equals(GameState.AwaitingPlayers));
     gameOverCanvas.gameObject.SetActive(gameState.Equals(GameState.EndGame));
     mainGameCanvas.gameObject.SetActive(gameState.Equals(GameState.GameRunning) || gameState.Equals(GameState.Countdown));
   }
 
-  public void OnTwoPlayers() {
-    minimumPlayers = 1;
-    SetGameState(GameState.AwaitingPlayers);
-  }
+  // public void OnTwoPlayers() {
+  //   minimumPlayers = 1;
+  //   SetGameState(GameState.AwaitingPlayers);
+  // }
 
-  public void OnThreePlayers() {
-    minimumPlayers = 2;
-    SetGameState(GameState.AwaitingPlayers);
-  }
+  // public void OnThreePlayers() {
+  //   minimumPlayers = 2;
+  //   SetGameState(GameState.AwaitingPlayers);
+  // }
 
-  public void OnFourPlayers() {
-    minimumPlayers = 3;
-    SetGameState(GameState.AwaitingPlayers);
-  }
+  // public void OnFourPlayers() {
+  //   minimumPlayers = 3;
+  //   SetGameState(GameState.AwaitingPlayers);
+  // }
 
   /* Broadcasts start */
   public void StartGame() {
-    if (testing || (minimumPlayers > 0 &&
-        redTeam.Players.Count >= minimumPlayers &&
-        blueTeam.Players.Count >= minimumPlayers)) {
+    if (gameState == GameState.AwaitingPlayers) {
+    // if (testing || (minimumPlayers > 0 &&
+    //     redTeam.Players.Count >= minimumPlayers &&
+    //     blueTeam.Players.Count >= minimumPlayers)) {
       BroadcastMessage("start", "");
       SetGameState(GameState.Countdown);
       timer.StartTimer();
+    // }
     }
   }
 
@@ -779,7 +789,8 @@ public class NewServer : MonoBehaviour {
   public void OnLatinMode() {
     if (gameState == GameState.ConfigureMode) {
       gameMode = GameMode.Latin;
-      SetGameState(GameState.ConfigurePlayers);
+      // SetGameState(GameState.ConfigurePlayers);
+      SetGameState(GameState.AwaitingPlayers);
       FoodData.Instance.mode = "latin";
     }
   }
@@ -787,7 +798,8 @@ public class NewServer : MonoBehaviour {
   public void OnFrenchMode() {
     if (gameState == GameState.ConfigureMode) {
       gameMode = GameMode.French;
-      SetGameState(GameState.ConfigurePlayers);
+      // SetGameState(GameState.ConfigurePlayers);
+      SetGameState(GameState.AwaitingPlayers);
       FoodData.Instance.mode = "french";
     }
   }
@@ -919,6 +931,6 @@ public class NewServer : MonoBehaviour {
 
     /* Reset teams */
     initialiseTeams();
-    gameState = GameState.ConfigurePlayers;
+    gameState = GameState.AwaitingPlayers;
   }
 }

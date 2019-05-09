@@ -1,0 +1,464 @@
+{
+  "ingredients": [
+    {
+      "name" : "mush",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "onion",
+      "choppable" : true,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 7,
+      "score" : 0
+    },
+    {
+      "name" : "mixed_vegetables",
+      "choppable" : true,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 10,
+      "score" : 0
+    },
+    {
+      "name" : "chicken",
+      "choppable" : true,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 10,
+      "score" : 0
+    },
+    {
+      "name" : "chopped_onion",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "chopped_mixed_vegetables",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "diced_chicken",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "potato",
+      "choppable" : true,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 7,
+      "score" : 0
+    },
+    {
+      "name" : "diced_potato",
+      "choppable" : false,
+      "cookable" : true,
+      "mode": "none",
+      "correctFlips" : 5,
+      "maxFlips" : 40,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "chips",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "french",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 70
+    },
+    {
+      "name" : "raw_steak",
+      "choppable" : false,
+      "cookable" : true,
+      "mode": "none",
+      "correctFlips" : 5,
+      "maxFlips" : 40,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "steak",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "steak_hache",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "french",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 100
+    },
+    {
+      "name" : "eggs",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "raw_omelette",
+      "choppable" : false,
+      "cookable" : true,
+      "mode": "none",
+      "correctFlips" : 7,
+      "maxFlips" : 40,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "omelette",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "french",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 70
+    },
+    {
+      "name" : "rice",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "milk",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "flour",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "crepe_mix",
+      "choppable" : false,
+      "cookable" : true,
+      "mode": "none",
+      "correctFlips" : 7,
+      "maxFlips" : 40,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "crepe",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "french",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 100
+    },
+    {
+      "name" : "shrimp",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "peas",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "paella_mix",
+      "choppable" : false,
+      "cookable" : true,
+      "mode": "none",
+      "correctFlips" : 10,
+      "maxFlips" : 40,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "paella",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "latin",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 100
+    },
+    {
+      "name" : "ratatouille_mix",
+      "choppable" : false,
+      "cookable" : true,
+      "mode": "none",
+      "correctFlips" : 10,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "cooked_ratatouille_mix",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "ratatouille",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "french",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 130
+    },
+    {
+      "name" : "quiche_mix",
+      "choppable" : false,
+      "cookable" : true,
+      "mode": "none",
+      "correctFlips" : 7,
+      "maxFlips" : 40,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "quiche",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "french",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 100
+    },
+    {
+      "name" : "raw_patatas_bravas",
+      "choppable" : false,
+      "cookable" : true,
+      "mode": "none",
+      "correctFlips" : 5,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "patatas_bravas",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "latin",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 100
+    },
+    {
+      "name" : "oil",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "chocolate_sauce",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "raw_churros",
+      "choppable" : false,
+      "cookable" : true,
+      "mode": "none",
+      "correctFlips" : 7,
+      "maxFlips" : 40,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "churros_mix",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "churros",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "latin",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 100
+    },
+    {
+      "name" : "raw_spanish_omelette",
+      "choppable" : false,
+      "cookable" : true,
+      "mode": "none",
+      "correctFlips" : 7,
+      "maxFlips" : 40,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "spanish_omelette",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "latin",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 100
+    },
+    {
+      "name" : "tortillas",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "raw_quesadilla",
+      "choppable" : false,
+      "cookable" : true,
+      "mode": "none",
+      "correctFlips" : 7,
+      "maxFlips" : 40,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "quesadilla",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "latin",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 130
+    },
+    {
+      "name" : "raw_calamari",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "calamari_mix",
+      "choppable" : false,
+      "cookable" : true,
+      "mode": "none",
+      "correctFlips" : 10,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    },
+    {
+      "name" : "calamari",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "latin",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 70
+    },
+    {
+      "name" : "cheese",
+      "choppable" : false,
+      "cookable" : false,
+      "mode": "none",
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 0,
+      "score" : 0
+    }
+  ]
+}

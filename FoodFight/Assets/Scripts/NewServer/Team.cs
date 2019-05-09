@@ -68,7 +68,7 @@ public class Team {
     Ingredient recipe = new Ingredient(recipeName, recipeName + "Prefab");
     string id = Name + recipeName + Orders.Count + "Object";
 
-    Orders.Add(new Order(id, recipe, new GameObject(id), 150, mainGameCanvas, Name));
+    Orders.Add(new Order(id, recipe, new GameObject(id), 180, mainGameCanvas, Name));
 
     return true;
   }
