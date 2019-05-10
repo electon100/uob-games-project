@@ -29,9 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Plating/PlatingStation.unity
     guid: d9714aaf340ec104ab70cc0993cdc3a8
-  - enabled: 1
-    path: Assets/Scenes/PlayerChangeIPScreen.unity
-    guid: 007ffb1a0a1ff4f0e87dcb95a62ff0bd
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/DisconnectScreen.unity
     guid: 8916318c27bdef24987503d39f5874a8
