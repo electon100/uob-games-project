@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
   <Tracking>
-    <ImageTarget name="empty-fridge-and-mouse-with-cheese-inside-it-vector-18299757" size="200.000000 254.314728" />
+    <ImageTarget name="fridge-1" size="280.000000 396.064514" />
   </Tracking>
 </QCARConfig>
