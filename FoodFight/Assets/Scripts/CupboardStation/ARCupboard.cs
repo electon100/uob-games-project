@@ -75,10 +75,6 @@ public class ARCupboard : MonoBehaviour
                 ingredient = new Ingredient("eggs", "eggsPrefab");
                 foodName.text = "You picked some eggs!";
                 break;
-            case "Noodles":
-                ingredient = new Ingredient("noodles", "noodlesPrefab");
-                foodName.text = "You picked some noodles!";
-                break;
             case "Flour":
                 ingredient = new Ingredient("flour", "flourPrefab");
                 foodName.text = "You picked a bag of flour!";
@@ -86,10 +82,6 @@ public class ARCupboard : MonoBehaviour
             case "Chicken":
                 ingredient = new Ingredient("chicken", "chickenPrefab");
                 foodName.text = "You picked some chicken!";
-                break;
-            case "SoySauce":
-                ingredient = new Ingredient("soy_sauce", "soy_saucePrefab");
-                foodName.text = "You picked some soy sauce!";
                 break;
             case "Steak":
                 ingredient = new Ingredient("raw_steak", "raw_steakPrefab");
