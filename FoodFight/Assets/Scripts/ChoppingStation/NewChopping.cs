@@ -32,6 +32,7 @@ public class NewChopping : MonoBehaviour {
 	private bool ingredientChoppedStationComplete = false;
 
 	private readonly float minimumChopInterval = 0.25f; // seconds
+	private readonly float minimumAcceleration = 0.15f;
 
 	/* Movement stuff */
   private float shakeSpeed = 20.0f; // Speed of knife shake
@@ -260,7 +261,7 @@ public class NewChopping : MonoBehaviour {
 	}
 
 	private bool DetectChop() {
-    return (Time.time - lastChop) > minimumChopInterval && Input.acceleration.y > 2.0f;
+    return (Time.time - lastChop) > minimumChopInterval && Input.acceleration.y > minimumAcceleration;
   }
 
 	private void ChangeView(string message, Material material) {
