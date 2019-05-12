@@ -12,6 +12,8 @@ public class Order {
 	public float Timer { get; set; }
 	public string Team { get; set; }
 
+	private bool initialisedUI;
+
 	private Canvas canvas;
 	private Transform orderPanel;
 
@@ -27,7 +29,7 @@ public class Order {
 	private Image backgroundImage;
 	private RectTransform backgroundTransform;
 
-	public Order(string ID, Ingredient Recipe, GameObject ParentGameObject, float Timer, Transform orderPanel, string Team) {
+	public Order(string ID, Ingredient Recipe, float Timer, Transform orderPanel, string Team) {
 		this.ID = ID;
 		this.Recipe = Recipe;
 		this.ParentGameObject = ParentGameObject;
@@ -35,6 +37,11 @@ public class Order {
 		this.orderPanel = orderPanel;
 		this.Team = Team;
 
+		this.initialisedUI = false;
+	}
+
+	private void initUI() {
+		ParentGameObject = new GameObject(ID);
 		ParentGameObject.AddComponent<Canvas>();
 		ParentGameObject.transform.SetParent(orderPanel.transform);
 		ParentGameObject.transform.localPosition = new Vector3(0,0,0);
@@ -90,68 +97,74 @@ public class Order {
 		recipeNameText.alignment = TextAnchor.MiddleCenter;
 		recipeNameText.text = Recipe.ToString();
 		recipeNameText.horizontalOverflow = HorizontalWrapMode.Wrap;
+
+		initialisedUI = true;
 	}
 
 	public void updateCanvas(int index, int screenWidth, int screenHeight) {
-		ParentGameObject.name = Team + Recipe.Name + index + "Object";
+		if (index < 3) {
+			if (!initialisedUI) initUI();
 
-		// 4 gap + 2 small orders + 1 big order = screenWidth / 2
-		int bigWidth = (screenWidth / 2) / 3;
-		int smallWidth = (screenWidth / 2) / 4;
-		int gapWidth = ((screenWidth / 2) - bigWidth - smallWidth * 2) / 4;
+			ParentGameObject.name = Team + Recipe.Name + index + "Object";
 
-		int bigHeight = (screenHeight / 2) / 2;
-		int smallHeight = (screenHeight / 2) / 3;
+			// 4 gap + 2 small orders + 1 big order = screenWidth / 2
+			int bigWidth = (screenWidth / 2) / 3;
+			int smallWidth = (screenWidth / 2) / 4;
+			int gapWidth = ((screenWidth / 2) - bigWidth - smallWidth * 2) / 4;
 
-		int width;
-		int height;
+			int bigHeight = (screenHeight / 2) / 2;
+			int smallHeight = (screenHeight / 2) / 3;
 
-		if (index == 0) {
-			height = bigHeight;
-			width = bigWidth;
-		} else {
-			height = smallHeight;
-			width = smallWidth;
-		}
+			int width;
+			int height;
 
-		// Font Sizes
-		int timerFontSize = (int) (height / 5);
-		int recipeFontSize = (int) (height / 4);
+			if (index == 0) {
+				height = bigHeight;
+				width = bigWidth;
+			} else {
+				height = smallHeight;
+				width = smallWidth;
+			}
 
-		// Y Offset for text
-		int timerOffset = -timerFontSize;
-		int recipeOffset = (height / 2) + timerOffset - (height / 3) - (int) (recipeFontSize / 2);
+			// Font Sizes
+			int timerFontSize = (int) (height / 5);
+			int recipeFontSize = (int) (height / 4);
 
-		backgroundTransform.sizeDelta = new Vector2(width, height);
+			// Y Offset for text
+			int timerOffset = -timerFontSize;
+			int recipeOffset = (height / 2) + timerOffset - (height / 3) - (int) (recipeFontSize / 2);
 
-		timerTransform.sizeDelta = new Vector2(width, height);
-		timerText.fontSize = timerFontSize;
+			backgroundTransform.sizeDelta = new Vector2(width, height);
 
-		recipeNameTransform.sizeDelta = new Vector2(width, height);
-		recipeNameText.fontSize = recipeFontSize;
+			timerTransform.sizeDelta = new Vector2(width, height);
+			timerText.fontSize = timerFontSize;
 
-		int posX;
-		int posY = -(screenHeight / 2) + (height / 2) - (height / 8);
+			recipeNameTransform.sizeDelta = new Vector2(width, height);
+			recipeNameText.fontSize = recipeFontSize;
 
-		int side = Team.Equals("red") ? -1 : 1;
+			int posX;
+			int posY = -(screenHeight / 2) + (height / 2) - (height / 8);
 
-		if (index == 0) {
-			posX = side * (gapWidth + width / 2);
-		} else {
-			posX = side * ((1 + index) * gapWidth + bigWidth + (index - 1) * smallWidth + smallWidth / 2);
-		}
+			int side = Team.Equals("red") ? -1 : 1;
 
-		Vector3 position = new Vector3(posX, posY, 0);
+			if (index == 0) {
+				posX = side * (gapWidth + width / 2);
+			} else {
+				posX = side * ((1 + index) * gapWidth + bigWidth + (index - 1) * smallWidth + smallWidth / 2);
+			}
 
-		backgroundTransform.localPosition = position;
-		timerTransform.localPosition = position + new Vector3(0, timerOffset, 0);
-		recipeNameTransform.localPosition = position + new Vector3(0, recipeOffset, 0);
+			Vector3 position = new Vector3(posX, posY, 0);
 
-		if (!timerExpired()) {
-			Timer -= Time.deltaTime;
-			displayTime();
-		} else {
-			recipeNameText.color = Color.yellow;
+			backgroundTransform.localPosition = position;
+			timerTransform.localPosition = position + new Vector3(0, timerOffset, 0);
+			recipeNameTransform.localPosition = position + new Vector3(0, recipeOffset, 0);
+
+			if (!timerExpired()) {
+				Timer -= Time.deltaTime;
+				displayTime();
+			} else {
+				recipeNameText.color = Color.yellow;
+			}
 		}
 	}
 
