@@ -36,6 +36,9 @@ public class NewServer : MonoBehaviour {
   public GameState gameState = GameState.MainMenu;
   public GameMode gameMode = GameMode.None;
 
+  private AudioClip frenchSuccess, latinSuccess;
+
+
   private List<int> allConnections = new List<int>();
 
   private void Start () {
@@ -46,6 +49,9 @@ public class NewServer : MonoBehaviour {
     timer = GameObject.Find("GameTimer").GetComponent<NewGameTimer>();
     wiiBlue = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourBlue>();
     wiiRed = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourRed>();
+
+    frenchSuccess = (AudioClip)Resources.Load("FrenchSuccess", typeof(AudioClip));
+    latinSuccess = (AudioClip)Resources.Load("Arriba", typeof(AudioClip));
   }
 
   void Update() {
@@ -487,6 +493,15 @@ public class NewServer : MonoBehaviour {
         ingredientToScore = Ingredient.XmlDeserializeFromString<Ingredient>(messageContent, ingredientToScore.GetType());
         UnityEngine.Debug.Log("Ingredient to score: " + ingredientToScore.Name);
         relevantTeam.scoreRecipe(ingredientToScore);
+
+      if(gameMode.Equals(GameMode.French)){
+        this.GetComponent<AudioSource>().clip = frenchSuccess;
+        this.GetComponent<AudioSource>().Play(0);
+      }
+      if(gameMode.Equals(GameMode.Latin)){
+        this.GetComponent<AudioSource>().clip = latinSuccess;
+        this.GetComponent<AudioSource>().Play(0);
+      }
 
         /* Broadcast new scores to devices */
         BroadcastScores();
