@@ -568,7 +568,7 @@ public class NewServer : MonoBehaviour {
   }
 
   private void UpdateCursorVisibility() {
-    Cursor.visible = gameState == GameState.GameRunning;
+    Cursor.visible = gameState != GameState.GameRunning;
   }
 
   private int ScoreIngredient(Ingredient ingredient) {
