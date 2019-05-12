@@ -38,7 +38,7 @@ public class OrderClient : MonoBehaviour {
 	public GameObject recipePanel, teamPanel, cuisinePanel, connectPanel, completePanel;
 	public Text orderText, teamText;
 
-	private static readonly string[] frenchOrders = {"crepe", "chips", "omlette", "quiche", "ratatouille", "steak_hache"};
+	private static readonly string[] frenchOrders = {"crepe", "chips", "omelette", "quiche", "ratatouille", "steak_hache"};
 	private static readonly string[] spanishOrders = {"calamari", "churros", "paella", "patatas_bravas", "quesadilla", "spanish_omelette"};
 
 	private List<Button> buttons = new List<Button>();
