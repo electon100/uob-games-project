@@ -52,6 +52,7 @@ public class NewServer : MonoBehaviour {
     SetCanvasForGameState(); /* Sets the main screen visible canvas based on game state */
     TickStations(); /* Ticks down the disabled timers on all stations */
     listenForKeyboardInput(); /* Process keyboard input */
+    UpdateCursorVisibility(); /* Hide cursor during gameplay */
 
     switch(gameState) {
       case GameState.ConfigureMode:
@@ -563,6 +564,10 @@ public class NewServer : MonoBehaviour {
         }
       }
     }
+  }
+
+  private void UpdateCursorVisibility() {
+    Cursor.visible = gameState == GameState.GameRunning;
   }
 
   private int ScoreIngredient(Ingredient ingredient) {
