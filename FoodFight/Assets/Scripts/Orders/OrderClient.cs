@@ -158,6 +158,7 @@ public class OrderClient : MonoBehaviour {
 					NetworkTransport.RemoveHost(hostId);
 					startGame = false;
 					isConnected = false;
+					OnDisconnect();
 					break;
 			case NetworkEventType.BroadcastEvent:
 					Debug.Log("Broadcast event.");
@@ -230,25 +231,14 @@ public class OrderClient : MonoBehaviour {
 		string messageContent = decodedMessage[1];
 
 		switch (messageType) {
-			case "endgame": // Called when the game is ended with the name of the winning team and the relevant scores
-				OnGameEnd(messageType, messageContent);
-				break;
 			case "newgame": // Called after the new game button is pressed on the server, resets the whole game state
 				Debug.Log("Resetting game state");
 				OnGameReset();
 				break;
-      case "start": // Broadcasted from the server when the required number of players is reached
-        Debug.Log("Starting game...");
-        startGame = true;
-        break;
       default:
         Debug.Log("Invalid message type.");
         break;
 		}
-	}
-
-	private void OnGameEnd(string messageType, string messageContent) {
-		resetUI();
 	}
 
 	public void OnGameReset() {
@@ -258,6 +248,15 @@ public class OrderClient : MonoBehaviour {
 	private void OnConnect() {
 		connectPanel.SetActive(false);
 		cuisinePanel.SetActive(true);
+	}
+
+	private void OnDisconnect() {
+		recipePanel.SetActive(false);
+		teamPanel.SetActive(false);
+		cuisinePanel.SetActive(false);
+		completePanel.SetActive(false);
+		connectPanel.SetActive(true);
+		warningText.text = "Disconnected";
 	}
 
 	public void onRed() {
@@ -326,11 +325,11 @@ public class OrderClient : MonoBehaviour {
 	}
 
 	private void resetUI() {
-		recipePanel.SetActive(false);
+		recipePanel.SetActive(true);
 		teamPanel.SetActive(false);
 		cuisinePanel.SetActive(false);
 		completePanel.SetActive(false);
-		connectPanel.SetActive(true);
+		connectPanel.SetActive(false);
 	}
 
 }
