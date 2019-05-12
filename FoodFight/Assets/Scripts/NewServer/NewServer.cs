@@ -80,7 +80,7 @@ public class NewServer : MonoBehaviour {
     if (Input.GetKeyDown(KeyCode.S)) OnLatinMode();
     if (Input.GetKeyDown(KeyCode.F)) OnFrenchMode();
     if (Input.GetKeyDown(KeyCode.Space) && gameState == GameState.AwaitingPlayers) StartGame();
-    if (Input.GetKeyDowj(KeyCode.Escape)) Application.Quit();
+    if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
   }
 
   private void setTeamStars() {
