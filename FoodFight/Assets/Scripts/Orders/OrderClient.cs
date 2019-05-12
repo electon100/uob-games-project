@@ -19,7 +19,7 @@ public class OrderClient : MonoBehaviour {
 	private const int MAX_CONNECTION = 10;
 	public int port = 8000;
 	private readonly string serverIPBase = "192.168.0."; // The base IP
-	private string serverIPSuffix = "48"; // The default IP suffix
+	private string serverIPSuffix = "100"; // The default IP suffix
 	public int hostId = 0;
 	public int connectionId, reliableChannel;
 
@@ -114,9 +114,6 @@ public class OrderClient : MonoBehaviour {
 		}
 
 		switch ((NetworkError) error) {
-			case NetworkError.Ok :
-				warningText.text = "OK";
-				break;
 			case NetworkError.WrongHost :
 				warningText.text = "WrongHost";
 				break;
@@ -124,7 +121,7 @@ public class OrderClient : MonoBehaviour {
 				warningText.text = "WrongConnection";
 				break;
 			default :
-				warningText.text = "Something Else";
+				warningText.text = "";
 				break;
 		}
 	}
@@ -207,9 +204,6 @@ public class OrderClient : MonoBehaviour {
 		}
 
 		switch ((NetworkError) error) {
-			case NetworkError.Ok :
-				warningText.text = "OK";
-				break;
 			case NetworkError.WrongHost :
 				warningText.text = "WrongHost";
 				break;
@@ -217,7 +211,7 @@ public class OrderClient : MonoBehaviour {
 				warningText.text = "WrongConnection";
 				break;
 			default :
-				warningText.text = "Something Else";
+				warningText.text = "";
 				break;
 		}
 	}
@@ -254,11 +248,11 @@ public class OrderClient : MonoBehaviour {
 	}
 
 	private void OnGameEnd(string messageType, string messageContent) {
-
+		resetUI();
 	}
 
 	public void OnGameReset() {
-
+		resetUI();
 	}
 
 	private void OnConnect() {
@@ -325,10 +319,18 @@ public class OrderClient : MonoBehaviour {
 
 	private void loadOrderCompletePanel() {
 		completePanel.SetActive(true);
-		orderText.text = order.First().ToString().ToLower() + order.Replace(' ', '_').Substring(1);
+		orderText.text = order.First().ToString().ToUpper() + order.Replace('_', ' ').Substring(1);
 		teamText.text = team + " Team";
 
 		SendMyMessage("order", team + "$" + order);
+	}
+
+	private void resetUI() {
+		recipePanel.SetActive(false);
+		teamPanel.SetActive(false);
+		cuisinePanel.SetActive(false);
+		completePanel.SetActive(false);
+		connectPanel.SetActive(true);
 	}
 
 }
