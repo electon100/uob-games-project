@@ -17,7 +17,7 @@ public class NewServer : MonoBehaviour {
   public GameObject bluePlayerPrefab, redPlayerPrefab, redBannerObject, blueBannerObject;
   public Transform mainMenuCanvas, pickModeCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
   public RectTransform redBannerTransform, blueBannerTransform;
-  public Text startScreenText, redEndGameText, blueEndGameText, redScoreText, blueScoreText;
+  public Text startScreenText, redEndGameText, blueEndGameText, redScoreText, blueScoreText, winningTeamText;
   public Image gameOverBackground, redStarSlider, blueStarSlider, redStarBackground, blueStarBackground, blueBannerImage, redBannerImage;
 
   private NewGameTimer timer;
@@ -25,6 +25,7 @@ public class NewServer : MonoBehaviour {
   private WiimoteBehaviourRed wiiRed;
 
   private readonly Color redTeamColour = new Color(1.0f, 0.3f, 0.3f, 1.0f), blueTeamColour = new Color(0.3f, 0.5f, 1.0f, 1.0f);
+  private readonly Color drawColour = new Color(0.23f, 0.71f, 0.58f, 1.0f);
 
   private readonly float disableStationDuration = 10.0f; /* 15 seconds */
   private readonly float negativeScoreMultiplier = 0.2f;
@@ -732,6 +733,7 @@ public class NewServer : MonoBehaviour {
   public void StartGame() {
     if (gameState == GameState.AwaitingPlayers) {
       BroadcastMessage("start", "");
+      BroadcastScores();
       SetGameState(GameState.Countdown);
       timer.StartTimer();
     }
@@ -740,16 +742,18 @@ public class NewServer : MonoBehaviour {
   /* Called by GameTimer.cs */
   public void OnGameOver() {
     SetGameState(GameState.EndGame);
-    redEndGameText.text = "Red score: " + redTeam.Score;
-    blueEndGameText.text = "Blue score: " + blueTeam.Score;
+    redEndGameText.text = "Red score\n" + redTeam.Score;
+    blueEndGameText.text = "Blue score\n" + blueTeam.Score;
     Team winningTeam = getWinningTeam();
     string broadcastMessage = "";
     if (winningTeam != null) {
+      winningTeamText.text = winningTeam.Name + " team wins!";
       gameOverBackground.color = winningTeam.Colour;
       broadcastMessage += winningTeam.Name + "$";
     } else {
       /* Draw! */
-      gameOverBackground.color = Color.white;
+      winningTeamText.text = "It was a draw!";
+      gameOverBackground.color = drawColour;
       broadcastMessage += "draw$";
     }
     broadcastMessage += redTeam.Score + "$" + blueTeam.Score;
