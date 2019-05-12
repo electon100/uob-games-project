@@ -14,10 +14,8 @@ public class NewServer : MonoBehaviour {
   private const int port = 8000;
   private int hostId, webHostId, reliableChannel;
 
-  // private int minimumPlayers = -1;
-
   public GameObject bluePlayerPrefab, redPlayerPrefab, redBannerObject, blueBannerObject;
-  public Transform mainMenuCanvas, pickModeCanvas,/*  pickPlayersCanvas,*/ startGameCanvas, mainGameCanvas, gameOverCanvas;
+  public Transform mainMenuCanvas, pickModeCanvas, startGameCanvas, mainGameCanvas, gameOverCanvas;
   public RectTransform redBannerTransform, blueBannerTransform;
   public Text startScreenText, redEndGameText, blueEndGameText, redScoreText, blueScoreText;
   public Image gameOverBackground, redStarSlider, blueStarSlider, redStarBackground, blueStarBackground, blueBannerImage, redBannerImage;
@@ -30,7 +28,6 @@ public class NewServer : MonoBehaviour {
 
   private readonly float disableStationDuration = 10.0f; /* 15 seconds */
   private readonly float negativeScoreMultiplier = 0.2f;
-  // private readonly bool testing = true; /* Whether we are in test mode */
   private readonly float minNextOrderTime = 15.0f; /* Minimum time before a new order is added */
   private readonly float maxNextOrderTime = 25.0f; /* Maximum time before a new order is added */
 
@@ -59,12 +56,9 @@ public class NewServer : MonoBehaviour {
       case GameState.ConfigureMode:
         listenForData();
         break;
-      // case GameState.ConfigurePlayers:
-      //   listenForData();
-      //   break;
       case GameState.AwaitingPlayers:
         listenForData();
-        //startScreenText.text = "Red: " + redTeam.Players.Count + " | Blue: " + blueTeam.Players.Count;
+        startScreenText.text = "Red: " + redTeam.Players.Count + " | Blue: " + blueTeam.Players.Count;
         break;
       case GameState.Countdown:
         setTeamStars();
@@ -195,19 +189,6 @@ public class NewServer : MonoBehaviour {
         GameObject StationDisablePrefab = GameObject.Find(team.Name + "station" + station.Id + "prefabdisable");
         station.DisablePrefab = StationDisablePrefab;
 
-        // if (station.Id == "2"){
-
-        //   ParticleSystem[] ps = GetComponentsInChildren<ParticleSystem>();
-        //   for (int i = 0; i < ps.Length; i++){
-        //     if (ps[i].gameObject.name == team.Name + "station" + station.Id + "smoke"){
-        //       station.SmokeParticleEffect = ps[i];
-        //     }
-        //   }
-
-        //   ParticleSystem StationSmokeEffect = GameObject.Find(team.Name + "station" + station.Id + "smoke").GetComponent<ParticleSystem>();
-        //   station.SmokeParticleEffect = StationSmokeEffect;
-        // }
-
         GameObject StationPrefab = GameObject.Find(team.Name + "stationprefab" + station.Id);
         station.Prefab = StationPrefab;
       }
@@ -258,7 +239,7 @@ public class NewServer : MonoBehaviour {
       case NetworkEventType.Nothing: // Do nothing if nothing was sent to server
         break;
       case NetworkEventType.ConnectEvent: // Have a phone connect to the server
-        UnityEngine.Debug.Log("Player " + connectionId + " has connected");
+        UnityEngine.Debug.Log(connectionId + " has connected");
         allConnections.Add(connectionId);
         break;
       case NetworkEventType.DataEvent: // Have the phone send data to the server
@@ -266,7 +247,7 @@ public class NewServer : MonoBehaviour {
         manageMessageEvents(message, connectionId);
         break;
       case NetworkEventType.DisconnectEvent: // Remove the player from the game
-        UnityEngine.Debug.Log("Player " + connectionId + " has disconnected");
+        UnityEngine.Debug.Log(connectionId + " has disconnected");
         OnNetworkDisconnect(connectionId);
         break;
       case NetworkEventType.BroadcastEvent:
@@ -567,11 +548,13 @@ public class NewServer : MonoBehaviour {
       string team = messageDetails[0];
       string order = messageDetails[1];
 
-      if (!order.Equals("")) {
-        if (team.Equals("red")) {
-          redTeam.addOrder(mainGameCanvas, order);
-        } else if (team.Equals("blue")) {
-          blueTeam.addOrder(mainGameCanvas, order);
+      if (gameState == GameState.GameRunning){
+        if (!order.Equals("")) {
+          if (team.Equals("red")) {
+            redTeam.addOrder(mainGameCanvas, order);
+          } else if (team.Equals("blue")) {
+            blueTeam.addOrder(mainGameCanvas, order);
+          }
         }
       }
     }
@@ -705,9 +688,6 @@ public class NewServer : MonoBehaviour {
           if (station.DisabledTimer < 0) {
             station.resetTimer();
           }
-          // station.SmokeParticleEffect.Play();
-        } else {
-          // station.SmokeParticleEffect.Stop();
         }
         station.DisablePrefab.SetActive(station.isDisabled());
         station.Prefab.SetActive(!station.isDisabled());
@@ -739,37 +719,17 @@ public class NewServer : MonoBehaviour {
   public void SetCanvasForGameState() {
     mainMenuCanvas.gameObject.SetActive(gameState.Equals(GameState.MainMenu));
     pickModeCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigureMode));
-    // pickPlayersCanvas.gameObject.SetActive(gameState.Equals(GameState.ConfigurePlayers));
     startGameCanvas.gameObject.SetActive(gameState.Equals(GameState.AwaitingPlayers));
     gameOverCanvas.gameObject.SetActive(gameState.Equals(GameState.EndGame));
     mainGameCanvas.gameObject.SetActive(gameState.Equals(GameState.GameRunning) || gameState.Equals(GameState.Countdown));
   }
 
-  // public void OnTwoPlayers() {
-  //   minimumPlayers = 1;
-  //   SetGameState(GameState.AwaitingPlayers);
-  // }
-
-  // public void OnThreePlayers() {
-  //   minimumPlayers = 2;
-  //   SetGameState(GameState.AwaitingPlayers);
-  // }
-
-  // public void OnFourPlayers() {
-  //   minimumPlayers = 3;
-  //   SetGameState(GameState.AwaitingPlayers);
-  // }
-
   /* Broadcasts start */
   public void StartGame() {
     if (gameState == GameState.AwaitingPlayers) {
-    // if (testing || (minimumPlayers > 0 &&
-    //     redTeam.Players.Count >= minimumPlayers &&
-    //     blueTeam.Players.Count >= minimumPlayers)) {
       BroadcastMessage("start", "");
       SetGameState(GameState.Countdown);
       timer.StartTimer();
-    // }
     }
   }
 
@@ -834,7 +794,6 @@ public class NewServer : MonoBehaviour {
   public void OnLatinMode() {
     if (gameState == GameState.ConfigureMode) {
       gameMode = GameMode.Latin;
-      // SetGameState(GameState.ConfigurePlayers);
       SetGameState(GameState.AwaitingPlayers);
       FoodData.Instance.mode = "latin";
     }
@@ -843,7 +802,6 @@ public class NewServer : MonoBehaviour {
   public void OnFrenchMode() {
     if (gameState == GameState.ConfigureMode) {
       gameMode = GameMode.French;
-      // SetGameState(GameState.ConfigurePlayers);
       SetGameState(GameState.AwaitingPlayers);
       FoodData.Instance.mode = "french";
     }
