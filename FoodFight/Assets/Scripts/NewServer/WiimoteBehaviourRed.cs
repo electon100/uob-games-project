@@ -209,6 +209,20 @@ public class WiimoteBehaviourRed : MonoBehaviour {
         redProjectile = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
     }
 
+    public void gameReset()
+    {
+        redIsSet = false;
+        firstTime = false;
+        redTime = 20.0f;
+        gamestarted = false;
+        aPressed = false;
+        redTimeOverPanel.gameObject.SetActive(false);
+        mainPanel.gameObject.SetActive(false);
+        RedStartPanel.gameObject.SetActive(true);
+        redStartText.text = "";
+        DisplayTime();
+    }
+
     float scaleX;
     float scaleY;
     float scaleZ;
