@@ -1036,9 +1036,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Other score
+  m_Text: 'other score
 
-    100'
+    0'
 --- !u!222 &571069868
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1121,7 +1121,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'My score
 
-    100
+    0
 
 '
 --- !u!222 &584197187

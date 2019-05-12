@@ -35,12 +35,12 @@ public class SimulatedPlayer : MonoBehaviour {
 				case ClientGameState.RecipeIntro:
 					fadeBackground = GameObject.Find("FadeBackgroundImage");
 					infoPanel = GameObject.Find("InfoPanel");
-					GameObject.Find("InfoText").GetComponent<Text>().text = "We are going to make Steak Hache. \n To do that, we need to cook \n a steak and some chips.";
+					GameObject.Find("InfoText").GetComponent<Text>().text = "We are going to make Steak Hache. \n\nTo start, we will make chips.";
 					break;
 				case ClientGameState.CupboardTutorial:
 					fadeBackground = GameObject.Find("FadeBackgroundImage");
 					infoPanel = GameObject.Find("InfoPanel");
-					GameObject.Find("InfoText").GetComponent<Text>().text = "Fisrt, log into the cupboard \n to pick up some potatoes.";					
+					GameObject.Find("InfoText").GetComponent<Text>().text = "Fisrt, log into the cupboard \n to pick up some potatoes.";
 					break;
 				case ClientGameState.ChoppingTutorial:
 					fadeBackground = GameObject.Find("FadeBackgroundImage");
@@ -61,7 +61,8 @@ public class SimulatedPlayer : MonoBehaviour {
 					fadeBackground = GameObject.Find("FadeBackgroundImage");
 					infoPanel = GameObject.Find("InfoPanel");
 					GameObject.Find("InfoText").GetComponent<Text>().text = "Tutorial completed! \n You got 100 points!";
-					GameObject.Find("MyScore").GetComponent<Text>().text = "Your team: \n 100";
+					GameObject.Find("MyScore").GetComponent<Text>().text = "My score\n100";
+          GameObject.Find("OtherScore").GetComponent<Text>().text = "Other score\n0";
 					break;
 				default:
 					break;
