@@ -76,6 +76,12 @@ public sealed class FoodData {
 		return recipe.name;
 	}
 
+	/* Determines whether the input ingredient matches the current cuisine */
+	public bool MatchesMode(Ingredient ingredient) {
+		IngredientDescription desc = GetIngredientDescription(ingredient);
+		return desc != null && desc.mode.Equals(mode);
+	}
+
 	/* Gets the score corresponding to an ingredient */
 	public int getScoreForIngredient(Ingredient ingredient) {
 		IngredientDescription desc = GetIngredientDescription(ingredient);

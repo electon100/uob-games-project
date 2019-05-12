@@ -548,12 +548,16 @@ public class NewServer : MonoBehaviour {
       string team = messageDetails[0];
       string order = messageDetails[1];
 
-      if (gameState == GameState.GameRunning){
-        if (!order.Equals("")) {
-          if (team.Equals("red")) {
-            redTeam.addOrder(mainGameCanvas, order);
-          } else if (team.Equals("blue")) {
-            blueTeam.addOrder(mainGameCanvas, order);
+      Ingredient ingred = new Ingredient(order, "mush");
+
+      if (FoodData.Instance.MatchesMode(ingred)) {
+        if (gameState == GameState.GameRunning){
+          if (!order.Equals("")) {
+            if (team.Equals("red")) {
+              redTeam.addOrder(mainGameCanvas, order);
+            } else if (team.Equals("blue")) {
+              blueTeam.addOrder(mainGameCanvas, order);
+            }
           }
         }
       }
@@ -758,6 +762,7 @@ public class NewServer : MonoBehaviour {
     foreach (Team team in allTeams) {
       foreach (Station station in team.Kitchen.Stations) {
         station.DisablePrefab.SetActive(true);
+        station.Prefab.SetActive(true);
       }
     }
   }
@@ -782,6 +787,8 @@ public class NewServer : MonoBehaviour {
     SetGameState(GameState.MainMenu);
     initialiseTeams();
     timer.ResetTimer();
+    wiiBlue.gameReset();
+    wiiRed.gameReset();
     BroadcastAllConnections("newgame", "");
   }
 
