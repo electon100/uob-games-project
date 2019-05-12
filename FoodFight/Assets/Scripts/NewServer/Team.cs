@@ -63,12 +63,21 @@ public class Team {
     return isStationOccupied(station.Id);
   }
 
-  public bool addOrder(Transform mainGameCanvas) {
+  public bool addRandomOrder(Transform mainGameCanvas) {
     string recipeName = FoodData.Instance.getRandomRecipeName();
     Ingredient recipe = new Ingredient(recipeName, recipeName + "Prefab");
     string id = Name + recipeName + Orders.Count + "Object";
 
-    Orders.Add(new Order(id, recipe, new GameObject(id), 180, mainGameCanvas, Name));
+    Orders.Add(new Order(id, recipe, 180, mainGameCanvas, Name));
+
+    return true;
+  }
+
+  public bool addOrder(Transform mainGameCanvas, string recipeName) {
+    Ingredient recipe = new Ingredient(recipeName, recipeName + "Prefab");
+    string id = Name + recipeName + Orders.Count + "Object";
+
+    Orders.Add(new Order(id, recipe, 180, mainGameCanvas, Name));
 
     return true;
   }

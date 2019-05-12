@@ -64,9 +64,10 @@ public class NewServer : MonoBehaviour {
       //   break;
       case GameState.AwaitingPlayers:
         listenForData();
-        startScreenText.text = "Red: " + redTeam.Players.Count + " | Blue: " + blueTeam.Players.Count;
+        //startScreenText.text = "Red: " + redTeam.Players.Count + " | Blue: " + blueTeam.Players.Count;
         break;
       case GameState.Countdown:
+        setTeamStars();
         break;
       case GameState.GameRunning:
         listenForData();
@@ -341,6 +342,9 @@ public class NewServer : MonoBehaviour {
       case "leave": // Player leaves a station
         OnMessageLeave(connectionId, messageType, messageContent);
         break;
+      case "order": // An Order is sent to the server
+        OnMessageOrder(connectionId, messageType, messageContent);
+        break;
       default:
         UnityEngine.Debug.Log("Invalid message type.");
         break;
@@ -556,6 +560,23 @@ public class NewServer : MonoBehaviour {
     }
   }
 
+  private void OnMessageOrder(int connectionId, string messageType, string messageContent) {
+    if (!messageContent.Equals("")) {
+      UnityEngine.Debug.Log("Order received");
+      string[] messageDetails = decodeMessage(messageContent, '$');
+      string team = messageDetails[0];
+      string order = messageDetails[1];
+
+      if (!order.Equals("")) {
+        if (team.Equals("red")) {
+          redTeam.addOrder(mainGameCanvas, order);
+        } else if (team.Equals("blue")) {
+          blueTeam.addOrder(mainGameCanvas, order);
+        }
+      }
+    }
+  }
+
   private int ScoreIngredient(Ingredient ingredient) {
     return FoodData.Instance.getScoreForIngredient(ingredient);
   }
@@ -651,13 +672,13 @@ public class NewServer : MonoBehaviour {
     }
 
     if ((redTeam.NextOrderTimer <= 0 && redTeam.Orders.Count < 3) || redTeam.Orders.Count < 1) {
-      redTeam.addOrder(mainGameCanvas);
+      redTeam.addRandomOrder(mainGameCanvas);
       redTeam.NextOrderTimer = redTeam.Orders.Count * Random.Range(minNextOrderTime, maxNextOrderTime);
     } else {
       redTeam.NextOrderTimer -= Time.deltaTime;
     }
     if ((blueTeam.NextOrderTimer <= 0 && blueTeam.Orders.Count < 3) || blueTeam.Orders.Count < 1) {
-      blueTeam.addOrder(mainGameCanvas);
+      blueTeam.addRandomOrder(mainGameCanvas);
       blueTeam.NextOrderTimer = blueTeam.Orders.Count * Random.Range(minNextOrderTime, maxNextOrderTime);
     } else {
       blueTeam.NextOrderTimer -= Time.deltaTime;
