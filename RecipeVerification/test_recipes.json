@@ -84,7 +84,7 @@
           "chopped": false
         },
         {
-          "name": "chopped_mixed_vegetables",
+          "name": "cheese",
           "cooked": false,
           "chopped": false
         }
@@ -204,12 +204,7 @@
       "name": "quiche_mix",
       "ingredients": [
         {
-          "name": "cheese",
-          "cooked": false,
-          "chopped": false
-        },
-        {
-          "name": "flour",
+          "name": "eggs",
           "cooked": false,
           "chopped": false
         },

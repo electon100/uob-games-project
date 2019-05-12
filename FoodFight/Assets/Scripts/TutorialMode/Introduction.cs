@@ -30,7 +30,7 @@ public class Introduction : MonoBehaviour {
 
 	private string getTextForSlide(int slide) {
 		switch(slide) {
-			case 0: return "Welcome to Food Fight, a fast paced cooking game in which two rival restaurants battle to prove that their kitchen is the best.";
+			case 0: return "Welcome to Food Fight, a fast paced cooking game in which two rival kitchens battle to prove that they are the best.";
 			case 1: return "Your job is work with your teammates to prove your kitchen is superior. Remember - good communication is key.";
 			case 2: return "To get points, cook and serve the orders which show up on the main screen before they expire.";
 			case 3: return "Stay on top of orders! If you miss one, you will lose points.";
@@ -74,6 +74,10 @@ public class Introduction : MonoBehaviour {
 		if (hasPrevSlide()) currentSlide--;
 	}
 
+	private bool isOnFirstSlide() {
+		return currentSlide == 0;
+	}
+
 	private void SetProgressBarValue() {
 		progressBar.maxValue = totalSlides;
 		progressBar.value = currentSlide;
@@ -81,7 +85,7 @@ public class Introduction : MonoBehaviour {
 
 	private void UpdateButtonStates() {
 		SetButtonInteractable(nextButton, hasNextSlide());
-		SetButtonInteractable(backButton, hasPrevSlide());
+		SetButtonInteractable(backButton, hasPrevSlide() || isOnFirstSlide());
 		startTutorialButton.gameObject.SetActive(currentSlide == totalSlides);
 	}
 
@@ -94,7 +98,8 @@ public class Introduction : MonoBehaviour {
 	}
 
 	public void OnBackButtonPress() {
-		prevSlide();
+		if (hasPrevSlide()) prevSlide();
+		else if (isOnFirstSlide()) networkClient.OnGameReset();
 	}
 
 	public void OnGotItButtonPress() {

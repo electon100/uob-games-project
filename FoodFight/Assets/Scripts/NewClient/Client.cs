@@ -87,7 +87,7 @@ public class Client : MonoBehaviour {
 			joinButton.SetActive(false);
 			text.SetActive(false);
 			tutorialButton.SetActive(false);
-		} 
+		}
 		else if (gameState.Equals(ClientGameState.JoinState)) {
 			startPanel = GameObject.Find("startPanel");
       startPanel.gameObject.SetActive(true);
@@ -119,7 +119,7 @@ public class Client : MonoBehaviour {
 
 	public void JoinGame() {
 		SkipTutorialMode();
-		
+
 		if (isJoined) {
 			SceneManager.LoadScene("PickTeamScreen");
 		} else {
@@ -407,7 +407,7 @@ public class Client : MonoBehaviour {
 		}
 	}
 
-	private void OnGameReset() {
+	public void OnGameReset() {
 		/* Reset the player's saved variables */
 		ingredientsInStation = new List<Ingredient>();
 		Player.ingredientsFromStation = ingredientsInStation;

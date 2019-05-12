@@ -129,6 +129,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
         }
 
         if (aPressed){
+            BlueStartPanel.gameObject.SetActive(false);
             TimeSpan tcountdown = TimeSpan.FromSeconds(countdown);
             string countdownFormated = string.Format("{0:D2}", tcountdown.Seconds);
             blueStartText.text = countdownFormated;
@@ -137,9 +138,9 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
         }          
 
         if(aPressed && countdown < 0){
+            blueStartText.text = "";
             gamestarted = true;
             mainPanel.gameObject.SetActive(true);
-            BlueStartPanel.gameObject.SetActive(false);
         }
     }
 
@@ -202,7 +203,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
         blueTimeOverPanel.gameObject.SetActive(false);
         mainPanel.gameObject.SetActive(false);
         BlueStartPanel.gameObject.SetActive(true);
-        blueStartText.text = "Press -a- to start game";
+        blueStartText.text = "";
         blueProjectile = (GameObject) Resources.Load(ingredient.Model, typeof(GameObject));
     }
 
@@ -216,7 +217,7 @@ public class WiimoteBehaviourBlue : MonoBehaviour {
         blueTimeOverPanel.gameObject.SetActive(false);
         mainPanel.gameObject.SetActive(false);
         BlueStartPanel.gameObject.SetActive(true);
-        blueStartText.text = "Press -a- to start game";
+        blueStartText.text = "";
         DisplayTime();
     }
 

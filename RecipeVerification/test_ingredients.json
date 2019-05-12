@@ -17,7 +17,7 @@
       "mode": "none",
       "correctFlips" : 0,
       "maxFlips" : 0,
-      "correctChops" : 5,
+      "correctChops" : 7,
       "score" : 0
     },
     {
@@ -25,20 +25,20 @@
       "choppable" : true,
       "cookable" : false,
       "mode": "none",
-      "correctFlips" : 6,
-      "maxFlips" : 20,
+      "correctFlips" : 0,
+      "maxFlips" : 0,
       "correctChops" : 10,
-      "score" : 20
+      "score" : 0
     },
     {
       "name" : "chicken",
       "choppable" : true,
       "cookable" : false,
       "mode": "none",
-      "correctFlips" : 5,
-      "maxFlips" : 40,
-      "correctChops" : 15,
-      "score" : 20
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 10,
+      "score" : 0
     },
     {
       "name" : "chopped_onion",
@@ -55,50 +55,30 @@
       "choppable" : false,
       "cookable" : false,
       "mode": "none",
-      "correctFlips" : 5,
-      "maxFlips" : 20,
+      "correctFlips" : 0,
+      "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 50
+      "score" : 0
     },
     {
       "name" : "diced_chicken",
       "choppable" : false,
       "cookable" : false,
       "mode": "none",
-      "correctFlips" : 5,
-      "maxFlips" : 40,
-      "correctChops" : 0,
-      "score" : 50
-    },
-    {
-      "name" : "soy_sauce",
-      "choppable" : false,
-      "cookable" : false,
-      "mode": "none",
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 20
-    },
-    {
-      "name" : "noodles",
-      "choppable" : false,
-      "cookable" : false,
-      "mode": "none",
-      "correctFlips" : 5,
-      "maxFlips" : 40,
-      "correctChops" : 0,
-      "score" : 20
+      "score" : 0
     },
     {
       "name" : "potato",
       "choppable" : true,
       "cookable" : false,
       "mode": "none",
-      "correctFlips" : 30,
-      "maxFlips" : 40,
-      "correctChops" : 10,
-      "score" : 20
+      "correctFlips" : 0,
+      "maxFlips" : 0,
+      "correctChops" : 7,
+      "score" : 0
     },
     {
       "name" : "diced_potato",
@@ -108,7 +88,7 @@
       "correctFlips" : 5,
       "maxFlips" : 40,
       "correctChops" : 0,
-      "score" : 50
+      "score" : 0
     },
     {
       "name" : "chips",
@@ -126,19 +106,19 @@
       "cookable" : true,
       "mode": "none",
       "correctFlips" : 5,
-      "maxFlips" : 10,
+      "maxFlips" : 40,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 0
     },
     {
       "name" : "steak",
       "choppable" : false,
       "cookable" : false,
       "mode": "none",
-      "correctFlips" : 5,
-      "maxFlips" : 10,
+      "correctFlips" : 0,
+      "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 0
     },
     {
       "name" : "steak_hache",
@@ -158,17 +138,17 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 20
+      "score" : 0
     },
     {
       "name" : "raw_omelette",
       "choppable" : false,
       "cookable" : true,
       "mode": "none",
-      "correctFlips" : 10,
-      "maxFlips" : 15,
+      "correctFlips" : 7,
+      "maxFlips" : 40,
       "correctChops" : 0,
-      "score" : 50
+      "score" : 0
     },
     {
       "name" : "omelette",
@@ -178,17 +158,17 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 100
+      "score" : 70
     },
     {
       "name" : "rice",
       "choppable" : false,
       "cookable" : false,
       "mode": "none",
-      "correctFlips" : 20,
-      "maxFlips" : 30,
+      "correctFlips" : 0,
+      "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 30
+      "score" : 0
     },
     {
       "name" : "milk",
@@ -198,7 +178,7 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 20
+      "score" : 0
     },
     {
       "name" : "flour",
@@ -208,17 +188,17 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 20
+      "score" : 0
     },
     {
       "name" : "crepe_mix",
       "choppable" : false,
       "cookable" : true,
       "mode": "none",
-      "correctFlips" : 8,
-      "maxFlips" : 12,
+      "correctFlips" : 7,
+      "maxFlips" : 40,
       "correctChops" : 0,
-      "score" : 60
+      "score" : 0
     },
     {
       "name" : "crepe",
@@ -238,7 +218,7 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 30
+      "score" : 0
     },
     {
       "name" : "peas",
@@ -248,17 +228,17 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 20
+      "score" : 0
     },
     {
       "name" : "paella_mix",
       "choppable" : false,
       "cookable" : true,
       "mode": "none",
-      "correctFlips" : 7,
-      "maxFlips" : 0,
+      "correctFlips" : 10,
+      "maxFlips" : 40,
       "correctChops" : 0,
-      "score" : 60
+      "score" : 0
     },
     {
       "name" : "paella",
@@ -278,7 +258,7 @@
       "correctFlips" : 10,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 0
     },
     {
       "name" : "cooked_ratatouille_mix",
@@ -288,7 +268,7 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 0
     },
     {
       "name" : "ratatouille",
@@ -298,37 +278,37 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 100
+      "score" : 130
     },
     {
       "name" : "quiche_mix",
       "choppable" : false,
       "cookable" : true,
       "mode": "none",
-      "correctFlips" : 6,
-      "maxFlips" : 0,
+      "correctFlips" : 7,
+      "maxFlips" : 40,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 0
     },
     {
       "name" : "quiche",
       "choppable" : false,
       "cookable" : false,
       "mode": "french",
-      "correctFlips" : 6,
+      "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 100
     },
     {
       "name" : "raw_patatas_bravas",
       "choppable" : false,
       "cookable" : true,
       "mode": "none",
-      "correctFlips" : 7,
+      "correctFlips" : 5,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 0
     },
     {
       "name" : "patatas_bravas",
@@ -338,7 +318,7 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 80
+      "score" : 100
     },
     {
       "name" : "oil",
@@ -348,7 +328,7 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 20
+      "score" : 0
     },
     {
       "name" : "chocolate_sauce",
@@ -358,17 +338,17 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 20
+      "score" : 0
     },
     {
       "name" : "raw_churros",
       "choppable" : false,
       "cookable" : true,
       "mode": "none",
-      "correctFlips" : 9,
-      "maxFlips" : 0,
+      "correctFlips" : 7,
+      "maxFlips" : 40,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 0
     },
     {
       "name" : "churros_mix",
@@ -378,7 +358,7 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 0
     },
     {
       "name" : "churros",
@@ -395,10 +375,10 @@
       "choppable" : false,
       "cookable" : true,
       "mode": "none",
-      "correctFlips" : 8,
-      "maxFlips" : 0,
+      "correctFlips" : 7,
+      "maxFlips" : 40,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 0
     },
     {
       "name" : "spanish_omelette",
@@ -408,7 +388,7 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 70
+      "score" : 100
     },
     {
       "name" : "tortillas",
@@ -425,10 +405,10 @@
       "choppable" : false,
       "cookable" : true,
       "mode": "none",
-      "correctFlips" : 10,
-      "maxFlips" : 0,
+      "correctFlips" : 7,
+      "maxFlips" : 40,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 0
     },
     {
       "name" : "quesadilla",
@@ -438,7 +418,7 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 100
+      "score" : 130
     },
     {
       "name" : "raw_calamari",
@@ -448,7 +428,7 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 0
     },
     {
       "name" : "calamari_mix",
@@ -458,7 +438,7 @@
       "correctFlips" : 10,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 0
     },
     {
       "name" : "calamari",
@@ -468,7 +448,7 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 40
+      "score" : 70
     },
     {
       "name" : "cheese",
@@ -478,7 +458,7 @@
       "correctFlips" : 0,
       "maxFlips" : 0,
       "correctChops" : 0,
-      "score" : 10
+      "score" : 0
     }
   ]
 }

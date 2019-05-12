@@ -11,8 +11,6 @@ public class Station {
 
   public List<Ingredient> Ingredients { get; }
 
-	public ParticleSystem SmokeParticleEffect { get; set; }
-
   public GameObject DisablePrefab { get; set; }
 
   public GameObject Prefab { get; set; }

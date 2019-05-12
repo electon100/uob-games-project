@@ -63,12 +63,21 @@ public class Team {
     return isStationOccupied(station.Id);
   }
 
-  public bool addOrder(Transform mainGameCanvas) {
+  public bool addRandomOrder(Transform mainGameCanvas) {
     string recipeName = FoodData.Instance.getRandomRecipeName();
     Ingredient recipe = new Ingredient(recipeName, recipeName + "Prefab");
     string id = Name + recipeName + Orders.Count + "Object";
 
-    Orders.Add(new Order(id, recipe, new GameObject(id), 150, mainGameCanvas, Name));
+    Orders.Add(new Order(id, recipe, 180, mainGameCanvas, Name));
+
+    return true;
+  }
+
+  public bool addOrder(Transform mainGameCanvas, string recipeName) {
+    Ingredient recipe = new Ingredient(recipeName, recipeName + "Prefab");
+    string id = Name + recipeName + Orders.Count + "Object";
+
+    Orders.Add(new Order(id, recipe, 180, mainGameCanvas, Name));
 
     return true;
   }
@@ -105,16 +114,29 @@ public class Team {
   }
 
   public void scoreRecipe(Ingredient ingredient) {
+    bool inOrders = false;
+    int ingredientScore = FoodData.Instance.getScoreForIngredient(ingredient);
     for (int i = 0; i < Orders.Count; i++) {
       if (ingredient.Name.Equals(Orders[i].Recipe.Name)) {
-        Score += FoodData.Instance.getScoreForIngredient(ingredient);
+        Score += ingredientScore;
         UnityEngine.Object.Destroy(Orders[i].ParentGameObject);
         Orders.Remove(Orders[i]);
+        inOrders = true;
         break;
       }
     }
 
-    if (Score > 10000) Score = 10000;
+    if (!inOrders) {
+      Score += (int) (ingredientScore / 3);
+    }
+
+    if (Score > 9999) Score = 9999;
+    if (Score < 0) Score = 0;
+  }
+
+  public void modifyScore(int scoreDelta) {
+    Score += scoreDelta;
+    if (Score > 9999) Score = 9999;
     if (Score < 0) Score = 0;
   }
 
