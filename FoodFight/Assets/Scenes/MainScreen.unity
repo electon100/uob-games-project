@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -30833,7 +30833,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -30928,14 +30928,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f57a9c52cc13dd94ca9304807298e9e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlueCupboard: {fileID: 721804270}
-  BlueChopping: {fileID: 577178284}
-  BlueFrying: {fileID: 1695425655}
-  BluePlating: {fileID: 547533111}
-  RedCupboard: {fileID: 182411285}
-  RedChopping: {fileID: 418956674}
-  RedFrying: {fileID: 1599058195}
-  RedPlating: {fileID: 1472801522}
+  BlueCupboard: {fileID: 182411285}
+  BlueChopping: {fileID: 418956674}
+  BlueFrying: {fileID: 1599058195}
+  BluePlating: {fileID: 1472801522}
+  RedCupboard: {fileID: 721804270}
+  RedChopping: {fileID: 577178284}
+  RedFrying: {fileID: 1695425655}
+  RedPlating: {fileID: 547533111}
 --- !u!4 &2015738762
 Transform:
   m_ObjectHideFlags: 0
