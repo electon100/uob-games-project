@@ -84,6 +84,10 @@ public class NewGameTimer : MonoBehaviour {
       }
     }
 
+    if (timer <= 30.0f) {
+      timerText.color = Color.red;
+    }
+
     updateUI();
   }
 
