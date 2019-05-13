@@ -667,8 +667,8 @@ public class NewServer : MonoBehaviour {
     float redDeltaScore = redTeam.checkExpiredOrders();
 
     if (redDeltaScore > 0 || blueDeltaScore > 0) {
-      redTeam.Score -= (int) (redDeltaScore * negativeScoreMultiplier);
-      blueTeam.Score -= (int) (blueDeltaScore * negativeScoreMultiplier);
+      redTeam.modifyScore(- (int) (redDeltaScore * negativeScoreMultiplier));
+      blueTeam.modifyScore(- (int) (blueDeltaScore * negativeScoreMultiplier));
 
       /* Broadcast new scores to devices */
       BroadcastScores();
