@@ -1,0 +1,1630 @@
+fileFormatVersion: 2
+guid: 4f152c8ff87baba45930e334d3fb6835
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: paella_mix_model:pCube2
+    100004: paella_mix_model:pCube3
+    100006: paella_mix_model:pea48
+    100008: paella_mix_model:pea50
+    100010: paella_mix_model:pea51
+    100012: paella_mix_model:pea53
+    100014: paella_mix_model:pea56
+    100016: paella_mix_model:pea59
+    100018: paella_mix_model:pea61
+    100020: paella_mix_model:pea63
+    100022: paella_mix_model:pea65
+    100024: paella_mix_model:pea66
+    100026: paella_mix_model:pea67
+    100028: paella_mix_model:pea72
+    100030: paella_mix_model:pea74
+    100032: paella_mix_model:prawn1
+    100034: paella_mix_model:rice1
+    100036: paella_mix_model:rice1 1
+    100038: paella_mix_model:rice103
+    100040: paella_mix_model:rice103 1
+    100042: paella_mix_model:rice105
+    100044: paella_mix_model:rice105 1
+    100046: paella_mix_model:rice107
+    100048: paella_mix_model:rice107 1
+    100050: paella_mix_model:rice108
+    100052: paella_mix_model:rice108 1
+    100054: paella_mix_model:rice109
+    100056: paella_mix_model:rice109 1
+    100058: paella_mix_model:rice11
+    100060: paella_mix_model:rice11 1
+    100062: paella_mix_model:rice115
+    100064: paella_mix_model:rice116
+    100066: paella_mix_model:rice118
+    100068: paella_mix_model:rice119
+    100070: paella_mix_model:rice123
+    100072: paella_mix_model:rice123 1
+    100074: paella_mix_model:rice127
+    100076: paella_mix_model:rice127 1
+    100078: paella_mix_model:rice13
+    100080: paella_mix_model:rice13 1
+    100082: paella_mix_model:rice131
+    100084: paella_mix_model:rice131 1
+    100086: paella_mix_model:rice134
+    100088: paella_mix_model:rice134 1
+    100090: paella_mix_model:rice138
+    100092: paella_mix_model:rice138 1
+    100094: paella_mix_model:rice15
+    100096: paella_mix_model:rice15 1
+    100098: paella_mix_model:rice150
+    100100: paella_mix_model:rice150 1
+    100102: paella_mix_model:rice154
+    100104: paella_mix_model:rice154 1
+    100106: paella_mix_model:rice157
+    100108: paella_mix_model:rice157 1
+    100110: paella_mix_model:rice16
+    100112: paella_mix_model:rice16 1
+    100114: paella_mix_model:rice161
+    100116: paella_mix_model:rice161 1
+    100118: paella_mix_model:rice162
+    100120: paella_mix_model:rice162 1
+    100122: paella_mix_model:rice165
+    100124: paella_mix_model:rice165 1
+    100126: paella_mix_model:rice166
+    100128: paella_mix_model:rice166 1
+    100130: paella_mix_model:rice169
+    100132: paella_mix_model:rice169 1
+    100134: paella_mix_model:rice17
+    100136: paella_mix_model:rice17 1
+    100138: paella_mix_model:rice174
+    100140: paella_mix_model:rice174 1
+    100142: paella_mix_model:rice176
+    100144: paella_mix_model:rice178
+    100146: paella_mix_model:rice179
+    100148: paella_mix_model:rice183
+    100150: paella_mix_model:rice183 1
+    100152: paella_mix_model:rice187
+    100154: paella_mix_model:rice187 1
+    100156: paella_mix_model:rice2
+    100158: paella_mix_model:rice2 1
+    100160: paella_mix_model:rice20
+    100162: paella_mix_model:rice20 1
+    100164: paella_mix_model:rice206
+    100166: paella_mix_model:rice206 1
+    100168: paella_mix_model:rice214
+    100170: paella_mix_model:rice217
+    100172: paella_mix_model:rice217 1
+    100174: paella_mix_model:rice218
+    100176: paella_mix_model:rice218 1
+    100178: paella_mix_model:rice219
+    100180: paella_mix_model:rice219 1
+    100182: paella_mix_model:rice22
+    100184: paella_mix_model:rice22 1
+    100186: paella_mix_model:rice226
+    100188: paella_mix_model:rice234
+    100190: paella_mix_model:rice239
+    100192: paella_mix_model:rice239 1
+    100194: paella_mix_model:rice24
+    100196: paella_mix_model:rice24 1
+    100198: paella_mix_model:rice25
+    100200: paella_mix_model:rice25 1
+    100202: paella_mix_model:rice26
+    100204: paella_mix_model:rice26 1
+    100206: paella_mix_model:rice28
+    100208: paella_mix_model:rice28 1
+    100210: paella_mix_model:rice29
+    100212: paella_mix_model:rice29 1
+    100214: paella_mix_model:rice3
+    100216: paella_mix_model:rice3 1
+    100218: paella_mix_model:rice31
+    100220: paella_mix_model:rice31 1
+    100222: paella_mix_model:rice33
+    100224: paella_mix_model:rice33 1
+    100226: paella_mix_model:rice34
+    100228: paella_mix_model:rice34 1
+    100230: paella_mix_model:rice35
+    100232: paella_mix_model:rice35 1
+    100234: paella_mix_model:rice38
+    100236: paella_mix_model:rice38 1
+    100238: paella_mix_model:rice4
+    100240: paella_mix_model:rice4 1
+    100242: paella_mix_model:rice43
+    100244: paella_mix_model:rice43 1
+    100246: paella_mix_model:rice44
+    100248: paella_mix_model:rice44 1
+    100250: paella_mix_model:rice46
+    100252: paella_mix_model:rice47
+    100254: paella_mix_model:rice47 1
+    100256: paella_mix_model:rice49
+    100258: paella_mix_model:rice49 1
+    100260: paella_mix_model:rice51
+    100262: paella_mix_model:rice51 1
+    100264: paella_mix_model:rice52
+    100266: paella_mix_model:rice52 1
+    100268: paella_mix_model:rice53
+    100270: paella_mix_model:rice53 1
+    100272: paella_mix_model:rice54
+    100274: paella_mix_model:rice54 1
+    100276: paella_mix_model:rice55
+    100278: paella_mix_model:rice56
+    100280: paella_mix_model:rice56 1
+    100282: paella_mix_model:rice58
+    100284: paella_mix_model:rice58 1
+    100286: paella_mix_model:rice6
+    100288: paella_mix_model:rice6 1
+    100290: paella_mix_model:rice60
+    100292: paella_mix_model:rice60 1
+    100294: paella_mix_model:rice61
+    100296: paella_mix_model:rice61 1
+    100298: paella_mix_model:rice64
+    100300: paella_mix_model:rice65
+    100302: paella_mix_model:rice65 1
+    100304: paella_mix_model:rice67
+    100306: paella_mix_model:rice67 1
+    100308: paella_mix_model:rice69
+    100310: paella_mix_model:rice69 1
+    100312: paella_mix_model:rice7
+    100314: paella_mix_model:rice7 1
+    100316: paella_mix_model:rice70
+    100318: paella_mix_model:rice70 1
+    100320: paella_mix_model:rice74
+    100322: paella_mix_model:rice74 1
+    100324: paella_mix_model:rice75
+    100326: paella_mix_model:rice75 1
+    100328: paella_mix_model:rice76
+    100330: paella_mix_model:rice76 1
+    100332: paella_mix_model:rice79
+    100334: paella_mix_model:rice80
+    100336: paella_mix_model:rice82
+    100338: paella_mix_model:rice82 1
+    100340: paella_mix_model:rice86
+    100342: paella_mix_model:rice88
+    100344: paella_mix_model:rice88 1
+    100346: paella_mix_model:rice91
+    100348: paella_mix_model:rice91 1
+    100350: paella_mix_model:rice94
+    100352: paella_mix_model:rice94 1
+    100354: paella_mix_model:rice95
+    100356: paella_mix_model:rice95 1
+    100358: paella_mix_model:rice96
+    100360: paella_mix_model:rice96 1
+    100362: paella_mix_model:rice98
+    100364: paella_mix_model:rice98 1
+    100366: paella_mix_model:rice_pile:rice1
+    100368: paella_mix_model:rice_pile:rice10
+    100370: paella_mix_model:rice_pile:rice102
+    100372: paella_mix_model:rice_pile:rice103
+    100374: paella_mix_model:rice_pile:rice105
+    100376: paella_mix_model:rice_pile:rice107
+    100378: paella_mix_model:rice_pile:rice108
+    100380: paella_mix_model:rice_pile:rice109
+    100382: paella_mix_model:rice_pile:rice11
+    100384: paella_mix_model:rice_pile:rice114
+    100386: paella_mix_model:rice_pile:rice115
+    100388: paella_mix_model:rice_pile:rice116
+    100390: paella_mix_model:rice_pile:rice118
+    100392: paella_mix_model:rice_pile:rice119
+    100394: paella_mix_model:rice_pile:rice125
+    100396: paella_mix_model:rice_pile:rice127
+    100398: paella_mix_model:rice_pile:rice129
+    100400: paella_mix_model:rice_pile:rice13
+    100402: paella_mix_model:rice_pile:rice131
+    100404: paella_mix_model:rice_pile:rice134
+    100406: paella_mix_model:rice_pile:rice135
+    100408: paella_mix_model:rice_pile:rice138
+    100410: paella_mix_model:rice_pile:rice145
+    100412: paella_mix_model:rice_pile:rice15
+    100414: paella_mix_model:rice_pile:rice150
+    100416: paella_mix_model:rice_pile:rice154
+    100418: paella_mix_model:rice_pile:rice157
+    100420: paella_mix_model:rice_pile:rice16
+    100422: paella_mix_model:rice_pile:rice161
+    100424: paella_mix_model:rice_pile:rice162
+    100426: paella_mix_model:rice_pile:rice164
+    100428: paella_mix_model:rice_pile:rice165
+    100430: paella_mix_model:rice_pile:rice166
+    100432: paella_mix_model:rice_pile:rice169
+    100434: paella_mix_model:rice_pile:rice17
+    100436: paella_mix_model:rice_pile:rice171
+    100438: paella_mix_model:rice_pile:rice174
+    100440: paella_mix_model:rice_pile:rice18
+    100442: paella_mix_model:rice_pile:rice180
+    100444: paella_mix_model:rice_pile:rice183
+    100446: paella_mix_model:rice_pile:rice187
+    100448: paella_mix_model:rice_pile:rice2
+    100450: paella_mix_model:rice_pile:rice20
+    100452: paella_mix_model:rice_pile:rice200
+    100454: paella_mix_model:rice_pile:rice206
+    100456: paella_mix_model:rice_pile:rice214
+    100458: paella_mix_model:rice_pile:rice218
+    100460: paella_mix_model:rice_pile:rice219
+    100462: paella_mix_model:rice_pile:rice22
+    100464: paella_mix_model:rice_pile:rice226
+    100466: paella_mix_model:rice_pile:rice239
+    100468: paella_mix_model:rice_pile:rice24
+    100470: paella_mix_model:rice_pile:rice25
+    100472: paella_mix_model:rice_pile:rice26
+    100474: paella_mix_model:rice_pile:rice28
+    100476: paella_mix_model:rice_pile:rice29
+    100478: paella_mix_model:rice_pile:rice3
+    100480: paella_mix_model:rice_pile:rice31
+    100482: paella_mix_model:rice_pile:rice33
+    100484: paella_mix_model:rice_pile:rice34
+    100486: paella_mix_model:rice_pile:rice35
+    100488: paella_mix_model:rice_pile:rice36
+    100490: paella_mix_model:rice_pile:rice37
+    100492: paella_mix_model:rice_pile:rice38
+    100494: paella_mix_model:rice_pile:rice4
+    100496: paella_mix_model:rice_pile:rice43
+    100498: paella_mix_model:rice_pile:rice44
+    100500: paella_mix_model:rice_pile:rice47
+    100502: paella_mix_model:rice_pile:rice49
+    100504: paella_mix_model:rice_pile:rice5
+    100506: paella_mix_model:rice_pile:rice51
+    100508: paella_mix_model:rice_pile:rice52
+    100510: paella_mix_model:rice_pile:rice53
+    100512: paella_mix_model:rice_pile:rice54
+    100514: paella_mix_model:rice_pile:rice55
+    100516: paella_mix_model:rice_pile:rice56
+    100518: paella_mix_model:rice_pile:rice58
+    100520: paella_mix_model:rice_pile:rice6
+    100522: paella_mix_model:rice_pile:rice60
+    100524: paella_mix_model:rice_pile:rice61
+    100526: paella_mix_model:rice_pile:rice64
+    100528: paella_mix_model:rice_pile:rice65
+    100530: paella_mix_model:rice_pile:rice67
+    100532: paella_mix_model:rice_pile:rice69
+    100534: paella_mix_model:rice_pile:rice7
+    100536: paella_mix_model:rice_pile:rice70
+    100538: paella_mix_model:rice_pile:rice73
+    100540: paella_mix_model:rice_pile:rice74
+    100542: paella_mix_model:rice_pile:rice75
+    100544: paella_mix_model:rice_pile:rice76
+    100546: paella_mix_model:rice_pile:rice77
+    100548: paella_mix_model:rice_pile:rice79
+    100550: paella_mix_model:rice_pile:rice80
+    100552: paella_mix_model:rice_pile:rice82
+    100554: paella_mix_model:rice_pile:rice83
+    100556: paella_mix_model:rice_pile:rice86
+    100558: paella_mix_model:rice_pile:rice88
+    100560: paella_mix_model:rice_pile:rice90
+    100562: paella_mix_model:rice_pile:rice91
+    100564: paella_mix_model:rice_pile:rice93
+    100566: paella_mix_model:rice_pile:rice94
+    100568: paella_mix_model:rice_pile:rice95
+    100570: paella_mix_model:rice_pile:rice96
+    100572: paella_mix_model:rice_pile:rice98
+    100574: paella_mix_model:rices
+    100576: paella_mix_model:rices1
+    100578: paella_mix_model:rices2
+    100580: paella_mix_model:shell
+    100582: paella_mix_model:tail
+    100584: pCube2
+    100586: pCube2 1
+    100588: pCube2 2
+    100590: pCube3
+    100592: pCube3 1
+    100594: pCube3 2
+    100596: peas
+    100598: prawn1
+    100600: prawn2
+    100602: prawn3
+    100604: prawnmeat
+    100606: prawnmeat 1
+    100608: prawnmeat 2
+    100610: prawnmeat 3
+    100612: prawns
+    100614: rice
+    100616: rice105
+    100618: rices2
+    100620: sauce
+    100622: shell
+    100624: shell 1
+    100626: shell 2
+    100628: tail
+    100630: tail 1
+    100632: tail 2
+    400000: //RootNode
+    400002: paella_mix_model:pCube2
+    400004: paella_mix_model:pCube3
+    400006: paella_mix_model:pea48
+    400008: paella_mix_model:pea50
+    400010: paella_mix_model:pea51
+    400012: paella_mix_model:pea53
+    400014: paella_mix_model:pea56
+    400016: paella_mix_model:pea59
+    400018: paella_mix_model:pea61
+    400020: paella_mix_model:pea63
+    400022: paella_mix_model:pea65
+    400024: paella_mix_model:pea66
+    400026: paella_mix_model:pea67
+    400028: paella_mix_model:pea72
+    400030: paella_mix_model:pea74
+    400032: paella_mix_model:prawn1
+    400034: paella_mix_model:rice1
+    400036: paella_mix_model:rice1 1
+    400038: paella_mix_model:rice103
+    400040: paella_mix_model:rice103 1
+    400042: paella_mix_model:rice105
+    400044: paella_mix_model:rice105 1
+    400046: paella_mix_model:rice107
+    400048: paella_mix_model:rice107 1
+    400050: paella_mix_model:rice108
+    400052: paella_mix_model:rice108 1
+    400054: paella_mix_model:rice109
+    400056: paella_mix_model:rice109 1
+    400058: paella_mix_model:rice11
+    400060: paella_mix_model:rice11 1
+    400062: paella_mix_model:rice115
+    400064: paella_mix_model:rice116
+    400066: paella_mix_model:rice118
+    400068: paella_mix_model:rice119
+    400070: paella_mix_model:rice123
+    400072: paella_mix_model:rice123 1
+    400074: paella_mix_model:rice127
+    400076: paella_mix_model:rice127 1
+    400078: paella_mix_model:rice13
+    400080: paella_mix_model:rice13 1
+    400082: paella_mix_model:rice131
+    400084: paella_mix_model:rice131 1
+    400086: paella_mix_model:rice134
+    400088: paella_mix_model:rice134 1
+    400090: paella_mix_model:rice138
+    400092: paella_mix_model:rice138 1
+    400094: paella_mix_model:rice15
+    400096: paella_mix_model:rice15 1
+    400098: paella_mix_model:rice150
+    400100: paella_mix_model:rice150 1
+    400102: paella_mix_model:rice154
+    400104: paella_mix_model:rice154 1
+    400106: paella_mix_model:rice157
+    400108: paella_mix_model:rice157 1
+    400110: paella_mix_model:rice16
+    400112: paella_mix_model:rice16 1
+    400114: paella_mix_model:rice161
+    400116: paella_mix_model:rice161 1
+    400118: paella_mix_model:rice162
+    400120: paella_mix_model:rice162 1
+    400122: paella_mix_model:rice165
+    400124: paella_mix_model:rice165 1
+    400126: paella_mix_model:rice166
+    400128: paella_mix_model:rice166 1
+    400130: paella_mix_model:rice169
+    400132: paella_mix_model:rice169 1
+    400134: paella_mix_model:rice17
+    400136: paella_mix_model:rice17 1
+    400138: paella_mix_model:rice174
+    400140: paella_mix_model:rice174 1
+    400142: paella_mix_model:rice176
+    400144: paella_mix_model:rice178
+    400146: paella_mix_model:rice179
+    400148: paella_mix_model:rice183
+    400150: paella_mix_model:rice183 1
+    400152: paella_mix_model:rice187
+    400154: paella_mix_model:rice187 1
+    400156: paella_mix_model:rice2
+    400158: paella_mix_model:rice2 1
+    400160: paella_mix_model:rice20
+    400162: paella_mix_model:rice20 1
+    400164: paella_mix_model:rice206
+    400166: paella_mix_model:rice206 1
+    400168: paella_mix_model:rice214
+    400170: paella_mix_model:rice217
+    400172: paella_mix_model:rice217 1
+    400174: paella_mix_model:rice218
+    400176: paella_mix_model:rice218 1
+    400178: paella_mix_model:rice219
+    400180: paella_mix_model:rice219 1
+    400182: paella_mix_model:rice22
+    400184: paella_mix_model:rice22 1
+    400186: paella_mix_model:rice226
+    400188: paella_mix_model:rice234
+    400190: paella_mix_model:rice239
+    400192: paella_mix_model:rice239 1
+    400194: paella_mix_model:rice24
+    400196: paella_mix_model:rice24 1
+    400198: paella_mix_model:rice25
+    400200: paella_mix_model:rice25 1
+    400202: paella_mix_model:rice26
+    400204: paella_mix_model:rice26 1
+    400206: paella_mix_model:rice28
+    400208: paella_mix_model:rice28 1
+    400210: paella_mix_model:rice29
+    400212: paella_mix_model:rice29 1
+    400214: paella_mix_model:rice3
+    400216: paella_mix_model:rice3 1
+    400218: paella_mix_model:rice31
+    400220: paella_mix_model:rice31 1
+    400222: paella_mix_model:rice33
+    400224: paella_mix_model:rice33 1
+    400226: paella_mix_model:rice34
+    400228: paella_mix_model:rice34 1
+    400230: paella_mix_model:rice35
+    400232: paella_mix_model:rice35 1
+    400234: paella_mix_model:rice38
+    400236: paella_mix_model:rice38 1
+    400238: paella_mix_model:rice4
+    400240: paella_mix_model:rice4 1
+    400242: paella_mix_model:rice43
+    400244: paella_mix_model:rice43 1
+    400246: paella_mix_model:rice44
+    400248: paella_mix_model:rice44 1
+    400250: paella_mix_model:rice46
+    400252: paella_mix_model:rice47
+    400254: paella_mix_model:rice47 1
+    400256: paella_mix_model:rice49
+    400258: paella_mix_model:rice49 1
+    400260: paella_mix_model:rice51
+    400262: paella_mix_model:rice51 1
+    400264: paella_mix_model:rice52
+    400266: paella_mix_model:rice52 1
+    400268: paella_mix_model:rice53
+    400270: paella_mix_model:rice53 1
+    400272: paella_mix_model:rice54
+    400274: paella_mix_model:rice54 1
+    400276: paella_mix_model:rice55
+    400278: paella_mix_model:rice56
+    400280: paella_mix_model:rice56 1
+    400282: paella_mix_model:rice58
+    400284: paella_mix_model:rice58 1
+    400286: paella_mix_model:rice6
+    400288: paella_mix_model:rice6 1
+    400290: paella_mix_model:rice60
+    400292: paella_mix_model:rice60 1
+    400294: paella_mix_model:rice61
+    400296: paella_mix_model:rice61 1
+    400298: paella_mix_model:rice64
+    400300: paella_mix_model:rice65
+    400302: paella_mix_model:rice65 1
+    400304: paella_mix_model:rice67
+    400306: paella_mix_model:rice67 1
+    400308: paella_mix_model:rice69
+    400310: paella_mix_model:rice69 1
+    400312: paella_mix_model:rice7
+    400314: paella_mix_model:rice7 1
+    400316: paella_mix_model:rice70
+    400318: paella_mix_model:rice70 1
+    400320: paella_mix_model:rice74
+    400322: paella_mix_model:rice74 1
+    400324: paella_mix_model:rice75
+    400326: paella_mix_model:rice75 1
+    400328: paella_mix_model:rice76
+    400330: paella_mix_model:rice76 1
+    400332: paella_mix_model:rice79
+    400334: paella_mix_model:rice80
+    400336: paella_mix_model:rice82
+    400338: paella_mix_model:rice82 1
+    400340: paella_mix_model:rice86
+    400342: paella_mix_model:rice88
+    400344: paella_mix_model:rice88 1
+    400346: paella_mix_model:rice91
+    400348: paella_mix_model:rice91 1
+    400350: paella_mix_model:rice94
+    400352: paella_mix_model:rice94 1
+    400354: paella_mix_model:rice95
+    400356: paella_mix_model:rice95 1
+    400358: paella_mix_model:rice96
+    400360: paella_mix_model:rice96 1
+    400362: paella_mix_model:rice98
+    400364: paella_mix_model:rice98 1
+    400366: paella_mix_model:rice_pile:rice1
+    400368: paella_mix_model:rice_pile:rice10
+    400370: paella_mix_model:rice_pile:rice102
+    400372: paella_mix_model:rice_pile:rice103
+    400374: paella_mix_model:rice_pile:rice105
+    400376: paella_mix_model:rice_pile:rice107
+    400378: paella_mix_model:rice_pile:rice108
+    400380: paella_mix_model:rice_pile:rice109
+    400382: paella_mix_model:rice_pile:rice11
+    400384: paella_mix_model:rice_pile:rice114
+    400386: paella_mix_model:rice_pile:rice115
+    400388: paella_mix_model:rice_pile:rice116
+    400390: paella_mix_model:rice_pile:rice118
+    400392: paella_mix_model:rice_pile:rice119
+    400394: paella_mix_model:rice_pile:rice125
+    400396: paella_mix_model:rice_pile:rice127
+    400398: paella_mix_model:rice_pile:rice129
+    400400: paella_mix_model:rice_pile:rice13
+    400402: paella_mix_model:rice_pile:rice131
+    400404: paella_mix_model:rice_pile:rice134
+    400406: paella_mix_model:rice_pile:rice135
+    400408: paella_mix_model:rice_pile:rice138
+    400410: paella_mix_model:rice_pile:rice145
+    400412: paella_mix_model:rice_pile:rice15
+    400414: paella_mix_model:rice_pile:rice150
+    400416: paella_mix_model:rice_pile:rice154
+    400418: paella_mix_model:rice_pile:rice157
+    400420: paella_mix_model:rice_pile:rice16
+    400422: paella_mix_model:rice_pile:rice161
+    400424: paella_mix_model:rice_pile:rice162
+    400426: paella_mix_model:rice_pile:rice164
+    400428: paella_mix_model:rice_pile:rice165
+    400430: paella_mix_model:rice_pile:rice166
+    400432: paella_mix_model:rice_pile:rice169
+    400434: paella_mix_model:rice_pile:rice17
+    400436: paella_mix_model:rice_pile:rice171
+    400438: paella_mix_model:rice_pile:rice174
+    400440: paella_mix_model:rice_pile:rice18
+    400442: paella_mix_model:rice_pile:rice180
+    400444: paella_mix_model:rice_pile:rice183
+    400446: paella_mix_model:rice_pile:rice187
+    400448: paella_mix_model:rice_pile:rice2
+    400450: paella_mix_model:rice_pile:rice20
+    400452: paella_mix_model:rice_pile:rice200
+    400454: paella_mix_model:rice_pile:rice206
+    400456: paella_mix_model:rice_pile:rice214
+    400458: paella_mix_model:rice_pile:rice218
+    400460: paella_mix_model:rice_pile:rice219
+    400462: paella_mix_model:rice_pile:rice22
+    400464: paella_mix_model:rice_pile:rice226
+    400466: paella_mix_model:rice_pile:rice239
+    400468: paella_mix_model:rice_pile:rice24
+    400470: paella_mix_model:rice_pile:rice25
+    400472: paella_mix_model:rice_pile:rice26
+    400474: paella_mix_model:rice_pile:rice28
+    400476: paella_mix_model:rice_pile:rice29
+    400478: paella_mix_model:rice_pile:rice3
+    400480: paella_mix_model:rice_pile:rice31
+    400482: paella_mix_model:rice_pile:rice33
+    400484: paella_mix_model:rice_pile:rice34
+    400486: paella_mix_model:rice_pile:rice35
+    400488: paella_mix_model:rice_pile:rice36
+    400490: paella_mix_model:rice_pile:rice37
+    400492: paella_mix_model:rice_pile:rice38
+    400494: paella_mix_model:rice_pile:rice4
+    400496: paella_mix_model:rice_pile:rice43
+    400498: paella_mix_model:rice_pile:rice44
+    400500: paella_mix_model:rice_pile:rice47
+    400502: paella_mix_model:rice_pile:rice49
+    400504: paella_mix_model:rice_pile:rice5
+    400506: paella_mix_model:rice_pile:rice51
+    400508: paella_mix_model:rice_pile:rice52
+    400510: paella_mix_model:rice_pile:rice53
+    400512: paella_mix_model:rice_pile:rice54
+    400514: paella_mix_model:rice_pile:rice55
+    400516: paella_mix_model:rice_pile:rice56
+    400518: paella_mix_model:rice_pile:rice58
+    400520: paella_mix_model:rice_pile:rice6
+    400522: paella_mix_model:rice_pile:rice60
+    400524: paella_mix_model:rice_pile:rice61
+    400526: paella_mix_model:rice_pile:rice64
+    400528: paella_mix_model:rice_pile:rice65
+    400530: paella_mix_model:rice_pile:rice67
+    400532: paella_mix_model:rice_pile:rice69
+    400534: paella_mix_model:rice_pile:rice7
+    400536: paella_mix_model:rice_pile:rice70
+    400538: paella_mix_model:rice_pile:rice73
+    400540: paella_mix_model:rice_pile:rice74
+    400542: paella_mix_model:rice_pile:rice75
+    400544: paella_mix_model:rice_pile:rice76
+    400546: paella_mix_model:rice_pile:rice77
+    400548: paella_mix_model:rice_pile:rice79
+    400550: paella_mix_model:rice_pile:rice80
+    400552: paella_mix_model:rice_pile:rice82
+    400554: paella_mix_model:rice_pile:rice83
+    400556: paella_mix_model:rice_pile:rice86
+    400558: paella_mix_model:rice_pile:rice88
+    400560: paella_mix_model:rice_pile:rice90
+    400562: paella_mix_model:rice_pile:rice91
+    400564: paella_mix_model:rice_pile:rice93
+    400566: paella_mix_model:rice_pile:rice94
+    400568: paella_mix_model:rice_pile:rice95
+    400570: paella_mix_model:rice_pile:rice96
+    400572: paella_mix_model:rice_pile:rice98
+    400574: paella_mix_model:rices
+    400576: paella_mix_model:rices1
+    400578: paella_mix_model:rices2
+    400580: paella_mix_model:shell
+    400582: paella_mix_model:tail
+    400584: pCube2
+    400586: pCube2 1
+    400588: pCube2 2
+    400590: pCube3
+    400592: pCube3 1
+    400594: pCube3 2
+    400596: peas
+    400598: prawn1
+    400600: prawn2
+    400602: prawn3
+    400604: prawnmeat
+    400606: prawnmeat 1
+    400608: prawnmeat 2
+    400610: prawnmeat 3
+    400612: prawns
+    400614: rice
+    400616: rice105
+    400618: rices2
+    400620: sauce
+    400622: shell
+    400624: shell 1
+    400626: shell 2
+    400628: tail
+    400630: tail 1
+    400632: tail 2
+    2100000: paella_mix_model_peas_peacol
+    2100002: paella_rice
+    2100004: paella_mix_model_prawn_model_shellcol
+    2100006: paella_mix_model_prawn_model_tailcol
+    2100008: paella_mix_model_prawn_model_prawnskin
+    2100010: paella_mix_model_pileofprawns1_prawn_model_shellcol
+    2300000: paella_mix_model:pCube2
+    2300002: paella_mix_model:pCube3
+    2300004: paella_mix_model:pea48
+    2300006: paella_mix_model:pea50
+    2300008: paella_mix_model:pea51
+    2300010: paella_mix_model:pea53
+    2300012: paella_mix_model:pea56
+    2300014: paella_mix_model:pea59
+    2300016: paella_mix_model:pea61
+    2300018: paella_mix_model:pea63
+    2300020: paella_mix_model:pea65
+    2300022: paella_mix_model:pea66
+    2300024: paella_mix_model:pea67
+    2300026: paella_mix_model:pea72
+    2300028: paella_mix_model:pea74
+    2300030: paella_mix_model:rice1
+    2300032: paella_mix_model:rice1 1
+    2300034: paella_mix_model:rice103
+    2300036: paella_mix_model:rice103 1
+    2300038: paella_mix_model:rice105
+    2300040: paella_mix_model:rice105 1
+    2300042: paella_mix_model:rice107
+    2300044: paella_mix_model:rice107 1
+    2300046: paella_mix_model:rice108
+    2300048: paella_mix_model:rice108 1
+    2300050: paella_mix_model:rice109
+    2300052: paella_mix_model:rice109 1
+    2300054: paella_mix_model:rice11
+    2300056: paella_mix_model:rice11 1
+    2300058: paella_mix_model:rice115
+    2300060: paella_mix_model:rice116
+    2300062: paella_mix_model:rice118
+    2300064: paella_mix_model:rice119
+    2300066: paella_mix_model:rice123
+    2300068: paella_mix_model:rice123 1
+    2300070: paella_mix_model:rice127
+    2300072: paella_mix_model:rice127 1
+    2300074: paella_mix_model:rice13
+    2300076: paella_mix_model:rice13 1
+    2300078: paella_mix_model:rice131
+    2300080: paella_mix_model:rice131 1
+    2300082: paella_mix_model:rice134
+    2300084: paella_mix_model:rice134 1
+    2300086: paella_mix_model:rice138
+    2300088: paella_mix_model:rice138 1
+    2300090: paella_mix_model:rice15
+    2300092: paella_mix_model:rice15 1
+    2300094: paella_mix_model:rice150
+    2300096: paella_mix_model:rice150 1
+    2300098: paella_mix_model:rice154
+    2300100: paella_mix_model:rice154 1
+    2300102: paella_mix_model:rice157
+    2300104: paella_mix_model:rice157 1
+    2300106: paella_mix_model:rice16
+    2300108: paella_mix_model:rice16 1
+    2300110: paella_mix_model:rice161
+    2300112: paella_mix_model:rice161 1
+    2300114: paella_mix_model:rice162
+    2300116: paella_mix_model:rice162 1
+    2300118: paella_mix_model:rice165
+    2300120: paella_mix_model:rice165 1
+    2300122: paella_mix_model:rice166
+    2300124: paella_mix_model:rice166 1
+    2300126: paella_mix_model:rice169
+    2300128: paella_mix_model:rice169 1
+    2300130: paella_mix_model:rice17
+    2300132: paella_mix_model:rice17 1
+    2300134: paella_mix_model:rice174
+    2300136: paella_mix_model:rice174 1
+    2300138: paella_mix_model:rice176
+    2300140: paella_mix_model:rice178
+    2300142: paella_mix_model:rice179
+    2300144: paella_mix_model:rice183
+    2300146: paella_mix_model:rice183 1
+    2300148: paella_mix_model:rice187
+    2300150: paella_mix_model:rice187 1
+    2300152: paella_mix_model:rice2
+    2300154: paella_mix_model:rice2 1
+    2300156: paella_mix_model:rice20
+    2300158: paella_mix_model:rice20 1
+    2300160: paella_mix_model:rice206
+    2300162: paella_mix_model:rice206 1
+    2300164: paella_mix_model:rice214
+    2300166: paella_mix_model:rice217
+    2300168: paella_mix_model:rice217 1
+    2300170: paella_mix_model:rice218
+    2300172: paella_mix_model:rice218 1
+    2300174: paella_mix_model:rice219
+    2300176: paella_mix_model:rice219 1
+    2300178: paella_mix_model:rice22
+    2300180: paella_mix_model:rice22 1
+    2300182: paella_mix_model:rice226
+    2300184: paella_mix_model:rice234
+    2300186: paella_mix_model:rice239
+    2300188: paella_mix_model:rice239 1
+    2300190: paella_mix_model:rice24
+    2300192: paella_mix_model:rice24 1
+    2300194: paella_mix_model:rice25
+    2300196: paella_mix_model:rice25 1
+    2300198: paella_mix_model:rice26
+    2300200: paella_mix_model:rice26 1
+    2300202: paella_mix_model:rice28
+    2300204: paella_mix_model:rice28 1
+    2300206: paella_mix_model:rice29
+    2300208: paella_mix_model:rice29 1
+    2300210: paella_mix_model:rice3
+    2300212: paella_mix_model:rice3 1
+    2300214: paella_mix_model:rice31
+    2300216: paella_mix_model:rice31 1
+    2300218: paella_mix_model:rice33
+    2300220: paella_mix_model:rice33 1
+    2300222: paella_mix_model:rice34
+    2300224: paella_mix_model:rice34 1
+    2300226: paella_mix_model:rice35
+    2300228: paella_mix_model:rice35 1
+    2300230: paella_mix_model:rice38
+    2300232: paella_mix_model:rice38 1
+    2300234: paella_mix_model:rice4
+    2300236: paella_mix_model:rice4 1
+    2300238: paella_mix_model:rice43
+    2300240: paella_mix_model:rice43 1
+    2300242: paella_mix_model:rice44
+    2300244: paella_mix_model:rice44 1
+    2300246: paella_mix_model:rice46
+    2300248: paella_mix_model:rice47
+    2300250: paella_mix_model:rice47 1
+    2300252: paella_mix_model:rice49
+    2300254: paella_mix_model:rice49 1
+    2300256: paella_mix_model:rice51
+    2300258: paella_mix_model:rice51 1
+    2300260: paella_mix_model:rice52
+    2300262: paella_mix_model:rice52 1
+    2300264: paella_mix_model:rice53
+    2300266: paella_mix_model:rice53 1
+    2300268: paella_mix_model:rice54
+    2300270: paella_mix_model:rice54 1
+    2300272: paella_mix_model:rice55
+    2300274: paella_mix_model:rice56
+    2300276: paella_mix_model:rice56 1
+    2300278: paella_mix_model:rice58
+    2300280: paella_mix_model:rice58 1
+    2300282: paella_mix_model:rice6
+    2300284: paella_mix_model:rice6 1
+    2300286: paella_mix_model:rice60
+    2300288: paella_mix_model:rice60 1
+    2300290: paella_mix_model:rice61
+    2300292: paella_mix_model:rice61 1
+    2300294: paella_mix_model:rice64
+    2300296: paella_mix_model:rice65
+    2300298: paella_mix_model:rice65 1
+    2300300: paella_mix_model:rice67
+    2300302: paella_mix_model:rice67 1
+    2300304: paella_mix_model:rice69
+    2300306: paella_mix_model:rice69 1
+    2300308: paella_mix_model:rice7
+    2300310: paella_mix_model:rice7 1
+    2300312: paella_mix_model:rice70
+    2300314: paella_mix_model:rice70 1
+    2300316: paella_mix_model:rice74
+    2300318: paella_mix_model:rice74 1
+    2300320: paella_mix_model:rice75
+    2300322: paella_mix_model:rice75 1
+    2300324: paella_mix_model:rice76
+    2300326: paella_mix_model:rice76 1
+    2300328: paella_mix_model:rice79
+    2300330: paella_mix_model:rice80
+    2300332: paella_mix_model:rice82
+    2300334: paella_mix_model:rice82 1
+    2300336: paella_mix_model:rice86
+    2300338: paella_mix_model:rice88
+    2300340: paella_mix_model:rice88 1
+    2300342: paella_mix_model:rice91
+    2300344: paella_mix_model:rice91 1
+    2300346: paella_mix_model:rice94
+    2300348: paella_mix_model:rice94 1
+    2300350: paella_mix_model:rice95
+    2300352: paella_mix_model:rice95 1
+    2300354: paella_mix_model:rice96
+    2300356: paella_mix_model:rice96 1
+    2300358: paella_mix_model:rice98
+    2300360: paella_mix_model:rice98 1
+    2300362: paella_mix_model:rice_pile:rice1
+    2300364: paella_mix_model:rice_pile:rice10
+    2300366: paella_mix_model:rice_pile:rice102
+    2300368: paella_mix_model:rice_pile:rice103
+    2300370: paella_mix_model:rice_pile:rice105
+    2300372: paella_mix_model:rice_pile:rice107
+    2300374: paella_mix_model:rice_pile:rice108
+    2300376: paella_mix_model:rice_pile:rice109
+    2300378: paella_mix_model:rice_pile:rice11
+    2300380: paella_mix_model:rice_pile:rice114
+    2300382: paella_mix_model:rice_pile:rice115
+    2300384: paella_mix_model:rice_pile:rice116
+    2300386: paella_mix_model:rice_pile:rice118
+    2300388: paella_mix_model:rice_pile:rice119
+    2300390: paella_mix_model:rice_pile:rice125
+    2300392: paella_mix_model:rice_pile:rice127
+    2300394: paella_mix_model:rice_pile:rice129
+    2300396: paella_mix_model:rice_pile:rice13
+    2300398: paella_mix_model:rice_pile:rice131
+    2300400: paella_mix_model:rice_pile:rice134
+    2300402: paella_mix_model:rice_pile:rice135
+    2300404: paella_mix_model:rice_pile:rice138
+    2300406: paella_mix_model:rice_pile:rice145
+    2300408: paella_mix_model:rice_pile:rice15
+    2300410: paella_mix_model:rice_pile:rice150
+    2300412: paella_mix_model:rice_pile:rice154
+    2300414: paella_mix_model:rice_pile:rice157
+    2300416: paella_mix_model:rice_pile:rice16
+    2300418: paella_mix_model:rice_pile:rice161
+    2300420: paella_mix_model:rice_pile:rice162
+    2300422: paella_mix_model:rice_pile:rice164
+    2300424: paella_mix_model:rice_pile:rice165
+    2300426: paella_mix_model:rice_pile:rice166
+    2300428: paella_mix_model:rice_pile:rice169
+    2300430: paella_mix_model:rice_pile:rice17
+    2300432: paella_mix_model:rice_pile:rice171
+    2300434: paella_mix_model:rice_pile:rice174
+    2300436: paella_mix_model:rice_pile:rice18
+    2300438: paella_mix_model:rice_pile:rice180
+    2300440: paella_mix_model:rice_pile:rice183
+    2300442: paella_mix_model:rice_pile:rice187
+    2300444: paella_mix_model:rice_pile:rice2
+    2300446: paella_mix_model:rice_pile:rice20
+    2300448: paella_mix_model:rice_pile:rice200
+    2300450: paella_mix_model:rice_pile:rice206
+    2300452: paella_mix_model:rice_pile:rice214
+    2300454: paella_mix_model:rice_pile:rice218
+    2300456: paella_mix_model:rice_pile:rice219
+    2300458: paella_mix_model:rice_pile:rice22
+    2300460: paella_mix_model:rice_pile:rice226
+    2300462: paella_mix_model:rice_pile:rice239
+    2300464: paella_mix_model:rice_pile:rice24
+    2300466: paella_mix_model:rice_pile:rice25
+    2300468: paella_mix_model:rice_pile:rice26
+    2300470: paella_mix_model:rice_pile:rice28
+    2300472: paella_mix_model:rice_pile:rice29
+    2300474: paella_mix_model:rice_pile:rice3
+    2300476: paella_mix_model:rice_pile:rice31
+    2300478: paella_mix_model:rice_pile:rice33
+    2300480: paella_mix_model:rice_pile:rice34
+    2300482: paella_mix_model:rice_pile:rice35
+    2300484: paella_mix_model:rice_pile:rice36
+    2300486: paella_mix_model:rice_pile:rice37
+    2300488: paella_mix_model:rice_pile:rice38
+    2300490: paella_mix_model:rice_pile:rice4
+    2300492: paella_mix_model:rice_pile:rice43
+    2300494: paella_mix_model:rice_pile:rice44
+    2300496: paella_mix_model:rice_pile:rice47
+    2300498: paella_mix_model:rice_pile:rice49
+    2300500: paella_mix_model:rice_pile:rice5
+    2300502: paella_mix_model:rice_pile:rice51
+    2300504: paella_mix_model:rice_pile:rice52
+    2300506: paella_mix_model:rice_pile:rice53
+    2300508: paella_mix_model:rice_pile:rice54
+    2300510: paella_mix_model:rice_pile:rice55
+    2300512: paella_mix_model:rice_pile:rice56
+    2300514: paella_mix_model:rice_pile:rice58
+    2300516: paella_mix_model:rice_pile:rice6
+    2300518: paella_mix_model:rice_pile:rice60
+    2300520: paella_mix_model:rice_pile:rice61
+    2300522: paella_mix_model:rice_pile:rice64
+    2300524: paella_mix_model:rice_pile:rice65
+    2300526: paella_mix_model:rice_pile:rice67
+    2300528: paella_mix_model:rice_pile:rice69
+    2300530: paella_mix_model:rice_pile:rice7
+    2300532: paella_mix_model:rice_pile:rice70
+    2300534: paella_mix_model:rice_pile:rice73
+    2300536: paella_mix_model:rice_pile:rice74
+    2300538: paella_mix_model:rice_pile:rice75
+    2300540: paella_mix_model:rice_pile:rice76
+    2300542: paella_mix_model:rice_pile:rice77
+    2300544: paella_mix_model:rice_pile:rice79
+    2300546: paella_mix_model:rice_pile:rice80
+    2300548: paella_mix_model:rice_pile:rice82
+    2300550: paella_mix_model:rice_pile:rice83
+    2300552: paella_mix_model:rice_pile:rice86
+    2300554: paella_mix_model:rice_pile:rice88
+    2300556: paella_mix_model:rice_pile:rice90
+    2300558: paella_mix_model:rice_pile:rice91
+    2300560: paella_mix_model:rice_pile:rice93
+    2300562: paella_mix_model:rice_pile:rice94
+    2300564: paella_mix_model:rice_pile:rice95
+    2300566: paella_mix_model:rice_pile:rice96
+    2300568: paella_mix_model:rice_pile:rice98
+    2300570: paella_mix_model:shell
+    2300572: pCube2
+    2300574: pCube2 1
+    2300576: pCube2 2
+    2300578: pCube3
+    2300580: pCube3 1
+    2300582: pCube3 2
+    2300584: prawnmeat
+    2300586: prawnmeat 1
+    2300588: prawnmeat 2
+    2300590: prawnmeat 3
+    2300592: rice105
+    2300594: sauce
+    2300596: shell
+    2300598: shell 1
+    2300600: shell 2
+    3300000: paella_mix_model:pCube2
+    3300002: paella_mix_model:pCube3
+    3300004: paella_mix_model:pea48
+    3300006: paella_mix_model:pea50
+    3300008: paella_mix_model:pea51
+    3300010: paella_mix_model:pea53
+    3300012: paella_mix_model:pea56
+    3300014: paella_mix_model:pea59
+    3300016: paella_mix_model:pea61
+    3300018: paella_mix_model:pea63
+    3300020: paella_mix_model:pea65
+    3300022: paella_mix_model:pea66
+    3300024: paella_mix_model:pea67
+    3300026: paella_mix_model:pea72
+    3300028: paella_mix_model:pea74
+    3300030: paella_mix_model:rice1
+    3300032: paella_mix_model:rice1 1
+    3300034: paella_mix_model:rice103
+    3300036: paella_mix_model:rice103 1
+    3300038: paella_mix_model:rice105
+    3300040: paella_mix_model:rice105 1
+    3300042: paella_mix_model:rice107
+    3300044: paella_mix_model:rice107 1
+    3300046: paella_mix_model:rice108
+    3300048: paella_mix_model:rice108 1
+    3300050: paella_mix_model:rice109
+    3300052: paella_mix_model:rice109 1
+    3300054: paella_mix_model:rice11
+    3300056: paella_mix_model:rice11 1
+    3300058: paella_mix_model:rice115
+    3300060: paella_mix_model:rice116
+    3300062: paella_mix_model:rice118
+    3300064: paella_mix_model:rice119
+    3300066: paella_mix_model:rice123
+    3300068: paella_mix_model:rice123 1
+    3300070: paella_mix_model:rice127
+    3300072: paella_mix_model:rice127 1
+    3300074: paella_mix_model:rice13
+    3300076: paella_mix_model:rice13 1
+    3300078: paella_mix_model:rice131
+    3300080: paella_mix_model:rice131 1
+    3300082: paella_mix_model:rice134
+    3300084: paella_mix_model:rice134 1
+    3300086: paella_mix_model:rice138
+    3300088: paella_mix_model:rice138 1
+    3300090: paella_mix_model:rice15
+    3300092: paella_mix_model:rice15 1
+    3300094: paella_mix_model:rice150
+    3300096: paella_mix_model:rice150 1
+    3300098: paella_mix_model:rice154
+    3300100: paella_mix_model:rice154 1
+    3300102: paella_mix_model:rice157
+    3300104: paella_mix_model:rice157 1
+    3300106: paella_mix_model:rice16
+    3300108: paella_mix_model:rice16 1
+    3300110: paella_mix_model:rice161
+    3300112: paella_mix_model:rice161 1
+    3300114: paella_mix_model:rice162
+    3300116: paella_mix_model:rice162 1
+    3300118: paella_mix_model:rice165
+    3300120: paella_mix_model:rice165 1
+    3300122: paella_mix_model:rice166
+    3300124: paella_mix_model:rice166 1
+    3300126: paella_mix_model:rice169
+    3300128: paella_mix_model:rice169 1
+    3300130: paella_mix_model:rice17
+    3300132: paella_mix_model:rice17 1
+    3300134: paella_mix_model:rice174
+    3300136: paella_mix_model:rice174 1
+    3300138: paella_mix_model:rice176
+    3300140: paella_mix_model:rice178
+    3300142: paella_mix_model:rice179
+    3300144: paella_mix_model:rice183
+    3300146: paella_mix_model:rice183 1
+    3300148: paella_mix_model:rice187
+    3300150: paella_mix_model:rice187 1
+    3300152: paella_mix_model:rice2
+    3300154: paella_mix_model:rice2 1
+    3300156: paella_mix_model:rice20
+    3300158: paella_mix_model:rice20 1
+    3300160: paella_mix_model:rice206
+    3300162: paella_mix_model:rice206 1
+    3300164: paella_mix_model:rice214
+    3300166: paella_mix_model:rice217
+    3300168: paella_mix_model:rice217 1
+    3300170: paella_mix_model:rice218
+    3300172: paella_mix_model:rice218 1
+    3300174: paella_mix_model:rice219
+    3300176: paella_mix_model:rice219 1
+    3300178: paella_mix_model:rice22
+    3300180: paella_mix_model:rice22 1
+    3300182: paella_mix_model:rice226
+    3300184: paella_mix_model:rice234
+    3300186: paella_mix_model:rice239
+    3300188: paella_mix_model:rice239 1
+    3300190: paella_mix_model:rice24
+    3300192: paella_mix_model:rice24 1
+    3300194: paella_mix_model:rice25
+    3300196: paella_mix_model:rice25 1
+    3300198: paella_mix_model:rice26
+    3300200: paella_mix_model:rice26 1
+    3300202: paella_mix_model:rice28
+    3300204: paella_mix_model:rice28 1
+    3300206: paella_mix_model:rice29
+    3300208: paella_mix_model:rice29 1
+    3300210: paella_mix_model:rice3
+    3300212: paella_mix_model:rice3 1
+    3300214: paella_mix_model:rice31
+    3300216: paella_mix_model:rice31 1
+    3300218: paella_mix_model:rice33
+    3300220: paella_mix_model:rice33 1
+    3300222: paella_mix_model:rice34
+    3300224: paella_mix_model:rice34 1
+    3300226: paella_mix_model:rice35
+    3300228: paella_mix_model:rice35 1
+    3300230: paella_mix_model:rice38
+    3300232: paella_mix_model:rice38 1
+    3300234: paella_mix_model:rice4
+    3300236: paella_mix_model:rice4 1
+    3300238: paella_mix_model:rice43
+    3300240: paella_mix_model:rice43 1
+    3300242: paella_mix_model:rice44
+    3300244: paella_mix_model:rice44 1
+    3300246: paella_mix_model:rice46
+    3300248: paella_mix_model:rice47
+    3300250: paella_mix_model:rice47 1
+    3300252: paella_mix_model:rice49
+    3300254: paella_mix_model:rice49 1
+    3300256: paella_mix_model:rice51
+    3300258: paella_mix_model:rice51 1
+    3300260: paella_mix_model:rice52
+    3300262: paella_mix_model:rice52 1
+    3300264: paella_mix_model:rice53
+    3300266: paella_mix_model:rice53 1
+    3300268: paella_mix_model:rice54
+    3300270: paella_mix_model:rice54 1
+    3300272: paella_mix_model:rice55
+    3300274: paella_mix_model:rice56
+    3300276: paella_mix_model:rice56 1
+    3300278: paella_mix_model:rice58
+    3300280: paella_mix_model:rice58 1
+    3300282: paella_mix_model:rice6
+    3300284: paella_mix_model:rice6 1
+    3300286: paella_mix_model:rice60
+    3300288: paella_mix_model:rice60 1
+    3300290: paella_mix_model:rice61
+    3300292: paella_mix_model:rice61 1
+    3300294: paella_mix_model:rice64
+    3300296: paella_mix_model:rice65
+    3300298: paella_mix_model:rice65 1
+    3300300: paella_mix_model:rice67
+    3300302: paella_mix_model:rice67 1
+    3300304: paella_mix_model:rice69
+    3300306: paella_mix_model:rice69 1
+    3300308: paella_mix_model:rice7
+    3300310: paella_mix_model:rice7 1
+    3300312: paella_mix_model:rice70
+    3300314: paella_mix_model:rice70 1
+    3300316: paella_mix_model:rice74
+    3300318: paella_mix_model:rice74 1
+    3300320: paella_mix_model:rice75
+    3300322: paella_mix_model:rice75 1
+    3300324: paella_mix_model:rice76
+    3300326: paella_mix_model:rice76 1
+    3300328: paella_mix_model:rice79
+    3300330: paella_mix_model:rice80
+    3300332: paella_mix_model:rice82
+    3300334: paella_mix_model:rice82 1
+    3300336: paella_mix_model:rice86
+    3300338: paella_mix_model:rice88
+    3300340: paella_mix_model:rice88 1
+    3300342: paella_mix_model:rice91
+    3300344: paella_mix_model:rice91 1
+    3300346: paella_mix_model:rice94
+    3300348: paella_mix_model:rice94 1
+    3300350: paella_mix_model:rice95
+    3300352: paella_mix_model:rice95 1
+    3300354: paella_mix_model:rice96
+    3300356: paella_mix_model:rice96 1
+    3300358: paella_mix_model:rice98
+    3300360: paella_mix_model:rice98 1
+    3300362: paella_mix_model:rice_pile:rice1
+    3300364: paella_mix_model:rice_pile:rice10
+    3300366: paella_mix_model:rice_pile:rice102
+    3300368: paella_mix_model:rice_pile:rice103
+    3300370: paella_mix_model:rice_pile:rice105
+    3300372: paella_mix_model:rice_pile:rice107
+    3300374: paella_mix_model:rice_pile:rice108
+    3300376: paella_mix_model:rice_pile:rice109
+    3300378: paella_mix_model:rice_pile:rice11
+    3300380: paella_mix_model:rice_pile:rice114
+    3300382: paella_mix_model:rice_pile:rice115
+    3300384: paella_mix_model:rice_pile:rice116
+    3300386: paella_mix_model:rice_pile:rice118
+    3300388: paella_mix_model:rice_pile:rice119
+    3300390: paella_mix_model:rice_pile:rice125
+    3300392: paella_mix_model:rice_pile:rice127
+    3300394: paella_mix_model:rice_pile:rice129
+    3300396: paella_mix_model:rice_pile:rice13
+    3300398: paella_mix_model:rice_pile:rice131
+    3300400: paella_mix_model:rice_pile:rice134
+    3300402: paella_mix_model:rice_pile:rice135
+    3300404: paella_mix_model:rice_pile:rice138
+    3300406: paella_mix_model:rice_pile:rice145
+    3300408: paella_mix_model:rice_pile:rice15
+    3300410: paella_mix_model:rice_pile:rice150
+    3300412: paella_mix_model:rice_pile:rice154
+    3300414: paella_mix_model:rice_pile:rice157
+    3300416: paella_mix_model:rice_pile:rice16
+    3300418: paella_mix_model:rice_pile:rice161
+    3300420: paella_mix_model:rice_pile:rice162
+    3300422: paella_mix_model:rice_pile:rice164
+    3300424: paella_mix_model:rice_pile:rice165
+    3300426: paella_mix_model:rice_pile:rice166
+    3300428: paella_mix_model:rice_pile:rice169
+    3300430: paella_mix_model:rice_pile:rice17
+    3300432: paella_mix_model:rice_pile:rice171
+    3300434: paella_mix_model:rice_pile:rice174
+    3300436: paella_mix_model:rice_pile:rice18
+    3300438: paella_mix_model:rice_pile:rice180
+    3300440: paella_mix_model:rice_pile:rice183
+    3300442: paella_mix_model:rice_pile:rice187
+    3300444: paella_mix_model:rice_pile:rice2
+    3300446: paella_mix_model:rice_pile:rice20
+    3300448: paella_mix_model:rice_pile:rice200
+    3300450: paella_mix_model:rice_pile:rice206
+    3300452: paella_mix_model:rice_pile:rice214
+    3300454: paella_mix_model:rice_pile:rice218
+    3300456: paella_mix_model:rice_pile:rice219
+    3300458: paella_mix_model:rice_pile:rice22
+    3300460: paella_mix_model:rice_pile:rice226
+    3300462: paella_mix_model:rice_pile:rice239
+    3300464: paella_mix_model:rice_pile:rice24
+    3300466: paella_mix_model:rice_pile:rice25
+    3300468: paella_mix_model:rice_pile:rice26
+    3300470: paella_mix_model:rice_pile:rice28
+    3300472: paella_mix_model:rice_pile:rice29
+    3300474: paella_mix_model:rice_pile:rice3
+    3300476: paella_mix_model:rice_pile:rice31
+    3300478: paella_mix_model:rice_pile:rice33
+    3300480: paella_mix_model:rice_pile:rice34
+    3300482: paella_mix_model:rice_pile:rice35
+    3300484: paella_mix_model:rice_pile:rice36
+    3300486: paella_mix_model:rice_pile:rice37
+    3300488: paella_mix_model:rice_pile:rice38
+    3300490: paella_mix_model:rice_pile:rice4
+    3300492: paella_mix_model:rice_pile:rice43
+    3300494: paella_mix_model:rice_pile:rice44
+    3300496: paella_mix_model:rice_pile:rice47
+    3300498: paella_mix_model:rice_pile:rice49
+    3300500: paella_mix_model:rice_pile:rice5
+    3300502: paella_mix_model:rice_pile:rice51
+    3300504: paella_mix_model:rice_pile:rice52
+    3300506: paella_mix_model:rice_pile:rice53
+    3300508: paella_mix_model:rice_pile:rice54
+    3300510: paella_mix_model:rice_pile:rice55
+    3300512: paella_mix_model:rice_pile:rice56
+    3300514: paella_mix_model:rice_pile:rice58
+    3300516: paella_mix_model:rice_pile:rice6
+    3300518: paella_mix_model:rice_pile:rice60
+    3300520: paella_mix_model:rice_pile:rice61
+    3300522: paella_mix_model:rice_pile:rice64
+    3300524: paella_mix_model:rice_pile:rice65
+    3300526: paella_mix_model:rice_pile:rice67
+    3300528: paella_mix_model:rice_pile:rice69
+    3300530: paella_mix_model:rice_pile:rice7
+    3300532: paella_mix_model:rice_pile:rice70
+    3300534: paella_mix_model:rice_pile:rice73
+    3300536: paella_mix_model:rice_pile:rice74
+    3300538: paella_mix_model:rice_pile:rice75
+    3300540: paella_mix_model:rice_pile:rice76
+    3300542: paella_mix_model:rice_pile:rice77
+    3300544: paella_mix_model:rice_pile:rice79
+    3300546: paella_mix_model:rice_pile:rice80
+    3300548: paella_mix_model:rice_pile:rice82
+    3300550: paella_mix_model:rice_pile:rice83
+    3300552: paella_mix_model:rice_pile:rice86
+    3300554: paella_mix_model:rice_pile:rice88
+    3300556: paella_mix_model:rice_pile:rice90
+    3300558: paella_mix_model:rice_pile:rice91
+    3300560: paella_mix_model:rice_pile:rice93
+    3300562: paella_mix_model:rice_pile:rice94
+    3300564: paella_mix_model:rice_pile:rice95
+    3300566: paella_mix_model:rice_pile:rice96
+    3300568: paella_mix_model:rice_pile:rice98
+    3300570: paella_mix_model:shell
+    3300572: pCube2
+    3300574: pCube2 1
+    3300576: pCube2 2
+    3300578: pCube3
+    3300580: pCube3 1
+    3300582: pCube3 2
+    3300584: prawnmeat
+    3300586: prawnmeat 1
+    3300588: prawnmeat 2
+    3300590: prawnmeat 3
+    3300592: rice105
+    3300594: sauce
+    3300596: shell
+    3300598: shell 1
+    3300600: shell 2
+    4300000: paella_mix_model:pea63
+    4300002: paella_mix_model:pea61
+    4300004: paella_mix_model:pea59
+    4300006: paella_mix_model:pea56
+    4300008: paella_mix_model:pea53
+    4300010: paella_mix_model:pea51
+    4300012: paella_mix_model:pea50
+    4300014: paella_mix_model:pea48
+    4300016: paella_mix_model:pea65
+    4300018: paella_mix_model:pea66
+    4300020: paella_mix_model:pea67
+    4300022: paella_mix_model:pea72
+    4300024: paella_mix_model:pea74
+    4300026: paella_mix_model:rice239
+    4300028: paella_mix_model:rice226
+    4300030: paella_mix_model:rice219
+    4300032: paella_mix_model:rice218
+    4300034: paella_mix_model:rice217
+    4300036: paella_mix_model:rice214
+    4300038: paella_mix_model:rice206
+    4300040: paella_mix_model:rice187
+    4300042: paella_mix_model:rice183
+    4300044: paella_mix_model:rice179
+    4300046: paella_mix_model:rice174
+    4300048: paella_mix_model:rice169
+    4300050: paella_mix_model:rice166
+    4300052: paella_mix_model:rice165
+    4300054: paella_mix_model:rice162
+    4300056: paella_mix_model:rice161
+    4300058: paella_mix_model:rice157
+    4300060: paella_mix_model:rice154
+    4300062: paella_mix_model:rice150
+    4300064: paella_mix_model:rice138
+    4300066: paella_mix_model:rice134
+    4300068: paella_mix_model:rice131
+    4300070: paella_mix_model:rice127
+    4300072: paella_mix_model:rice123
+    4300074: paella_mix_model:rice116
+    4300076: paella_mix_model:rice109
+    4300078: paella_mix_model:rice108
+    4300080: paella_mix_model:rice107
+    4300082: paella_mix_model:rice105
+    4300084: paella_mix_model:rice103
+    4300086: paella_mix_model:rice98
+    4300088: paella_mix_model:rice96
+    4300090: paella_mix_model:rice95
+    4300092: paella_mix_model:rice94
+    4300094: paella_mix_model:rice91
+    4300096: paella_mix_model:rice88
+    4300098: paella_mix_model:rice86
+    4300100: paella_mix_model:rice82
+    4300102: paella_mix_model:rice80
+    4300104: paella_mix_model:rice76
+    4300106: paella_mix_model:rice75
+    4300108: paella_mix_model:rice74
+    4300110: paella_mix_model:rice70
+    4300112: paella_mix_model:rice69
+    4300114: paella_mix_model:rice67
+    4300116: paella_mix_model:rice65
+    4300118: paella_mix_model:rice61
+    4300120: paella_mix_model:rice60
+    4300122: paella_mix_model:rice58
+    4300124: paella_mix_model:rice56
+    4300126: paella_mix_model:rice54
+    4300128: paella_mix_model:rice53
+    4300130: paella_mix_model:rice52
+    4300132: paella_mix_model:rice51
+    4300134: paella_mix_model:rice49
+    4300136: paella_mix_model:rice47
+    4300138: paella_mix_model:rice44
+    4300140: paella_mix_model:rice43
+    4300142: paella_mix_model:rice38
+    4300144: paella_mix_model:rice35
+    4300146: paella_mix_model:rice34
+    4300148: paella_mix_model:rice33
+    4300150: paella_mix_model:rice31
+    4300152: paella_mix_model:rice29
+    4300154: paella_mix_model:rice28
+    4300156: paella_mix_model:rice26
+    4300158: paella_mix_model:rice25
+    4300160: paella_mix_model:rice24
+    4300162: paella_mix_model:rice22
+    4300164: paella_mix_model:rice20
+    4300166: paella_mix_model:rice17
+    4300168: paella_mix_model:rice16
+    4300170: paella_mix_model:rice15
+    4300172: paella_mix_model:rice13
+    4300174: paella_mix_model:rice11
+    4300176: paella_mix_model:rice7
+    4300178: paella_mix_model:rice6
+    4300180: paella_mix_model:rice4
+    4300182: paella_mix_model:rice3
+    4300184: paella_mix_model:rice2
+    4300186: paella_mix_model:rice1
+    4300188: paella_mix_model:rice239
+    4300190: paella_mix_model:rice234
+    4300192: paella_mix_model:rice219
+    4300194: paella_mix_model:rice218
+    4300196: paella_mix_model:rice217
+    4300198: paella_mix_model:rice206
+    4300200: paella_mix_model:rice187
+    4300202: paella_mix_model:rice183
+    4300204: paella_mix_model:rice178
+    4300206: paella_mix_model:rice176
+    4300208: paella_mix_model:rice174
+    4300210: paella_mix_model:rice169
+    4300212: paella_mix_model:rice166
+    4300214: paella_mix_model:rice165
+    4300216: paella_mix_model:rice162
+    4300218: paella_mix_model:rice161
+    4300220: paella_mix_model:rice157
+    4300222: paella_mix_model:rice154
+    4300224: paella_mix_model:rice150
+    4300226: paella_mix_model:rice138
+    4300228: paella_mix_model:rice134
+    4300230: paella_mix_model:rice131
+    4300232: paella_mix_model:rice127
+    4300234: paella_mix_model:rice123
+    4300236: paella_mix_model:rice119
+    4300238: paella_mix_model:rice118
+    4300240: paella_mix_model:rice115
+    4300242: paella_mix_model:rice109
+    4300244: paella_mix_model:rice108
+    4300246: paella_mix_model:rice107
+    4300248: paella_mix_model:rice105
+    4300250: paella_mix_model:rice103
+    4300252: paella_mix_model:rice98
+    4300254: paella_mix_model:rice96
+    4300256: paella_mix_model:rice95
+    4300258: paella_mix_model:rice94
+    4300260: paella_mix_model:rice91
+    4300262: paella_mix_model:rice88
+    4300264: paella_mix_model:rice82
+    4300266: paella_mix_model:rice79
+    4300268: paella_mix_model:rice76
+    4300270: paella_mix_model:rice75
+    4300272: paella_mix_model:rice74
+    4300274: paella_mix_model:rice70
+    4300276: paella_mix_model:rice69
+    4300278: paella_mix_model:rice67
+    4300280: paella_mix_model:rice65
+    4300282: paella_mix_model:rice64
+    4300284: paella_mix_model:rice61
+    4300286: paella_mix_model:rice60
+    4300288: paella_mix_model:rice58
+    4300290: paella_mix_model:rice56
+    4300292: paella_mix_model:rice55
+    4300294: paella_mix_model:rice54
+    4300296: paella_mix_model:rice53
+    4300298: paella_mix_model:rice52
+    4300300: paella_mix_model:rice51
+    4300302: paella_mix_model:rice49
+    4300304: paella_mix_model:rice47
+    4300306: paella_mix_model:rice46
+    4300308: paella_mix_model:rice44
+    4300310: paella_mix_model:rice43
+    4300312: paella_mix_model:rice38
+    4300314: paella_mix_model:rice35
+    4300316: paella_mix_model:rice34
+    4300318: paella_mix_model:rice33
+    4300320: paella_mix_model:rice31
+    4300322: paella_mix_model:rice29
+    4300324: paella_mix_model:rice28
+    4300326: paella_mix_model:rice26
+    4300328: paella_mix_model:rice25
+    4300330: paella_mix_model:rice24
+    4300332: paella_mix_model:rice22
+    4300334: paella_mix_model:rice20
+    4300336: paella_mix_model:rice17
+    4300338: paella_mix_model:rice16
+    4300340: paella_mix_model:rice15
+    4300342: paella_mix_model:rice13
+    4300344: paella_mix_model:rice11
+    4300346: paella_mix_model:rice7
+    4300348: paella_mix_model:rice6
+    4300350: paella_mix_model:rice4
+    4300352: paella_mix_model:rice3
+    4300354: paella_mix_model:rice2
+    4300356: paella_mix_model:rice1
+    4300358: paella_mix_model:rice_pile:rice239
+    4300360: paella_mix_model:rice_pile:rice226
+    4300362: paella_mix_model:rice_pile:rice219
+    4300364: paella_mix_model:rice_pile:rice218
+    4300366: paella_mix_model:rice_pile:rice214
+    4300368: paella_mix_model:rice_pile:rice206
+    4300370: paella_mix_model:rice_pile:rice200
+    4300372: paella_mix_model:rice_pile:rice187
+    4300374: paella_mix_model:rice_pile:rice183
+    4300376: paella_mix_model:rice_pile:rice180
+    4300378: paella_mix_model:rice_pile:rice174
+    4300380: paella_mix_model:rice_pile:rice171
+    4300382: paella_mix_model:rice_pile:rice169
+    4300384: paella_mix_model:rice_pile:rice166
+    4300386: paella_mix_model:rice_pile:rice165
+    4300388: paella_mix_model:rice_pile:rice164
+    4300390: paella_mix_model:rice_pile:rice162
+    4300392: paella_mix_model:rice_pile:rice161
+    4300394: paella_mix_model:rice_pile:rice157
+    4300396: paella_mix_model:rice_pile:rice154
+    4300398: paella_mix_model:rice_pile:rice150
+    4300400: paella_mix_model:rice_pile:rice145
+    4300402: paella_mix_model:rice_pile:rice138
+    4300404: paella_mix_model:rice_pile:rice135
+    4300406: paella_mix_model:rice_pile:rice134
+    4300408: paella_mix_model:rice_pile:rice131
+    4300410: paella_mix_model:rice_pile:rice129
+    4300412: paella_mix_model:rice_pile:rice127
+    4300414: paella_mix_model:rice_pile:rice125
+    4300416: paella_mix_model:rice_pile:rice119
+    4300418: paella_mix_model:rice_pile:rice118
+    4300420: paella_mix_model:rice_pile:rice116
+    4300422: paella_mix_model:rice_pile:rice115
+    4300424: paella_mix_model:rice_pile:rice114
+    4300426: paella_mix_model:rice_pile:rice109
+    4300428: paella_mix_model:rice_pile:rice108
+    4300430: paella_mix_model:rice_pile:rice107
+    4300432: paella_mix_model:rice_pile:rice105
+    4300434: paella_mix_model:rice_pile:rice103
+    4300436: paella_mix_model:rice_pile:rice102
+    4300438: paella_mix_model:rice_pile:rice98
+    4300440: paella_mix_model:rice_pile:rice96
+    4300442: paella_mix_model:rice_pile:rice95
+    4300444: paella_mix_model:rice_pile:rice94
+    4300446: paella_mix_model:rice_pile:rice93
+    4300448: paella_mix_model:rice_pile:rice91
+    4300450: paella_mix_model:rice_pile:rice90
+    4300452: paella_mix_model:rice_pile:rice88
+    4300454: paella_mix_model:rice_pile:rice86
+    4300456: paella_mix_model:rice_pile:rice83
+    4300458: paella_mix_model:rice_pile:rice82
+    4300460: paella_mix_model:rice_pile:rice80
+    4300462: paella_mix_model:rice_pile:rice79
+    4300464: paella_mix_model:rice_pile:rice77
+    4300466: paella_mix_model:rice_pile:rice76
+    4300468: paella_mix_model:rice_pile:rice75
+    4300470: paella_mix_model:rice_pile:rice74
+    4300472: paella_mix_model:rice_pile:rice73
+    4300474: paella_mix_model:rice_pile:rice70
+    4300476: paella_mix_model:rice_pile:rice69
+    4300478: paella_mix_model:rice_pile:rice67
+    4300480: paella_mix_model:rice_pile:rice65
+    4300482: paella_mix_model:rice_pile:rice64
+    4300484: paella_mix_model:rice_pile:rice61
+    4300486: paella_mix_model:rice_pile:rice60
+    4300488: paella_mix_model:rice_pile:rice58
+    4300490: paella_mix_model:rice_pile:rice56
+    4300492: paella_mix_model:rice_pile:rice55
+    4300494: paella_mix_model:rice_pile:rice54
+    4300496: paella_mix_model:rice_pile:rice53
+    4300498: paella_mix_model:rice_pile:rice52
+    4300500: paella_mix_model:rice_pile:rice51
+    4300502: paella_mix_model:rice_pile:rice49
+    4300504: paella_mix_model:rice_pile:rice47
+    4300506: paella_mix_model:rice_pile:rice44
+    4300508: paella_mix_model:rice_pile:rice43
+    4300510: paella_mix_model:rice_pile:rice38
+    4300512: paella_mix_model:rice_pile:rice37
+    4300514: paella_mix_model:rice_pile:rice36
+    4300516: paella_mix_model:rice_pile:rice35
+    4300518: paella_mix_model:rice_pile:rice34
+    4300520: paella_mix_model:rice_pile:rice33
+    4300522: paella_mix_model:rice_pile:rice31
+    4300524: paella_mix_model:rice_pile:rice29
+    4300526: paella_mix_model:rice_pile:rice28
+    4300528: paella_mix_model:rice_pile:rice26
+    4300530: paella_mix_model:rice_pile:rice25
+    4300532: paella_mix_model:rice_pile:rice24
+    4300534: paella_mix_model:rice_pile:rice22
+    4300536: paella_mix_model:rice_pile:rice20
+    4300538: paella_mix_model:rice_pile:rice18
+    4300540: paella_mix_model:rice_pile:rice17
+    4300542: paella_mix_model:rice_pile:rice16
+    4300544: paella_mix_model:rice_pile:rice15
+    4300546: paella_mix_model:rice_pile:rice13
+    4300548: paella_mix_model:rice_pile:rice11
+    4300550: paella_mix_model:rice_pile:rice10
+    4300552: paella_mix_model:rice_pile:rice7
+    4300554: paella_mix_model:rice_pile:rice6
+    4300556: paella_mix_model:rice_pile:rice5
+    4300558: paella_mix_model:rice_pile:rice4
+    4300560: paella_mix_model:rice_pile:rice3
+    4300562: paella_mix_model:rice_pile:rice2
+    4300564: paella_mix_model:rice_pile:rice1
+    4300566: rice105
+    4300568: paella_mix_model:shell
+    4300570: paella_mix_model:pCube3
+    4300572: paella_mix_model:pCube2
+    4300574: prawnmeat
+    4300576: shell
+    4300578: pCube3
+    4300580: pCube2
+    4300582: prawnmeat
+    4300584: shell
+    4300586: pCube3
+    4300588: pCube2
+    4300590: prawnmeat
+    4300592: shell
+    4300594: pCube3
+    4300596: pCube2
+    4300598: prawnmeat
+    4300600: sauce
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
