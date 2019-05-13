@@ -596,29 +596,23 @@ public class NewServer : MonoBehaviour {
       Team throwingTeam = null;
 
       /* Values switched around as you want to disable the opposing kitchen, not your own */
-      if (team.Equals(redTeam.Name)) {
-        relevantTeam = blueTeam;
-        throwingTeam = redTeam;
-      }
-      else if (team.Equals(blueTeam.Name)) {
-        relevantTeam = redTeam;
-        throwingTeam = blueTeam;
-      }
+      if (team.Equals(redTeam.Name)) relevantTeam = blueTeam;
+      else if (team.Equals(blueTeam.Name)) relevantTeam = redTeam;
 
       // Modify score when you hit an enemy station
       // Score depends on the station hit: cupboard = 4, chopping = 10, frying = 8, plating = 6
       switch(station) {
         case "0":
-          throwingTeam.modifyScore(4);
+          relevantTeam.modifyScore(-4);
           break;
         case "1":
-          throwingTeam.modifyScore(10);
+          relevantTeam.modifyScore(-10);
           break;
         case "2":
-          throwingTeam.modifyScore(8);
+          relevantTeam.modifyScore(-8);
           break;
         case "3":
-          throwingTeam.modifyScore(6);
+          relevantTeam.modifyScore(-6);
           break;
       }
 
