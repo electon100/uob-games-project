@@ -29,8 +29,8 @@ public class NewServer : MonoBehaviour {
 
   private readonly float disableStationDuration = 10.0f; /* 15 seconds */
   private readonly float negativeScoreMultiplier = 0.2f;
-  private readonly float minNextOrderTime = 60.0f; /* Minimum time before a new order is added */
-  private readonly float maxNextOrderTime = 120.0f; /* Maximum time before a new order is added */
+  private readonly float minNextOrderTime = 30.0f; /* Minimum time before a new order is added */
+  private readonly float maxNextOrderTime = 60.0f; /* Maximum time before a new order is added */
 
   private Team redTeam, blueTeam;
   public GameState gameState = GameState.MainMenu;
@@ -107,7 +107,7 @@ public class NewServer : MonoBehaviour {
     redBannerTransform.localPosition = new Vector2(xPosRed, yPos);
     blueBannerTransform.localPosition = new Vector2(xPosBlue, yPos);
 
-    float maxScore = 500.0f;
+    float maxScore = 1000.0f;
 
     int redSliderWidth = clampScore(redTeam.Score, 0, (int) maxScore);
     int blueSliderWidth = clampScore(blueTeam.Score, 0, (int) maxScore);
