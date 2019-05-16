@@ -29,12 +29,15 @@ public class NewServer : MonoBehaviour {
 
   private readonly float disableStationDuration = 10.0f; /* 15 seconds */
   private readonly float negativeScoreMultiplier = 0.2f;
-  private readonly float minNextOrderTime = 15.0f; /* Minimum time before a new order is added */
-  private readonly float maxNextOrderTime = 25.0f; /* Maximum time before a new order is added */
+  private readonly float minNextOrderTime = 30.0f; /* Minimum time before a new order is added */
+  private readonly float maxNextOrderTime = 60.0f; /* Maximum time before a new order is added */
 
   private Team redTeam, blueTeam;
   public GameState gameState = GameState.MainMenu;
   public GameMode gameMode = GameMode.None;
+
+  private AudioClip frenchSuccess, latinSuccess;
+
 
   private List<int> allConnections = new List<int>();
 
@@ -46,12 +49,16 @@ public class NewServer : MonoBehaviour {
     timer = GameObject.Find("GameTimer").GetComponent<NewGameTimer>();
     wiiBlue = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourBlue>();
     wiiRed = GameObject.Find("WiimoteManager").GetComponent<WiimoteBehaviourRed>();
+
+    frenchSuccess = (AudioClip)Resources.Load("FrenchSuccess", typeof(AudioClip));
+    latinSuccess = (AudioClip)Resources.Load("Arriba", typeof(AudioClip));
   }
 
   void Update() {
     SetCanvasForGameState(); /* Sets the main screen visible canvas based on game state */
     TickStations(); /* Ticks down the disabled timers on all stations */
     listenForKeyboardInput(); /* Process keyboard input */
+    UpdateCursorVisibility(); /* Hide cursor during gameplay */
 
     switch(gameState) {
       case GameState.ConfigureMode:
@@ -79,6 +86,7 @@ public class NewServer : MonoBehaviour {
     if (Input.GetKeyDown(KeyCode.S)) OnLatinMode();
     if (Input.GetKeyDown(KeyCode.F)) OnFrenchMode();
     if (Input.GetKeyDown(KeyCode.Space) && gameState == GameState.AwaitingPlayers) StartGame();
+    if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
   }
 
   private void setTeamStars() {
@@ -99,7 +107,7 @@ public class NewServer : MonoBehaviour {
     redBannerTransform.localPosition = new Vector2(xPosRed, yPos);
     blueBannerTransform.localPosition = new Vector2(xPosBlue, yPos);
 
-    float maxScore = 500.0f;
+    float maxScore = 1000.0f;
 
     int redSliderWidth = clampScore(redTeam.Score, 0, (int) maxScore);
     int blueSliderWidth = clampScore(blueTeam.Score, 0, (int) maxScore);
@@ -488,6 +496,15 @@ public class NewServer : MonoBehaviour {
         UnityEngine.Debug.Log("Ingredient to score: " + ingredientToScore.Name);
         relevantTeam.scoreRecipe(ingredientToScore);
 
+      if(gameMode.Equals(GameMode.French)){
+        this.GetComponent<AudioSource>().clip = frenchSuccess;
+        this.GetComponent<AudioSource>().Play(0);
+      }
+      if(gameMode.Equals(GameMode.Latin)){
+        this.GetComponent<AudioSource>().clip = latinSuccess;
+        this.GetComponent<AudioSource>().Play(0);
+      }
+
         /* Broadcast new scores to devices */
         BroadcastScores();
       } else {
@@ -565,6 +582,10 @@ public class NewServer : MonoBehaviour {
     }
   }
 
+  private void UpdateCursorVisibility() {
+    Cursor.visible = gameState != GameState.GameRunning;
+  }
+
   private int ScoreIngredient(Ingredient ingredient) {
     return FoodData.Instance.getScoreForIngredient(ingredient);
   }
@@ -575,29 +596,23 @@ public class NewServer : MonoBehaviour {
       Team throwingTeam = null;
 
       /* Values switched around as you want to disable the opposing kitchen, not your own */
-      if (team.Equals(redTeam.Name)) {
-        relevantTeam = blueTeam;
-        throwingTeam = redTeam;
-      }
-      else if (team.Equals(blueTeam.Name)) {
-        relevantTeam = redTeam;
-        throwingTeam = blueTeam;
-      }
+      if (team.Equals(redTeam.Name)) relevantTeam = blueTeam;
+      else if (team.Equals(blueTeam.Name)) relevantTeam = redTeam;
 
       // Modify score when you hit an enemy station
       // Score depends on the station hit: cupboard = 4, chopping = 10, frying = 8, plating = 6
       switch(station) {
         case "0":
-          throwingTeam.modifyScore(4);
+          relevantTeam.modifyScore(-4);
           break;
         case "1":
-          throwingTeam.modifyScore(10);
+          relevantTeam.modifyScore(-10);
           break;
         case "2":
-          throwingTeam.modifyScore(8);
+          relevantTeam.modifyScore(-8);
           break;
         case "3":
-          throwingTeam.modifyScore(6);
+          relevantTeam.modifyScore(-6);
           break;
       }
 
@@ -652,8 +667,8 @@ public class NewServer : MonoBehaviour {
     float redDeltaScore = redTeam.checkExpiredOrders();
 
     if (redDeltaScore > 0 || blueDeltaScore > 0) {
-      redTeam.Score -= (int) (redDeltaScore * negativeScoreMultiplier);
-      blueTeam.Score -= (int) (blueDeltaScore * negativeScoreMultiplier);
+      redTeam.modifyScore(- (int) (redDeltaScore * negativeScoreMultiplier));
+      blueTeam.modifyScore(- (int) (blueDeltaScore * negativeScoreMultiplier));
 
       /* Broadcast new scores to devices */
       BroadcastScores();

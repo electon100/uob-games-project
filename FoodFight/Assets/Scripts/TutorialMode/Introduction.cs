@@ -31,10 +31,10 @@ public class Introduction : MonoBehaviour {
 	private string getTextForSlide(int slide) {
 		switch(slide) {
 			case 0: return "Welcome to Food Fight, a fast paced cooking game in which two rival kitchens battle to prove that they are the best.";
-			case 1: return "Your job is work with your teammates to prove your kitchen is superior. Remember - good communication is key.";
+			case 1: return "Your job is to work with your teammates to prove your kitchen is superior. Remember - good communication is key.";
 			case 2: return "To get points, cook and serve the orders which show up on the main screen before they expire.";
 			case 3: return "Stay on top of orders! If you miss one, you will lose points.";
-			case 4: return "Damage the enemy kitchen's stations by throwing food at them. This prevents them from logging in for a minimum of 10 seconds.";
+			case 4: return "Damage the enemy kitchen's stations by throwing food at them. This prevents them from logging in for 10 seconds.";
 			case 5: return "Only 1 person can use each station at any time. If you have finished at a station, be sure to leave so your teammates can use it!";
 			case 6: return "Now you are ready to play the tutorial.\n\nGood luck!";
 			default: return "";
